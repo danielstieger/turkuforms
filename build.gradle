@@ -51,6 +51,7 @@ ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
 
 war {
     dependsOn(mowarePluginAdoption)
+    webXml = file('artefact/web.xml')
 }
 
 

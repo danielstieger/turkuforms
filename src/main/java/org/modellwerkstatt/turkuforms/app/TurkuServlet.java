@@ -10,13 +10,13 @@ public class TurkuServlet extends VaadinServlet {
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-        TurkuLog.l("TurkuServlet.init()");
+        TurkuLog.l("TurkuServlet.init() not annotated ... ");
         super.init(servletConfig);
     }
 
     @Override
     public void destroy() {
-        TurkuLog.l("TurkuServlet.init()");
+        TurkuLog.l("TurkuServlet.init() not annotated ...");
         super.destroy();
     }
 }
