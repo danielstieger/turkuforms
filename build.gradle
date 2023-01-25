@@ -1,3 +1,4 @@
+
 buildscript {
     repositories {
         mavenCentral()
@@ -26,6 +27,8 @@ vaadin {
     productionMode = true
 }
 
+group 'org.modellwerkstatt'
+// version '0.9'
 
 dependencies {
     implementation enforcedPlatform("com.vaadin:vaadin-bom:$vaadinVersion")
@@ -48,15 +51,14 @@ dependencies {
 
 ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
 
-
 war {
     dependsOn(mowarePluginAdoption)
     webXml = file('artefact/web.xml')
 }
 
 
-task ZZ_tomcatHotDeploy(type: Copy, dependsOn: war) {
+task ZZ_tomcatHotDeploy(type: Copy) {
+    dependsOn(war)
     from war.archivePath
     into "${tomcatHome}/webapps"
 }
-
