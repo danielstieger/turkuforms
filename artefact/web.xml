@@ -11,9 +11,6 @@
     <display-name>APPLICATION_FQNAME - APPLICATION_BUILDVERSION</display-name>
 
     <session-config>
-        <!-- When user is not doing anything for sesstion-timeout min.
-             we close the session. VaadinForms handles those timeouts in
-             VApplicationLoader, not here. -->
         <session-timeout>5</session-timeout>
     </session-config>
 

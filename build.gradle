@@ -10,6 +10,7 @@ buildscript {
 plugins {
     id 'com.vaadin'
     id 'war'
+//    id "com.dorongold.task-tree" version "2.1.0"
 }
 
 defaultTasks("war")
@@ -62,3 +63,10 @@ task ZZ_tomcatHotDeploy(type: Copy) {
     from war.archivePath
     into "${tomcatHome}/webapps"
 }
+
+
+/* gradle.taskGraph.whenReady {
+    tasks.findByName('vaadinPrepareFrontend').enabled(false)
+    tasks.findByName('vaadinBuildFrontend').enabled(false)
+
+} */

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 public class TurkuServlet extends VaadinServlet {
 
     @Override
@@ -16,12 +17,16 @@ public class TurkuServlet extends VaadinServlet {
         TurkuLog.clearAndDelete();
 
         super.init(servletConfig);
-
     }
+
+
 
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // No access here to UI.getCurrent()
+
         super.service(request, response);
 
         boolean isVaadinHeartBeat = request.getContentLength() == 0;
