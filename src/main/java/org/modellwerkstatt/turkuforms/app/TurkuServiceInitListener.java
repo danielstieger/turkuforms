@@ -5,20 +5,18 @@ import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import org.modellwerkstatt.turkuforms.infra.TurkuLog;
 
+//TODO: use @Component when working with spring boot
 public class TurkuServiceInitListener implements VaadinServiceInitListener {
 
     @Override
     public void serviceInit(ServiceInitEvent event) {
         TurkuLog.l("TurkuServiceInitListener.serviceInit() preInit");
 
-        RouteConfiguration.forApplicationScope().setRoute("static", StaticView.class);
-
         event.getSource().addSessionInitListener(
                 initEvent -> {
 
                     TurkuLog.l("TurkuServiceInitListener.sessionInit() ");
-                    RouteConfiguration.forSessionScope().setRoute("view", TestView.class);
-                    RouteConfiguration.forSessionScope().setRoute("login", LoginView.class);
+
                 }
 
                 );

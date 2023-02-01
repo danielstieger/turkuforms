@@ -15,12 +15,18 @@
     </session-config>
 
     <servlet>
+        <async-supported>true</async-supported>
         <servlet-name>loaderservlet</servlet-name>
         <servlet-class>org.modellwerkstatt.turkuforms.app.TurkuServlet</servlet-class>
 
         <init-param>
             <param-name>heartbeatInterval</param-name>
             <param-value>60</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>pushmode</param-name>
+            <param-value>automatic</param-value>
         </init-param>
 
         <init-param>
