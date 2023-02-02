@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.app;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -8,6 +9,7 @@ import com.vaadin.flow.router.*;
 import org.modellwerkstatt.turkuforms.infra.TurkuLog;
 
 
+@JsModule("./turku.js")
 public class TestView extends HorizontalLayout implements BeforeEnterObserver, BeforeLeaveObserver, Runnable {
     private Paragraph mainP;
     private int counter = 0;
@@ -23,6 +25,8 @@ public class TestView extends HorizontalLayout implements BeforeEnterObserver, B
         mainP.setText("TestView.constructor()");
 
         ui = UI.getCurrent();
+
+        ui.getPage().executeJs("turku.init()");
 
         Thread t = new Thread(this);
         t.start();

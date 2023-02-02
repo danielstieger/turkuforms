@@ -14,7 +14,6 @@ public class TurkuServiceInitListener implements VaadinServiceInitListener {
 
         event.getSource().addSessionInitListener(
                 initEvent -> {
-
                     TurkuLog.l("TurkuServiceInitListener.sessionInit() ");
 
                 }
