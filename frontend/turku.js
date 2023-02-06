@@ -1,7 +1,9 @@
-//
-// Turkuforms modellwerkstatt.org
-// Stieger Dan, Winter 22/23
-//
+/*
+ * Turkuforms modellwerkstatt.org
+ * Stieger Dan, Winter 22/23
+ *
+ * Custom vaadin JS for moware turkuforms
+ */
 
 window.turku = {
 

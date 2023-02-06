@@ -30,6 +30,9 @@ public class TurkuServlet extends VaadinServlet {
         RouteConfiguration.forApplicationScope().setRoute("static", StaticView.class);
         RouteConfiguration.forApplicationScope().setRoute("view", TestView.class);
         RouteConfiguration.forApplicationScope().setRoute("login", LoginView.class);
+        RouteConfiguration.forApplicationScope().setRoute("", LandingView.class);
+
+
 
     }
 
