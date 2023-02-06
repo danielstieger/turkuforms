@@ -18,6 +18,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -59,6 +60,8 @@ public class LandingView extends AppLayout {
 
 
         VerticalLayout drawer = new VerticalLayout();
+        drawer.setSizeFull();
+
 
         Button l1 = new Button("Link 1 Command");
         Button l2 = new Button("Dark Mode", event -> {
@@ -78,7 +81,37 @@ public class LandingView extends AppLayout {
         l2.setWidthFull();
         l2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-        drawer.add(l1, l2);
+        VerticalLayout drawerTop = new VerticalLayout(l1, l2);
+        drawerTop.setSizeFull();
+        drawer.add(drawerTop);
+
+
+
+        Button darkToggle = new Button(new Icon(VaadinIcon.ADJUST), event -> {
+
+            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+
+            if (themeList.contains(Lumo.DARK)) {
+                themeList.remove(Lumo.DARK);
+            } else {
+                themeList.add(Lumo.DARK);
+            }
+        });
+
+        darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        darkToggle.setSizeUndefined();
+
+        Button logout = new Button(new Icon(VaadinIcon.valueOf("POWER_OFF")));
+        logout.setSizeUndefined();
+
+        Label userLabel = new Label("daniels");
+        userLabel.setWidthFull();
+
+
+
+        HorizontalLayout drawerBottom = new HorizontalLayout(userLabel, darkToggle, logout);
+        drawerBottom.setWidthFull();
+        drawer.add(drawerBottom);
 
         addToDrawer(drawer);
         setDrawerOpened(false);
