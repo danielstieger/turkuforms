@@ -58,7 +58,6 @@ public class TurkuLayout extends AppLayout {
         setPrimarySection(Section.NAVBAR);
 
 
-
         Button l1 = new Button("Link 1 Command");
         Button l2 = new Button("Dark Mode", event -> {
 

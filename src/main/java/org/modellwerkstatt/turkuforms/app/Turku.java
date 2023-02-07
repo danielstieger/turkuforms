@@ -11,14 +11,14 @@ import java.io.IOException;
 
 public class Turku {
     public static final String VERSION = "Turkuforms (moware11) 0.1";
-    private static final boolean HARDLOG_AVAILABLE = true;
+    public static final boolean DEBUG_HARDLOG = true;
     private static final String HARDLOG_FILENAME = "/Users/danielstieger/turkulog.txt";
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");
 
 
 
     public static void l(String text) {
-        if (!(HARDLOG_AVAILABLE)) {
+        if (!(DEBUG_HARDLOG)) {
             return;
         }
 
@@ -43,7 +43,7 @@ public class Turku {
 
 
     public static void clearAndDelete() {
-        if (!(HARDLOG_AVAILABLE)) {
+        if (!(DEBUG_HARDLOG)) {
             return;
         }
 
