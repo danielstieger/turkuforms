@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.experiment;
 
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.UI;
@@ -9,7 +9,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.turkuforms.infra.TurkuLog;
+import org.modellwerkstatt.turkuforms.app.Turku;
 
 @PreserveOnRefresh
 public class StaticView extends Div implements BeforeEnterObserver, BeforeLeaveObserver {
@@ -26,32 +26,32 @@ public class StaticView extends Div implements BeforeEnterObserver, BeforeLeaveO
         this.add(new Button("To View Button", e -> { UI.getCurrent().navigate("view");}));
         this.add(new Anchor("view", "to View Anchor"));
 
-        TurkuLog.l("StaticView.constructor() UI is "+ UI.getCurrent());
+        Turku.l("StaticView.constructor() UI is "+ UI.getCurrent());
     }
 
     @ClientCallable
     public void turkuOnWindowFocusEvent() {
-        TurkuLog.l("StaticView.turkuOnWindowFocusEvent(): ");
+        Turku.l("StaticView.turkuOnWindowFocusEvent(): ");
         for (UI ui : VaadinSession.getCurrent().getUIs()) {
-            TurkuLog.l("> UI: " + ui + (UI.getCurrent() == ui ? " [THIS]" : ""));
+            Turku.l("> UI: " + ui + (UI.getCurrent() == ui ? " [THIS]" : ""));
         }
     }
 
     @ClientCallable
     public void turkuOnWindowUnload() {
-        TurkuLog.l("StaticView.turkuOnWindowUnload(): ");
+        Turku.l("StaticView.turkuOnWindowUnload(): ");
     }
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
-        TurkuLog.l("StaticView.beforeLeave(): "+ event);
+        Turku.l("StaticView.beforeLeave(): "+ event);
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        TurkuLog.l("StaticView.beforeEnter(): "+ event);
+        Turku.l("StaticView.beforeEnter(): "+ event);
         for (UI ui : VaadinSession.getCurrent().getUIs()) {
-            TurkuLog.l("> UI: " + ui + (UI.getCurrent() == ui ? " [THIS]" : ""));
+            Turku.l("> UI: " + ui + (UI.getCurrent() == ui ? " [THIS]" : ""));
         }
 
         UI.getCurrent().getPage().executeJs("turku.init($0);", this);

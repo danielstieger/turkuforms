@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.infra;
+package org.modellwerkstatt.turkuforms.app;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
@@ -9,7 +9,8 @@ import org.joda.time.DateTime;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class TurkuLog {
+public class Turku {
+    public static final String VERSION = "Turkuforms (moware11) 0.1";
     private static final boolean HARDLOG_AVAILABLE = true;
     private static final String HARDLOG_FILENAME = "/Users/danielstieger/turkulog.txt";
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");
@@ -52,5 +53,9 @@ public class TurkuLog {
         }
     }
 
+
+    public static void main(String[] args) {
+        System.out.println(VERSION);
+    }
 }
 

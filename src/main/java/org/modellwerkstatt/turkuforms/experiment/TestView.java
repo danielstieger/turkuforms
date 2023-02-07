@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.experiment;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -6,7 +6,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.*;
-import org.modellwerkstatt.turkuforms.infra.TurkuLog;
+import org.modellwerkstatt.turkuforms.app.Turku;
 
 
 @JsModule("./turku.js")
@@ -51,12 +51,12 @@ public class TestView extends HorizontalLayout implements BeforeEnterObserver, B
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
-        TurkuLog.l("TestView.beforeLeave(): "+ event);
+        Turku.l("TestView.beforeLeave(): "+ event);
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        TurkuLog.l("TestView.beforeEnter(): "+ event);
+        Turku.l("TestView.beforeEnter(): "+ event);
 
     }
 }

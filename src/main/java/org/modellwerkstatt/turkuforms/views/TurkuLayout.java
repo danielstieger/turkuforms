@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
@@ -28,9 +27,9 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 
-public class LandingView extends AppLayout {
+public class TurkuLayout extends AppLayout {
 
-    public LandingView() {
+    public TurkuLayout() {
         DrawerToggle toggle = new DrawerToggle();
 
         H1 title = new H1("mo DiLaKa 1.8");
@@ -59,9 +58,6 @@ public class LandingView extends AppLayout {
         setPrimarySection(Section.NAVBAR);
 
 
-        VerticalLayout drawer = new VerticalLayout();
-        drawer.setSizeFull();
-
 
         Button l1 = new Button("Link 1 Command");
         Button l2 = new Button("Dark Mode", event -> {
@@ -81,11 +77,12 @@ public class LandingView extends AppLayout {
         l2.setWidthFull();
         l2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-        VerticalLayout drawerTop = new VerticalLayout(l1, l2);
+
+        Div d = new Div();
+        d.setHeightFull();
+
+        VerticalLayout drawerTop = new VerticalLayout(l1, l2, d);
         drawerTop.setSizeFull();
-        drawer.add(drawerTop);
-
-
 
         Button darkToggle = new Button(new Icon(VaadinIcon.ADJUST), event -> {
 
@@ -107,13 +104,14 @@ public class LandingView extends AppLayout {
         Label userLabel = new Label("daniels");
         userLabel.setWidthFull();
 
-
+        Label sysInfo = new Label("@ LOLA/wws");
 
         HorizontalLayout drawerBottom = new HorizontalLayout(userLabel, darkToggle, logout);
         drawerBottom.setWidthFull();
-        drawer.add(drawerBottom);
+        drawerBottom.setAlignSelf(FlexComponent.Alignment.CENTER, userLabel);
 
-        addToDrawer(drawer);
+        drawerTop.add(sysInfo, drawerBottom);
+        addToDrawer(drawerTop);
         setDrawerOpened(false);
 
 

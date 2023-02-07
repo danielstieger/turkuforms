@@ -1,9 +1,11 @@
 package org.modellwerkstatt.turkuforms.app;
 
 import com.vaadin.flow.router.RouteConfiguration;
-import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServlet;
-import org.modellwerkstatt.turkuforms.infra.TurkuLog;
+import org.modellwerkstatt.turkuforms.experiment.LoginView;
+import org.modellwerkstatt.turkuforms.experiment.StaticView;
+import org.modellwerkstatt.turkuforms.experiment.TestView;
+import org.modellwerkstatt.turkuforms.views.TurkuLayout;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,7 +18,7 @@ public class TurkuServlet extends VaadinServlet {
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-        TurkuLog.clearAndDelete();
+        Turku.clearAndDelete();
 
         super.init(servletConfig);
 
@@ -25,12 +27,12 @@ public class TurkuServlet extends VaadinServlet {
     @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
-        TurkuLog.l("Turkuservlet.servletInitializer() .... ");
+        Turku.l("Turkuservlet.servletInitializer() .... ");
 
         RouteConfiguration.forApplicationScope().setRoute("static", StaticView.class);
         RouteConfiguration.forApplicationScope().setRoute("view", TestView.class);
         RouteConfiguration.forApplicationScope().setRoute("login", LoginView.class);
-        RouteConfiguration.forApplicationScope().setRoute("", LandingView.class);
+        RouteConfiguration.forApplicationScope().setRoute("", TurkuLayout.class);
 
 
 
