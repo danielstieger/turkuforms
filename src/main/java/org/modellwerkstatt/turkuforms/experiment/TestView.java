@@ -5,7 +5,10 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.BeforeLeaveEvent;
+import com.vaadin.flow.router.BeforeLeaveObserver;
 import org.modellwerkstatt.turkuforms.app.Turku;
 
 

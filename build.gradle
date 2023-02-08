@@ -48,6 +48,17 @@ dependencies {
     implementation files("${mowarePluginHome}/jars/basis/spring-core-5.2.9.RELEASE.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-beans-5.2.9.RELEASE.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-context-5.2.9.RELEASE.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-aop-5.2.9.RELEASE.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-jdbc-5.2.9.RELEASE.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-tx-5.2.9.RELEASE.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-expression-5.2.9.RELEASE.jar")
+    implementation files("${mowarePluginHome}/jars/basis/mo-javaxbus-1.0.jar")
+
+    implementation files("${mpsHome}/lib/mps-references.jar")
+    implementation files("${mpsHome}/lib/mps-collections.jar")
+    implementation files("${mpsHome}/lib/mps-closures.jar")
+    implementation files("${mpsHome}/lib/commons-lang-2.4.jar")
+
 
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.manmap.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.objectflow.runtime.jar")
@@ -61,6 +72,10 @@ ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
 war {
     dependsOn(mowarePluginAdoption)
     webXml = file('artefact/web.xml')
+
+    from(appClassesHome) {
+        into 'WEB-INF/classes'
+    }
 }
 
 

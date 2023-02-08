@@ -4,13 +4,13 @@ import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 
-public class TurkuFactory extends BaseUiFactory implements ITurkuFactory {
+public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
     private String redirectAfterLogoutPath;
     public static boolean allowEuroSignInDelegates = false;
 
 
-    public TurkuFactory() {
+    public TurkuAppFactory() {
         super(MoWareTranslations.TranslationSelection.V_TRANSLATIONS);
         redirectAfterLogoutPath = DEFAULT_REDIRECT_TO_AFTER_LOGOUT;
     }

@@ -6,18 +6,9 @@
  */
 
 
-.NavbarTitle {
+.TurkuLayoutNavbarTitle {
     font-size: var(--lumo-font-size-l);
     margin: 0;
-}
-
-.TileButton {
-    font-size: var(--lumo-font-size-s);
-    margin: 1em;
-}
-
-.TilesGrid {
-    margin-top: 3em;
 }
 
 vaadin-menu-bar {
@@ -27,4 +18,13 @@ vaadin-menu-bar {
 vaadin-menu-bar::part(container) {
     justify-content: flex-end;
 
+}
+
+.MainwindowTileButton {
+    font-size: var(--lumo-font-size-s);
+    margin: 1em;
+}
+
+.MainwindowTilesGrid {
+    margin-top: 3em;
 }

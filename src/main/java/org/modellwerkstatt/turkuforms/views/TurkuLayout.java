@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.views;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -10,7 +11,6 @@ import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -19,27 +19,78 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.dom.ThemeList;
-import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 
 public class TurkuLayout extends AppLayout {
 
+    private Label sysInfoLabel;
+    private Label userInfoLabel;
+    private VerticalLayout drawerLayout;
+
     public TurkuLayout() {
+
+    }
+
+    public void init(String appNavbarTitle) {
         DrawerToggle toggle = new DrawerToggle();
+        setPrimarySection(Section.NAVBAR);
+        setDrawerOpened(false);
 
-        H1 title = new H1("mo DiLaKa 1.8");
+        H1 title = new H1(appNavbarTitle);
         title.setWidthFull();
-        title.addClassName("NavbarTitle");
+        title.addClassName("TurkuLayoutNavbarTitle");
+        addToNavbar(toggle, title);
 
 
+        // default drawer
+        Div verticalExpansion = new Div();
+        verticalExpansion.setHeightFull();
+
+        Button darkToggle = new Button(new Icon(VaadinIcon.ADJUST), event -> {
+
+            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+
+            if (themeList.contains(Lumo.DARK)) {
+                themeList.remove(Lumo.DARK);
+            } else {
+                themeList.add(Lumo.DARK);
+            }
+        });
+        darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        darkToggle.setSizeUndefined();
+
+        Button logout = new Button(new Icon(VaadinIcon.valueOf("POWER_OFF")), event -> { logoutFromApp(); });
+        logout.setSizeUndefined();
+
+        userInfoLabel = new Label("-");
+        userInfoLabel.setWidthFull();
+
+        sysInfoLabel = new Label("-");
+
+        HorizontalLayout drawerBottom = new HorizontalLayout(userInfoLabel, darkToggle, logout);
+        drawerBottom.setWidthFull();
+        drawerBottom.setAlignSelf(FlexComponent.Alignment.CENTER, userInfoLabel);
+
+        drawerLayout = new VerticalLayout(verticalExpansion, sysInfoLabel, drawerBottom);
+        drawerLayout.setSizeFull();
+        addToDrawer(drawerLayout);
+    }
+
+    public void setUserInfo(String info) {
+        userInfoLabel.setText(info);
+    }
+
+    public void setSysInfo(String info){
+        sysInfoLabel.setText(info);
+    }
+
+    public void addMainMenu(){
         MenuBar bar = new MenuBar();
         bar.setWidthFull();
         bar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+
 
         MenuItem start = bar.addItem(new Icon(VaadinIcon.CHEVRON_DOWN));
         start.add(new Text("Start"));
@@ -54,10 +105,10 @@ public class TurkuLayout extends AppLayout {
         startSubMenu.addItem("Command 1");
         startSubMenu.addItem("Quit");
 
-        addToNavbar(toggle, title, bar);
-        setPrimarySection(Section.NAVBAR);
+        addToNavbar(bar);
+    }
 
-
+    public void addDraweMenu(){
         Button l1 = new Button("Link 1 Command");
         Button l2 = new Button("Dark Mode", event -> {
 
@@ -76,101 +127,18 @@ public class TurkuLayout extends AppLayout {
         l2.setWidthFull();
         l2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-
-        Div d = new Div();
-        d.setHeightFull();
-
-        VerticalLayout drawerTop = new VerticalLayout(l1, l2, d);
-        drawerTop.setSizeFull();
-
-        Button darkToggle = new Button(new Icon(VaadinIcon.ADJUST), event -> {
-
-            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
-
-            if (themeList.contains(Lumo.DARK)) {
-                themeList.remove(Lumo.DARK);
-            } else {
-                themeList.add(Lumo.DARK);
-            }
-        });
-
-        darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        darkToggle.setSizeUndefined();
-
-        Button logout = new Button(new Icon(VaadinIcon.valueOf("POWER_OFF")));
-        logout.setSizeUndefined();
-
-        Label userLabel = new Label("daniels");
-        userLabel.setWidthFull();
-
-        Label sysInfo = new Label("@ LOLA/wws");
-
-        HorizontalLayout drawerBottom = new HorizontalLayout(userLabel, darkToggle, logout);
-        drawerBottom.setWidthFull();
-        drawerBottom.setAlignSelf(FlexComponent.Alignment.CENTER, userLabel);
-
-        drawerTop.add(sysInfo, drawerBottom);
-        addToDrawer(drawerTop);
-        setDrawerOpened(false);
-
-
-        setContent(getTiles());
+        drawerLayout.addComponentAtIndex(0,l1);
+        drawerLayout.addComponentAtIndex(1,l2);
     }
 
 
-    private FlexLayout getTiles() {
-        FlexLayout tilesGrid = new FlexLayout();
-        tilesGrid.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        tilesGrid.addClassName("TilesGrid");
-        tilesGrid.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-        tilesGrid.setWidthFull();
-        tilesGrid.setAlignContent(FlexLayout.ContentAlignment.SPACE_AROUND);
+    private void buildMainMenu(){
 
-        String st = "_";
-        for(int i=0; i < 10; i++) {
-            Button tile = new Button("Start Command "+ st + i + " here. ");
-            tile.setTooltipText("This is the tooltip for this command.. <br> This is a rather large explanation.");
-            tile.setMinHeight("200px");
-            tile.setMinWidth("200px");
-            tile.addClassName("TileButton");
 
-            tilesGrid.setFlexGrow(0d, tile);
-            tilesGrid.setFlexShrink(0d, tile);
-            tilesGrid.setFlexBasis("30%", tile);
-
-            st += "_";
-            tilesGrid.add(tile);
-        }
-
-        return tilesGrid;
     }
 
-    private Tabs getTabs() {
-        Tabs tabs = new Tabs();
-        tabs.add(createTab(VaadinIcon.DASHBOARD, "Dashboard"),
-                createTab(VaadinIcon.CART, "Orders"),
-                createTab(VaadinIcon.USER_HEART, "Customers"),
-                createTab(VaadinIcon.PACKAGE, "Products"),
-                createTab(VaadinIcon.RECORDS, "Documents"),
-                createTab(VaadinIcon.LIST, "Tasks"),
-                createTab(VaadinIcon.CHART, "Analytics"));
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
-        return tabs;
-    }
+    private void logoutFromApp() {
 
-    private Tab createTab(VaadinIcon viewIcon, String viewName) {
-        Icon icon = viewIcon.create();
-        icon.getStyle().set("box-sizing", "border-box")
-                .set("margin-inline-end", "var(--lumo-space-m)")
-                .set("padding", "var(--lumo-space-xs)");
-
-        RouterLink link = new RouterLink();
-        link.add(icon, new Span(viewName));
-        // Demo has no routes
-        // link.setRoute(viewClass.java);
-        link.setTabIndex(-1);
-
-        return new Tab(link);
     }
 
 

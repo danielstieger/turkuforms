@@ -10,10 +10,6 @@ import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.OFXStringFormatter2;
-import org.modellwerkstatt.turkuforms.experiment.LoginView;
-import org.modellwerkstatt.turkuforms.experiment.StaticView;
-import org.modellwerkstatt.turkuforms.experiment.TestView;
-import org.modellwerkstatt.turkuforms.views.TurkuLayout;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -26,27 +22,34 @@ import java.io.IOException;
 
 
 public class TurkuServlet extends VaadinServlet {
-    private String appBehaviorFqName;
-    private String appPackageFqName;
-    private String xmlConfigFile;
-    private String servletPath;
     private String guessedServerName;
-
-
-    private ApplicationContext appContext;
     private IGenAppUiModule genApplication;
     private ITurkuFactory appFactory;
     private AppJmxRegistration jmxRegistration;
+
+    public ITurkuFactory getUiFactory() {
+        return appFactory;
+    }
+    public IGenAppUiModule getAppBehaviour() {
+        return genApplication;
+    }
+
+    public String getGuessedServerName() {
+        return guessedServerName;
+    }
+    public AppJmxRegistration getJmxRegistration() {
+        return jmxRegistration;
+    }
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
         Turku.clearAndDelete();
 
-        servletPath = this.getServletContext().getContextPath();
+        String servletPath = this.getServletContext().getContextPath();
         //  - main app behavior class will be given via servlet confg
-        appBehaviorFqName = getInitParameter("applicationFqName");
-        xmlConfigFile = getInitParameter("xmlConfigFile");
+        String appBehaviorFqName = getInitParameter("applicationFqName");
+        String xmlConfigFile = getInitParameter("xmlConfigFile");
         // as well as home screen
         String homeScreenParam = getInitParameter("homeScreenPath");
         if (homeScreenParam != null) {
@@ -59,7 +62,7 @@ public class TurkuServlet extends VaadinServlet {
 
         try {
             //  - okay, wire up everything
-            appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
+            ApplicationContext appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
             appFactory = ((ITurkuFactory) appContext.getBean(IToolkit_UiFactory.class));
 
             ClassLoader classLoader = this.getClass().getClassLoader();
@@ -80,15 +83,8 @@ public class TurkuServlet extends VaadinServlet {
     @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
-        Turku.l("Turkuservlet.servletInitializer() .... ");
 
-        RouteConfiguration.forApplicationScope().setRoute("static", StaticView.class);
-        RouteConfiguration.forApplicationScope().setRoute("view", TestView.class);
-        RouteConfiguration.forApplicationScope().setRoute("login", LoginView.class);
-        RouteConfiguration.forApplicationScope().setRoute("", TurkuLayout.class);
-
-
-
+        RouteConfiguration.forApplicationScope().setRoute("", TurkuApp.class);
     }
 
     @Override
