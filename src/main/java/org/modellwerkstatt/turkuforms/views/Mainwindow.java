@@ -4,41 +4,55 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.router.PreserveOnRefresh;
+import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
+
+import java.util.List;
 
 @PreserveOnRefresh
 public class Mainwindow extends TurkuLayout {
 
 
+    protected FlexLayout tilesFlexLayout;
+
     public Mainwindow() {
-        super();
 
     }
 
-    private FlexLayout getTiles() {
-        FlexLayout tilesGrid = new FlexLayout();
-        tilesGrid.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        tilesGrid.addClassName("MainwindowTilesGrid");
-        tilesGrid.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-        tilesGrid.setWidthFull();
-        tilesGrid.setAlignContent(FlexLayout.ContentAlignment.SPACE_AROUND);
 
-        String st = "_";
-        for(int i=0; i < 10; i++) {
-            Button tile = new Button("Start Command "+ st + i + " here. ");
-            tile.setTooltipText("This is the tooltip for this command.. <br> This is a rather large explanation.");
-            tile.setMinHeight("200px");
-            tile.setMinWidth("200px");
-            tile.addClassName("MainwindowTileButton");
+    protected FlexLayout updateTiles(List<TileAction> tileActionList) {
+        if (tilesFlexLayout == null) {
+            tilesFlexLayout = new FlexLayout();
+            tilesFlexLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+            tilesFlexLayout.addClassName("MainwindowTilesGrid");
+            tilesFlexLayout.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+            tilesFlexLayout.setWidthFull();
+            tilesFlexLayout.setAlignContent(FlexLayout.ContentAlignment.SPACE_AROUND);
 
-            tilesGrid.setFlexGrow(0d, tile);
-            tilesGrid.setFlexShrink(0d, tile);
-            tilesGrid.setFlexBasis("30%", tile);
+            for(TileAction tile: tileActionList) {
+                Button btn = new Button(tile.getAction().labelText);
+                btn.setTooltipText(tile.getAction().getToolTip());
+                btn.setMinHeight("200px");
+                btn.setMinWidth("200px");
+                btn.addClassName("MainwindowTileButton");
 
-            st += "_";
-            tilesGrid.add(tile);
+                tilesFlexLayout.setFlexGrow(0d, btn);
+                tilesFlexLayout.setFlexShrink(0d, btn);
+                tilesFlexLayout.setFlexBasis("30%", btn);
+                tilesFlexLayout.add(btn);
+            }
+
+        } else {
+          int runningIndex = 0;
+
+          for(TileAction tile: tileActionList) {
+              ((Button) tilesFlexLayout.getComponentAt(runningIndex)).setText(tile.getAction().labelText);
+              runningIndex ++;
+          }
+
         }
 
-        return tilesGrid;
+
+        return tilesFlexLayout;
     }
 
 }
