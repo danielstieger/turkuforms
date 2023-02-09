@@ -9,7 +9,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveObserver;
-import org.modellwerkstatt.turkuforms.app.Turku;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 
 @JsModule("./turku.js")

@@ -8,7 +8,6 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 
 import java.util.List;
 
-@PreserveOnRefresh
 public class Mainwindow extends TurkuLayout {
 
 

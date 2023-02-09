@@ -5,7 +5,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.router.*;
-import org.modellwerkstatt.turkuforms.app.Turku;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 @PreserveOnRefresh
 public class LoginView extends Div implements BeforeEnterObserver, BeforeLeaveObserver {

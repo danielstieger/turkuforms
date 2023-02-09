@@ -6,6 +6,7 @@ import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
@@ -19,12 +20,13 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.*;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.views.Mainwindow;
 
 import java.util.List;
 
 
-
+@PreserveOnRefresh
 public class TurkuApp extends Mainwindow implements IToolkit_Application {
     private ApplicationController applicationController;
     private IOFXUserEnvironment userEnvironment;
@@ -44,6 +46,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application {
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, session.getBrowser().getAddress(),"");
 
         setContent(tilesFlexLayout);
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.app;
 
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 //TODO: use @Component when working with spring boot
 public class TurkuServiceInitListener implements VaadinServiceInitListener {

@@ -6,13 +6,9 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.contextmenu.HasMenuItems;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -20,12 +16,17 @@ import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.shared.Tooltip;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.dom.ThemeList;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.app.Turku;
+import org.modellwerkstatt.turkuforms.util.TurkuMenuItemGlue;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 
 import java.util.List;
@@ -120,12 +121,20 @@ public class TurkuLayout extends AppLayout {
     }
 
     private SubMenu createMainMenuStructure(SubMenu parent, List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList) {
-        // TODO: Tooltip
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
             if (currentItem instanceof MenuActionGlue) {
                 MenuActionGlue glue =  (MenuActionGlue) currentItem;
-                MenuItem created = parent.addItem(glue.labelText);
+
+                MenuItem created = parent.addItem(glue.labelText, event -> {
+                    event.getSource().setEnabled(false);
+                    glue.startCommand(); });
+
+                glue.attachButton1(new TurkuMenuItemGlue(created));
+
+                Tooltip t = Tooltip.forComponent(created);
+                t.setText(Workarounds.mlToolTipText(glue.getToolTip()));
+
 
             } else {
                 if (currentItem.labelText == null) {
@@ -144,25 +153,31 @@ public class TurkuLayout extends AppLayout {
     }
 
     protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList){
-        int runningIndex = 0;
+        Tabs tabs = new Tabs();
+        tabs.setOrientation(Tabs.Orientation.VERTICAL);
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
             if (currentItem instanceof MenuActionGlue) {
                 MenuActionGlue glue =  (MenuActionGlue) currentItem;
-                Button itemButton = new Button(glue.labelText);
-                itemButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-                itemButton.setWidthFull();
-                drawerLayout.addComponentAtIndex(runningIndex, itemButton);
-                runningIndex++;
+
+                Icon icon = VaadinIcon.CHEVRON_CIRCLE_RIGHT.create();
+                icon.getStyle().set("box-sizing", "border-box")
+                        .set("margin-inline-end", "var(--lumo-space-m)")
+                        .set("padding", "var(--lumo-space-xs)");
+                RouterLink link = new RouterLink();
+                link.add(icon, new Span(glue.labelText));
+                link.setTabIndex(-1);
+                tabs.add(new Tab(link));
+
+
 
             } else {
                 if (currentItem.labelText == null) {
-                    // null is separator
-                    drawerLayout.addComponentAtIndex(runningIndex, new Hr());
-                    runningIndex++;
+                    // null is separator; not used yet ...
                 }
             }
         }
+        drawerLayout.addComponentAtIndex(0, tabs);
     }
 
 

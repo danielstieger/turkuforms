@@ -28,3 +28,7 @@ vaadin-menu-bar::part(container) {
 .MainwindowTilesGrid {
     margin-top: 3em;
 }
+
+vaadin-tooltip-overlay::part(content) {
+   white-space: pre;
+}

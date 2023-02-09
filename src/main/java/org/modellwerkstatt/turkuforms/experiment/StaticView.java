@@ -9,7 +9,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.turkuforms.app.Turku;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 @PreserveOnRefresh
 public class StaticView extends Div implements BeforeEnterObserver, BeforeLeaveObserver {

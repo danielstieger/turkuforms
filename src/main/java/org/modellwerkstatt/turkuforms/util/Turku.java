@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
