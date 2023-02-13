@@ -6,6 +6,18 @@
  */
 
 
+
+
+/* * * * * * * * * * * * * * * * * * * * * * */
+vaadin-tooltip-overlay::part(content) {
+   white-space: pre;
+}
+
+
+
+
+
+/* TurkuLayout * * * * * * * * * * * * * * * */
 .TurkuLayoutNavbarTitle {
     font-size: var(--lumo-font-size-l);
     margin: 0;
@@ -29,6 +41,12 @@ vaadin-menu-bar::part(container) {
     margin-top: 3em;
 }
 
-vaadin-tooltip-overlay::part(content) {
-   white-space: pre;
+.TurkulayoutMenuIcon {
+    box-sizing: border-box;
+    margin-inline-end: var(--lumo-space-m);
+    padding: var(--lumo-space-xs);
+}
+
+.MainwindowDrawerCmdButton {
+    font-size: var(--lumo-font-size-s);
 }

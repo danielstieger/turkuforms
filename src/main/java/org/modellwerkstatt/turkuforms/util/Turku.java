@@ -9,7 +9,7 @@ import java.io.*;
 public class Turku {
     public static final String VERSION = "Turkuforms (moware11) 0.1";
     public static final boolean DEBUG_HARDLOG = true;
-    private static final String HARDLOG_FILENAME = "/Users/danielstieger/turkulog.txt";
+    private static final String HARDLOG_FILENAME = "/Users/danielstieger/turkulog.log";
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");
 
 

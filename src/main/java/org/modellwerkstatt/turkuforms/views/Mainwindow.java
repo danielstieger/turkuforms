@@ -1,10 +1,13 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.router.PreserveOnRefresh;
+import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
+import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 
@@ -28,11 +31,27 @@ public class Mainwindow extends TurkuLayout {
             tilesFlexLayout.setAlignContent(FlexLayout.ContentAlignment.SPACE_AROUND);
 
             for(TileAction tile: tileActionList) {
-                Button btn = new Button(tile.getAction().labelText);
-                btn.setTooltipText(tile.getAction().getToolTip());
+                MenuActionGlue glue = tile.getAction();
+                Button btn;
+
+                if (Workarounds.hasIcon(glue.imageName)) {
+                    Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
+                    icn.addClassName("TurkulayoutMenuIcon");
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, e -> {glue.startCommand();});
+
+                } else {
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), e -> {glue.startCommand();});
+
+                }
+
+                glue.attachButton1(new TurkuHasEnabled(btn));
+
+                btn.setDisableOnClick(true);
+                btn.setTooltipText(Workarounds.mlToolTipText(tile.getAction().getToolTip()));
                 btn.setMinHeight("200px");
                 btn.setMinWidth("200px");
                 btn.addClassName("MainwindowTileButton");
+                btn.getStyle().set("border-bottom", "5px solid " + tile.getColor());
 
                 tilesFlexLayout.setFlexGrow(0d, btn);
                 tilesFlexLayout.setFlexShrink(0d, btn);
@@ -44,7 +63,8 @@ public class Mainwindow extends TurkuLayout {
           int runningIndex = 0;
 
           for(TileAction tile: tileActionList) {
-              ((Button) tilesFlexLayout.getComponentAt(runningIndex)).setText(tile.getAction().labelText);
+              MenuActionGlue glue = tile.getAction();
+              ((Button) tilesFlexLayout.getComponentAt(runningIndex)).setText(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey));
               runningIndex ++;
           }
 

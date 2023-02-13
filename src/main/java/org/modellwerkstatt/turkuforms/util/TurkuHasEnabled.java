@@ -1,0 +1,20 @@
+package org.modellwerkstatt.turkuforms.util;
+
+import com.vaadin.flow.component.HasEnabled;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_EnableItem;
+
+
+public class TurkuHasEnabled implements IToolkit_EnableItem {
+    private HasEnabled enabled_1;
+
+    public TurkuHasEnabled(HasEnabled item) {
+        //TODO: Only needed in case we add context menu here.
+        //      Otherwise remove and use anonymous IToolkit_EnableItem
+        enabled_1 = item;
+    }
+
+    @Override
+    public void setItemEnabled(boolean b) {
+        enabled_1.setEnabled(b);
+    }
+}

@@ -1,5 +1,7 @@
 package org.modellwerkstatt.turkuforms.views;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -8,7 +10,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -17,17 +21,13 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.shared.Tooltip;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.dom.ThemeList;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.TurkuMenuItemGlue;
+import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
-
 
 import java.util.List;
 
@@ -40,6 +40,7 @@ public class TurkuLayout extends AppLayout {
     private H1 navbarTitle;
     private MenuBar mainmenuBar;
     protected ITurkuFactory turkuFactory;
+    private VerticalLayout drawerCommandsLayout;
 
     public TurkuLayout() {
     }
@@ -56,12 +57,7 @@ public class TurkuLayout extends AppLayout {
         navbarTitle.addClassName("TurkuLayoutNavbarTitle");
         addToNavbar(toggle, navbarTitle);
 
-
-        // default drawer
-        Div verticalExpansion = new Div();
-        verticalExpansion.setHeightFull();
-
-        Button darkToggle = new Button(new Icon(VaadinIcon.ADJUST), event -> {
+        Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("adjust")), event -> {
 
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();
 
@@ -74,7 +70,7 @@ public class TurkuLayout extends AppLayout {
         darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         darkToggle.setSizeUndefined();
 
-        Button logout = new Button(new Icon(VaadinIcon.POWER_OFF), event -> { exitRequestedFromMenu(); });
+        Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("logout")), event -> { exitRequestedFromMenu(); });
         logout.setSizeUndefined();
 
         userInfoLabel = new Label("-");
@@ -86,7 +82,10 @@ public class TurkuLayout extends AppLayout {
         drawerBottom.setWidthFull();
         drawerBottom.setAlignSelf(FlexComponent.Alignment.CENTER, userInfoLabel);
 
-        drawerLayout = new VerticalLayout(verticalExpansion, sysInfoLabel, drawerBottom);
+        drawerCommandsLayout = new VerticalLayout();
+        drawerCommandsLayout.setSizeFull();
+
+        drawerLayout = new VerticalLayout(drawerCommandsLayout, sysInfoLabel, drawerBottom);
         drawerLayout.setSizeFull();
         addToDrawer(drawerLayout);
     }
@@ -126,11 +125,25 @@ public class TurkuLayout extends AppLayout {
             if (currentItem instanceof MenuActionGlue) {
                 MenuActionGlue glue =  (MenuActionGlue) currentItem;
 
-                MenuItem created = parent.addItem(glue.labelText, event -> {
+                ComponentEventListener<ClickEvent<MenuItem>> execItem = event -> {
                     event.getSource().setEnabled(false);
-                    glue.startCommand(); });
+                    glue.startCommand();
+                };
 
-                glue.attachButton1(new TurkuMenuItemGlue(created));
+                MenuItem created;
+
+                if (Workarounds.hasIcon(glue.imageName)) {
+                    Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
+                    icn.addClassName("TurkulayoutMenuIcon");
+                    created = parent.addItem(icn, execItem);
+                    created.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey)));
+
+                } else {
+                    created = parent.addItem(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), execItem);
+
+                }
+
+                glue.attachButton1(new TurkuHasEnabled(created));
 
                 Tooltip t = Tooltip.forComponent(created);
                 t.setText(Workarounds.mlToolTipText(glue.getToolTip()));
@@ -153,31 +166,40 @@ public class TurkuLayout extends AppLayout {
     }
 
     protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList){
-        Tabs tabs = new Tabs();
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
             if (currentItem instanceof MenuActionGlue) {
                 MenuActionGlue glue =  (MenuActionGlue) currentItem;
+                ComponentEventListener<ClickEvent<Button>> execItem = event -> {
+                    this.setDrawerOpened(false);
+                    glue.startCommand();
+                };
+                Button btn;
 
-                Icon icon = VaadinIcon.CHEVRON_CIRCLE_RIGHT.create();
-                icon.getStyle().set("box-sizing", "border-box")
-                        .set("margin-inline-end", "var(--lumo-space-m)")
-                        .set("padding", "var(--lumo-space-xs)");
-                RouterLink link = new RouterLink();
-                link.add(icon, new Span(glue.labelText));
-                link.setTabIndex(-1);
-                tabs.add(new Tab(link));
+                if (Workarounds.hasIcon(glue.imageName)) {
+                    Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
+                    icn.addClassName("TurkulayoutMenuIcon");
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, execItem);
 
+                } else {
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), execItem);
 
+                }
+
+                glue.attachButton1(new TurkuHasEnabled(btn));
+                btn.setTooltipText(Workarounds.mlToolTipText(glue.getToolTip()));
+                btn.setWidthFull();
+                btn.setDisableOnClick(true);
+                btn.setClassName("MainwindowDrawerCmdButton");
+                drawerCommandsLayout.add(btn);
 
             } else {
                 if (currentItem.labelText == null) {
                     // null is separator; not used yet ...
                 }
+                // subfolders not used yet ...
             }
         }
-        drawerLayout.addComponentAtIndex(0, tabs);
     }
 
 

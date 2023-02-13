@@ -3,15 +3,28 @@ package org.modellwerkstatt.turkuforms.app;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
+import org.modellwerkstatt.turkuforms.forms.TurkuTable;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
+import org.modellwerkstatt.turkuforms.views.CmdUiTab;
+
+import java.util.List;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
-    public static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
+    public final static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
     private String redirectAfterLogoutPath;
-    public static boolean allowEuroSignInDelegates = false;
+
+    private DefaultIconTranslator iconTranslator;
+
+    /* onTheFly settings can be access statically in the app (factory instance not available?) */
+    public static boolean onTheFly_allowEuroSignInDelegates = false;
 
 
     public TurkuAppFactory() {
         super(MoWareTranslations.TranslationSelection.V_TRANSLATIONS);
+
+        iconTranslator = new DefaultIconTranslator();
         redirectAfterLogoutPath = DEFAULT_REDIRECT_TO_AFTER_LOGOUT;
     }
     public String getRedirectAfterLogoutPath() {
@@ -22,10 +35,10 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     }
 
     public void setAllowEuroSign(boolean val) {
-        allowEuroSignInDelegates = val;
+        onTheFly_allowEuroSignInDelegates = val;
     }
     public boolean getAllowEuroSign() {
-        return allowEuroSignInDelegates;
+        return onTheFly_allowEuroSignInDelegates;
     }
 
     @Override
@@ -40,7 +53,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_FormContainer<?> createToolkitFormContainer() {
-        return null;
+        return new TurkuGridLayout();
     }
 
     @Override
@@ -50,7 +63,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_TableForm<?> createToolkitTableForm() {
-        return null;
+        return new TurkuTable();
     }
 
     @Override
@@ -59,13 +72,13 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     }
 
     @Override
-    public IToolkit_CommandContainerUI createTabContainerUi(IToolkit_Application iToolkit_application, boolean b) {
-        return null;
+    public IToolkit_CommandContainerUI createTabContainerUi(IToolkit_Application iToolkit_application, boolean modal) {
+        return new CmdUiTab(this, modal);
     }
 
     @Override
-    public IToolkit_CommandContainerUI createPromptContainerUi(IToolkit_Application iToolkit_application, boolean b) {
-        return null;
+    public IToolkit_CommandContainerUI createPromptContainerUi(IToolkit_Application iToolkit_application, boolean fullSize) {
+        return new CmdUiPrompt(this);
     }
 
     @Override
@@ -106,5 +119,21 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     @Override
     public IToolkit_TextEditor createTextAreaEditor(int i) {
         return null;
+    }
+
+
+    @Override
+    public String translateIconName(String name) {
+        return iconTranslator.translate(name);
+    }
+
+    @Override
+    public String translateButtonLabel(String label, String hk) {
+        String fullLabel = label;
+        if (Workarounds.hasHk(hk)) {
+            fullLabel += hk.length() == 1 ? " (CRTL-" + hk + ")" : " (" + hk + ")";
+        }
+
+        return fullLabel;
     }
 }
