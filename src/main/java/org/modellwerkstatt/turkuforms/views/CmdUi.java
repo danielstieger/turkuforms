@@ -4,7 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -18,15 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI {
+    private final static String CONCLUSION_BUTTON_FLEX_GAPS = "var(--lumo-space-m)";
     protected ICommandContainer cmdContainer;
-    protected List<Button> conclusionButtons = new ArrayList<Button>();
-    protected HorizontalLayout buttonPane = new HorizontalLayout();
+    protected List<Button> conclusionButtons;
+    protected FlexLayout buttonPane;
     protected ITurkuFactory factory;
 
     public CmdUi(ITurkuFactory fact) {
         factory = fact;
-        buttonPane = new HorizontalLayout();
+        conclusionButtons = new ArrayList<>();
+        buttonPane = new FlexLayout();
         buttonPane.setWidthFull();
+        buttonPane.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+        buttonPane.getStyle().set("column-gap", CONCLUSION_BUTTON_FLEX_GAPS);
     }
 
 
@@ -86,9 +90,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
                 Div spacer = new Div();
                 buttonPane.add(spacer);
                 buttonPane.expand(spacer);
-
-            } else {
-
             }
         }
 

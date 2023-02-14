@@ -11,7 +11,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 
 import java.util.List;
 
-public class TurkuGridLayout<Dto extends IOFXEntity<?>> extends VerticalLayout implements IToolkit_FormContainer<Dto> {
+public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_FormContainer<DTO> {
 
     @Override
     public void setLayoutConstraints(List<String> list, List<String> list1) {
@@ -34,7 +34,7 @@ public class TurkuGridLayout<Dto extends IOFXEntity<?>> extends VerticalLayout i
     }
 
     @Override
-    public void loadList(List<Dto> list, IOFXSelection iofxSelection) {
+    public void loadList(List<DTO> list, IOFXSelection iofxSelection) {
 
     }
 

@@ -9,8 +9,6 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
-import java.util.List;
-
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public final static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
     private String redirectAfterLogoutPath;

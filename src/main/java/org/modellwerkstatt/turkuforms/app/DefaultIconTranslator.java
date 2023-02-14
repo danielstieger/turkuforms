@@ -19,9 +19,12 @@ public class DefaultIconTranslator {
         trans.put("status", "vaadin:file-o");
         trans.put("print", "vaadin:print");
         trans.put("save", "vaadin:database ");
-        trans.put("logout", "vaadin:power-off");
-        // ESC button icons
-        trans.put("arrow_back", "vaadin:caret-left ");
+
+        // system icons ...
+        trans.put("arrow_back", "vaadin:caret-left"); // left ESC button
+        trans.put("mainmenu_down", "vaadin:caret-down");
+        trans.put("mainmenu_logout", "vaadin:power-off");
+        trans.put("mainmenu_adjust", "vaadin:adjust");
     }
 
     public String translate(String iconName) {

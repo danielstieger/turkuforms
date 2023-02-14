@@ -14,7 +14,6 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -57,7 +56,7 @@ public class TurkuLayout extends AppLayout {
         navbarTitle.addClassName("TurkuLayoutNavbarTitle");
         addToNavbar(toggle, navbarTitle);
 
-        Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("adjust")), event -> {
+        Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();
 
             if (themeList.contains(Lumo.DARK)) {
@@ -70,7 +69,7 @@ public class TurkuLayout extends AppLayout {
         darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         darkToggle.setSizeUndefined();
 
-        Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("logout")), event -> {
+        Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_logout")), event -> {
             this.setDrawerOpened(false);
             exitRequestedFromMenu();
         });
@@ -116,7 +115,7 @@ public class TurkuLayout extends AppLayout {
         }
 
 
-        MenuItem root = mainmenuBar.addItem(new Icon(VaadinIcon.CHEVRON_DOWN));
+        MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
         root.add(new Text(menuName));
         SubMenu rootSubMenu = root.getSubMenu();
         return createMainMenuStructure(rootSubMenu, menu.items);

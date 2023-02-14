@@ -103,7 +103,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application {
     public void setMenuAndInit(int langIndex, MenuSub start, MenuSub extra, MenuSub help) {
         SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
 
-        Icon vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("logout"));
+        Icon vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"));
         vaadinPowerOff.addClassName("TurkulayoutMenuIcon");
         startMenu.addItem(vaadinPowerOff, event -> {super.exitRequestedFromMenu();});
         addDrawerMenu(start.items);

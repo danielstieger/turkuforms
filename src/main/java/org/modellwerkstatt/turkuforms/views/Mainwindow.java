@@ -1,5 +1,7 @@
 package org.modellwerkstatt.turkuforms.views;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -32,15 +34,19 @@ public class Mainwindow extends TurkuLayout {
 
             for(TileAction tile: tileActionList) {
                 MenuActionGlue glue = tile.getAction();
+                ComponentEventListener<ClickEvent<Button>> execItem = event -> {
+                    this.setDrawerOpened(false);
+                    glue.startCommand();
+                };
                 Button btn;
 
                 if (Workarounds.hasIcon(glue.imageName)) {
                     Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
                     icn.addClassName("TurkulayoutMenuIcon");
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, e -> {glue.startCommand();});
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, execItem);
 
                 } else {
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), e -> {glue.startCommand();});
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), execItem);
 
                 }
 
