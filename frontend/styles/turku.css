@@ -55,14 +55,16 @@ vaadin-menu-bar::part(container) {
 /* CmdUi * * * * * * * * * * * * * * * */
 @media screen and (max-width: 750px) {
 
-.CmdUiConclusionsFlex {
+    .CmdUiConclusionsFlex {
+        flex-wrap: wrap-reverse;
+        flex-direction: row-reverse;
+    }
 
-}
+    .CmdUiConclusionsFlexSpacer {
+        display: none;
+    }
 
-.CmdUiConclusionsFlexButton {
-    flex: 100%;
-}
-
-
-
+    .CmdUiConclusionsFlexButton {
+        flex: 1 0 45%;
+    }
 }

@@ -90,6 +90,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
             if (conclusionButtons.size() == 1) {
                 Div spacer = new Div();
+                spacer.addClassName("CmdUiConclusionsFlexSpacer");
                 cmdUiConclusionsFlex.add(spacer);
                 cmdUiConclusionsFlex.expand(spacer);
             }
