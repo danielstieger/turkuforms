@@ -21,21 +21,22 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     private final static String CONCLUSION_BUTTON_FLEX_GAPS = "var(--lumo-space-m)";
     protected ICommandContainer cmdContainer;
     protected List<Button> conclusionButtons;
-    protected FlexLayout buttonPane;
+    protected FlexLayout cmdUiConclusionsFlex;
     protected ITurkuFactory factory;
 
     public CmdUi(ITurkuFactory fact) {
         factory = fact;
         conclusionButtons = new ArrayList<>();
-        buttonPane = new FlexLayout();
-        buttonPane.setWidthFull();
-        buttonPane.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-        buttonPane.getStyle().set("column-gap", CONCLUSION_BUTTON_FLEX_GAPS);
+        cmdUiConclusionsFlex = new FlexLayout();
+        cmdUiConclusionsFlex.addClassName("CmdUiConclusionsFlex");
+        cmdUiConclusionsFlex.setWidthFull();
+        cmdUiConclusionsFlex.setFlexWrap(FlexLayout.FlexWrap.WRAP_REVERSE);
+        cmdUiConclusionsFlex.getStyle().set("column-gap", CONCLUSION_BUTTON_FLEX_GAPS);
     }
 
 
     public void initialShow(IToolkit_Form content) {
-        this.add((Component) content, buttonPane);
+        this.add((Component) content, cmdUiConclusionsFlex);
     }
 
     @Override
@@ -54,7 +55,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void setConclusions(List<OFXConclusionInformation> conclusionInfo, List<String> globalHks) {
         // already optimized, only called for "new" pages, not on reloads of same page
-        buttonPane.removeAll();
+        cmdUiConclusionsFlex.removeAll();
         conclusionButtons.clear();
 
         List<String> conclusionHks = new ArrayList<String>();
@@ -80,16 +81,17 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
                 button.setVisible(false);
             }
 
+            button.addClassName("CmdUiConclusionsFlexButton");
             button.setSizeUndefined();
             button.setDisableOnClick(true);
-            buttonPane.add(button);
+            cmdUiConclusionsFlex.add(button);
             conclusionButtons.add(button);
 
 
             if (conclusionButtons.size() == 1) {
                 Div spacer = new Div();
-                buttonPane.add(spacer);
-                buttonPane.expand(spacer);
+                cmdUiConclusionsFlex.add(spacer);
+                cmdUiConclusionsFlex.expand(spacer);
             }
         }
 

@@ -50,3 +50,19 @@ vaadin-menu-bar::part(container) {
 .MainwindowDrawerCmdButton {
     font-size: var(--lumo-font-size-s);
 }
+
+
+/* CmdUi * * * * * * * * * * * * * * * */
+@media screen and (max-width: 750px) {
+
+.CmdUiConclusionsFlex {
+
+}
+
+.CmdUiConclusionsFlexButton {
+    flex: 100%;
+}
+
+
+
+}
