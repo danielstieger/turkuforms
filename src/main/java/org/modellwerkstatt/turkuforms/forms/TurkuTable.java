@@ -1,6 +1,8 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
@@ -11,7 +13,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 
 import java.util.List;
 
-public class TurkuTable<Dto extends IOFXEntity<?>> extends Div implements IToolkit_TableForm<Dto> {
+public class TurkuTable<Dto extends IOFXEntity<?>> extends VerticalLayout implements IToolkit_TableForm<Dto> {
 
 
     public TurkuTable() {
@@ -20,7 +22,7 @@ public class TurkuTable<Dto extends IOFXEntity<?>> extends Div implements IToolk
 
     @Override
     public void endOfInitializationForElementClass(Class aClass) {
-        this.setText("Table for " + aClass.getSimpleName());
+        this.add(new Div(new Text("Table for " + aClass.getSimpleName())));
     }
 
     @Override

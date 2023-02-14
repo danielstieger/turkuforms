@@ -81,10 +81,14 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             buttonPane.add(button);
             conclusionButtons.add(button);
 
+
             if (conclusionButtons.size() == 1) {
                 Div spacer = new Div();
-//                spacer.setWidthFull();
                 buttonPane.add(spacer);
+                buttonPane.expand(spacer);
+
+            } else {
+
             }
         }
 

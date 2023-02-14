@@ -17,6 +17,8 @@ public class CmdUiTab extends CmdUi {
     @Override
     public void show(String winTitle, IToolkit_Form form) {
         windowTitle = winTitle;
+
+        this.setSizeFull();
         ((HasSize) form).setSizeFull();
         initialShow(form);
     }

@@ -58,7 +58,6 @@ public class TurkuLayout extends AppLayout {
         addToNavbar(toggle, navbarTitle);
 
         Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("adjust")), event -> {
-
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();
 
             if (themeList.contains(Lumo.DARK)) {
@@ -66,11 +65,15 @@ public class TurkuLayout extends AppLayout {
             } else {
                 themeList.add(Lumo.DARK);
             }
+            this.setDrawerOpened(false);
         });
         darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         darkToggle.setSizeUndefined();
 
-        Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("logout")), event -> { exitRequestedFromMenu(); });
+        Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("logout")), event -> {
+            this.setDrawerOpened(false);
+            exitRequestedFromMenu();
+        });
         logout.setSizeUndefined();
 
         userInfoLabel = new Label("-");
@@ -204,7 +207,7 @@ public class TurkuLayout extends AppLayout {
 
 
     protected void exitRequestedFromMenu() {
-
+        // TODO: How should we do an exit?
     }
 
 

@@ -20,6 +20,8 @@ public class DefaultIconTranslator {
         trans.put("print", "vaadin:print");
         trans.put("save", "vaadin:database ");
         trans.put("logout", "vaadin:power-off");
+        // ESC button icons
+        trans.put("arrow_back", "vaadin:caret-left ");
     }
 
     public String translate(String iconName) {
