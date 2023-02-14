@@ -1,4 +1,11 @@
 package org.modellwerkstatt.turkuforms.forms;
 
-public class FormHeading {
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+public class FormHeading extends VerticalLayout {
+
+    public FormHeading() {
+    }
+
+
 }

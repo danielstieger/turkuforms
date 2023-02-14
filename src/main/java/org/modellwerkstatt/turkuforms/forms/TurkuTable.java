@@ -1,10 +1,13 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
@@ -16,15 +19,31 @@ import java.util.List;
 
 public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableForm<DTO> {
     private FlexLayout topPane;
+    private FormHeading heading;
+    private TextField searchField;
+    private Button csvButton;
+    private Label infoLabel;
+
     private Grid grid;
     private FlexLayout bottomPane;
 
 
     public TurkuTable() {
-
         this.setSizeFull();
 
+        topPane = new FlexLayout();
+        topPane.setSizeFull();
 
+        heading = new FormHeading();
+        searchField = new TextField();
+        csvButton = new Button("csv");
+        infoLabel = new Label("*/*");
+
+        topPane.add(heading, searchField, csvButton, infoLabel);
+
+        grid = new Grid<>();
+
+        this.add(topPane, grid);
     }
 
     @Override
