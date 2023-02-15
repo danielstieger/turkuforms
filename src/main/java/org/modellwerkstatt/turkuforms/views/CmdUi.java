@@ -12,31 +12,26 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.util.LeftRight;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;
 import java.util.List;
 
 abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI {
-    private final static String CONCLUSION_BUTTON_FLEX_GAPS = "var(--lumo-space-m)";
     protected ICommandContainer cmdContainer;
     protected List<Button> conclusionButtons;
-    protected FlexLayout cmdUiConclusionsFlex;
+    protected LeftRight conclusionLayout;
     protected ITurkuFactory factory;
 
     public CmdUi(ITurkuFactory fact) {
         factory = fact;
         conclusionButtons = new ArrayList<>();
-        cmdUiConclusionsFlex = new FlexLayout();
-        cmdUiConclusionsFlex.addClassName("CmdUiConclusionsFlex");
-        cmdUiConclusionsFlex.setWidthFull();
-        cmdUiConclusionsFlex.setFlexWrap(FlexLayout.FlexWrap.WRAP_REVERSE);
-        cmdUiConclusionsFlex.getStyle().set("column-gap", CONCLUSION_BUTTON_FLEX_GAPS);
+        conclusionLayout = new LeftRight("ConclusionBtns");
     }
 
-
     public void initialShow(IToolkit_Form content) {
-        this.add((Component) content, cmdUiConclusionsFlex);
+        this.add((Component) content, conclusionLayout);
     }
 
     @Override
@@ -55,7 +50,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void setConclusions(List<OFXConclusionInformation> conclusionInfo, List<String> globalHks) {
         // already optimized, only called for "new" pages, not on reloads of same page
-        cmdUiConclusionsFlex.removeAll();
+        conclusionLayout.clear();
         conclusionButtons.clear();
 
         List<String> conclusionHks = new ArrayList<String>();
@@ -81,19 +76,12 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
                 button.setVisible(false);
             }
 
-            button.addClassName("CmdUiConclusionsFlexButton");
-            button.setSizeUndefined();
             button.setDisableOnClick(true);
-            cmdUiConclusionsFlex.add(button);
+            conclusionLayout.add(button);
             conclusionButtons.add(button);
 
 
-            if (conclusionButtons.size() == 1) {
-                Div spacer = new Div();
-                spacer.addClassName("CmdUiConclusionsFlexSpacer");
-                cmdUiConclusionsFlex.add(spacer);
-                cmdUiConclusionsFlex.expand(spacer);
-            }
+            if (conclusionButtons.size() == 1) { conclusionLayout.spacer(); }
         }
 
         // TODO: register globalHks and conclusionHks

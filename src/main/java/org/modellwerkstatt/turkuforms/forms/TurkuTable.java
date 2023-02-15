@@ -2,44 +2,60 @@ package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
+import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
+import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.util.LeftRight;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 
 public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableForm<DTO> {
-    private FlexLayout topPane;
+    private LeftRight topPane;
     private FormHeading heading;
     private TextField searchField;
-    private Button csvButton;
-    private Label infoLabel;
+    private Button infoCsvButton;
 
     private Grid grid;
     private FlexLayout bottomPane;
+    private ITurkuFactory factory;
 
 
-    public TurkuTable() {
+    public TurkuTable(ITurkuFactory fact) {
+        factory = fact;
+
         this.setSizeFull();
 
-        topPane = new FlexLayout();
-        topPane.setSizeFull();
+        topPane = new LeftRight();
 
         heading = new FormHeading();
-        searchField = new TextField();
-        csvButton = new Button("csv");
-        infoLabel = new Label("*/*");
 
-        topPane.add(heading, searchField, csvButton, infoLabel);
+        searchField = new TextField();
+        searchField.setAutoselect(true);
+        searchField.setClearButtonVisible(true);
+        searchField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+
+        infoCsvButton = new Button("*/*");
+        infoCsvButton.setTooltipText(factory.getSystemLabel(-1, MoWareTranslations.Key.COPY_CSV_FROM_TABLE));
+        infoCsvButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY);
+
+        topPane.add(heading);
+        topPane.spacer();
+        topPane.add(searchField);
+        topPane.add(infoCsvButton);
 
         grid = new Grid<>();
 
@@ -48,7 +64,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void endOfInitializationForElementClass(Class aClass) {
-        this.add(new Div(new Text("Table for " + aClass.getSimpleName())));
+
     }
 
     @Override
@@ -108,12 +124,12 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void setTitleText(String s) {
-
+        heading.setHeading(s);
     }
 
     @Override
     public void setProblems(List<IOFXProblem> list) {
-
+        heading.flag(list);
     }
 
     @Override

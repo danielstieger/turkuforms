@@ -30,5 +30,10 @@ public class Workarounds {
     public static boolean hasHk(String hkname){
         return hkname != null && !"".equals(hkname);
     }
+
+    public static boolean hasLabel(String label){
+        return label != null && !"".equals(label);
+    }
+
 }
 

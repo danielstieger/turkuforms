@@ -61,7 +61,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_TableForm<?> createToolkitTableForm() {
-        return new TurkuTable();
+        return new TurkuTable(this);
     }
 
     @Override

@@ -14,7 +14,6 @@ public class DefaultIconTranslator {
         trans.put("launch", "vaadin:external-link");
         trans.put("label", "vaadin:tab-a");
         trans.put("search", "vaadin:search");
-        trans.put("new", "vaadin:file-add");
         trans.put("settings", "vaadin:cog-o");
         trans.put("status", "vaadin:file-o");
         trans.put("print", "vaadin:print");
