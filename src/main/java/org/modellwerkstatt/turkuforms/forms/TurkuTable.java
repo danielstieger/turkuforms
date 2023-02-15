@@ -19,28 +19,35 @@ import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.LeftRight;
+import org.modellwerkstatt.turkuforms.util.OverflowMenu;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 
 public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableForm<DTO> {
+    private ITurkuFactory factory;
+
     private LeftRight topPane;
     private FormHeading heading;
     private TextField searchField;
     private Button infoCsvButton;
+    private OverflowMenu overflowMenu;
 
     private Grid grid;
-    private FlexLayout bottomPane;
-    private ITurkuFactory factory;
+    private Label leftLabel;
+    private Label rightLabel;
+    private boolean hasSummaryLine = false;
+
 
 
     public TurkuTable(ITurkuFactory fact) {
         factory = fact;
 
+        this.setPadding(false);
         this.setSizeFull();
+        this.getStyle().set("gap", "0");
 
         topPane = new LeftRight();
-
         heading = new FormHeading();
 
         searchField = new TextField();
@@ -83,11 +90,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
     @Override
-    public void setSelectionSummaryLineText(String s) {
-
-    }
-
-    @Override
     public boolean selectionChanged(IOFXSelection iofxSelection) {
         return false;
     }
@@ -97,10 +99,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     }
 
-    @Override
-    public void setTableSummaryLineText(String s) {
 
-    }
 
     @Override
     public void forceNotEditable() {
@@ -112,14 +111,47 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     }
 
+
+
+
     @Override
-    public void addMenuAndSetButtons(MenuSub menuSub) {
+    public Object myRequestFocus() {
+        return null;
+    }
+
+    @Override
+    public void afterFullUiInitialized() {
 
     }
 
     @Override
-    public void gcClear() {
+    public void setSelectionSummaryLineText(String s) {
+        if (!hasSummaryLine) { initSummaryLine(); }
+        rightLabel.setText(s);
+    }
 
+    @Override
+    public void setTableSummaryLineText(String s) {
+        if (!hasSummaryLine) { initSummaryLine(); }
+        leftLabel.setText(s);
+    }
+
+    private void initSummaryLine(){
+        leftLabel = new Label();
+        rightLabel = new Label();
+        LeftRight lr = new LeftRight();
+        lr.add(leftLabel);
+        lr.spacer();
+        lr.add(rightLabel);
+        this.add(lr);
+        hasSummaryLine = true;
+    }
+
+    @Override
+    public void addMenuAndSetButtons(MenuSub menuSub) {
+        overflowMenu = new OverflowMenu();
+        overflowMenu.initialize(factory, menuSub);
+        topPane.add(overflowMenu);
     }
 
     @Override
@@ -133,12 +165,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
     @Override
-    public Object myRequestFocus() {
-        return null;
-    }
-
-    @Override
-    public void afterFullUiInitialized() {
-
+    public void gcClear() {
+        factory = null;
     }
 }

@@ -25,6 +25,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.util.OverflowMenu;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -111,6 +112,7 @@ public class TurkuLayout extends AppLayout {
             mainmenuBar.setOpenOnHover(true);
             mainmenuBar.setWidthFull();
             mainmenuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+            mainmenuBar.addClassName("TurkuLayoutMenuBar");
             addToNavbar(mainmenuBar);
         }
 
@@ -118,53 +120,7 @@ public class TurkuLayout extends AppLayout {
         MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
         root.add(new Text(menuName));
         SubMenu rootSubMenu = root.getSubMenu();
-        return createMainMenuStructure(rootSubMenu, menu.items);
-    }
-
-    private SubMenu createMainMenuStructure(SubMenu parent, List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList) {
-
-        for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
-            if (currentItem instanceof MenuActionGlue) {
-                MenuActionGlue glue =  (MenuActionGlue) currentItem;
-
-                ComponentEventListener<ClickEvent<MenuItem>> execItem = event -> {
-                    event.getSource().setEnabled(false);
-                    glue.startCommand();
-                };
-
-                MenuItem created;
-
-                if (Workarounds.hasIcon(glue.imageName)) {
-                    Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
-                    icn.addClassName("TurkulayoutMenuIcon");
-                    created = parent.addItem(icn, execItem);
-                    created.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey)));
-
-                } else {
-                    created = parent.addItem(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), execItem);
-
-                }
-
-                glue.attachButton1(new TurkuHasEnabled(created));
-
-                Tooltip t = Tooltip.forComponent(created);
-                t.setText(Workarounds.mlToolTipText(glue.getToolTip()));
-
-
-            } else {
-                if (currentItem.labelText == null) {
-                    // null is separator
-                    parent.add(new Hr());
-
-                } else {
-                    MenuItem created = parent.addItem(currentItem.labelText);
-                    SubMenu createdSub = created.getSubMenu();
-                    createMainMenuStructure(createdSub,((MenuSub) currentItem).items);
-                }
-
-            }
-        }
-        return parent;
+        return OverflowMenu.createMainMenuStructure(turkuFactory, rootSubMenu, menu.items);
     }
 
     protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList){

@@ -46,11 +46,11 @@ vaadin-tooltip-overlay::part(content) {
     margin: 0;
 }
 
-vaadin-menu-bar {
+.TurkuLayoutMenuBar {
     padding-right: 2em;
 }
 
-vaadin-menu-bar::part(container) {
+.TurkuLayoutMenuBar::part(container) {
     justify-content: flex-end;
 
 }

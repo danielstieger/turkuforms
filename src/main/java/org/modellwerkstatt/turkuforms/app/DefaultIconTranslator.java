@@ -24,6 +24,8 @@ public class DefaultIconTranslator {
         trans.put("mainmenu_down", "vaadin:caret-down");
         trans.put("mainmenu_logout", "vaadin:power-off");
         trans.put("mainmenu_adjust", "vaadin:adjust");
+        trans.put("table_menu", "vaadin:menu");
+
     }
 
     public String translate(String iconName) {

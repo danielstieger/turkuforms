@@ -11,6 +11,8 @@ public class CmdUiTab extends CmdUi {
 
     public CmdUiTab(ITurkuFactory fact, boolean modal) {
         super(fact);
+        setPadding(false);
+
         isModal = modal;
     }
 

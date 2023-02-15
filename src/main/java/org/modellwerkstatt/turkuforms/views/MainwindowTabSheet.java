@@ -5,6 +5,9 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
+import com.vaadin.flow.component.tabs.TabVariant;
+import com.vaadin.flow.dom.ThemeList;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +19,14 @@ public class MainwindowTabSheet extends Composite<Component> {
 
     public MainwindowTabSheet() {
         tabsInSheet = new ArrayList<>();
-
+        // TODO: dont we need a TabChange listener?
     }
 
     @Override
     protected Component initContent() {
-
         commandTabSheet = new TabSheet();
         commandTabSheet.setSizeFull();
         commandTabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
-
         return commandTabSheet;
     }
 
