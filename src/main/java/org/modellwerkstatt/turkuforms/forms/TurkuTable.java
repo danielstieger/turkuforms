@@ -10,16 +10,21 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
+import com.vaadin.flow.data.renderer.LitRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
+import com.vaadin.flow.function.ValueProvider;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
+import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.LeftRight;
 import org.modellwerkstatt.turkuforms.util.OverflowMenu;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
@@ -33,7 +38,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private Button infoCsvButton;
     private OverflowMenu overflowMenu;
 
-    private Grid grid;
+    private Grid<DTO> grid;
     private Label leftLabel;
     private Label rightLabel;
     private boolean hasSummaryLine = false;
@@ -64,7 +69,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(searchField);
         topPane.add(infoCsvButton);
 
-        grid = new Grid<>();
+        grid = new Grid<DTO>();
 
         this.add(topPane, grid);
     }
@@ -80,13 +85,22 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
     @Override
-    public void addTableItemColor(String s, ITableCellStringConverter iTableCellStringConverter) {
+    public void addTableItemColor(String property, ITableCellStringConverter converter) {
 
     }
 
     @Override
-    public void addColumn(String s, String s1, ITableCellStringConverter iTableCellStringConverter, int i, boolean b, boolean b1, boolean b2) {
+    public void addColumn(String property, String label, ITableCellStringConverter converter, int width, boolean editable, boolean folded, boolean important) {
 
+        String template = "<span>Hello</span>";
+        Grid.Column<DTO> col = grid.addColumn(LitRenderer.<DTO>of(template).
+                withProperty(property, item -> {
+                    Turku.l("LitRenderer " + item + "."+ property + " = " + MoJSON.get(item, property));
+                    return "" + MoJSON.get(item, property); }));
+
+        col.setHeader(label);
+        col.setWidth("" + width + "%");
+        col.setResizable(true);
     }
 
     @Override
@@ -96,7 +110,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void loadList(List<DTO> list, IOFXSelection iofxSelection) {
-
+        grid.setItems(list);
     }
 
 

@@ -28,6 +28,11 @@ vaadin {
     productionMode = true
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+    options.deprecation = true
+}
+
 group 'org.modellwerkstatt'
 // version '0.9'
 
