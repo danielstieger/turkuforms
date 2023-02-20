@@ -29,12 +29,12 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     }
 
     @Override
-    public boolean selectionChanged(IOFXSelection iofxSelection) {
+    public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
         return false;
     }
 
     @Override
-    public void loadList(List<DTO> list, IOFXSelection iofxSelection) {
+    public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
 
     }
 
