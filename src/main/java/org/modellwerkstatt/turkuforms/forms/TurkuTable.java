@@ -1,6 +1,8 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.*;
@@ -11,7 +13,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import net.bytebuddy.implementation.bytecode.Throw;
+import com.vaadin.flow.function.SerializablePredicate;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
@@ -43,16 +45,17 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private Class dtoClass;
     private Grid<DTO> grid;
     private GridMultiSelectionModel<DTO> selectionModel;
-    private GridListDataView<DTO> gridListDataView;
+    private TurkuTableDataView<DTO> dataView;
+
 
     private IGenSelControlled genFormController;
     private List<TurkuTableCol> colInfo = new ArrayList<>();
+
 
     private Label leftLabel;
     private Label rightLabel;
     private boolean hasSummaryLine = false;
     private boolean selectionHandlerEnabled = true;
-    private String filterSearchForWhat = "";
 
 
 
@@ -70,11 +73,15 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         searchField.setAutoselect(true);
         searchField.setClearButtonVisible(true);
         searchField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.setValueChangeMode(ValueChangeMode.LAZY);
 
         infoCsvButton = new Button("*/*");
         infoCsvButton.setTooltipText(factory.getSystemLabel(-1, MoWareTranslations.Key.COPY_CSV_FROM_TABLE));
         infoCsvButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY);
+
+        infoCsvButton.addClickListener(event -> {
+            UI.getCurrent().getPage().executeJs("turku.copyToClipboard($0, $1)", this, dataView.generateCsv());
+        });
 
         topPane.add(heading);
         topPane.spacer();
@@ -85,6 +92,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
+        selectionModel.setSelectionColumnFrozen(true);
 
         grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<DTO>>() {
             @Override
@@ -101,6 +109,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
                 Set<DTO> allSelected = event.getAllSelectedItems();
+                Turku.l("selectionModel.addMultiSelectionListener() Now " + allSelected.size() + " selected");
+
                 Selection sel = new Selection(dtoClass);
                 sel.setIssuer(this.hashCode());
 
@@ -108,18 +118,25 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     sel.setObjects(new ArrayList(allSelected));
                 }
                 genFormController.pushSelection(sel);
+                adjustTableInformation("MSL");
             }
         });
 
         this.add(topPane, grid);
 
+
+        dataView = new TurkuTableDataView<>(colInfo);
         searchField.addValueChangeListener(e -> {
-                    filterSearchForWhat = e.getValue();
-                    if (gridListDataView != null) {
-                        gridListDataView.refreshAll();
+                    Turku.l("SearchField.valueChange(LAZY) for '"+ e.getValue() + "'");
+                    dataView.setSearchText(e.getValue());
+                    Set<DTO> curSel = selectionModel.getSelectedItems();
+                    if (dataView.updateFilterList(grid, curSel)) {
+                        for (DTO item: curSel) { selectionModel.select(item); }
                     }
                 });
     }
+
+
 
     @Override
     public void endOfInitializationForElementClass(Class theDto) {
@@ -150,7 +167,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         if (folded) {
 
         } else {
-            colInfo.add(new TurkuTableCol(colInfo.size(), property, converter, width));
+            colInfo.add(new TurkuTableCol(colInfo.size(), property, label, converter, width));
 
             String template = "<span style=\"${item." + property + "Style}\">${item." + property + "}</span>";
             String fontWeight = important ? "font-weight:800;" : "";
@@ -186,13 +203,14 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
+        // TODO: FALSE zurück liefern, in case selection not found??
+
         Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
         selectionHandlerEnabled = false;
-        selectionModel.deselectAll();
 
-        for (DTO obj : iofxSelection.getObjects()) {
-            selectionModel.select(obj);
-        }
+        selectionModel.deselectAll();
+        for (DTO obj : iofxSelection.getObjects()) { selectionModel.select(obj); }
+        adjustTableInformation("SC");
 
         selectionHandlerEnabled = true;
         return true;
@@ -202,31 +220,22 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
         Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
 
-        gridListDataView = grid.setItems(list);
-        gridListDataView.addFilter(dto -> {
-            int i = 0;
-            String viewed = "?";
-            try {
-                for (; i < colInfo.size(); i++) {
-                    TurkuTableCol col = colInfo.get(i);
-                    viewed = col.mowareConverter.convert(MoJSON.get(dto, col.propertyName));
-                    if (viewed.toLowerCase().replace(".", "").contains(filterSearchForWhat)) {
-                        return true;
-                    }
-                }
-            }catch (Throwable t) {
-                Turku.l("DTO " + dto + " @ prop " + colInfo.get(i).propertyName + " - " + viewed);
-                Turku.l("TABLE LOADLIST: " + OFXConsoleHelper.stackTrace2String(t));
-            }
+        // (0) SelCrtl clears selection if sel not in newList
+        if (dataView.setNewList(grid, list, iofxSelection)) {
+            selectionChanged(iofxSelection);
+            adjustTableInformation("LL");
+        } else {
+            adjustTableInformation("*");
+        }
 
-            return false;
-        });
-        selectionChanged(iofxSelection);
+
     }
 
 
-    void adjustTableInformation(boolean allSelectedItemsFound) {
-
+    void adjustTableInformation(String st) {
+        int selCnt = selectionModel.getSelectedItems().size();
+        int total = dataView.getFilteredTotalCount();
+        infoCsvButton.setText(st + ":" + selCnt + " / " + total);
     }
 
 
@@ -241,8 +250,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
 
-
-
     @Override
     public Object myRequestFocus() {
         return null;
@@ -251,6 +258,17 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public void afterFullUiInitialized() {
 
+    }
+
+    private void clearLocalSelectionWithoutPush() {
+        Turku.l("TurkuTable.clearLocalSelectionWithoutPush() clearing local selection!");
+        if (selectionHandlerEnabled) {
+            selectionHandlerEnabled = false;
+            selectionModel.deselectAll();
+            selectionHandlerEnabled = true;
+        } else {
+            selectionModel.deselectAll();
+        }
     }
 
     @Override
