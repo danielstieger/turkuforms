@@ -3,9 +3,11 @@ package org.modellwerkstatt.turkuforms.util;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.contextmenu.HasMenuItems;
-import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.contextmenu.*;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
+import com.vaadin.flow.component.grid.contextmenu.GridMenuItem;
+import com.vaadin.flow.component.grid.contextmenu.GridSubMenu;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -26,11 +28,13 @@ public class OverflowMenu extends MenuBar {
     }
 
 
-    public void initialize(ITurkuFactory factory, MenuSub menu){
+    public <T> void initialize(ITurkuFactory factory, MenuSub menu, Grid<T> grid){
+        GridContextMenu<T> rootGCM = new GridContextMenu<T>(grid);
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menu.items) {
             if (currentItem instanceof MenuActionGlue) {
-                createActionItem(factory, this, (MenuActionGlue) currentItem);
+                // only overflow menu for context menu
+                createActionItem(factory, this, null, null, (MenuActionGlue) currentItem);
 
             } else {
                 if (currentItem.labelText == null) {
@@ -39,7 +43,7 @@ public class OverflowMenu extends MenuBar {
                 } else {
                     MenuItem created = this.addItem(Workarounds.createIconWithCollection(factory.translateIconName("table_menu")));
                     SubMenu createdSub = created.getSubMenu();
-                    createMainMenuStructure(factory, createdSub,((MenuSub) currentItem).items);
+                    createMainMenuStructure(factory, createdSub, rootGCM, null, ((MenuSub) currentItem).items);
                 }
             }
         }
@@ -47,11 +51,15 @@ public class OverflowMenu extends MenuBar {
 
 
 
-    static public SubMenu createMainMenuStructure(ITurkuFactory turkuFactory, SubMenu parent, List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList) {
+    static public <T> SubMenu createMainMenuStructure(ITurkuFactory turkuFactory,
+                                                      SubMenu parent,
+                                                      GridContextMenu<T> rootGCM,
+                                                      GridSubMenu<T> subGCM,
+                                                      List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList) {
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
             if (currentItem instanceof MenuActionGlue) {
-                createActionItem(turkuFactory, parent, (MenuActionGlue) currentItem);
+                createActionItem(turkuFactory, parent, rootGCM, subGCM, (MenuActionGlue) currentItem);
             } else {
                 if (currentItem.labelText == null) {
                     // null is separator
@@ -60,7 +68,18 @@ public class OverflowMenu extends MenuBar {
                 } else {
                     MenuItem created = parent.addItem(currentItem.labelText);
                     SubMenu createdSub = created.getSubMenu();
-                    createMainMenuStructure(turkuFactory, createdSub,((MenuSub) currentItem).items);
+
+                    if (rootGCM != null) {
+                        GridMenuItem<T> createdGCM = rootGCM.addItem(currentItem.labelText);
+                        subGCM = createdGCM.getSubMenu();
+
+                    } else if (subGCM != null) {
+                        GridMenuItem<T> createdGCM = subGCM.addItem(currentItem.labelText);
+                        subGCM = createdGCM.getSubMenu();
+
+                    }
+
+                    createMainMenuStructure(turkuFactory, createdSub, null, subGCM, ((MenuSub) currentItem).items);
                 }
             }
         }
@@ -70,30 +89,63 @@ public class OverflowMenu extends MenuBar {
 
 
 
-    static public MenuItem createActionItem(ITurkuFactory turkuFactory, HasMenuItems parent, MenuActionGlue glue) {
-
+    static public <T> MenuItem createActionItem(ITurkuFactory turkuFactory, HasMenuItems parent, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, MenuActionGlue glue) {
+        // Menu & GCM do not have common interfaces and HasGridMenuItems is protected (vaadin bug?)
         ComponentEventListener<ClickEvent<MenuItem>> execItem = event -> {
             event.getSource().setEnabled(false);
             glue.startCommand();
         };
+        ComponentEventListener<GridContextMenu.GridContextMenuItemClickEvent<T>> execGCMItem = event -> {
+            event.getSource().setEnabled(false);
+            glue.startCommand();
+        };
+
+        // either or - not both...
+        boolean createRootGCM = rootGCM != null;
+        boolean createSubGCM = subGCM != null;
+        GridMenuItem<T> createdGCM = null;
 
         MenuItem created;
 
         if (Workarounds.hasIcon(glue.imageName)) {
-            Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
-            icn.addClassName("TurkulayoutMenuIcon");
-            created = parent.addItem(icn, execItem);
+            Icon icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
+            icon.addClassName("TurkulayoutMenuIcon");
+            created = parent.addItem(icon, execItem);
             created.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey)));
 
+            if (createRootGCM) {
+                icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
+                icon.addClassName("TurkulayoutMenuIcon");
+                createdGCM = rootGCM.addItem(icon, execGCMItem);
+                createdGCM.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey)));
+
+            } else if (createSubGCM) {
+                icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
+                icon.addClassName("TurkulayoutMenuIcon");
+                createdGCM = subGCM.addItem(icon, execGCMItem);
+                createdGCM.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey)));
+
+            }
+
         } else {
-            created = parent.addItem(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), execItem);
+            String label = turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey);
+            created = parent.addItem(label, execItem);
+
+            if (createRootGCM) {
+                createdGCM = rootGCM.addItem(label, execGCMItem);
+            } else if (createSubGCM) {
+                createdGCM = subGCM.addItem(label, execGCMItem);
+            }
 
         }
 
         glue.attachButton1(new TurkuHasEnabled(created));
-
         Tooltip t = Tooltip.forComponent(created);
         t.setText(Workarounds.mlToolTipText(glue.getToolTip()));
+
+        if (createdGCM != null) {
+            glue.attachButton2(new TurkuHasEnabled(createdGCM));
+        }
 
         return created;
     }

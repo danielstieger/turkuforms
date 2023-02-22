@@ -51,6 +51,21 @@ public class TurkuTableDataView<DTO> {
         return allSelectionsFound;
     }
 
+    public boolean allSelectionsCurrentlyInFilter(Set<DTO> currentTableSelection){
+        int selectionSize = currentTableSelection.size();
+        int foundSel = 0;
+
+        for (DTO item: filteredList){
+            if (currentTableSelection.contains(item)) {
+                foundSel ++;
+            }
+
+            if (foundSel >= selectionSize) { break; }
+        }
+
+        return foundSel == selectionSize;
+    }
+
     private boolean applyFilterAndRefreshGrid(Collection<DTO> selection) {
         if (isNoSearch()) {
             filteredList = originalList;

@@ -120,7 +120,7 @@ public class TurkuLayout extends AppLayout {
         MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
         root.add(new Text(menuName));
         SubMenu rootSubMenu = root.getSubMenu();
-        return OverflowMenu.createMainMenuStructure(turkuFactory, rootSubMenu, menu.items);
+        return OverflowMenu.createMainMenuStructure(turkuFactory, rootSubMenu, null, null, menu.items);
     }
 
     protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList){

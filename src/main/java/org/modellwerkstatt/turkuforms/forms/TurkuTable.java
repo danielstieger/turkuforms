@@ -1,19 +1,16 @@
 package org.modellwerkstatt.turkuforms.forms;
 
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.*;
-import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.function.SerializablePredicate;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
@@ -22,7 +19,6 @@ import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.Selection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.LeftRight;
@@ -118,7 +114,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     sel.setObjects(new ArrayList(allSelected));
                 }
                 genFormController.pushSelection(sel);
-                adjustTableInformation("MSL");
+                adjustTableInformation("", true);
             }
         });
 
@@ -129,9 +125,17 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         searchField.addValueChangeListener(e -> {
                     Turku.l("SearchField.valueChange(LAZY) for '"+ e.getValue() + "'");
                     dataView.setSearchText(e.getValue());
+
                     Set<DTO> curSel = selectionModel.getSelectedItems();
                     if (dataView.updateFilterList(grid, curSel)) {
-                        for (DTO item: curSel) { selectionModel.select(item); }
+                        // new GridListDataView cleared selections
+                        selectionModel.updateSelection(curSel, Collections.emptySet());
+                        // TODO: Not exactly correct. We are loosing the ! in case of empty selections
+                        adjustTableInformation("",true);
+
+                    }else{
+                        adjustTableInformation("",false);
+
                     }
                 });
     }
@@ -203,17 +207,21 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
-        // TODO: FALSE zurück liefern, in case selection not found??
-
         Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
         selectionHandlerEnabled = false;
 
         selectionModel.deselectAll();
-        for (DTO obj : iofxSelection.getObjects()) { selectionModel.select(obj); }
-        adjustTableInformation("SC");
+
+        // There is actually a filteredList
+        LinkedHashSet<DTO> selection = new LinkedHashSet<>(iofxSelection.getObjects());
+        boolean allSelectionsAvailable = dataView.allSelectionsCurrentlyInFilter(selection);
+        if (allSelectionsAvailable) {
+            selectionModel.updateSelection(selection, Collections.emptySet());
+        }
+        adjustTableInformation("", allSelectionsAvailable);
 
         selectionHandlerEnabled = true;
-        return true;
+        return allSelectionsAvailable;
     }
 
     @Override
@@ -223,19 +231,17 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         // (0) SelCrtl clears selection if sel not in newList
         if (dataView.setNewList(grid, list, iofxSelection)) {
             selectionChanged(iofxSelection);
-            adjustTableInformation("LL");
         } else {
-            adjustTableInformation("*");
+            adjustTableInformation("", false);
         }
-
-
     }
 
 
-    void adjustTableInformation(String st) {
+    void adjustTableInformation(String debugSt, boolean selOfSelCrtlSameAsLocal) {
         int selCnt = selectionModel.getSelectedItems().size();
         int total = dataView.getFilteredTotalCount();
-        infoCsvButton.setText(st + ":" + selCnt + " / " + total);
+        if (!selOfSelCrtlSameAsLocal) { debugSt += " !"; }
+        infoCsvButton.setText(debugSt + " " + selCnt + " | " + total);
     }
 
 
@@ -297,7 +303,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public void addMenuAndSetButtons(MenuSub menuSub) {
         overflowMenu = new OverflowMenu();
-        overflowMenu.initialize(factory, menuSub);
+        overflowMenu.initialize(factory, menuSub, grid);
         topPane.add(overflowMenu);
     }
 

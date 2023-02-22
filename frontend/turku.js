@@ -16,11 +16,9 @@ window.turku = {
     copyToClipboard : async function(view, text) {
         try {
             await navigator.clipboard.writeText(text);
-            alert('Content copied to clipboard');
-            /* Resolved - text copied to clipboard successfully */
+
           } catch (err) {
-            alert('Failed to copy: ', err);
-            /* Rejected - text failed to copy to the clipboard */
+            alert('Failed to copy content to clipboard!\n\n' + err);
           }
     }
 
