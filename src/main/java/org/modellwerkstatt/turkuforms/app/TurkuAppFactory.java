@@ -51,7 +51,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_FormContainer<?> createToolkitFormContainer() {
-        return new TurkuGridLayout();
+        return new TurkuGridLayout(this);
     }
 
     @Override

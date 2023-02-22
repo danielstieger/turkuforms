@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.forms;
+package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.html.Div;

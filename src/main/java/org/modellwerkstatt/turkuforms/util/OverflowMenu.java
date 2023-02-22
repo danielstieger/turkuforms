@@ -29,7 +29,7 @@ public class OverflowMenu extends MenuBar {
 
 
     public <T> void initialize(ITurkuFactory factory, MenuSub menu, Grid<T> grid){
-        GridContextMenu<T> rootGCM = new GridContextMenu<T>(grid);
+        GridContextMenu<T> rootGCM = grid == null ? null : new GridContextMenu<T>(grid);
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menu.items) {
             if (currentItem instanceof MenuActionGlue) {
