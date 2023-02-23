@@ -21,7 +21,7 @@ vaadin-tooltip-overlay::part(content) {
     font-weight: 500;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 810px) {
 
     .LeftRightFlexConclusionBtns {
         flex-wrap: wrap-reverse !important;
@@ -34,6 +34,10 @@ vaadin-tooltip-overlay::part(content) {
 
     .LeftRightFlexChildConclusionBtns {
         flex: 1 0 45%;
+    }
+
+    .InvisibleWhenBelow {
+        display: none;
     }
 }
 

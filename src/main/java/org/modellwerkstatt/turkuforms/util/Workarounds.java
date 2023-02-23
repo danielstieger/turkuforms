@@ -1,13 +1,14 @@
 package org.modellwerkstatt.turkuforms.util;
 
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Workarounds {
+
 
     public static String mlToolTipText(String tooltip){
         // \n is acceptable here for now, since we use
@@ -65,6 +66,12 @@ public class Workarounds {
             col.widthInPercent -= diff;
             alreadyAdjusted += diff;
         }
+    }
+
+    public static void shrinkSpace(ThemableLayout layout){
+        layout.setSpacing(false);
+        layout.setPadding(false);
+        layout.setMargin(false);
     }
 }
 

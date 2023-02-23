@@ -13,7 +13,9 @@ import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.FormHeading;
 import org.modellwerkstatt.turkuforms.util.LeftRight;
 import org.modellwerkstatt.turkuforms.util.OverflowMenu;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_FormContainer<DTO> {
@@ -24,8 +26,8 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     private boolean needsFullWith = false;
     private boolean multipleColumns;
-    private List<String> colConstraints;
-    private List<String> rowConstraints;
+    private List<Integer> colConstraints;
+    private List<Integer> rowConstraints;
 
     private int childsAdded = 0;
     private FlexComponent containerToAddComponent;
@@ -35,20 +37,23 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         super();
         this.factory = factory;
         containerToAddComponent = this;
+        Workarounds.shrinkSpace(this);
     }
 
     @Override
     public void setLayoutConstraints(List<String> colConstraints, List<String> rowConstraints) {
-        this.colConstraints = colConstraints;
-        this.rowConstraints = rowConstraints;
+        this.colConstraints = new ArrayList<>();
+        for (String c: colConstraints) { this.colConstraints.add(getWeight(c)); };
+        this.rowConstraints = new ArrayList<>();
+        for (String c: rowConstraints) { this.rowConstraints.add(getWeight(c)); };
 
-        multipleColumns = colConstraints.size() > 1;
+        multipleColumns = this.colConstraints.size() > 1;
         this.setSizeUndefined();
-        if (hasStarWeight(colConstraints)) {
+        if (hasStarWeight(this.colConstraints)) {
             needsFullWith = true;
             this.setWidthFull();
         }
-        if (hasStarWeight(rowConstraints)) { this.setHeightFull(); }
+        if (hasStarWeight(this.rowConstraints)) { this.setHeightFull(); }
     }
 
     @Override
@@ -60,12 +65,13 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
             throw new RuntimeException("This can not happen! Col/Row constraints can t be correct; col: " + currentCol + " / " +
                     colConstraints.size() + ", row: " + currentRow + " / " + rowConstraints.size()); }
 
-        int currentColConstraint = getWeight(colConstraints.get(currentCol));
-        int currentRowConstraint = getWeight(rowConstraints.get(currentRow));
+        int currentColConstraint = colConstraints.get(currentCol);
+        int currentRowConstraint = rowConstraints.get(currentRow);
 
         // Start with a new HorizontalLayout ?
         if (currentCol == 0 && multipleColumns) {
             HorizontalLayout hl = new HorizontalLayout();
+            Workarounds.shrinkSpace(hl);
             hl.setSizeUndefined();
 
             if (needsFullWith) hl.setWidthFull();
@@ -140,14 +146,14 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         factory = null;
     }
 
-    private boolean hasStarWeight(List<String> weights) {
-        for (String st: weights) {
-            if (getWeight(st) > 0) { return true; }
+    public static boolean hasStarWeight(List<Integer> weights) {
+        for (Integer st: weights) {
+            if (st > 0) { return true; }
         }
         return false;
     }
 
-    private int getWeight(String st) {
+    public static int getWeight(String st) {
         if (st.equals("-1")) { return -1; }
         else if (st.equals("1*")) { return 1; }
         else if (st.equals("2*")) { return 2; }

@@ -3,6 +3,8 @@ package org.modellwerkstatt.turkuforms.app;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.turkuforms.editors.*;
+import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
 import org.modellwerkstatt.turkuforms.forms.TurkuTable;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -66,7 +68,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_DelegateForm<?> createToolkitDelegateForm() {
-        return null;
+        return new TurkuDelegatesForm<>(this);
     }
 
     @Override
@@ -81,42 +83,42 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_TextEditor createTextEditor() {
-        return null;
+        return new TextEditor();
     }
 
     @Override
     public IToolkit_TextEditor createDummyEditor() {
-        return null;
+        return new DummyEditor();
     }
 
     @Override
     public IToolkit_ReferenceEditor createReferenceEditor() {
-        return null;
+        return new ReferenceEditor();
     }
 
     @Override
     public IToolkit_StatusEditor createStatusEditor() {
-        return null;
+        return new StatusEditor();
     }
 
     @Override
     public IToolkit_DateOrTimeEditor createDateEditor(boolean b) {
-        return null;
+        return new DateEditor(b);
     }
 
     @Override
     public IToolkit_DateOrTimeEditor createDateAndTimeEditor() {
-        return null;
+        return new DateTimeEditor();
     }
 
     @Override
     public IToolkit_ImageEditor createImageEditor() {
-        return null;
+        return new ImageViewer();
     }
 
     @Override
     public IToolkit_TextEditor createTextAreaEditor(int i) {
-        return null;
+        return new TextAreaEditor();
     }
 
 

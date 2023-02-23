@@ -1,11 +1,9 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.Collection;

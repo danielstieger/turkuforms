@@ -2,9 +2,7 @@ package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;

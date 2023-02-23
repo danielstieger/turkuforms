@@ -5,9 +5,6 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
-import com.vaadin.flow.component.tabs.TabVariant;
-import com.vaadin.flow.dom.ThemeList;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;

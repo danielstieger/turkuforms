@@ -1,10 +1,7 @@
 package org.modellwerkstatt.turkuforms.util;
 
-import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Span;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 

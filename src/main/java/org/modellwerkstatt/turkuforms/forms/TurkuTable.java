@@ -40,10 +40,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private GridMultiSelectionModel<DTO> selectionModel;
     private TurkuTableDataView<DTO> dataView;
 
-
     private IGenSelControlled genFormController;
     private List<TurkuTableCol> colInfo = new ArrayList<>();
-
 
     private Label leftLabel;
     private Label rightLabel;
@@ -54,8 +52,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     public TurkuTable(ITurkuFactory fact) {
         factory = fact;
-
-        this.setPadding(false);
+        Workarounds.shrinkSpace(this);
         this.setSizeFull();
         this.getStyle().set("gap", "0");
 
@@ -90,11 +87,18 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<DTO>>() {
             @Override
             public void onComponentEvent(ItemClickEvent<DTO> event) {
+                boolean doNotClearSelection = event.isCtrlKey() || event.isAltKey() || event.isShiftKey();
                 DTO item = event.getItem();
-                if (selectionModel.isSelected(item)) {
+                Set<DTO> currentSel = selectionModel.getSelectedItems();
+
+                if (currentSel.contains(item)) {
                     selectionModel.deselect(item);
-                }else{
-                    selectionModel.select(item);
+
+                } else {
+                    HashSet<DTO> itemAsSet = new HashSet<>();
+                    itemAsSet.add(item);
+                    if (doNotClearSelection) { currentSel.clear(); }
+                    selectionModel.updateSelection(itemAsSet, currentSel);
                 }
             }
         });
@@ -102,7 +106,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
                 Set<DTO> allSelected = event.getAllSelectedItems();
-                Turku.l("selectionModel.addMultiSelectionListener() Now " + allSelected.size() + " selected");
+                Turku.l("selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
 
                 Selection sel = new Selection(dtoClass);
                 sel.setIssuer(this.hashCode());
@@ -204,7 +208,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
-        Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
+        // Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
         selectionHandlerEnabled = false;
 
         selectionModel.deselectAll();
@@ -223,7 +227,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
-        Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
+        // Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
 
         // (0) SelCrtl clears selection if sel not in newList
         if (dataView.setNewList(grid, list, iofxSelection)) {
