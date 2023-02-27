@@ -78,7 +78,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_CommandContainerUI createPromptContainerUi(IToolkit_Application iToolkit_application, boolean fullSize) {
-        return new CmdUiPrompt(this);
+        return new CmdUiPrompt(this, fullSize);
     }
 
     @Override

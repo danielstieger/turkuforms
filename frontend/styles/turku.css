@@ -80,6 +80,12 @@ vaadin-tooltip-overlay::part(content) {
 
 
 /* CmdUi * * * * * * * * * * * * * * * */
+.PromptWindow::part(overlay) {
+    position: absolute !important;
+    top: 0px !important;
+}
+
+
 
 /* TurkuTable * * * * * * * * * * * * * * * */
 

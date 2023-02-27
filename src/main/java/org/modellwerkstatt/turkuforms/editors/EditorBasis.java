@@ -57,7 +57,7 @@ abstract public class EditorBasis {
     }
 
     public String getText() {
-        return null;
+        return field.getValue();
     }
 
     public void setIssuesUpdateConclusion() {

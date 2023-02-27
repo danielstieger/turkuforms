@@ -10,13 +10,14 @@ public class FormHeading extends Div {
 
     public FormHeading() {
         this.addClassName("FormHeading");
+        heading = new Div();
+        this.add(heading);
     }
 
 
     public void setHeading(String label) {
-        heading = new Div();
         heading.setText(label);
-        this.add(heading);
+
     }
 
     public void flag(List<IOFXProblem> problemList) {
