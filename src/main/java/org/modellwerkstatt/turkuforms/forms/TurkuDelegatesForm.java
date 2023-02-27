@@ -10,7 +10,6 @@ import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.editors.DummyEditor;
-import org.modellwerkstatt.turkuforms.util.FormHeading;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;

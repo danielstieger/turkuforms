@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.util;
+package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;

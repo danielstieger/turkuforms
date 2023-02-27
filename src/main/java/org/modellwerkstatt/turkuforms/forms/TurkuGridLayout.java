@@ -10,9 +10,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_FormContainer;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.FormHeading;
-import org.modellwerkstatt.turkuforms.util.LeftRight;
-import org.modellwerkstatt.turkuforms.util.OverflowMenu;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;

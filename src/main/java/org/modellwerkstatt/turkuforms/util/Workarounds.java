@@ -1,5 +1,8 @@
 package org.modellwerkstatt.turkuforms.util;
 
+import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.ShortcutRegistration;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
@@ -27,18 +30,6 @@ public class Workarounds {
         } catch (Throwable t) {
             throw new RuntimeException("While looking for icon '" + fullName + "'", t);
         }
-    }
-
-    public static boolean hasIcon(String iconname){
-        return iconname != null && !"".equals(iconname);
-    }
-
-    public static boolean hasHk(String hkname){
-        return hkname != null && !"".equals(hkname);
-    }
-
-    public static boolean hasLabel(String label){
-        return label != null && !"".equals(label);
     }
 
 
@@ -72,6 +63,17 @@ public class Workarounds {
         layout.setSpacing(false);
         layout.setPadding(false);
         layout.setMargin(false);
+    }
+
+
+    public static void useButtonShortcutHk(Button button, String hk) {
+        ShortcutRegistration reg;
+        if (Defs.hkNeedsCrtl(hk)) { reg = button.addClickShortcut(HkTranslate.trans(hk), KeyModifier.CONTROL); }
+        else { reg = button.addClickShortcut(HkTranslate.trans(hk)); }
+
+        reg.setBrowserDefaultAllowed(false);
+        reg.setEventPropagationAllowed(false);
+
     }
 }
 

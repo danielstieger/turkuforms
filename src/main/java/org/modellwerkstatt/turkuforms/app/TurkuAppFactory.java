@@ -7,7 +7,7 @@ import org.modellwerkstatt.turkuforms.editors.*;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
 import org.modellwerkstatt.turkuforms.forms.TurkuTable;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
@@ -130,8 +130,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     @Override
     public String translateButtonLabel(String label, String hk) {
         String fullLabel = label;
-        if (Workarounds.hasHk(hk)) {
-            fullLabel += hk.length() == 1 ? " (CRTL-" + hk + ")" : " (" + hk + ")";
+        if (Defs.needsHkRegistration(hk)) {
+            fullLabel += Defs.hkNeedsCrtl(hk) ? " (CRTL-" + hk + ")" : " (" + hk + ")";
         }
 
         return fullLabel;

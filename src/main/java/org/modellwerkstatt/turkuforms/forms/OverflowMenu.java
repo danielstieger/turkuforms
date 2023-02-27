@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.util;
+package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -18,6 +18,9 @@ import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 
@@ -109,7 +112,7 @@ public class OverflowMenu extends MenuBar {
 
         MenuItem created;
 
-        if (Workarounds.hasIcon(glue.imageName)) {
+        if (Defs.hasIcon(glue.imageName)) {
             Icon icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
             icon.addClassName("TurkulayoutMenuIcon");
             created = parent.addItem(icon, execItem);

@@ -24,6 +24,7 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 import org.modellwerkstatt.turkuforms.views.Mainwindow;
 import org.modellwerkstatt.turkuforms.views.MainwindowTabSheet;
+import org.modellwerkstatt.turkuforms.views.PromptWindow;
 
 import java.util.List;
 
@@ -58,13 +59,15 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application {
     }
 
     @Override
-    public void showDialog(DlgType dlgType, String s, IApplicationController.DlgRunnable dlgRunnable) {
-        Turku.l("TurkuApp.showDialog() " + s);
+    public void showDialog(DlgType dlgType, String text, IApplicationController.DlgRunnable dlgRunnable) {
+        PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
+        window.simplePrompt(dlgType, text, dlgRunnable);
     }
 
     @Override
     public void showProblemsDialog(List<IOFXProblem> list, IApplicationController.DlgRunnable dlgRunnable) {
-        Turku.l("TurkuApp.()" + OFXConsoleHelper.asSimpleString(list));
+        PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
+        window.simpleProblemDialog(list, dlgRunnable);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application {
 
     @Override
     public void setToastMessage(String s) {
-        Turku.l("TurkuApp.setToastMessage() " + s);
+        Notification.show(s, 4000, Notification.Position.TOP_CENTER);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.ShortcutRegistration;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,7 +13,10 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.LeftRight;
+import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.forms.LeftRight;
+import org.modellwerkstatt.turkuforms.util.HkTranslate;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;
@@ -51,16 +57,17 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         conclusionLayout.clear();
         conclusionButtons.clear();
 
-        List<String> conclusionHks = new ArrayList<String>();
+
+        // TODO: Where can we register the other hk s?
+        Turku.l("Registered global hotkeys for this cmd ui " + globalHks);
 
         for (OFXConclusionInformation oci : conclusionInfo) {
-            if (Workarounds.hasHk(oci.hotkey)) {
+            if (Defs.needsHkRegistration(oci.hotkey)) {
                 oci.buttonTitle = factory.translateButtonLabel(oci.buttonTitle, oci.hotkey);
-                conclusionHks.add(oci.hotkey);
             }
 
             Button button;
-            if (Workarounds.hasIcon(oci.iconName)) {
+            if (Defs.hasIcon(oci.iconName)) {
                 button = new Button(oci.buttonTitle, Workarounds.createIconWithCollection(factory.translateIconName(oci.iconName)), event -> {
                     cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
                 });
@@ -74,17 +81,20 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
                 button.setVisible(false);
             }
 
-            button.setDisableOnClick(true);
+            if (Defs.needsHkRegistration(oci.hotkey)) {
+                Workarounds.useButtonShortcutHk(button, oci.hotkey);
+            }
+
+            // button.setDisableOnClick(true);
             conclusionLayout.add(button);
             conclusionButtons.add(button);
 
+            if (conclusionButtons.size() == 1) {
+                conclusionLayout.spacer();
+            }
 
-            if (conclusionButtons.size() == 1) { conclusionLayout.spacer(); }
         }
-
-        // TODO: register globalHks and conclusionHks
     }
-
 
     @Override
     public void delayedRequestFocus() {

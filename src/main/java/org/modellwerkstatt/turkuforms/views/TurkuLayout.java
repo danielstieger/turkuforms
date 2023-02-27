@@ -23,7 +23,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.OverflowMenu;
+import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.forms.OverflowMenu;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -132,7 +133,7 @@ public class TurkuLayout extends AppLayout {
                 };
                 Button btn;
 
-                if (Workarounds.hasIcon(glue.imageName)) {
+                if (Defs.hasIcon(glue.imageName)) {
                     Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
                     icn.addClassName("TurkulayoutMenuIcon");
                     btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, execItem);

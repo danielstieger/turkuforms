@@ -16,7 +16,7 @@ public class CmdUiPrompt extends CmdUi {
 
     @Override
     public void show(String windowTitle, IToolkit_Form form) {
-        promptWindow = new PromptWindow();
+        promptWindow = new PromptWindow(true);
         promptWindow.add(this);
         initialShow(form);
         if (fullSize) {

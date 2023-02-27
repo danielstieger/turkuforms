@@ -79,12 +79,21 @@ vaadin-tooltip-overlay::part(content) {
 }
 
 
-/* CmdUi * * * * * * * * * * * * * * * */
+/* PromptWindow / CmdUi * * * * * * * * * * */
 .PromptWindow::part(overlay) {
     position: absolute !important;
     top: 0px !important;
 }
 
+.PromptWindowInfoDiv {
+    padding: 4em;
+    white-space: pre;
+}
+.PromptWindowQuestionColor { color: var(--lumo-error-color) !important; }
+.PromptWindowErrorLarge {
+    font: courier;
+    font-size: var(--lumo-font-size-xxs);
+}
 
 
 /* TurkuTable * * * * * * * * * * * * * * * */
