@@ -4,8 +4,13 @@ import com.vaadin.flow.component.Key;
 
 import java.util.HashMap;
 
+/**
+ *  ATTENTION: fromVaadinTranslation - some Keys are mapped twice !
+ *
+ */
 public class HkTranslate {
     final static private HashMap<String, Key> toVaadin = new HashMap<>();
+    final static private HashMap<String, String> fromVaadin = new HashMap<>();
     static {
         toVaadin.put("A", Key.KEY_A);
         toVaadin.put("B", Key.KEY_B);
@@ -95,6 +100,9 @@ public class HkTranslate {
         // toVaadin.put("UPD", Key.);
         // toVaadin.put("GO", Key.);
         // toVaadin.put("UNDEFINED", Key.);
+
+        // ATTENTION: ESC or add are mapped twice !!!
+        toVaadin.forEach((s, key) -> fromVaadin.put("" + key.getKeys(), s));
     }
 
 
@@ -103,5 +111,13 @@ public class HkTranslate {
             throw new IllegalArgumentException("Turkuforms.HkTranslate is currently not aware of hotkey '" + s + "',");
         }
         return toVaadin.get(s);
+    }
+
+    public static String trans(Key k) {
+        String key = "" + k.getKeys();
+        if (!fromVaadin.containsKey(key)) {
+            throw new IllegalArgumentException("Turkuforms.HkTranslate is currently not aware of vaadin key '" + k.getKeys() + "',");
+        }
+        return fromVaadin.get(key);
     }
 }

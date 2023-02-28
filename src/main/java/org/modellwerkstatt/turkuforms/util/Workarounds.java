@@ -1,10 +1,10 @@
 package org.modellwerkstatt.turkuforms.util;
 
-import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.ShortcutRegistration;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
 
 import java.util.ArrayList;
@@ -73,7 +73,19 @@ public class Workarounds {
 
         reg.setBrowserDefaultAllowed(false);
         reg.setEventPropagationAllowed(false);
-
     }
+
+    public static void useGlobalShortcutHk(VerticalLayout layout, String hk, ShortcutEventListener listener) {
+        ShortcutRegistration reg;
+
+        if (Defs.hkNeedsCrtl(hk)) { reg = UI.getCurrent().addShortcutListener(listener, HkTranslate.trans(hk), KeyModifier.CONTROL); }
+        else { reg = UI.getCurrent().addShortcutListener(listener, HkTranslate.trans(hk)); }
+        // reg.listenOn(layout);
+        reg.setBrowserDefaultAllowed(false);
+        reg.setEventPropagationAllowed(false);
+
+        Turku.l("Workarounds.useGlobalShortcutHk() next registered " + reg.getLifecycleOwner() + " / " + reg.getKey().getKeys());
+    }
+
 }
 

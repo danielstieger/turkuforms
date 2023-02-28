@@ -53,7 +53,7 @@ public class Mainwindow extends TurkuLayout {
 
                 glue.attachButton1(new TurkuHasEnabled(btn));
 
-                btn.setDisableOnClick(true);
+                // btn.setDisableOnClick(true);
                 btn.setTooltipText(Workarounds.mlToolTipText(tile.getAction().getToolTip()));
                 btn.setMinHeight("200px");
                 btn.setMinWidth("200px");

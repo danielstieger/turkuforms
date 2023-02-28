@@ -146,7 +146,7 @@ public class TurkuLayout extends AppLayout {
                 glue.attachButton1(new TurkuHasEnabled(btn));
                 btn.setTooltipText(Workarounds.mlToolTipText(glue.getToolTip()));
                 btn.setWidthFull();
-                btn.setDisableOnClick(true);
+                // btn.setDisableOnClick(true);
                 btn.setClassName("MainwindowDrawerCmdButton");
                 drawerCommandsLayout.add(btn);
 

@@ -1,17 +1,16 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.ShortcutRegistration;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
+import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
@@ -22,16 +21,29 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI {
+abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI, ShortcutEventListener {
     protected ICommandContainer cmdContainer;
     protected List<Button> conclusionButtons;
     protected LeftRight conclusionLayout;
     protected ITurkuFactory factory;
+    protected List<String> globalHotkeysWhennAttached;
 
     public CmdUi(ITurkuFactory fact) {
+        super();
         factory = fact;
         conclusionButtons = new ArrayList<>();
         conclusionLayout = new LeftRight("ConclusionBtns");
+    }
+
+    @Override
+    public void onShortcut(ShortcutEvent event) {
+        try {
+            String keyName = HkTranslate.trans(event.getKey());
+            Turku.l("CmdUi.onShortcut() received " + keyName + " / from " + event.getLifecycleOwner());
+            cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
+        } catch (Throwable t) {
+            Turku.l("CmdUi.onShortcut() " + OFXConsoleHelper.stackTrace2String(t));
+        }
     }
 
     public void initialShow(IToolkit_Form content) {
@@ -53,13 +65,16 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void setConclusions(List<OFXConclusionInformation> conclusionInfo, List<String> globalHks) {
+        Turku.l("CmdUI.setConclusions()");
         // already optimized, only called for "new" pages, not on reloads of same page
         conclusionLayout.clear();
         conclusionButtons.clear();
 
 
-        // TODO: Where can we register the other hk s?
-        Turku.l("Registered global hotkeys for this cmd ui " + globalHks);
+        this.globalHotkeysWhennAttached = globalHks;
+        for (String hk: globalHotkeysWhennAttached) {
+            Workarounds.useGlobalShortcutHk(this, hk, event -> { Turku.l("Hello Shortcut: " + event); });
+        }
 
         for (OFXConclusionInformation oci : conclusionInfo) {
             if (Defs.needsHkRegistration(oci.hotkey)) {
@@ -92,7 +107,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             if (conclusionButtons.size() == 1) {
                 conclusionLayout.spacer();
             }
-
         }
     }
 

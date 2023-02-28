@@ -44,18 +44,23 @@ public class PromptWindow extends Dialog {
         this.langIndex = langIndex;
     }
 
+
+    public static final String OK_HOKTEY = "F12";
+    public static final String NO_HOKTEY = "ESC";
+
     public void simplePrompt(IToolkit_Application.DlgType msgType, String text, IApplicationController.DlgRunnable dlgRunnable) {
         Div infoDiv = new Div();
         infoDiv.addClassName("PromptWindowInfoDiv");
         infoDiv.setText(text);
 
-        Button okButton = new Button(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.OK_BUTTON), event -> {
+
+        Button okButton = new Button(uiFactory.translateButtonLabel(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.OK_BUTTON),OK_HOKTEY), event -> {
             this.close();
             if (dlgRunnable!=null) {
                 dlgRunnable.run(true);
             }
         });
-        Workarounds.useButtonShortcutHk(okButton, "F12");
+        Workarounds.useButtonShortcutHk(okButton, OK_HOKTEY);
         okButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
 
         if (msgType == IToolkit_Application.DlgType.INFO_SMALL) {
@@ -80,15 +85,15 @@ public class PromptWindow extends Dialog {
             this.setHeaderTitle(uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.QUESTION));
             infoDiv.addClassName("PromptWindowQuestionColor");
             this.add(infoDiv);
-            okButton.setText(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.DISCARD_BUTTON));
+            okButton.setText(uiFactory.translateButtonLabel(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.DISCARD_BUTTON),OK_HOKTEY));
 
-            Button cancelButton = new Button(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.NO_BUTTON), event -> {
+            Button cancelButton = new Button(uiFactory.translateButtonLabel(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.NO_BUTTON),NO_HOKTEY), event -> {
                 this.close();
                 if (dlgRunnable!=null) {
                     dlgRunnable.run(false);
                 }
             });
-            Workarounds.useButtonShortcutHk(cancelButton, "ESC");
+            Workarounds.useButtonShortcutHk(cancelButton, NO_HOKTEY);
             cancelButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
 
             this.getFooter().add(cancelButton);
@@ -102,14 +107,15 @@ public class PromptWindow extends Dialog {
     public void simpleProblemDialog(List<IOFXProblem> list, IApplicationController.DlgRunnable dlgRunnable) {
         this.setHeaderTitle(uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ERROR));
 
-        Button okButton = new Button(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.OK_BUTTON), event -> {
+        Button okButton = new Button(uiFactory.translateButtonLabel(uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.OK_BUTTON),OK_HOKTEY), event -> {
             this.close();
             if (dlgRunnable!=null) {
                 dlgRunnable.run(true);
             }
         });
-        okButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
 
+        okButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        Workarounds.useButtonShortcutHk(okButton, OK_HOKTEY);
 
         Div infoDiv = new Div();
         infoDiv.addClassName("PromptWindowInfoDiv");
