@@ -84,7 +84,6 @@ public class TurkuServlet extends VaadinServlet {
     @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
-
         RouteConfiguration.forApplicationScope().setRoute("", TurkuApp.class);
     }
 

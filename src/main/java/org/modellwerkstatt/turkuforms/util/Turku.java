@@ -1,5 +1,7 @@
 package org.modellwerkstatt.turkuforms.util;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.server.VaadinServlet;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
@@ -13,6 +15,10 @@ public class Turku {
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");
 
 
+
+    public static void logWithServlet(String source, String msg, Throwable t) {
+        VaadinServlet.getCurrent().log(source + ": " + msg, t);
+    }
 
     public static void l(String text) {
         if (!(DEBUG_HARDLOG)) {

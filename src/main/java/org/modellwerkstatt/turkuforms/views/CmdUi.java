@@ -37,13 +37,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void onShortcut(ShortcutEvent event) {
-        try {
-            String keyName = HkTranslate.trans(event.getKey());
-            Turku.l("CmdUi.onShortcut() received " + keyName + " / from " + event.getLifecycleOwner());
-            cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
-        } catch (Throwable t) {
-            Turku.l("CmdUi.onShortcut() " + OFXConsoleHelper.stackTrace2String(t));
-        }
+        String keyName = HkTranslate.trans(event.getKey());
+        cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
     }
 
     public void initialShow(IToolkit_Form content) {
@@ -65,15 +60,13 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void setConclusions(List<OFXConclusionInformation> conclusionInfo, List<String> globalHks) {
-        Turku.l("CmdUI.setConclusions()");
         // already optimized, only called for "new" pages, not on reloads of same page
         conclusionLayout.clear();
         conclusionButtons.clear();
 
 
-        this.globalHotkeysWhennAttached = globalHks;
-        for (String hk: globalHotkeysWhennAttached) {
-            Workarounds.useGlobalShortcutHk(this, hk, event -> { Turku.l("Hello Shortcut: " + event); });
+        for (String hk: globalHks) {
+            Workarounds.useGlobalShortcutHk(this, hk, this );
         }
 
         for (OFXConclusionInformation oci : conclusionInfo) {

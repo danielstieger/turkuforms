@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.Key;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 
 import java.util.HashMap;
 
@@ -108,7 +109,9 @@ public class HkTranslate {
 
     public static Key trans(String s) {
         if (!toVaadin.containsKey(s)) {
-            throw new IllegalArgumentException("Turkuforms.HkTranslate is currently not aware of hotkey '" + s + "',");
+            IllegalArgumentException iae = new IllegalArgumentException("Turkuforms.HkTranslate is currently not aware of hotkey '" + s + "',");
+            Turku.logWithServlet(HkTranslate.class.getName(), "Turkuforms.HkTranslate is currently not aware of hotkey '" + s + "',", iae);
+            throw iae;
         }
         return toVaadin.get(s);
     }
@@ -116,7 +119,9 @@ public class HkTranslate {
     public static String trans(Key k) {
         String key = "" + k.getKeys();
         if (!fromVaadin.containsKey(key)) {
-            throw new IllegalArgumentException("Turkuforms.HkTranslate is currently not aware of vaadin key '" + k.getKeys() + "',");
+            IllegalArgumentException iae = new IllegalArgumentException("Turkuforms.HkTranslate is currently not aware of vaadin key '" + k.getKeys() + "',");
+            Turku.logWithServlet(HkTranslate.class.getName(), "Turkuforms.HkTranslate is currently not aware of vaadin key '" + k.getKeys() + "',", iae);
+            throw iae;
         }
         return fromVaadin.get(key);
     }

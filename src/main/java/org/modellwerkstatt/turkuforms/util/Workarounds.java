@@ -78,13 +78,14 @@ public class Workarounds {
     public static void useGlobalShortcutHk(VerticalLayout layout, String hk, ShortcutEventListener listener) {
         ShortcutRegistration reg;
 
-        if (Defs.hkNeedsCrtl(hk)) { reg = UI.getCurrent().addShortcutListener(listener, HkTranslate.trans(hk), KeyModifier.CONTROL); }
-        else { reg = UI.getCurrent().addShortcutListener(listener, HkTranslate.trans(hk)); }
-        // reg.listenOn(layout);
-        reg.setBrowserDefaultAllowed(false);
-        reg.setEventPropagationAllowed(false);
+        if (Defs.hkNeedsCrtl(hk)) {
+            reg = Shortcuts.addShortcutListener(layout, listener, HkTranslate.trans(hk), KeyModifier.CONTROL);
+        } else {
+            reg = Shortcuts.addShortcutListener(layout, listener, HkTranslate.trans(hk));
+        }
 
-        Turku.l("Workarounds.useGlobalShortcutHk() next registered " + reg.getLifecycleOwner() + " / " + reg.getKey().getKeys());
+        reg.setEventPropagationAllowed(false);
+        reg.setBrowserDefaultAllowed(false);
     }
 
 }
