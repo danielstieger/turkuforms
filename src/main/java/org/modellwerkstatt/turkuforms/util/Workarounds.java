@@ -13,6 +13,7 @@ import java.util.List;
 public class Workarounds {
 
 
+    // TODO: Remove me?
     public static String mlToolTipText(String tooltip){
         // \n is acceptable here for now, since we use
         // css property:   white-space: pre;
@@ -75,7 +76,7 @@ public class Workarounds {
         reg.setEventPropagationAllowed(false);
     }
 
-    public static void useGlobalShortcutHk(VerticalLayout layout, String hk, ShortcutEventListener listener) {
+    public static void useGlobalShortcutHk(Component layout, String hk, ShortcutEventListener listener) {
         ShortcutRegistration reg;
 
         if (Defs.hkNeedsCrtl(hk)) {
@@ -84,6 +85,17 @@ public class Workarounds {
             reg = Shortcuts.addShortcutListener(layout, listener, HkTranslate.trans(hk));
         }
 
+        reg.setEventPropagationAllowed(false);
+        reg.setBrowserDefaultAllowed(false);
+    }
+
+    public static void installMowareAddonHotkeys(Component layout, ShortcutEventListener listener) {
+        ShortcutRegistration reg;
+
+        reg = UI.getCurrent().addShortcutListener(listener, Key.F5, KeyModifier.SHIFT);
+        reg.setEventPropagationAllowed(false);
+        reg.setBrowserDefaultAllowed(false);
+        reg = UI.getCurrent().addShortcutListener(listener, Key.F6, KeyModifier.SHIFT);
         reg.setEventPropagationAllowed(false);
         reg.setBrowserDefaultAllowed(false);
     }

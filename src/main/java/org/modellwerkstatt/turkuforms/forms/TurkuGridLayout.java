@@ -147,6 +147,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         for (Integer st: weights) {
             if (st > 0) { return true; }
         }
+
         return false;
     }
 

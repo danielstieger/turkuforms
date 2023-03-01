@@ -31,7 +31,7 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import java.util.List;
 
 
-public class TurkuLayout extends AppLayout {
+abstract public class TurkuAppLayout extends AppLayout {
 
     private Label sysInfoLabel;
     private Label userInfoLabel;
@@ -41,7 +41,7 @@ public class TurkuLayout extends AppLayout {
     protected ITurkuFactory turkuFactory;
     private VerticalLayout drawerCommandsLayout;
 
-    public TurkuLayout() {
+    public TurkuAppLayout() {
     }
 
     protected void init(ITurkuFactory factory, String appNavbarTitle) {
@@ -160,9 +160,7 @@ public class TurkuLayout extends AppLayout {
     }
 
 
-    protected void exitRequestedFromMenu() {
-        // TODO: How should we do an exit?
-    }
+    abstract protected void exitRequestedFromMenu();
 
 
 }

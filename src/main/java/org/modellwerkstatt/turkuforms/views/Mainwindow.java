@@ -14,7 +14,7 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 
-public class Mainwindow extends TurkuLayout {
+abstract public class Mainwindow extends TurkuAppLayout {
 
 
     protected FlexLayout tilesFlexLayout;

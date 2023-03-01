@@ -20,6 +20,7 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI, ShortcutEventListener {
     protected ICommandContainer cmdContainer;
@@ -38,6 +39,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void onShortcut(ShortcutEvent event) {
         String keyName = HkTranslate.trans(event.getKey());
+        Turku.l("CmdUi.onShortcut() received " + keyName);
         cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
     }
 

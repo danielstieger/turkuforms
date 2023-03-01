@@ -109,5 +109,11 @@ vaadin-tooltip-overlay::part(content) {
 .TurkuErrorColor { color: var(--lumo-error-color) !important; }
 .TurkuWarningColor { color: #FF6700 !important; }
 
+vaadin-grid::part(row) {
+   max-height: 1.8em;
+   min-height: 1.8em;
+}
 
-
+vaadin-grid {
+    height: 100px !important;
+}
