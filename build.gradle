@@ -19,6 +19,7 @@ repositories {
     mavenCentral()
     maven { setUrl("https://maven.vaadin.com/vaadin-prereleases") }
     maven { url "https://plugins.gradle.org/m2/" }
+    maven { url "https://maven.vaadin.com/vaadin-addons" }
 }
 
 
@@ -39,8 +40,10 @@ group 'org.modellwerkstatt'
 dependencies {
     implementation enforcedPlatform("com.vaadin:vaadin-bom:$vaadinVersion")
 
+
     // Vaadin
     implementation("com.vaadin:vaadin-core")
+    implementation("com.vaadin.componentfactory:selection-grid-flow:2.0.0")
     providedCompile "javax.servlet:javax.servlet-api:3.1.0"
 
     // logging
@@ -49,7 +52,6 @@ dependencies {
 
 
     // moware dependencies * * * * * * * * * * * * * * * * *
-    implementation files("./extlib/selection-grid-flow-2.0.0.jar")
     implementation files("${mowarePluginHome}/jars/basis/joda-time-2.10.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-core-5.2.9.RELEASE.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-beans-5.2.9.RELEASE.jar")
