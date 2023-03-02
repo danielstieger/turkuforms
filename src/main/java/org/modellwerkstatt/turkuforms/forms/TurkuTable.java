@@ -19,6 +19,7 @@ import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.Selection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.*;
@@ -107,6 +108,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             if (selectionHandlerEnabled) {
                 Set<DTO> allSelected = event.getAllSelectedItems();
                 Turku.l("selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
+                Turku.l("came from \n" + OFXConsoleHelper._____organizeCurrentStacktrace_____());
 
                 Selection sel = new Selection(dtoClass);
                 sel.setIssuer(this.hashCode());
@@ -229,11 +231,17 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
         // Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
 
+        selectionHandlerEnabled = false;
         // (0) SelCrtl clears selection if sel not in newList
-        if (dataView.setNewList(grid, list, iofxSelection)) {
+        boolean selCleared = dataView.setNewList(grid, list, iofxSelection);
+        selectionHandlerEnabled = true;
+
+        if (selCleared) {
             selectionChanged(iofxSelection);
+
         } else {
             adjustTableInformation("", false);
+
         }
     }
 

@@ -143,7 +143,7 @@ abstract public class TurkuAppLayout extends AppLayout {
 
                 }
 
-                glue.attachButton1(new TurkuHasEnabled(btn));
+                glue.attachButton1(new TurkuHasEnabled(btn, "Drawer " + glue.labelText));
                 btn.setTooltipText(Workarounds.mlToolTipText(glue.getToolTip()));
                 btn.setWidthFull();
                 // btn.setDisableOnClick(true);

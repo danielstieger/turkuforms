@@ -51,7 +51,7 @@ abstract public class Mainwindow extends TurkuAppLayout {
 
                 }
 
-                glue.attachButton1(new TurkuHasEnabled(btn));
+                glue.attachButton1(new TurkuHasEnabled(btn, "Tile " + glue.labelText));
 
                 // btn.setDisableOnClick(true);
                 btn.setTooltipText(Workarounds.mlToolTipText(tile.getAction().getToolTip()));

@@ -144,12 +144,12 @@ public class OverflowMenu extends MenuBar {
 
         }
 
-        glue.attachButton1(new TurkuHasEnabled(created));
+        glue.attachButton1(new TurkuHasEnabled(created, "Menu " + glue.labelText));
         Tooltip t = Tooltip.forComponent(created);
         t.setText(Workarounds.mlToolTipText(glue.getToolTip()));
 
         if (createdGCM != null) {
-            glue.attachButton2(new TurkuHasEnabled(createdGCM));
+            glue.attachButton2(new TurkuHasEnabled(createdGCM, "Context " + glue.labelText));
         }
 
         return created;
