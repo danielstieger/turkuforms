@@ -49,6 +49,7 @@ dependencies {
 
 
     // moware dependencies * * * * * * * * * * * * * * * * *
+    implementation files("./extlib/selection-grid-flow-2.0.0.jar")
     implementation files("${mowarePluginHome}/jars/basis/joda-time-2.10.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-core-5.2.9.RELEASE.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-beans-5.2.9.RELEASE.jar")

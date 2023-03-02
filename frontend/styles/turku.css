@@ -90,9 +90,9 @@ vaadin-tooltip-overlay::part(content) {
     white-space: pre;
 }
 .PromptWindowQuestionColor { color: var(--lumo-error-color) !important; }
-.PromptWindowErrorLarge {
+.PromptWindowLarge {
     font-family: courier;
-    font-size: var(--lumo-font-size-xxs);
+    font-size: var(--lumo-font-size-xs);
 }
 
 

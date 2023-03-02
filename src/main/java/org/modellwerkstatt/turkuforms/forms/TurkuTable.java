@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.vaadin.componentfactory.selectiongrid.SelectionGrid;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -79,7 +80,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(searchField);
         topPane.add(infoCsvButton);
 
-        grid = new Grid<DTO>();
+        grid = new SelectionGrid<DTO>();
         grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
@@ -108,7 +109,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             if (selectionHandlerEnabled) {
                 Set<DTO> allSelected = event.getAllSelectedItems();
                 Turku.l("selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
-                Turku.l("came from \n" + OFXConsoleHelper._____organizeCurrentStacktrace_____());
 
                 Selection sel = new Selection(dtoClass);
                 sel.setIssuer(this.hashCode());

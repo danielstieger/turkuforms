@@ -19,7 +19,6 @@ public class TurkuHasEnabled implements IToolkit_EnableItem {
 
     @Override
     public void setItemEnabled(boolean b) {
-        Turku.l("TurkuHasEnabled reevaluate to " + b + " for "+ desc);
         enabled_1.setEnabled(b);
     }
 }

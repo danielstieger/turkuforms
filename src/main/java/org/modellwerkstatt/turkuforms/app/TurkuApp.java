@@ -86,7 +86,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         }
 
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
-        window.simplePrompt(DlgType.ERROR_LARGE, content, null);
+        window.simplePrompt(DlgType.INFO_LARGE, content, null);
     }
 
     @Override
