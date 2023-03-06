@@ -80,13 +80,13 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(searchField);
         topPane.add(infoCsvButton);
 
-        grid = new SelectionGrid<DTO>();
+        grid = new SelectionGrid<>();
         grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
 
-        grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<DTO>>() {
+        /* grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<DTO>>() {
             @Override
             public void onComponentEvent(ItemClickEvent<DTO> event) {
                 boolean doNotClearSelection = event.isCtrlKey() || event.isAltKey() || event.isShiftKey();
@@ -103,7 +103,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     selectionModel.updateSelection(itemAsSet, currentSel);
                 }
             }
-        });
+        }); */
 
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
@@ -210,7 +210,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
-        // Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
+        Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
         selectionHandlerEnabled = false;
 
         selectionModel.deselectAll();
@@ -229,7 +229,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
-        // Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
+        Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
 
         selectionHandlerEnabled = false;
         // (0) SelCrtl clears selection if sel not in newList

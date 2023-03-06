@@ -4,6 +4,7 @@ import com.vaadin.componentfactory.selectiongrid.SelectionGrid;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -20,10 +21,11 @@ public class AboutView extends VerticalLayout {
         Div messageDiv = new Div();
 
         List<Person> personList = getItems();
-        Grid<Person> grid = new SelectionGrid<>();
+        SelectionGrid<Person> grid = new SelectionGrid<>();
         grid.setItems(personList);
 
-        grid.addColumn(Person::getFirstName).setHeader("First Name");
+
+        Grid.Column<Person> persCol = grid.addColumn(Person::getFirstName).setHeader("First Name");
         grid.addColumn(Person::getAge).setHeader("Age");
 
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -37,6 +39,7 @@ public class AboutView extends VerticalLayout {
         // You can pre-select items
         grid.asMultiSelect().select(personList.get(0), personList.get(1));
         add(grid, messageDiv);
+        grid.focusOnCell(personList.get(0), persCol);
     }
 
     private List<Person> getItems() {
