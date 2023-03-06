@@ -44,6 +44,8 @@ dependencies {
     // Vaadin
     implementation("com.vaadin:vaadin-core")
     implementation("com.vaadin.componentfactory:selection-grid-flow:2.0.0")
+    // implementation("org.webjars.bowergithub.vaadin:vaadin-element-mixin:2.4.2")
+
     providedCompile "javax.servlet:javax.servlet-api:3.1.0"
 
     // logging
