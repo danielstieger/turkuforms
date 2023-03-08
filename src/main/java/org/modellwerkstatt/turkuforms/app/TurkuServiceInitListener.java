@@ -1,28 +1,31 @@
 package org.modellwerkstatt.turkuforms.app;
 
-import com.vaadin.flow.server.ServiceInitEvent;
-import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.server.*;
+import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
 import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.springframework.stereotype.Component;
 
-//TODO: use @Component when working with spring boot
 public class TurkuServiceInitListener implements VaadinServiceInitListener {
 
     @Override
     public void serviceInit(ServiceInitEvent event) {
-        Turku.l("TurkuServiceInitListener.serviceInit() preInit");
+        Turku.l("TurkuServiceInitListener.serviceInit() installing handlers");
 
-        event.getSource().addSessionInitListener(
-                initEvent -> {
-                    Turku.l("TurkuServiceInitListener.sessionInit() ");
+        event.getSource().addSessionDestroyListener(destroyEvent -> {
 
-                }
+           VaadinSession session = destroyEvent.getSession();
+           WrappedSession wrappedSession = session.getSession();
 
-                );
+           Turku.l("TurkuServiceInitListener.sessionDestroyed() " + Turku.sessionToString(wrappedSession));
 
-        event.getSource().addUIInitListener(
-                initEvent -> Turku.l("TurkuServiceInitListener.uiInit() "));
+           ApplicationController crtl = Workarounds.getAppCrtlFromSession(wrappedSession);
 
-
+           if (crtl != null && !crtl.inShutdownMode()) {
+               Turku.l("TurkuServiceInitListener.sessionDestroyed() The crtl was shutdown by session destroy listener.");
+               crtl.internal_immediatelyShutdown();
+           }
+        });
 
     }
 

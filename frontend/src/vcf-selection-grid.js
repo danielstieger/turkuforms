@@ -18,9 +18,8 @@
  * #L%
  */
 
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin';
 import { GridElement } from  '@vaadin/vaadin-grid/src/vaadin-grid.js';
 
 import {

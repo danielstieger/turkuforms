@@ -9,9 +9,8 @@ import org.modellwerkstatt.turkuforms.util.Turku;
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 public class AppConfig implements AppShellConfigurator {
 
-
     @Override
     public void configurePage(AppShellSettings settings) {
-        Turku.l("AppConfig . configurePage");
+        Turku.l("AppConfig.configurePage()");
     }
 }

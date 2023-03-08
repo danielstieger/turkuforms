@@ -1,5 +1,25 @@
 package org.modellwerkstatt.turkuforms.components;
 
+/*
+ * #%L
+ * selection-grid-flow
+ * %%
+ * Copyright (C) 2020 Vaadin Ltd
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Tag;
@@ -19,16 +39,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Tag("sel-table")
-@CssImport(value = "./styles/seltable.css", themeFor = "sel-table")
-@JsModule("./src/vcf-sel-table.js")
-@JsModule("./src/sel-table.js")
-public class SelTable<T> extends Grid<T> {
+@SuppressWarnings("unchecked")
+@Tag("vaadin-selection-grid")
+@CssImport(value = "./styles/grid.css", themeFor = "vaadin-selection-grid")
+@JsModule("./src/vcf-selection-grid.js")
+@JsModule("./src/selection-grid.js")
+public class SelectionGrid<T> extends Grid<T> {
 
     /**
      * @see Grid#Grid()
      */
-    public SelTable() {
+    public SelectionGrid() {
         super();
     }
 
@@ -36,7 +57,7 @@ public class SelTable<T> extends Grid<T> {
      * @param pageSize - the page size. Must be greater than zero.
      * @see Grid#Grid(int)
      */
-    public SelTable(int pageSize) {
+    public SelectionGrid(int pageSize) {
         super(pageSize);
     }
 
@@ -45,7 +66,7 @@ public class SelTable<T> extends Grid<T> {
      * @param autoCreateColumns – when true, columns are created automatically for the properties of the beanType
      * @see Grid#Grid(Class, boolean)
      */
-    public SelTable(Class<T> beanType, boolean autoCreateColumns) {
+    public SelectionGrid(Class<T> beanType, boolean autoCreateColumns) {
         super(beanType, autoCreateColumns);
     }
 
@@ -53,22 +74,10 @@ public class SelTable<T> extends Grid<T> {
      * @param beanType - the bean type to use, not null
      * @see Grid#Grid(Class)
      */
-    public SelTable(Class<T> beanType) {
+    public SelectionGrid(Class<T> beanType) {
         super(beanType);
     }
 
-    /**
-     * Runs the super.onAttach and hides the multi selection column afterwards (if necessary).
-     *
-     * @param attachEvent event
-     */
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
-        if (this.getSelectionModel() instanceof SelectionModel.Multi) {
-            hideMultiSelectionColumn();
-        }
-    }
 
     @Override
     public void scrollToIndex(int rowIndex) {
@@ -182,34 +191,14 @@ public class SelTable<T> extends Grid<T> {
         }
     }
 
-    @Override
-    protected void setSelectionModel(GridSelectionModel<T> model, SelectionMode selectionMode) {
-        if (selectionMode == SelectionMode.MULTI) {
-            hideMultiSelectionColumn();
-        }
-        super.setSelectionModel(model, selectionMode);
-    }
-
-    /**
-     * Runs a JavaScript snippet to hide the multi selection / checkbox column on the client side. The column
-     * is not removed, but set to "hidden" explicitly.
-     */
-    protected void hideMultiSelectionColumn() {
-        getElement().getNode().runWhenAttached(ui ->
-                ui.beforeClientResponse(this, context ->
-                        getElement().executeJs(
-                                "if (this.querySelector('vaadin-grid-flow-selection-column')) {" +
-                                        " this.querySelector('vaadin-grid-flow-selection-column').hidden = true }")));
-    }
-
     /**
      * Adds theme variants to the component.
      *
      * @param variants theme variants to add
      */
-    public void addThemeVariants(SelTableVariant... variants) {
+    public void addThemeVariants(SelectionGridVariant... variants) {
         getThemeNames().addAll(Stream.of(variants)
-                .map(SelTableVariant::getVariantName).collect(Collectors.toList()));
+                .map(SelectionGridVariant::getVariantName).collect(Collectors.toList()));
     }
 
     /**
@@ -217,8 +206,8 @@ public class SelTable<T> extends Grid<T> {
      *
      * @param variants theme variants to remove
      */
-    public void removeThemeVariants(SelTableVariant... variants) {
+    public void removeThemeVariants(SelectionGridVariant... variants) {
         getThemeNames().removeAll(Stream.of(variants)
-                .map(SelTableVariant::getVariantName).collect(Collectors.toList()));
+                .map(SelectionGridVariant::getVariantName).collect(Collectors.toList()));
     }
 }

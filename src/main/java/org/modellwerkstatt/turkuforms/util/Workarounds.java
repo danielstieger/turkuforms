@@ -5,15 +5,25 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.WrappedSession;
+import javafx.application.Application;
+import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
+import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Workarounds {
 
+    public static ApplicationController getAppCrtlFromSession(HttpSession session) {
+        return (ApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
+    }
+    public static ApplicationController getAppCrtlFromSession(WrappedSession session) {
+        return (ApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
+    }
 
-    // TODO: Remove me?
     public static String mlToolTipText(String tooltip){
         // \n is acceptable here for now, since we use
         // css property:   white-space: pre;

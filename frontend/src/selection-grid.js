@@ -17,8 +17,8 @@
  * limitations under the License.
  * #L%
  */
-customElements.whenDefined("sel-table").then(() => {
-    const Grid = customElements.get("sel-table");
+customElements.whenDefined("vaadin-selection-grid").then(() => {
+    const Grid = customElements.get("vaadin-selection-grid");
     if (Grid) {
         const oldClickHandler = Grid.prototype._onClick;
         Grid.prototype._onClick = function _click(e) {
