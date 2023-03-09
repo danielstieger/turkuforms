@@ -45,7 +45,7 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
             const boundOldClickHandler = oldClickHandler.bind(this);
             boundOldClickHandler(e);
 
-            if (e.originalTarget.type == "checkbox") {
+            if ('type' in e.originalTarget && e.originalTarget.type == "checkbox") {
                 // handled by original grid
             } else {
                 this._selectionGridSelectRow(e);
@@ -71,7 +71,8 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
         Grid.prototype.old_onSpaceKeyDown = Grid.prototype._onSpaceKeyDown;
         Grid.prototype._onSpaceKeyDown = function _onSpaceKeyDownOverriden(e) {
             this.old_onSpaceKeyDown(e);
-            const tr = e.composedPath().find((p) => p.nodeName === "TR");
+            console.log("Just executed the old spacedown() .... ");
+            /* const tr = e.composedPath().find((p) => p.nodeName === "TR");
             if (tr && typeof tr.index != 'undefined') {
                 const item = tr._item;
                 const index = tr.index;
@@ -89,7 +90,7 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
                         this.selectItem(item);
                     }
                 }
-            }
+            } */
         }
     }
 });

@@ -66,38 +66,33 @@ public class Turku {
     }
 
     public static void l(String text) {
-        if (!(DEBUG_HARDLOG)) {
-            return;
-        }
+        if (DEBUG_HARDLOG && new File(HARDLOG_FILENAME).canWrite()) {
+            try {
+                File logFile = new File(HARDLOG_FILENAME);
+                FileOutputStream out;
 
-        try {
-            File logFile = new File(HARDLOG_FILENAME);
-            FileOutputStream out;
+                out = new FileOutputStream(HARDLOG_FILENAME, logFile.exists());
 
-            out = new FileOutputStream(HARDLOG_FILENAME, logFile.exists());
+                PrintWriter writer = new PrintWriter(out);
+                writer.println("" + formatter.print(new DateTime()) + ": " + text);
+                writer.close();
+                out.close();
 
-            PrintWriter writer = new PrintWriter(out);
-            writer.println("" + formatter.print(new DateTime()) + ": " + text);
-            writer.close();
-            out.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            }
         }
     }
 
 
     public static void clearAndDelete() {
-        if (!(DEBUG_HARDLOG)) {
-            return;
-        }
 
-        File logFile = new File(HARDLOG_FILENAME);
-        if (logFile.exists()) {
-            logFile.delete();
+        if (DEBUG_HARDLOG && new File(HARDLOG_FILENAME).canWrite()) {
+            File logFile = new File(HARDLOG_FILENAME);
+            if (logFile.exists()) {
+                logFile.delete();
+            }
         }
     }
 

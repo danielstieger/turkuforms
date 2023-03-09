@@ -17,11 +17,12 @@ public class AboutView extends VerticalLayout {
 
     public AboutView() {
         setSpacing(true);
+        this.setSizeFull();
 
         Div messageDiv = new Div();
-
         List<Person> personList = getItems();
-        SelectionGrid<Person> grid = new SelectionGrid<>();
+        Grid<Person> grid = new Grid<>();
+        grid.setSizeFull();
         grid.setItems(personList);
 
 
@@ -39,15 +40,16 @@ public class AboutView extends VerticalLayout {
         // You can pre-select items
         grid.asMultiSelect().select(personList.get(0), personList.get(1));
         add(grid, messageDiv);
-        grid.focusOnCell(personList.get(0), persCol);
+        // grid.focusOnCell(personList.get(0), persCol);
+        grid.focus();
     }
 
     private List<Person> getItems() {
         List<Person> p =  new ArrayList<Person>();
 
-        p.add(new Person());
-        p.add(new Person());
-        p.add(new Person());
+        for (int i = 1; i < 200; i++) {
+            p.add(new Person(i));
+        }
 
         return p;
     }

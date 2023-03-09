@@ -18,6 +18,7 @@ import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.Selection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.components.SelectionGrid;
@@ -36,7 +37,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private OverflowMenu overflowMenu;
 
     private Class dtoClass;
-    private Grid<DTO> grid;
+    private SelectionGrid<DTO> grid;
     private GridMultiSelectionModel<DTO> selectionModel;
     private TurkuTableDataView<DTO> dataView;
 
@@ -268,12 +269,19 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public Object myRequestFocus() {
-        return null;
+        /* grid.getElement().executeJs(
+                "setTimeout(function(){let firstTd = $0.shadowRoot.querySelector('tr:first-child > td:first-child'); firstTd.click(); firstTd.focus(); },0)",
+                grid.getElement()); */
+
+        Optional<DTO> first = selectionModel.getFirstSelectedItem();
+        Turku.l("TurkuTable.myRequestFocus() called: " + first);
+        first.ifPresent(dto -> grid.focusOnCell(dto));
+        return grid;
     }
 
     @Override
     public void afterFullUiInitialized() {
-
+        Turku.l("TurkuTable.afterFullUiInitialized() called");
     }
 
     private void clearLocalSelectionWithoutPush() {
