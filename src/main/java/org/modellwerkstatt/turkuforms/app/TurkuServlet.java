@@ -90,27 +90,6 @@ public class TurkuServlet extends VaadinServlet {
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
         RouteConfiguration.forApplicationScope().setRoute("", TurkuApp.class);
-
-        getService().addSessionInitListener(initEvent -> {
-            Turku.l("sessionInit() " + initEvent.getSession());
-
-        });
-
-        getService().addSessionDestroyListener(destroyEvent -> {
-            Turku.l("sessionDestroyed() ");
-
-            VaadinSession session = destroyEvent.getSession();
-            WrappedSession wrappedSession = session.getSession();
-
-            Turku.l("sessionDestroyed() " + Turku.sessionToString(wrappedSession));
-
-            ApplicationController crtl = Workarounds.getAppCrtlFromSession(wrappedSession);
-
-            if (crtl != null && !crtl.inShutdownMode()) {
-                Turku.l("TurkuServiceInitListener.sessionDestroyed() The crtl was shutdown by session destroy listener.");
-                crtl.internal_immediatelyShutdown();
-            }
-        });
     }
 
     @Override
@@ -130,7 +109,7 @@ public class TurkuServlet extends VaadinServlet {
 
         HttpSession session = request.getSession(false);
         if (session != null && !isVaadinHeartBeat) {
-            ApplicationController appCrtl = Workarounds.getAppCrtlFromSession(session);
+            TurkuApplicationController appCrtl = Workarounds.getAppCrtlFromSession(session);
 
             if (appCrtl != null) {
                 String remoteAddr = "" + session.getAttribute("remoteAddr");

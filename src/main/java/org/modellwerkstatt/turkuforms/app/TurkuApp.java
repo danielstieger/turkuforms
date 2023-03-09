@@ -34,7 +34,7 @@ import java.util.List;
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
 public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener {
-    private ApplicationController applicationController;
+    private TurkuApplicationController applicationController;
     private IOFXUserEnvironment userEnvironment;
     private MainwindowTabSheet mainTabImpl;
 
@@ -52,7 +52,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         mainTabImpl = new MainwindowTabSheet();
 
         String remoteAddr =  session.getBrowser().getAddress();
-        applicationController = new ApplicationController(servlet.getUiFactory(), this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN);
+        applicationController = new TurkuApplicationController(servlet.getUiFactory(), this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
 
         // TODO: correct here?

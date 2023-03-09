@@ -84,6 +84,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
 
+
         /* grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<DTO>>() {
             @Override
             public void onComponentEvent(ItemClickEvent<DTO> event) {
@@ -118,6 +119,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 adjustTableInformation("", true);
             }
         });
+        Workarounds.useGridShortcutHk(grid, "A", event -> { selectionModel.selectAll(); });
+
 
         this.add(topPane, grid);
 

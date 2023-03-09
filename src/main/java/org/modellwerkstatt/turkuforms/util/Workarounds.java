@@ -2,12 +2,14 @@ package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.WrappedSession;
 import javafx.application.Application;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
+import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
 
@@ -17,11 +19,11 @@ import java.util.List;
 
 public class Workarounds {
 
-    public static ApplicationController getAppCrtlFromSession(HttpSession session) {
-        return (ApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
+    public static TurkuApplicationController getAppCrtlFromSession(HttpSession session) {
+        return (TurkuApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
     }
-    public static ApplicationController getAppCrtlFromSession(WrappedSession session) {
-        return (ApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
+    public static TurkuApplicationController getAppCrtlFromSession(WrappedSession session) {
+        return (TurkuApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
     }
 
     public static String mlToolTipText(String tooltip){
@@ -85,6 +87,17 @@ public class Workarounds {
         reg.setBrowserDefaultAllowed(false);
         reg.setEventPropagationAllowed(false);
     }
+
+    public static void useGridShortcutHk(Grid grid, String hk, ShortcutEventListener listener) {
+        ShortcutRegistration reg;
+        if (Defs.hkNeedsCrtl(hk)) { reg = Shortcuts.addShortcutListener(grid, listener, HkTranslate.trans(hk), KeyModifier.CONTROL); }
+        else { reg = Shortcuts.addShortcutListener(grid, listener, HkTranslate.trans(hk)); }
+
+        reg.listenOn(grid);
+        reg.setBrowserDefaultAllowed(false);
+        reg.setEventPropagationAllowed(false);
+    }
+
 
     public static void useGlobalShortcutHk(Component layout, String hk, ShortcutEventListener listener) {
         ShortcutRegistration reg;

@@ -37,6 +37,7 @@ export function _selectionGridSelectRow(e) {
 }
 export function _selectionGridSelectRowWithItem(e, item, index) {
     const ctrlKey = (e.metaKey)?e.metaKey:e.ctrlKey; //(this._ios)?e.metaKey:e.ctrlKey;
+
     // if click select only this row
     if (!ctrlKey && !e.shiftKey) {
         if (this.$server) {
