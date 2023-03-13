@@ -6,6 +6,7 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.turkuforms.editors.*;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
+import org.modellwerkstatt.turkuforms.forms.TurkuTabForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuTable;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
@@ -58,7 +59,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_TabForm<?> createToolkitTabForm() {
-        return null;
+        return new TurkuTabForm();
     }
 
     @Override

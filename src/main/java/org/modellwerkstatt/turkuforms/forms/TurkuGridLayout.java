@@ -28,6 +28,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     private int childsAdded = 0;
     private FlexComponent containerToAddComponent;
+    private IToolkit_Form focusComponent;
 
 
     public TurkuGridLayout(ITurkuFactory factory) {
@@ -54,7 +55,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     }
 
     @Override
-    public void addChildren(IToolkit_Form iToolkit_form) {
+    public void addChildren(IToolkit_Form child) {
         int currentRow = childsAdded / colConstraints.size();
         int currentCol = childsAdded - (currentRow * colConstraints.size());
 
@@ -87,12 +88,16 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         int childConstraint = multipleColumns ? currentColConstraint : currentRowConstraint;
         // TODO: should we also apply sizeFull/sizeUndefined()
         // add child now
-        Component childCmpt = (Component) iToolkit_form;
+        Component childCmpt = (Component) child;
         containerToAddComponent.add(childCmpt);
         if (childConstraint == -1) {
             containerToAddComponent.setFlexGrow(0, childCmpt);
         } else {
             containerToAddComponent.setFlexGrow(childConstraint, childCmpt);
+        }
+
+        if (childsAdded == 0) {
+            focusComponent = child;
         }
 
         childsAdded ++;
@@ -120,7 +125,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     @Override
     public Object myRequestFocus() {
-        return null;
+        return focusComponent.myRequestFocus();
     }
 
     @Override
