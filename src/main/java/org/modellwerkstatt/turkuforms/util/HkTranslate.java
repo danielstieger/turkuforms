@@ -51,7 +51,7 @@ public class HkTranslate {
         toVaadin.put("N9", Key.NUMPAD_9);
         // toVaadin.put("TAB", Key.);
         // toVaadin.put("SPACE", Key.);
-        // toVaadin.put("ENTER", Key.);
+        toVaadin.put("ENTER", Key.ENTER);
         toVaadin.put("ESCAPE", Key.ESCAPE);
         toVaadin.put("ESC", Key.ESCAPE);
         toVaadin.put("BACKSPACE", Key.BACKSPACE);

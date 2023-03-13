@@ -24,7 +24,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.forms.OverflowMenu;
+import org.modellwerkstatt.turkuforms.forms.MenuStructure;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -119,7 +119,7 @@ abstract public class TurkuAppLayout extends AppLayout {
         MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
         root.add(new Text(menuName));
         SubMenu rootSubMenu = root.getSubMenu();
-        return OverflowMenu.createMainMenuStructure(turkuFactory, rootSubMenu, null, null, menu.items);
+        return MenuStructure.createMainMenuStructure(turkuFactory, null, rootSubMenu, null, null, null, menu.items);
     }
 
     protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList){

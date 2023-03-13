@@ -19,27 +19,30 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.util.HkTranslate;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 
-public class OverflowMenu extends MenuBar {
+public class MenuStructure extends MenuBar {
+    public final static String DOUBLECLICK_HK = "ENTER";
 
+    protected MenuActionGlue doubleClickAction;
 
-    public OverflowMenu() {
+    public MenuStructure() {
         super();
         addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
     }
 
 
-    public <T> void initialize(ITurkuFactory factory, MenuSub menu, Grid<T> grid){
+    public <T> void initialize(ITurkuFactory factory, MenuSub menu, Grid<T> grid) {
         GridContextMenu<T> rootGCM = grid == null ? null : new GridContextMenu<T>(grid);
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menu.items) {
             if (currentItem instanceof MenuActionGlue) {
                 // only overflow menu for context menu
-                createActionItem(factory, this, null, null, (MenuActionGlue) currentItem);
+                createActionItem(factory, this,this, grid, null, null, (MenuActionGlue) currentItem);
 
             } else {
                 if (currentItem.labelText == null) {
@@ -48,23 +51,31 @@ public class OverflowMenu extends MenuBar {
                 } else {
                     MenuItem created = this.addItem(Workarounds.createIconWithCollection(factory.translateIconName("table_menu")));
                     SubMenu createdSub = created.getSubMenu();
-                    createMainMenuStructure(factory, createdSub, rootGCM, null, ((MenuSub) currentItem).items);
+                    createMainMenuStructure(factory, this, createdSub, grid, rootGCM, null, ((MenuSub) currentItem).items);
                 }
             }
         }
     }
 
+    public void execDoubleClick() {
+        if (doubleClickAction != null && doubleClickAction.reevalEnabled()) {
+            doubleClickAction.startCommand();
+        }
+    }
 
 
     static public <T> SubMenu createMainMenuStructure(ITurkuFactory turkuFactory,
+                                                      MenuStructure overflowMenu,
                                                       SubMenu parent,
+                                                      Grid grid,
                                                       GridContextMenu<T> rootGCM,
                                                       GridSubMenu<T> subGCM,
                                                       List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList) {
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
             if (currentItem instanceof MenuActionGlue) {
-                createActionItem(turkuFactory, parent, rootGCM, subGCM, (MenuActionGlue) currentItem);
+                createActionItem(turkuFactory, overflowMenu, parent, grid, rootGCM, subGCM, (MenuActionGlue) currentItem);
+
             } else {
                 if (currentItem.labelText == null) {
                     // null is separator
@@ -84,7 +95,7 @@ public class OverflowMenu extends MenuBar {
 
                     }
 
-                    createMainMenuStructure(turkuFactory, createdSub, null, subGCM, ((MenuSub) currentItem).items);
+                    createMainMenuStructure(turkuFactory, overflowMenu, createdSub, grid, null, subGCM, ((MenuSub) currentItem).items);
                 }
             }
         }
@@ -94,7 +105,7 @@ public class OverflowMenu extends MenuBar {
 
 
 
-    static public <T> MenuItem createActionItem(ITurkuFactory turkuFactory, HasMenuItems parent, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, MenuActionGlue glue) {
+    static public <T> MenuItem createActionItem(ITurkuFactory turkuFactory, MenuStructure overflowMenu, HasMenuItems parent, Grid grid, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, MenuActionGlue glue) {
         // Menu & GCM do not have common interfaces and HasGridMenuItems is protected (vaadin bug?)
         ComponentEventListener<ClickEvent<MenuItem>> execItem = event -> {
             event.getSource().setEnabled(false);
@@ -151,6 +162,15 @@ public class OverflowMenu extends MenuBar {
         if (createdGCM != null) {
             glue.attachButton2(new TurkuHasEnabled(createdGCM, "Context " + glue.labelText));
         }
+
+        if (Defs.needsHkRegistration(glue.public_hotKey) && grid != null) {
+            Workarounds.useGridShortcutHk(grid, glue.public_hotKey, event -> { if (glue.reevalEnabled()) { glue.startCommand(); } });
+            if (overflowMenu != null) {
+                overflowMenu.doubleClickAction = glue;
+            }
+
+        }
+
 
         return created;
     }

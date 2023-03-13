@@ -18,7 +18,6 @@ import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.Selection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.components.SelectionGrid;
@@ -34,7 +33,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private FormHeading heading;
     private TextField searchField;
     private Button infoCsvButton;
-    private OverflowMenu overflowMenu;
+    private MenuStructure overflowMenu;
 
     private Class dtoClass;
     private SelectionGrid<DTO> grid;
@@ -85,26 +84,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
 
-
-        /* grid.addItemClickListener(new ComponentEventListener<ItemClickEvent<DTO>>() {
-            @Override
-            public void onComponentEvent(ItemClickEvent<DTO> event) {
-                boolean doNotClearSelection = event.isCtrlKey() || event.isAltKey() || event.isShiftKey();
-                DTO item = event.getItem();
-                Set<DTO> currentSel = selectionModel.getSelectedItems();
-
-                if (currentSel.contains(item)) {
-                    selectionModel.deselect(item);
-
-                } else {
-                    HashSet<DTO> itemAsSet = new HashSet<>();
-                    itemAsSet.add(item);
-                    if (doNotClearSelection) { currentSel.clear(); }
-                    selectionModel.updateSelection(itemAsSet, currentSel);
-                }
-            }
-        }); */
-
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
                 Set<DTO> allSelected = event.getAllSelectedItems();
@@ -121,7 +100,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             }
         });
         Workarounds.useGridShortcutHk(grid, "A", event -> { selectionModel.selectAll(); });
-
 
         this.add(topPane, grid);
 
@@ -320,9 +298,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void addMenuAndSetButtons(MenuSub menuSub) {
-        overflowMenu = new OverflowMenu();
+        overflowMenu = new MenuStructure();
         overflowMenu.initialize(factory, menuSub, grid);
         topPane.add(overflowMenu);
+
+        grid.addItemDoubleClickListener(e -> { overflowMenu.execDoubleClick(); });
     }
 
     @Override

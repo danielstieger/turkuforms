@@ -18,7 +18,7 @@ import java.util.List;
 public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_FormContainer<DTO> {
     private ITurkuFactory factory;
     private LeftRight topContainer;
-    private OverflowMenu menu;
+    private MenuStructure menu;
     private FormHeading heading;
 
     private boolean needsFullWith = false;
@@ -101,7 +101,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     @Override
     public void addMenuAndSetButtons(MenuSub menuSub) {
         if (topContainer == null) { installTopContainer(); }
-        menu = new OverflowMenu();
+        menu = new MenuStructure();
         topContainer.add(menu);
         menu.initialize(factory, menuSub, null);
     }
