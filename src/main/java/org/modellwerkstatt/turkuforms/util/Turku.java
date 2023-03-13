@@ -15,7 +15,9 @@ import java.util.Map;
 public class Turku {
     public static final String INTERNAL_VERSION = "Turkuforms (moware11) 0.1";
     public static final boolean DEBUG_HARDLOG = true;
-    private static final String HARDLOG_FILENAME = "/Users/danielstieger/turkulog.log";
+
+    private static final String HARDLOG_DIR = "/Users/danielstieger/";
+    private static final String HARDLOG_FILENAME = HARDLOG_DIR + "turkulog.log";
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");
 
     public static String sessionToString(WrappedSession session) {
@@ -66,7 +68,7 @@ public class Turku {
     }
 
     public static void l(String text) {
-        if (DEBUG_HARDLOG && new File(HARDLOG_FILENAME).canWrite()) {
+        if (DEBUG_HARDLOG && new File(HARDLOG_DIR).canWrite()) {
             try {
                 File logFile = new File(HARDLOG_FILENAME);
                 FileOutputStream out;
