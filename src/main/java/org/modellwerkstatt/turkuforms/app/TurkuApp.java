@@ -47,9 +47,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
 
         // TODO: constructing basis ui later?
-        init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
-
         mainTabImpl = new MainwindowTabSheet();
+
+        init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
         String remoteAddr =  session.getBrowser().getAddress();
         applicationController = new TurkuApplicationController(servlet.getUiFactory(), this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN);
@@ -59,7 +59,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         session.getSession().setAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME, applicationController);
         session.getSession().setAttribute("remoteAddr", remoteAddr);
         session.getSession().setAttribute("userName", userEnvironment.getUserName());
-
     }
 
     @Override
@@ -134,6 +133,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
         addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
         addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
+
+
+        // initialize other stuff
+        mainTabImpl.addTabSelectedChangeListener( i -> applicationController.onTabChangeEvent(i));
+
     }
 
     @Override

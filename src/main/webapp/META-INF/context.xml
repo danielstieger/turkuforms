@@ -1,0 +1,4 @@
+<!-- 'context.xml' file in 'META-INF' folder of your web app; prevents session serialization -->
+<Context>
+    <Manager pathname="" />
+</Context>

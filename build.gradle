@@ -80,6 +80,7 @@ war {
     dependsOn(mowarePluginAdoption)
     webXml = file('artefact/web.xml')
 
+
     from(appClassesHome) {
         into 'WEB-INF/classes'
     }

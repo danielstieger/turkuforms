@@ -9,43 +9,53 @@ import com.vaadin.flow.component.tabs.TabSheetVariant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainwindowTabSheet extends Composite<Component> {
-    private TabSheet commandTabSheet;
+public class MainwindowTabSheet extends TabSheet {
     private List<CmdUiTab> tabsInSheet;
 
 
     public MainwindowTabSheet() {
+        super();
+        setSizeFull();
+        addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
+
         tabsInSheet = new ArrayList<>();
-        // TODO: dont we need a TabChange listener?
     }
 
-    @Override
-    protected Component initContent() {
-        commandTabSheet = new TabSheet();
-        commandTabSheet.setSizeFull();
-        commandTabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
-        return commandTabSheet;
+
+
+    public void addTabSelectedChangeListener(TabSelectedIndexChanged change){
+        this.addSelectedChangeListener(event ->{
+            Tab current = event.getSelectedTab();
+            int index = this.getIndexOf(current);
+            change.selectedIndexChanged(index);
+        });
     }
 
     public void addTab(CmdUiTab tab) {
-        Tab imp = commandTabSheet.add(tab.getWindowTitle(), tab);
-        commandTabSheet.setSelectedTab(imp);
+        Tab imp = this.add(tab.getWindowTitle(), tab);
+        this.setSelectedTab(imp);
         tabsInSheet.add(tab);
     }
 
     public void focusTab(CmdUiTab tab) {
         int index = tabsInSheet.indexOf(tab);
-        commandTabSheet.setSelectedIndex(index);
+        this.setSelectedIndex(index);
     }
 
     public void closeTab(CmdUiTab tab) {
         int index = tabsInSheet.indexOf(tab);
-        Tab impl = commandTabSheet.getTabAt(index);
-        commandTabSheet.remove(impl);
+        Tab impl = this.getTabAt(index);
+        this.remove(impl);
         tabsInSheet.remove(tab);
     }
 
     public boolean hasOpenTabs() {
         return tabsInSheet.size() > 0;
+    }
+
+    public interface TabSelectedIndexChanged {
+
+        public void selectedIndexChanged(int i);
+
     }
 }
