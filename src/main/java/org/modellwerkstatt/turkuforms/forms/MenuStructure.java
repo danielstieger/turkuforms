@@ -19,7 +19,6 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.util.HkTranslate;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 

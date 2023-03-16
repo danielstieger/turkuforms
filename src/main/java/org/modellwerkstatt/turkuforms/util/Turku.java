@@ -2,18 +2,20 @@ package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.WrappedSession;
+import jakarta.servlet.http.HttpServletRequest;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Turku {
-    public static final String INTERNAL_VERSION = "Turkuforms (moware11) 0.1";
+    public static final String INTERNAL_VERSION = "Turkuforms 0.01 BETA";
     public static final boolean DEBUG_HARDLOG = true;
 
     private static final String HARDLOG_DIR = "/Users/danielstieger/";

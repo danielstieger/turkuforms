@@ -1,6 +1,8 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ShortcutEvent;
+import com.vaadin.flow.component.ShortcutEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,17 +12,15 @@ import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
+import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.HkTranslate;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI, ShortcutEventListener {
     protected ICommandContainer cmdContainer;

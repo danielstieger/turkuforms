@@ -3,8 +3,6 @@ package org.modellwerkstatt.turkuforms.util;
 import com.vaadin.flow.component.HasEnabled;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_EnableItem;
 
-import java.awt.*;
-
 
 public class TurkuHasEnabled implements IToolkit_EnableItem {
     private HasEnabled enabled_1;

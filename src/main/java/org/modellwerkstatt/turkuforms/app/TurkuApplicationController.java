@@ -1,5 +1,7 @@
 package org.modellwerkstatt.turkuforms.app;
 
+import jakarta.servlet.http.HttpSessionBindingEvent;
+import jakarta.servlet.http.HttpSessionBindingListener;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
@@ -8,8 +10,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionBindingListener;
 
 public class TurkuApplicationController extends ApplicationController implements HttpSessionBindingListener {
 
