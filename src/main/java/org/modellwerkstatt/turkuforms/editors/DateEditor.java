@@ -9,7 +9,7 @@ public class DateEditor extends EditorBasis implements IToolkit_DateOrTimeEditor
     }
 
     @Override
-    public void setFormatter(String s, String s1) {
+    public void setFormatter(String format, String locale, int langIdx) {
 
     }
 }

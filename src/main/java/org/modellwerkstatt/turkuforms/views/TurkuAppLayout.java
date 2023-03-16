@@ -18,16 +18,21 @@ import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.dom.ThemeList;
+import com.vaadin.flow.server.Version;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
+import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.forms.MenuStructure;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
+import java.lang.management.ManagementFactory;
 import java.util.List;
 
 
@@ -78,7 +83,18 @@ abstract public class TurkuAppLayout extends AppLayout {
         userInfoLabel = new Label("-");
         userInfoLabel.setWidthFull();
 
+        String basicSysInfo = MoVersion.MOWARE_PLUGIN_VERSION + "\n" + Turku.INTERNAL_VERSION + "\n";
+        basicSysInfo += "Vaadin Version " + Version.getFullVersion() + "\n";
+        basicSysInfo += ManagementFactory.getRuntimeMXBean().getVmVendor() + " " +
+                       ManagementFactory.getRuntimeMXBean().getVmName() + " " +
+                       ManagementFactory.getRuntimeMXBean().getVmVersion();
+
+
         sysInfoLabel = new Label("-");
+        Tooltip sysInfoTooltip = Tooltip.forComponent(sysInfoLabel);
+        sysInfoTooltip.setText(basicSysInfo);
+        sysInfoTooltip.setPosition(Tooltip.TooltipPosition.TOP_END);
+        sysInfoTooltip.setHideDelay(5000);
 
         HorizontalLayout drawerBottom = new HorizontalLayout(userInfoLabel, darkToggle, logout);
         drawerBottom.setWidthFull();
