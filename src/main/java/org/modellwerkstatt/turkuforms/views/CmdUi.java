@@ -4,6 +4,7 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.Command;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
@@ -80,10 +81,12 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             if (Defs.hasIcon(oci.iconName)) {
                 button = new Button(oci.buttonTitle, Workarounds.createIconWithCollection(factory.translateIconName(oci.iconName)), event -> {
                     cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
+
                 });
             } else {
                 button = new Button(oci.buttonTitle, event -> {
                     cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
+
                 });
             }
 
