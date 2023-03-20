@@ -109,11 +109,10 @@ vaadin-tooltip-overlay::part(content) {
 .TurkuErrorColor { color: var(--lumo-error-color) !important; }
 .TurkuWarningColor { color: #FF6700 !important; }
 
-vaadin-selection-grid::part(row) {
-   max-height: 1.8em;
-   min-height: 1.8em;
-}
-
 vaadin-selection-grid {
     height: 100px !important;
+}
+
+vaadin-selection-grid vaadin-checkbox {
+    --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2.8));
 }

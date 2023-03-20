@@ -79,8 +79,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(infoCsvButton);
 
         grid = new SelectionGrid<>();
-        grid.addThemeVariants(GridVariant.LUMO_COMPACT);
+        // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
+
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
 
@@ -167,7 +168,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     }));
 
 
-            col.setHeader(label);
+            col.setHeader(Workarounds.niceGridHeaderLabel(label));
             col.setResizable(true);
             col.setTextAlign(converter.isRightAligned() ? ColumnTextAlign.END : ColumnTextAlign.START);
 

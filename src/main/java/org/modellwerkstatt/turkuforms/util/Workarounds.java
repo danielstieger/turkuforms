@@ -31,6 +31,13 @@ public class Workarounds {
         return tooltip;
     }
 
+    public static String niceGridHeaderLabel(String s){
+        if ("".equals(s)) {
+            return "-";
+        }
+        return s;
+    }
+
     public static Icon createIconWithCollection(String fullName) {
         try {
             if (fullName.contains(":")) {

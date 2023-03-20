@@ -51,6 +51,8 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     public SelectionGrid() {
         super();
+        setThemeName("dense");
+
     }
 
     /**
@@ -59,6 +61,8 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     public SelectionGrid(int pageSize) {
         super(pageSize);
+        setThemeName("dense");
+
     }
 
     /**
@@ -68,6 +72,8 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     public SelectionGrid(Class<T> beanType, boolean autoCreateColumns) {
         super(beanType, autoCreateColumns);
+        setThemeName("dense");
+
     }
 
     /**
@@ -76,6 +82,8 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     public SelectionGrid(Class<T> beanType) {
         super(beanType);
+        setThemeName("dense");
+
     }
 
 
@@ -178,6 +186,7 @@ public class SelectionGrid<T> extends Grid<T> {
             int to = Math.max(fromIndex, toIndex);
             DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
             Method fetchFromProvider;
+
             try {
                 fetchFromProvider = DataCommunicator.class.getDeclaredMethod("fetchFromProvider", int.class, int.class);
                 fetchFromProvider.setAccessible(true);
@@ -189,6 +198,19 @@ public class SelectionGrid<T> extends Grid<T> {
                 ignored.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * Runs a JavaScript snippet to hide the multi selection / checkbox column on the client side. The column
+     * is not removed, but set to "hidden" explicitly.
+     */
+    public void hideMultiSelectionColumn() {
+        getElement().getNode().runWhenAttached(ui ->
+                ui.beforeClientResponse(this, context ->
+                        getElement().executeJs(
+                                "if (this.querySelector('vaadin-grid-flow-selection-column')) {" +
+                                        " this.querySelector('vaadin-grid-flow-selection-column').hidden = true }")));
     }
 
     /**
