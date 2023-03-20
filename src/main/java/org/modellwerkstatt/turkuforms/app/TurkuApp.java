@@ -136,7 +136,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
 
         // initialize other stuff
-        // mainTabImpl.addTabSelectedChangeListener( i -> applicationController.onTabChangeEvent(i));
+        mainTabImpl.addTabSelectedChangeListener( i -> applicationController.onTabChangeEvent(i));
 
     }
 

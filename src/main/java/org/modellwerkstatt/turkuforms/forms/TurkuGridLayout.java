@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.modellwerkstatt.dataux.runtime.core.FocusController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_FormContainer;
@@ -20,6 +21,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     private LeftRight topContainer;
     private MenuStructure menu;
     private FormHeading heading;
+    private FocusController<IToolkit_Form> focusController;
 
     private boolean needsFullWith = false;
     private boolean multipleColumns;
@@ -28,7 +30,6 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     private int childsAdded = 0;
     private FlexComponent containerToAddComponent;
-    private IToolkit_Form focusComponent;
 
 
     public TurkuGridLayout(ITurkuFactory factory) {
@@ -36,6 +37,8 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         this.factory = factory;
         containerToAddComponent = this;
         Workarounds.shrinkSpace(this);
+        focusController = new FocusController<>();
+
     }
 
     @Override
@@ -56,6 +59,8 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     @Override
     public void addChildren(IToolkit_Form child) {
+        focusController.addChild(child);
+
         int currentRow = childsAdded / colConstraints.size();
         int currentCol = childsAdded - (currentRow * colConstraints.size());
 
@@ -96,10 +101,6 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
             containerToAddComponent.setFlexGrow(childConstraint, childCmpt);
         }
 
-        if (childsAdded == 0) {
-            focusComponent = child;
-        }
-
         childsAdded ++;
     }
 
@@ -125,7 +126,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     @Override
     public Object myRequestFocus() {
-        return focusComponent.myRequestFocus();
+        return focusController.myRequestFocus();
     }
 
     @Override

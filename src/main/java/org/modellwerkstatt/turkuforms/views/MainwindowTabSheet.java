@@ -5,6 +5,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,10 @@ public class MainwindowTabSheet extends TabSheet {
     public void addTabSelectedChangeListener(TabSelectedIndexChanged change){
         this.addSelectedChangeListener(event ->{
             Tab current = event.getSelectedTab();
-            int index = this.getIndexOf(current);
-            change.selectedIndexChanged(index);
+            if (current != null) {
+                int index = this.getIndexOf(current);
+                change.selectedIndexChanged(index);
+            }
         });
     }
 

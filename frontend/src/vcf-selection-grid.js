@@ -61,7 +61,7 @@ class VcfSelectionGridElement extends ElementMixin(ThemableMixin(GridElement)) {
             if (rowNumber < 0 || cellNumber < 0) {
                 throw "index out of bound";
             }
-            this.scrollToIndex(rowNumber);
+            // this.scrollToIndex(rowNumber);
             /** workaround when the expanded node opens children the index is outside the grid size
              * https://github.com/vaadin/vaadin-grid/issues/2060
              * Remove this once this is fixed
@@ -84,9 +84,13 @@ class VcfSelectionGridElement extends ElementMixin(ThemableMixin(GridElement)) {
         const row = Array.from(this.$.items.children).filter(
             (child) => child.index === rowNumber
         )[0];
+
+        console.log("FOCUS: " + row);
+
         // if row is already
         if (row) {
             const cell = row.children[cellNumber];
+            console.log("FOCUSSING ON " + cell);
             if (cell) {
                 cell.focus();
             } else {
