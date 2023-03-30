@@ -1,4 +1,5 @@
 package org.modellwerkstatt.turkuforms.experiment;
+import com.flowingcode.vaadin.addons.gridhelpers.GridHelper;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,9 +22,34 @@ public class GridDenseTheme extends VerticalLayout {
         data.add(new Person("Dan", "Man", LocalDate.now()));
         data.add(new Person("Dan", "Man", LocalDate.now()));
         data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
+        data.add(new Person("Dan", "Man", LocalDate.now()));
 
         grid.setItems(data);
-        grid.setThemeName("dense");
+
+
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridHelper.setArrowSelectionEnabled(grid, true);
+        GridHelper.setColumnToggleVisible(grid, isVisible());
+        GridHelper.setSelectOnClick(grid, true);
+        grid.addThemeName(GridHelper.DENSE_THEME);
 
         add(grid);
     }
