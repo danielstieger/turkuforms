@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.flowingcode.vaadin.addons.gridhelpers.GridHelper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -20,7 +21,6 @@ import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.objectflow.runtime.Selection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.components.SelectionGrid;
 import org.modellwerkstatt.turkuforms.util.*;
 
 import java.util.*;
@@ -36,7 +36,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private MenuStructure overflowMenu;
 
     private Class dtoClass;
-    private SelectionGrid<DTO> grid;
+    private Grid<DTO> grid;
     private GridMultiSelectionModel<DTO> selectionModel;
     private TurkuTableDataView<DTO> dataView;
 
@@ -78,9 +78,12 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(searchField);
         topPane.add(infoCsvButton);
 
-        grid = new SelectionGrid<>();
+        grid = new Grid<>();
         // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridHelper.setArrowSelectionEnabled(grid, true);
+        // GridHelper.setColumnToggleVisible(grid, isVisible());
+        grid.addThemeName(GridHelper.DENSE_THEME);
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
@@ -254,7 +257,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         Optional<DTO> first = selectionModel.getFirstSelectedItem();
         Turku.l("TurkuTable.myRequestFocus() called: " + first);
-        first.ifPresent(dto -> grid.focusOnCell(dto));
+        // first.ifPresent(dto -> grid.focusOnCell(dto));
         return grid;
     }
 

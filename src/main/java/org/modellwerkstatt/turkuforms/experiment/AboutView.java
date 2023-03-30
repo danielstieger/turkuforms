@@ -3,10 +3,8 @@ package org.modellwerkstatt.turkuforms.experiment;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.modellwerkstatt.turkuforms.components.SelectionGrid;
 
 import java.util.ArrayList;
 import java.util.List;
