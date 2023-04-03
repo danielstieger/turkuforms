@@ -52,6 +52,10 @@ dependencies {
     providedCompile "org.projectlombok:lombok:1.18.24"
     annotationProcessor "org.projectlombok:lombok:1.18.24"
 
+    implementation 'com.vaadin.componentfactory:selection-grid-flow:3.0.0'
+
+
+
     // moware dependencies * * * * * * * * * * * * * * * * *
     implementation files("${mowarePluginHome}/jars/basis/joda-time-2.10.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-core-5.2.9.RELEASE.jar")

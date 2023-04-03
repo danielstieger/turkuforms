@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.forms;
 
-import com.flowingcode.vaadin.addons.gridhelpers.GridHelper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -81,9 +80,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid = new Grid<>();
         // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        GridHelper.setArrowSelectionEnabled(grid, true);
-        // GridHelper.setColumnToggleVisible(grid, isVisible());
-        grid.addThemeName(GridHelper.DENSE_THEME);
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
