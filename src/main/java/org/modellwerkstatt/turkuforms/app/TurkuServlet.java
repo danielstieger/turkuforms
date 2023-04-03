@@ -2,11 +2,6 @@ package org.modellwerkstatt.turkuforms.app;
 
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinServlet;
-import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
@@ -20,6 +15,12 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
