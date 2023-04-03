@@ -52,7 +52,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     public TurkuTable(ITurkuFactory fact) {
         factory = fact;
-        Workarounds.shrinkSpace(this);
+        Peculiar.shrinkSpace(this);
         this.setSizeFull();
         this.getStyle().set("gap", "0");
 
@@ -81,6 +81,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid = new SelectionGrid<>();
         // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.hideMultiSelectionColumn();
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
@@ -100,7 +101,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 adjustTableInformation("", true);
             }
         });
-        Workarounds.useGridShortcutHk(grid, "A", event -> { selectionModel.selectAll(); });
+        Peculiar.useGridShortcutHk(grid, "A", event -> { selectionModel.selectAll(); });
 
         this.add(topPane, grid);
 

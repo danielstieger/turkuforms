@@ -11,7 +11,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_FormContainer;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         super();
         this.factory = factory;
         containerToAddComponent = this;
-        Workarounds.shrinkSpace(this);
+        Peculiar.shrinkSpace(this);
         focusController = new FocusController<>();
 
     }
@@ -74,7 +74,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         // Start with a new HorizontalLayout ?
         if (currentCol == 0 && multipleColumns) {
             HorizontalLayout hl = new HorizontalLayout();
-            Workarounds.shrinkSpace(hl);
+            Peculiar.shrinkSpace(hl);
             hl.setSizeUndefined();
 
             if (needsFullWith) hl.setWidthFull();

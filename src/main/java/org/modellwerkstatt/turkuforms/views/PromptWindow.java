@@ -14,7 +14,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class PromptWindow extends Dialog {
                 dlgRunnable.run(true);
             }
         });
-        Workarounds.useButtonShortcutHk(okButton, OK_HOKTEY);
+        Peculiar.useButtonShortcutHk(okButton, OK_HOKTEY);
         okButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
 
         Button cancelButton = null;
@@ -69,7 +69,7 @@ public class PromptWindow extends Dialog {
                     dlgRunnable.run(false);
                 }
             });
-            Workarounds.useButtonShortcutHk(cancelButton, NO_HOKTEY);
+            Peculiar.useButtonShortcutHk(cancelButton, NO_HOKTEY);
             cancelButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_PRIMARY);
         }
 

@@ -4,7 +4,6 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.server.Command;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
@@ -13,22 +12,19 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
-import org.modellwerkstatt.turkuforms.util.HkTranslate;
-import org.modellwerkstatt.turkuforms.util.Turku;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI, ShortcutEventListener {
     protected ICommandContainer cmdContainer;
-    protected List<Button> conclusionButtons;
     protected LeftRight conclusionLayout;
     protected ITurkuFactory factory;
-    protected List<String> globalHotkeysWhennAttached;
+    protected List<OFXConclusionInformation> conclusionInformations;
+    protected List<Button> conclusionButtons;
 
     public CmdUi(ITurkuFactory fact) {
         super();
@@ -40,7 +36,21 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void onShortcut(ShortcutEvent event) {
         String keyName = HkTranslate.trans(event.getKey());
-        Turku.l("CmdUi.onShortcut() received " + keyName);
+        Turku.l("CmdUi.onShortcut() received " + keyName + " hash " + event.hashCode());
+
+        if (Workarounds.sameHkInThisRequest(keyName)) {
+            return;
+        }
+
+        // check conclusion first
+        for (OFXConclusionInformation info: conclusionInformations) {
+            if (keyName.equals(info.hotkey)) {
+                cmdContainer.receiveAndProcess(new ConclusionEvent(info.conclusionHashCode, info.buttonTitle));
+                return;
+            }
+        }
+
+        // early returnS above : )
         cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
     }
 
@@ -64,15 +74,16 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void setConclusions(List<OFXConclusionInformation> conclusionInfo, List<String> globalHks) {
         // already optimized, only called for "new" pages, not on reloads of same page
+        conclusionInformations = conclusionInfo;
         conclusionLayout.clear();
         conclusionButtons.clear();
 
-
         for (String hk: globalHks) {
-            Workarounds.useGlobalShortcutHk(this, hk, this );
+            Peculiar.useGlobalShortcutHk(this, hk, this );
         }
 
         for (OFXConclusionInformation oci : conclusionInfo) {
+
             if (Defs.needsHkRegistration(oci.hotkey)) {
                 oci.buttonTitle = factory.translateButtonLabel(oci.buttonTitle, oci.hotkey);
             }
@@ -95,7 +106,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             }
 
             if (Defs.needsHkRegistration(oci.hotkey)) {
-                Workarounds.useButtonShortcutHk(button, oci.hotkey);
+                Peculiar.useGlobalShortcutHk(this, oci.hotkey,this);
+                // Workarounds.useButtonShortcutHk(button, oci.hotkey);
             }
 
             // button.setDisableOnClick(true);
@@ -110,18 +122,21 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void delayedRequestFocus() {
+        Turku.l("CmdUi.delayedRequestFocus() called: " + UI.getCurrent().getSession().getLastRequestTimestamp());
         ((IToolkit_Form) this.getComponentAt(0)).myRequestFocus();
     }
 
     @Override
     public void delayedAfterFullUiInitialized() {
         ((IToolkit_Form) this.getComponentAt(0)).afterFullUiInitialized();
+
     }
 
     @Override
-    public void reevalConclusions(List<OFXConclusionInformation> conclusionInformations) {
-        for (int i = 0; i < conclusionInformations.size(); i++) {
-            conclusionButtons.get(i).setEnabled(conclusionInformations.get(i).enabled);
+    public void reevalConclusions(List<OFXConclusionInformation> concInfos) {
+        conclusionInformations = concInfos;
+        for (int i = 0; i < concInfos.size(); i++) {
+            conclusionButtons.get(i).setEnabled(concInfos.get(i).enabled);
         }
     }
 

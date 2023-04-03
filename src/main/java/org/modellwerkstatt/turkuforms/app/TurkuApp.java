@@ -19,10 +19,7 @@ import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
-import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.util.HkTranslate;
-import org.modellwerkstatt.turkuforms.util.Turku;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 import org.modellwerkstatt.turkuforms.views.Mainwindow;
 import org.modellwerkstatt.turkuforms.views.MainwindowTabSheet;
@@ -187,9 +184,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void ensureHotkeyAvailable(List<String> list) {
         for (String hk: list){
-            Workarounds.useGlobalShortcutHk(this, hk, this);
+            Peculiar.useGlobalShortcutHk(this, hk, this);
         }
-        Workarounds.installMowareAddonHotkeys(this, this);
+        Peculiar.installMowareAddonHotkeys(this, this);
     }
 
     @Override

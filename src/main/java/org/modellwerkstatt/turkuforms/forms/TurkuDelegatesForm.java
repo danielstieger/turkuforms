@@ -10,7 +10,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.editors.DummyEditor;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
     public TurkuDelegatesForm(ITurkuFactory fact) {
         factory = fact;
-        Workarounds.shrinkSpace(this);
+        Peculiar.shrinkSpace(this);
 
         formLayout = new FormLayout();
         this.add(formLayout);

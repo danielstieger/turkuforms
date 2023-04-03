@@ -104,6 +104,8 @@ public class HkTranslate {
 
         // ATTENTION: ESC or add are mapped twice !!!
         toVaadin.forEach((s, key) -> fromVaadin.put("" + key.getKeys(), s));
+        fromVaadin.put("" + Key.ESCAPE.getKeys(), "ESC");
+
     }
 
 

@@ -1,12 +1,9 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.HasSize;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class CmdUiTab extends CmdUi {
     private boolean isModal;
@@ -15,7 +12,7 @@ public class CmdUiTab extends CmdUi {
 
     public CmdUiTab(ITurkuFactory fact, boolean modal) {
         super(fact);
-        Workarounds.shrinkSpace(this);
+        Peculiar.shrinkSpace(this);
 
         isModal = modal;
     }

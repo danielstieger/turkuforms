@@ -18,10 +18,7 @@ import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.util.HkTranslate;
-import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.util.*;
 
 import java.util.List;
 
@@ -164,7 +161,7 @@ public class MenuStructure extends MenuBar {
         }
 
         if (Defs.needsHkRegistration(glue.public_hotKey) && grid != null) {
-            Workarounds.useGridShortcutHk(grid, glue.public_hotKey, event -> { if (glue.reevalEnabled()) { glue.startCommand(); } });
+            Peculiar.useGridShortcutHk(grid, glue.public_hotKey, event -> { if (glue.reevalEnabled()) { glue.startCommand(); } });
             if (overflowMenu != null) {
                 overflowMenu.doubleClickAction = glue;
             }
