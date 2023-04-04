@@ -20,6 +20,7 @@
 /* eslint-disable no-invalid-this */
 
 export function _selectionGridSelectRow(e) {
+
     const vaadinTreeToggle = e.composedPath().find((p) => p.nodeName === "VAADIN-GRID-TREE-TOGGLE");
     if (vaadinTreeToggle) {
         // don't select, it will expand/collapse the node

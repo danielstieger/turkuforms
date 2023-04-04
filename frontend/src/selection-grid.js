@@ -54,6 +54,8 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
         Grid.prototype.old_onNavigationKeyDown = Grid.prototype._onNavigationKeyDown;
         Grid.prototype._onNavigationKeyDown = function _onNavigationKeyDownOverridden(e, key) {
             this.old_onNavigationKeyDown(e, key);
+
+
             const ctrlKey = (e.metaKey)?e.metaKey:e.ctrlKey;
             if (e.shiftKey || !ctrlKey) {
                 // select on shift down on shift up
@@ -76,9 +78,7 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
 
         Grid.prototype.old_onSpaceKeyDown = Grid.prototype._onSpaceKeyDown;
         Grid.prototype._onSpaceKeyDown = function _onSpaceKeyDownOverriden(e) {
-            /* this.old_onSpaceKeyDown(e); */
-
-            e.preventDefault();
+            this.old_onSpaceKeyDown(e);
 
             const tr = e.composedPath().find((p) => p.nodeName === "TR");
             if (tr && typeof tr.index != 'undefined') {
