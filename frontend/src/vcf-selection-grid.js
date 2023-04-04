@@ -85,12 +85,10 @@ class VcfSelectionGridElement extends ElementMixin(ThemableMixin(GridElement)) {
             (child) => child.index === rowNumber
         )[0];
 
-        console.log("FOCUS: " + row);
-
         // if row is already
         if (row) {
             const cell = row.children[cellNumber];
-            console.log("FOCUSSING ON " + cell);
+
             if (cell) {
                 cell.focus();
             } else {
