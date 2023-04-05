@@ -82,6 +82,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.hideMultiSelectionColumn();
+        grid.setThemeName("dense");
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);

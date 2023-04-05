@@ -53,27 +53,31 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
         };
         Grid.prototype.old_onNavigationKeyDown = Grid.prototype._onNavigationKeyDown;
         Grid.prototype._onNavigationKeyDown = function _onNavigationKeyDownOverridden(e, key) {
-            this.old_onNavigationKeyDown(e, key);
 
+            this.old_onNavigationKeyDown(e, key);
 
             const ctrlKey = (e.metaKey)?e.metaKey:e.ctrlKey;
             if (e.shiftKey || !ctrlKey) {
                 // select on shift down on shift up
                 if (key === 'ArrowDown' || key === 'ArrowUp') {
+
                     const row = Array.from(this.$.items.children).filter(
                         (child) => child.index === this._focusedItemIndex
                     )[0];
+
                     if (row && typeof row.index != 'undefined') {
                         this._selectionGridSelectRowWithItem(e, row._item, row.index);
                     }
+
                 }
             } // else do nothing
         }
 
-        Grid.prototype.old_onKeyUp = Grid.prototype._onKeyUp;
+        /* Grid.prototype.old_onKeyUp = Grid.prototype._onKeyUp;
         Grid.prototype._onKeyUp = function _onKeyUpOverriden(e) {
-            // Get rid of old key up
-        }
+            // Get rid of old key up DAN
+
+        } */
 
 
         Grid.prototype.old_onSpaceKeyDown = Grid.prototype._onSpaceKeyDown;

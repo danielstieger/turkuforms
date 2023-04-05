@@ -7,14 +7,12 @@ import type { GridActiveItemChangedEvent } from '@vaadin/grid';
 @customElement('desktop-grid')
 export class DesktopGrid extends LitElement {
 
-
     static styles = css`
         :host {
             width: 100%;
             height: 100%;
         }
     `;
-
 
     @state()
     private items: DS[] = [];
@@ -69,11 +67,6 @@ export class DesktopGrid extends LitElement {
         console.log('DesktopGrid.firstUpdated() called ' + this.items);
     }
 
-
-
-
-
-
     protected initData(val: string, ssView: any){
         this.view = ssView;
         this.items = JSON.parse('[' + val + ']');
@@ -94,7 +87,7 @@ export class DesktopGrid extends LitElement {
 
     render() {
         return html`<vaadin-grid .items="${this.items}" .selectedItems="${this.selectedItems}"
-                                                                @active-item-changed="${this.selectedItemChanged}">
+                                  @active-item-changed="${this.selectedItemChanged}">
                        <vaadin-grid-column header="First Name" path="c1"></vaadin-grid-column>
                        <vaadin-grid-column header="Last Name" path="c2"></vaadin-grid-column>
                        <vaadin-grid-column path="c3"></vaadin-grid-column>

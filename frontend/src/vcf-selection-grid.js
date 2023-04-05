@@ -88,7 +88,6 @@ class VcfSelectionGridElement extends ElementMixin(ThemableMixin(GridElement)) {
         // if row is already
         if (row) {
             const cell = row.children[cellNumber];
-
             if (cell) {
                 cell.focus();
             } else {

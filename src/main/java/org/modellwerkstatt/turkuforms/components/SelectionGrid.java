@@ -30,7 +30,9 @@ import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.grid.GridSelectionModel;
 import com.vaadin.flow.data.provider.DataCommunicator;
 import com.vaadin.flow.data.selection.SelectionModel;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,14 +47,17 @@ import java.util.stream.Stream;
 @JsModule("./src/vcf-selection-grid.js")
 @JsModule("./src/selection-grid.js")
 public class SelectionGrid<T> extends Grid<T> {
+    private Method dataCommunicatorFetchFromProvider;
+    private Method dataCommunicatorGetDataProviderSize;
+    private Method columnGetInternalId;
+
 
     /**
      * @see Grid#Grid()
      */
     public SelectionGrid() {
         super();
-        setThemeName("dense");
-
+        reflectMethods();
     }
 
     /**
@@ -61,8 +66,7 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     public SelectionGrid(int pageSize) {
         super(pageSize);
-        setThemeName("dense");
-
+        reflectMethods();
     }
 
     /**
@@ -72,8 +76,7 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     public SelectionGrid(Class<T> beanType, boolean autoCreateColumns) {
         super(beanType, autoCreateColumns);
-        setThemeName("dense");
-
+        reflectMethods();
     }
 
     /**
@@ -82,7 +85,24 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     public SelectionGrid(Class<T> beanType) {
         super(beanType);
-        setThemeName("dense");
+        reflectMethods();
+    }
+
+    private void reflectMethods() {
+        try {
+            dataCommunicatorFetchFromProvider = DataCommunicator.class.getDeclaredMethod("fetchFromProvider", int.class, int.class);
+            dataCommunicatorFetchFromProvider.setAccessible(true);
+
+            dataCommunicatorGetDataProviderSize = DataCommunicator.class.getDeclaredMethod("getDataProviderSize");
+            dataCommunicatorGetDataProviderSize.setAccessible(true);
+
+            columnGetInternalId = Column.class.getDeclaredMethod("getInternalId");
+            columnGetInternalId.setAccessible(true);
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -116,36 +136,29 @@ public class SelectionGrid<T> extends Grid<T> {
         }
     }
 
+    private List<T> getItemsInOrder() {
+        DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
+
+        try {
+            int size = (Integer) dataCommunicatorGetDataProviderSize.invoke(dataCommunicator);
+            return ((Stream<T>) dataCommunicatorFetchFromProvider.invoke(dataCommunicator, 0, size)).collect(Collectors.toList());
+
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private int getIndexForItem(T item) {
         return getItemsInOrder().indexOf(item);
     }
 
-    private List<T> getItemsInOrder() {
-        DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
-        Method fetchFromProvider;
-        Method getDataProviderSize;
-        try {
-            fetchFromProvider = DataCommunicator.class.getDeclaredMethod("fetchFromProvider", int.class, int.class);
-            getDataProviderSize = DataCommunicator.class.getDeclaredMethod("getDataProviderSize");
-            fetchFromProvider.setAccessible(true);
-            getDataProviderSize.setAccessible(true);
-            int size = (Integer) getDataProviderSize.invoke(dataCommunicator);
-            return ((Stream<T>) fetchFromProvider.invoke(dataCommunicator, 0, size)).collect(Collectors.toList());
-        } catch (Exception ignored) {
-        }
-        return new ArrayList<>();
-    }
-
     private String getColumnInternalId(Column<T> column) {
-        Method getInternalId;
         try {
-            getInternalId = Column.class.getDeclaredMethod("getInternalId");
-            getInternalId.setAccessible(true);
-            return (String) getInternalId.invoke(column);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
+            return (String) columnGetInternalId.invoke(column);
+
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-        throw new IllegalArgumentException("getInternalId");
     }
 
     /**
@@ -156,17 +169,18 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     @ClientCallable
     private void selectRange(int fromIndex, int toIndex) {
+        Turku.l("selectRange() " + fromIndex + " - " + toIndex);
+
         GridSelectionModel<T> model = getSelectionModel();
         if (model instanceof GridMultiSelectionModel) {
             DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
-            Method fetchFromProvider;
+
             try {
-                fetchFromProvider = DataCommunicator.class.getDeclaredMethod("fetchFromProvider", int.class, int.class);
-                fetchFromProvider.setAccessible(true);
-                asMultiSelect().select(((Stream<T>) fetchFromProvider.invoke(dataCommunicator, Math.min(fromIndex, toIndex), Math.max(fromIndex,
+                asMultiSelect().select(((Stream<T>) dataCommunicatorFetchFromProvider.invoke(dataCommunicator, Math.min(fromIndex, toIndex), Math.max(fromIndex,
                         toIndex) - Math.min(fromIndex, toIndex) + 1)).collect(Collectors.toList()));
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -179,22 +193,22 @@ public class SelectionGrid<T> extends Grid<T> {
      */
     @ClientCallable
     private void selectRangeOnly(int fromIndex, int toIndex) {
+        Turku.l("selectRangeOnly() " + fromIndex + " - " + toIndex);
+
         GridSelectionModel<T> model = getSelectionModel();
         if (model instanceof GridMultiSelectionModel) {
             int from = Math.min(fromIndex, toIndex);
             int to = Math.max(fromIndex, toIndex);
             DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
-            Method fetchFromProvider;
 
             try {
-                fetchFromProvider = DataCommunicator.class.getDeclaredMethod("fetchFromProvider", int.class, int.class);
-                fetchFromProvider.setAccessible(true);
-                Set<T> newSelectedItems = ((Stream<T>) fetchFromProvider.invoke(dataCommunicator, from, to - from + 1)).collect(Collectors.toSet());
+                Set<T> newSelectedItems = ((Stream<T>) dataCommunicatorFetchFromProvider.invoke(dataCommunicator, from, to - from + 1)).collect(Collectors.toSet());
                 HashSet<T> oldSelectedItems = new HashSet<>(getSelectedItems());
                 oldSelectedItems.removeAll(newSelectedItems);
                 asMultiSelect().updateSelection(newSelectedItems, oldSelectedItems);
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
     }
