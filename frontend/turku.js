@@ -20,6 +20,14 @@ window.turku = {
           } catch (err) {
             alert('Failed to copy content to clipboard!\n\n' + err);
           }
+    },
+
+    focusGrid : function(grid) {
+        setTimeout(function() {
+            let firstTd = grid.shadowRoot.querySelector('[aria-selected="true"] > td');
+            firstTd.focus();
+            console.log('window.turku.focusGrid() focussed on ' + firstTd);
+        }, 0);
     }
 
 }

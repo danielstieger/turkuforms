@@ -74,7 +74,7 @@ export function _selectionGridSelectRowWithItem(e, item, index) {
         if (!ctrlKey) {
             if (this.$server) {
                 // TODO: Why double update this ?
-                // this.$server.selectRangeOnly(index, index);
+                this.$server.selectRangeOnly(index, index);
             }
         } else {
             if (this.selectedItems && this.selectedItems.some((i) => i.key === item.key)) {

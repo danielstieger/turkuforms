@@ -73,11 +73,25 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
             } // else do nothing
         }
 
-        /* Grid.prototype.old_onKeyUp = Grid.prototype._onKeyUp;
-        Grid.prototype._onKeyUp = function _onKeyUpOverriden(e) {
-            // Get rid of old key up DAN
 
-        } */
+        Grid.prototype.old_onCellNavigation = Grid.prototype._onCellNavigation;
+        Grid.prototype._onCellNavigation = function _onCellNavigationOverridden(cell, dx, dy) {
+            console.log('_onCellNavigation ' + cell + "  (" +dx+ ", " + dy + ")");
+            this.old_onCellNavigation(cell, dx, dy);
+        }
+
+        Grid.prototype.old_onRowNavigation = Grid.prototype._onRowNavigation;
+        Grid.prototype._onRowNavigation = function _onRowNavigationOverridden(activeRow, dy) {
+            console.log('_onRowNavigation ' + activeRow + "  (" + dy + ")");
+            this.old_onRowNavigation(activeRow, dy);
+        }
+
+        Grid.prototype.old__focusBodyCell = Grid.prototype.__focusBodyCell;
+        Grid.prototype.__focusBodyCell = function __focusBodyCellOverridden(param) {
+            console.log('__focusBodyCell ' + param );
+            console.log(param);
+            this.old__focusBodyCell(param);
+        }
 
 
         Grid.prototype.old_onSpaceKeyDown = Grid.prototype._onSpaceKeyDown;

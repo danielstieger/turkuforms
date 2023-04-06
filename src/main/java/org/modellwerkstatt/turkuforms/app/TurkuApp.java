@@ -3,6 +3,8 @@ package org.modellwerkstatt.turkuforms.app;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.dependency.JavaScript;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.PreserveOnRefresh;
@@ -26,6 +28,7 @@ import org.modellwerkstatt.turkuforms.views.MainwindowTabSheet;
 import org.modellwerkstatt.turkuforms.views.PromptWindow;
 
 import java.util.List;
+
 
 
 @PreserveOnRefresh

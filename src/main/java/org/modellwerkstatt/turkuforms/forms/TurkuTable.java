@@ -250,13 +250,14 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public Object myRequestFocus() {
-        /* grid.getElement().executeJs(
-                "setTimeout(function(){let firstTd = $0.shadowRoot.querySelector('tr:first-child > td:first-child'); firstTd.click(); firstTd.focus(); },0)",
-                grid.getElement()); */
+        grid.getElement().executeJs(
+                "turku.focusGrid($0)",
+                grid.getElement());
 
         Optional<DTO> first = selectionModel.getFirstSelectedItem();
         Turku.l("TurkuTable.myRequestFocus() called: " + first);
-        first.ifPresent(dto -> grid.focusOnCell(dto));
+        // first.ifPresent(dto -> grid.focusOnCell(dto));
+        grid.focus();
         return grid;
     }
 

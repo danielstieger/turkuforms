@@ -3,6 +3,7 @@ package org.modellwerkstatt.turkuforms.views;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -14,6 +15,7 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
 
+@JavaScript("./turku.js")
 abstract public class Mainwindow extends TurkuAppLayout {
 
 
