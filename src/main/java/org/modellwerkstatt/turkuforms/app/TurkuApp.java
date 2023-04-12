@@ -21,6 +21,7 @@ import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
+import org.modellwerkstatt.turkuforms.auth.TestLogin;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 import org.modellwerkstatt.turkuforms.views.Mainwindow;
@@ -42,17 +43,21 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public TurkuApp() {
         TurkuServlet servlet = (TurkuServlet) VaadinServlet.getCurrent();
         VaadinSession session = UI.getCurrent().getSession();
-        userEnvironment = new UserEnvironmentInformation();
 
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
+        ITurkuFactory factory = servlet.getUiFactory();
 
         // TODO: constructing basis ui later?
         mainTabImpl = new MainwindowTabSheet();
 
+        ITurkuAuthenticate auth = new TestLogin();
+        String result = auth.authenticate(factory, servlet.getGuessedServerName(), "", appUiModule);
+        userEnvironment = auth.getEnvironment();
+
         init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
         String remoteAddr =  session.getBrowser().getAddress();
-        applicationController = new TurkuApplicationController(servlet.getUiFactory(), this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN);
+        applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
 
         // TODO: correct here?

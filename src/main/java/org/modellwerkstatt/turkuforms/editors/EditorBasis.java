@@ -53,6 +53,7 @@ abstract public class EditorBasis {
     }
 
     public void setText(String s) {
+        if (s == null) { s = "(null)"; }
         field.setValue(s);
     }
 

@@ -71,6 +71,7 @@ dependencies {
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.objectflow.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.dataux.runtime.jar")
 
+    implementation files("${appClassesHome}/../../../jars/commons-net-3.3.jar")
 
 }
 
@@ -78,10 +79,13 @@ ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
 
 war {
     dependsOn(mowarePluginAdoption)
-    webXml = file('artefact/web.xml')
-
+    webXml = file("${warFile}")
 
     from(appClassesHome) {
+        into 'WEB-INF/classes'
+    }
+
+    from(appClassesHome2) {
         into 'WEB-INF/classes'
     }
 }
