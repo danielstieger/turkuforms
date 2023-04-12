@@ -71,7 +71,7 @@ dependencies {
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.objectflow.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.dataux.runtime.jar")
 
-    implementation files("${appClassesHome}/../../../jars/commons-net-3.3.jar")
+    // implementation files("${appClassesHome}/../../../jars/commons-net-3.3.jar")
 
 }
 
@@ -85,9 +85,12 @@ war {
         into 'WEB-INF/classes'
     }
 
-    from(appClassesHome2) {
-        into 'WEB-INF/classes'
+    if (project.hasProperty("appClassesHome2")) {
+        from(appClassesHome2) {
+            into 'WEB-INF/classes'
+        }
     }
+
 }
 
 

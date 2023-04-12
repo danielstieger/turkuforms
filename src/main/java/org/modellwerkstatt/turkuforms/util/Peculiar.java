@@ -36,7 +36,7 @@ public class Peculiar {
         reg.setEventPropagationAllowed(false);
     }
 
-    public static void useGridShortcutHk(Grid grid, String hk, ShortcutEventListener listener) {
+    public static void useGridShortcutHk(Component grid, String hk, ShortcutEventListener listener) {
         ShortcutRegistration reg;
         if (Defs.hkNeedsCrtl(hk)) { reg = Shortcuts.addShortcutListener(grid, listener, HkTranslate.trans(hk), KeyModifier.CONTROL); }
         else { reg = Shortcuts.addShortcutListener(grid, listener, HkTranslate.trans(hk)); }

@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.contextmenu.HasMenuItems;
@@ -161,7 +162,8 @@ public class MenuStructure extends MenuBar {
         }
 
         if (Defs.needsHkRegistration(glue.public_hotKey) && grid != null) {
-            Peculiar.useGridShortcutHk(grid, glue.public_hotKey, event -> { if (glue.reevalEnabled()) { glue.startCommand(); } });
+            Component turkuTable = grid.getParent().get();
+            Peculiar.useGridShortcutHk(turkuTable, glue.public_hotKey, event -> { if (glue.reevalEnabled()) { glue.startCommand(); } });
             if (overflowMenu != null) {
                 overflowMenu.doubleClickAction = glue;
             }
