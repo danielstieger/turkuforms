@@ -71,8 +71,9 @@ dependencies {
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.objectflow.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.dataux.runtime.jar")
 
-    // implementation files("${appClassesHome}/../../../jars/commons-net-3.3.jar")
-
+    if (project.hasProperty("additionalLib1")) {
+        implementation files("${appClassesHome}${additionalLib1}")
+    }
 }
 
 ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"

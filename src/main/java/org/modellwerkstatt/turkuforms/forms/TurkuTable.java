@@ -159,16 +159,16 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         } else {
             colInfo.add(new TurkuTableCol(colInfo.size(), property, label, converter, width));
 
-            String template = "<span style=\"${item." + property + "Style}\">${item." + property + "}</span>";
+            String litPropName = Workarounds.litPropertyName(property);
+            String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
             String fontWeight = important ? "font-weight:800;" : "";
 
             Grid.Column<DTO> col = grid.addColumn(LitRenderer.<DTO>of(template).
-                    withProperty(property, item -> { return converter.convert(MoJSON.get(item, property)); }).
-                    withProperty(property + "Style", item -> {
+                    withProperty(litPropName, item -> { return converter.convert(MoJSON.get(item, property)); }).
+                    withProperty(litPropName + "Style", item -> {
                         String color = converter.getBgColor(MoJSON.get(item, property));
                         return color == null ? fontWeight: fontWeight + "color:" + color + ";";
                     }));
-
 
             col.setHeader(Workarounds.niceGridHeaderLabel(label));
             col.setResizable(true);
@@ -184,7 +184,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     return -1;
                 } else if (v2 == null) {
                     return +1;
-                }else {
+                } else {
                     return v1.compareTo(v2);
                 }
             });

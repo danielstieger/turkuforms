@@ -45,7 +45,7 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
             const boundOldClickHandler = oldClickHandler.bind(this);
             boundOldClickHandler(e);
 
-            if (e.originalTarget != 'undefined' && 'type' in e.originalTarget && e.originalTarget.type == "checkbox") {
+            if (e.originalTarget != 'undefined' && e.originalTarget.type != 'undefined' && e.originalTarget.type == "checkbox") {
                 // handled by original grid
             } else {
                 this._selectionGridSelectRow(e);

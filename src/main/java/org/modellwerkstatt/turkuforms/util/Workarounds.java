@@ -68,7 +68,9 @@ public class Workarounds {
         return crtl.sameHkInThisRequest(hk);
     }
 
-
+    public static String litPropertyName(String origNameWithDot) {
+        return origNameWithDot.replace(".","_");
+    }
 
 }
 
