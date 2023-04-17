@@ -23,4 +23,8 @@ public class Defs {
         return label != null && !"".equals(label);
     }
 
+    public static boolean hasValidationErrorText(String text) {
+        return text != null && !"".equals(text.trim());
+    }
+
 }

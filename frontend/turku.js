@@ -28,6 +28,10 @@ window.turku = {
             firstTd.focus();
             console.log('window.turku.focusGrid() focussed on ' + firstTd);
         }, 0);
+    },
+
+    selectAllOnChildInput: function(cmpt) {
+        cmpt.querySelector("input").select();
     }
 
 }

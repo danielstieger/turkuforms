@@ -1,96 +1,25 @@
 package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.textfield.TextField;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 
-public class DummyEditor implements IToolkit_TextEditor {
-    private Label label;
-    private Label editor;
-
+public class DummyEditor extends EditorBasis<TextField> implements IToolkit_TextEditor {
 
     public DummyEditor() {
-        label = new Label();
-        editor = new Label();
+        super(new TextField());
+        inputField.setSizeFull();
+        inputField.setEnabled(false);
+        inputField.setVisible(false);
     }
 
-    @Override
-    public void setDelegate(IDataUxDelegate iDataUxDelegate) {
-
-    }
-
-    @Override
-    public void enableKeyReleaseEvents() {
-
-    }
-
-    @Override
-    public void setLabelTooltip(String s) {
-
-    }
-
-    @Override
-    public void setValidationErrorText(String s) {
-
-    }
-
-    @Override
-    public void setLabel(String s) {
-
-    }
-
-    @Override
-    public void setEnabled(boolean b) {
-
-    }
-
-    @Override
-    public void setEditorPrompt(String s) {
-
-    }
-
-    @Override
-    public void newObjectBound() {
-
-    }
-
-    @Override
     public void setText(String s) {
-
+        throw new RuntimeException("Not implemented for this editor.") ;
     }
 
-    @Override
     public String getText() {
-        return null;
+        throw new RuntimeException("Not implemented for this editor.") ;
     }
 
-    @Override
-    public void setIssuesUpdateConclusion() {
-
-    }
-
-    @Override
-    public void setOption(Option... options) {
-
-    }
-
-    @Override
-    public Object getEditor() {
-        return editor;
-    }
-
-    @Override
-    public Object getLabel() {
-        return label;
-    }
-
-    @Override
-    public Object getRightPartComponent() {
-        return editor;
-    }
-
-    @Override
-    public void gcClear() {
-
-    }
 }
