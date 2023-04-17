@@ -101,21 +101,28 @@ public class TurkuServlet extends VaadinServlet {
 
         TurkuApplicationController crtl = null;
         HttpSession session = null;
+        String remoteAddr = null;
+        String userName = null;
 
         if (!isVaadinHeartBeat) {
             session = request.getSession(false);
             if (session != null) {
                 crtl = Peculiar.getAppCrtlFromSession(session);
 
-                if (crtl != null) { crtl.startRequest(); }
+                if (crtl != null) {
+                    /* get all relevant information here, since session
+                     * might be invalidated while processing vaadin stuff
+                     */
+                    crtl.startRequest();
+                    remoteAddr = "" + session.getAttribute("remoteAddr");
+                    userName = "" + session.getAttribute("userName");
+                }
             }
         }
 
         super.service(request, response);
 
         if (crtl != null) {
-            String remoteAddr = "" + session.getAttribute("remoteAddr");
-            String userName = "" + session.getAttribute("userName");
             jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some interaction", startOfRequest);
         }
     }

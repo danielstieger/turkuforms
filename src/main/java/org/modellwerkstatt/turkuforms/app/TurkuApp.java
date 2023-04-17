@@ -7,6 +7,7 @@ import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
@@ -57,8 +58,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
         String remoteAddr =  session.getBrowser().getAddress();
-        applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN);
+        applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
+
 
         // TODO: correct here?
         session.getSession().setAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME, applicationController);
