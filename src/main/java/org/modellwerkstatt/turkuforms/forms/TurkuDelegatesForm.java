@@ -1,16 +1,21 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
+import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegateHook;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.editors.DummyEditor;
+import org.modellwerkstatt.turkuforms.editors.EditorBasis;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +25,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     private FormHeading heading;
     private FormLayout formLayout;
     private List<Integer> colWeights;
-    private int numDelegate = 0;
+    private List<IDataUxDelegate> delegates;
 
     public TurkuDelegatesForm(ITurkuFactory fact) {
         factory = fact;
@@ -28,6 +33,8 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
         formLayout = new FormLayout();
         this.add(formLayout);
+
+        delegates = new ArrayList<>();
     }
 
     @Override
@@ -56,12 +63,12 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         Component label = (Component) editor.getLabel();
 
         FormLayout.FormItem newItem = formLayout.addFormItem(rightPart, label);
-        formLayout.setColspan(newItem, colWeights.get(numDelegate % colWeights.size()));
+        formLayout.setColspan(newItem, colWeights.get(delegates.size() % colWeights.size()));
         if (editor instanceof DummyEditor) { newItem.addClassName("InvisibleWhenBelow"); }
 
         // Turku.l("TurkuDelegatesForm.addDelegate() added "+ iDataUxDelegate.getPropertyName() + " as "  + numDelegate + " with span  " + colWeights.get(numDelegate % colWeights.size()));
 
-        numDelegate++;
+        delegates.add(iDataUxDelegate);
     }
 
     @Override
@@ -81,12 +88,59 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
     @Override
     public Object myRequestFocus() {
-        return null;
+
+        EditorBasis<?> turkuEditor = null;
+        boolean focussed = false;
+
+        for (IDataUxDelegate<?> dlgt: delegates) {
+            if (dlgt.isRequestFocus()) {
+                focussed = true;
+                turkuEditor = (EditorBasis<?>) dlgt.getDelegateUiImpl();
+                turkuEditor.turkuFocus();
+                break;
+            }
+        }
+
+        if (!focussed) {
+            for (IDataUxDelegate<?> dlgt: delegates) {
+                if (dlgt.isEnabled()) {
+                    focussed = true;
+                    turkuEditor = (EditorBasis<?>) dlgt.getDelegateUiImpl();
+                    turkuEditor.turkuFocus();
+                    break;
+                }
+            }
+        }
+
+        Turku.l("TurkuDelegatesForm.myRequestFocus() on " + turkuEditor);
+
+        if (!focussed) { return null; }
+        else { return turkuEditor.getEditor(); }
     }
 
     @Override
     public String checkDelegatesValidAndFocus() {
-        return null;
+        int firstFocus = -1;
+        String errText;
+        String firstErr = null;
+
+        for (int i = 0; i < delegates.size(); i++) {
+            errText = delegates.get(i).isInputValid();
+            if (errText != null && firstFocus < 0) {
+                firstFocus = i;
+                firstErr = errText;
+            }
+        }
+
+        if (firstFocus >= 0) {
+            EditorBasis fc = (EditorBasis) this.delegates.get(firstFocus).getDelegateUiImpl();
+            fc.turkuFocus();
+            Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() focussed " + fc);
+
+        }
+
+        Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() " + firstErr);
+        return firstErr;
     }
 
     @Override
@@ -103,6 +157,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     @Override
     public void setProblems(List<IOFXProblem> list) {
         if (heading == null) { installHeading(); }
+        Turku.l("TurkuDelegatesForms.setProblems() " + list);
         heading.flag(list);
     }
 

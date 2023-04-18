@@ -61,7 +61,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
 
-
         // TODO: correct here?
         session.getSession().setAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME, applicationController);
         session.getSession().setAttribute("remoteAddr", remoteAddr);

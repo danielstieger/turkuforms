@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.HasEnabled;
 import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.html.Label;
@@ -27,12 +28,12 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
  *
  */
 
-abstract public class EditorBasis<T extends Component & HasValidation & HasEnabled> {
+abstract public class EditorBasis<T extends Component & HasValidation & HasEnabled & Focusable> {
     protected Label label;
     protected T inputField;
 
     protected boolean issueUpdateEnabled = false;
-    protected IDataUxDelegate delegate;
+    protected IDataUxDelegate<?> delegate;
 
     public EditorBasis(T theField) {
         inputField = theField;
@@ -87,6 +88,10 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
 
     }
 
+    public void turkuFocus() {
+        inputField.focus();
+    }
+
     public Object getEditor() {
         return null;
     }
@@ -101,5 +106,11 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
 
     public void gcClear() {
 
+    }
+
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " for " + (delegate == null ? "null" : delegate.getPropertyName());
     }
 }

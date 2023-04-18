@@ -49,7 +49,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public boolean flagValidationAdditionally() {
-        return false;
+        return true;
     }
 
     @Override

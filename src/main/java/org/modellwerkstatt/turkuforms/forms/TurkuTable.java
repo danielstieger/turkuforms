@@ -193,7 +193,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
-        Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
+        // Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
         selectionHandlerEnabled = false;
 
         selectionModel.deselectAll();
@@ -212,7 +212,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
-        Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
+        // Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
 
         selectionHandlerEnabled = false;
         // (0) SelCrtl clears selection if sel not in newList

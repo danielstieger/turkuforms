@@ -2,11 +2,8 @@ package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
-import javafx.scene.control.ComboBox;
 import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 
@@ -28,13 +25,17 @@ public class Peculiar {
         layout.setMargin(false);
     }
 
-    public static void crtlSpaceHk(Component box, ShortcutEventListener listener) {
+    public static void crtlSpaceCrtlAHk(Component box, ShortcutEventListener listener) {
         ShortcutRegistration reg;
 
-        reg = Shortcuts.addShortcutListener(box, listener, Key.SPACE, KeyModifier.CONTROL);
-
+        reg = Shortcuts.addShortcutListener(box, listener, Key.SPACE, KeyModifier.CONTROL).listenOn(box);
         reg.setBrowserDefaultAllowed(false);
         reg.setEventPropagationAllowed(false);
+
+        reg = Shortcuts.addShortcutListener(box, listener, Key.KEY_A, KeyModifier.CONTROL).listenOn(box);
+        reg.setBrowserDefaultAllowed(false);
+        reg.setEventPropagationAllowed(false);
+
     }
 
     // @Deprecated - remove this one for consistency
