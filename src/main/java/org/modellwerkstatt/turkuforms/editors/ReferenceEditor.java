@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.ComboBoxVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ReferenceEditor;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
@@ -18,11 +19,19 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
         inputField.setAllowCustomValue(false);
         inputField.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
         inputField.setRequired(true);
+        inputField.addThemeVariants(ComboBoxVariant.LUMO_SMALL);
 
         Peculiar.crtlSpaceCrtlAHk(inputField, event -> {
             inputField.setOpened(! inputField.isOpened());
             if (inputField.isOpened()) { selectAll(); }
         });
+    }
+
+
+    @Override
+    public void setIssuesUpdateConclusion() {
+        super.setIssuesUpdateConclusion();
+        inputField.addValueChangeListener(event -> { execUpdateConclusion(event.getValue());});
     }
 
     public void setText(String s) {

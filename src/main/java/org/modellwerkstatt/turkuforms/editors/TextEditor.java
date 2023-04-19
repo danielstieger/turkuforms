@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -13,10 +14,11 @@ public class TextEditor extends EditorBasis<TextField> implements IToolkit_TextE
         inputField.setEnabled(false);
         inputField.setAutoselect(true);
         inputField.setValueChangeMode(ValueChangeMode.LAZY);
+        inputField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
     }
 
     public void setText(String s) {
-        Turku.l("TextEditor.getText() " + s);
+        // Turku.l("TextEditor.getText() " + s);
 
         if (s == null) {
             inputField.clear();
@@ -28,7 +30,7 @@ public class TextEditor extends EditorBasis<TextField> implements IToolkit_TextE
 
     public String getText() {
         String val = inputField.getValue();
-        Turku.l("TextEditor.getText() " + val);
+        // Turku.l("TextEditor.getText() " + val);
         return val;
     }
 
