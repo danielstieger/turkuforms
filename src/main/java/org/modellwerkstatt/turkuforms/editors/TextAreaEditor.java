@@ -8,7 +8,6 @@ public class TextAreaEditor extends EditorBasis<TextField> implements IToolkit_T
     public TextAreaEditor() {
         super(new TextField());
         inputField.setSizeFull();
-        inputField.setEnabled(false);
     }
 
     public void setText(String s) {

@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
+import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Defs;
@@ -36,27 +37,22 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
         inputField = theField;
         rightPart = inputField;
         label = new Label();
+        label.setMinWidth("200px");
         // label.setFor(inputField);
     }
 
-    public void setDelegate(IDataUxDelegate iDataUxDelegate) {
-
-        Turku.l("EditorBasis.setDelegate() for " + this);
-        delegate = iDataUxDelegate;
-    }
+    public void setDelegate(IDataUxDelegate iDataUxDelegate) { delegate = iDataUxDelegate; }
 
     public void enableKeyReleaseEvents() {
         // for textfield only, in case hooks are used (calc tax of value etc.)
     }
 
     public void setLabelTooltip(String s) {
-        Turku.l("EditorBasis.setLabelTooltip() for " + this);
         Tooltip tt = Tooltip.forComponent(label);
         tt.setText(Workarounds.mlToolTipText(s));
     }
 
     public void setValidationErrorText(String text) {
-        Turku.l("EditorBasis.setValidationErrorText() for " + this);
         if (Defs.hasValidationErrorText(text)) {
             inputField.setErrorMessage(text);
             inputField.setInvalid(true);
@@ -67,38 +63,38 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
     }
 
     public void setLabel(String s) {
-        Turku.l("EditorBasis.setLabel() for " + this );
         label.setText(s);
     }
 
     public void setEnabled(boolean b) {
-        Turku.l("EditorBasis.setEnableD( " + b + ") for " + this );
-        if (updateConclusionButton!= null) { updateConclusionButton.setEnabled(b); }
-        inputField.setEnabled(b);
+        // since setEnabled is called oftentimes, unclear if that does impair vaadin performance
+        if (cachedEnabledState != b) {
+            cachedEnabledState = b;
+            if (updateConclusionButton!= null) { updateConclusionButton.setEnabled(b); }
+            inputField.setEnabled(b);
+        }
     }
 
-    public void setEditorPrompt(String s) {
-        Turku.l("EditorBasis.setEditorPrompt() for " + this );
-        inputField.getElement().setProperty("placeholder", s);
-    }
+    public void setEditorPrompt(String s) { inputField.getElement().setProperty("placeholder", s);}
 
     public void newObjectBound() {
-        Turku.l("EditorBasis.newObjectBound() for " + this);
         lastIssuedUpdateText = null;
     }
 
     public void execUpdateConclusion(String newValue) {
         // default implementation
-        Turku.l("EditorBasis.execUpdateConclusion() [" + issueUpdateEnabled + "] " + lastIssuedUpdateText + " -> " + newValue);
-        if (inputField.isEnabled() && issueUpdateEnabled) {
+        Turku.l("EditorBasis.execUpdateConclusion() [" + issueUpdateEnabled + "] " + lastIssuedUpdateText + " -> " + newValue + " for " + this);
+        /* if (newValue == null) {
+            Turku.l(OFXConsoleHelper._____organizeCurrentStacktrace_____());
+        } */
+
+        if (cachedEnabledState && issueUpdateEnabled) {
             if (!SaveObjectComperator.equals(lastIssuedUpdateText, newValue)) {
                 Turku.l("EditorBasis.execUpdateConclusion() STARTING update conclusion.");
 
                 lastIssuedUpdateText = newValue;
                 issueUpdateEnabled = false;
                 delegate.issueUpdateConclusionAfterContentChange();
-                Turku.l("EditorBasis.execUpdateConclusion() update conclusion PROCESSED 1 .");
-
                 issueUpdateEnabled = true;
                 Turku.l("EditorBasis.execUpdateConclusion() update conclusion PROCESSED 2.");
             }
@@ -112,7 +108,6 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
     }
 
     public void setIssuesUpdateConclusion() {
-        Turku.l("EditorBasis.setIssuesUpdateConclusion() for " + this);
 
         HorizontalLayout hl = new HorizontalLayout();
         Peculiar.shrinkSpace(hl);
@@ -123,8 +118,6 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
         updateConclusionButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         updateConclusionButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
 
-
-
         hl.add(inputField, updateConclusionButton);
         hl.setFlexGrow(1.0, inputField);
         hl.setFlexGrow(0.0, updateConclusionButton);
@@ -134,28 +127,15 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
     }
 
     public void setOption(IToolkit_TextEditor.Option... options) {
-        Turku.l("EditorBasis.setOption() for " + this);
     }
 
-    public void turkuFocus() {
-        Turku.l("EditorBasis.turkuFocus() for " + this);
-        inputField.focus();
-    }
+    public void turkuFocus() { inputField.focus(); }
 
-    public Object getEditor() {
-        Turku.l("EditorBasis.getEditor() for " + this);
-        return inputField;
-    }
+    public Object getEditor() { return inputField; }
 
-    public Object getLabel() {
-        Turku.l("EditorBasis.getLabel() for " + this);
-        return label;
-    }
+    public Object getLabel() { return label; }
 
-    public Object getRightPartComponent() {
-        Turku.l("EditorBasis.getRightPartComponent() for " + this);
-        return rightPart;
-    }
+    public Object getRightPartComponent() { return rightPart; }
 
     public void gcClear() {
         delegate = null;

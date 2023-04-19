@@ -16,6 +16,7 @@ import org.modellwerkstatt.turkuforms.editors.DummyEditor;
 import org.modellwerkstatt.turkuforms.editors.EditorBasis;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,10 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         IToolkit_TextEditor editor = iDataUxDelegate.getDelegateUiImpl();
         Component rightPart = (Component) editor.getRightPartComponent();
         Component label = (Component) editor.getLabel();
+        Component field = (Component) editor.getEditor();
+
+        Peculiar.enterHk(field, event -> { focusOnNextDlgt(iDataUxDelegate); });
+
 
         FormLayout.FormItem newItem = formLayout.addFormItem(rightPart, label);
         formLayout.setColspan(newItem, colWeights.get(delegates.size() % colWeights.size()));
@@ -165,4 +170,25 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         heading = new FormHeading();
         addComponentAtIndex(0, heading);
     }
+
+    public void focusOnNextDlgt(IDataUxDelegate<?> current) {
+        int index = delegates.indexOf(current);
+        index ++;
+
+        if (index >= delegates.size()) {
+            // we are done - keep focus on last one
+
+        } else if (delegates.get(index).isEnabled()) {
+            EditorBasis editorBasis = (EditorBasis) delegates.get(index).getDelegateUiImpl();
+            editorBasis.turkuFocus();
+
+        } else {
+            focusOnNextDlgt(delegates.get(index));
+
+        }
+
+
+    }
+
+
 }

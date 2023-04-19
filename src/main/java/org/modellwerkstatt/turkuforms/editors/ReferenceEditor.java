@@ -4,7 +4,10 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.ComboBoxVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ReferenceEditor;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
+import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,29 +40,41 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
     public void setText(String s) {
         boolean valueNull = (s == null);
 
-        // scope not set at all, okay in case of read only
-        if (!valueNull && items == null && !inputField.isEnabled()) {
-            List<String> scope = new ArrayList<>();
-            scope.add(s);
-            this.setItems(scope);
+        Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given("+s+")");
+        if (!SaveObjectComperator.equals(cachedValue, s)) {
+            Turku.l(".... updating combo");
 
-        } else if (!valueNull && items == null) {
-            throw new RuntimeException("Editor for " + delegate.getPropertyName() + " has no scope set and is not in read-only.");
+            // scope not set at all, okay in case of read only
+            if (!valueNull && items == null && !cachedEnabledState) {
+                List<String> scope = new ArrayList<>();
+                scope.add(s);
+                this.setItems(scope);
 
-        } else if (!valueNull && !items.contains(s)) {
-            throw new RuntimeException("Editor for " + delegate.getPropertyName() + " scope does not contain " + s + ". Scope set is " + String.join("; ", items));
+            } else if (!valueNull && items == null) {
+                throw new RuntimeException("Editor for " + delegate.getPropertyName() + " has no scope set and is not in read-only.");
+
+            } else if (!valueNull && !items.contains(s)) {
+                throw new RuntimeException("Editor for " + delegate.getPropertyName() + " scope does not contain " + s + ". Scope set is " + String.join("; ", items));
+            }
+
+            if (valueNull) {
+                cachedValue = null;
+                lastIssuedUpdateText = null;
+                inputField.clear();
+            } else {
+                cachedValue = s;
+                lastIssuedUpdateText = s;
+                inputField.setValue(s);
+            }
         }
 
-        if (valueNull) {
-            inputField.clear();
-        } else {
-            inputField.setValue(s);
-        }
     }
 
     public String getText() {
         // vaadin getValue() returns null for "nothing selected"
-        return inputField.getValue();
+        cachedValue = inputField.getValue();
+        Turku.l("ReferenceEditor.getText() cachedValue " + cachedValue);
+        return cachedValue;
     }
 
     @Override
@@ -71,8 +86,12 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
 
     @Override
     public void setItems(List<String> given) {
+        Turku.l("ReferenceEditor.setItems() "+ this + " => " + given);
         items = given;
         inputField.setItems(items);
+        // calling vaadin.setItems() will set value to null
+        lastIssuedUpdateText = null;
+        cachedValue = null;
     }
 
     @Override

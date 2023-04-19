@@ -34,4 +34,6 @@ window.turku = {
         cmpt.querySelector("input").select();
     }
 
+
+
 }

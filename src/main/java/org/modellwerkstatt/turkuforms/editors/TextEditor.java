@@ -11,7 +11,6 @@ public class TextEditor extends EditorBasis<TextField> implements IToolkit_TextE
     public TextEditor() {
         super(new TextField());
         inputField.setSizeFull();
-        inputField.setEnabled(false);
         inputField.setAutoselect(true);
         inputField.setValueChangeMode(ValueChangeMode.LAZY);
         inputField.addThemeVariants(TextFieldVariant.LUMO_SMALL);

@@ -38,6 +38,16 @@ public class Peculiar {
 
     }
 
+    public static void enterHk(Component field, ShortcutEventListener listener) {
+        ShortcutRegistration reg;
+
+        reg = Shortcuts.addShortcutListener(field, listener, Key.ENTER).listenOn(field);
+        reg.setBrowserDefaultAllowed(false);
+        reg.setEventPropagationAllowed(false);
+    }
+
+
+
     // @Deprecated - remove this one for consistency
     public static void useButtonShortcutHk(Button button, String hk) {
         ShortcutRegistration reg;

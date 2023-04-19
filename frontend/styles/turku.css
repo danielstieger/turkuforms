@@ -117,10 +117,18 @@ vaadin-selection-grid vaadin-checkbox {
     --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2.8));
 }
 
-vaadin-grid-sorter::host {
-    border: 1px solid red;
-}
+
 
 vaadin-grid-sorter:not([direction])::part(indicators)::before {
   display: none;
+}
+
+/* TurkuDelegateForm * * * * * * * * * * * * * * * */
+vaadin-form-item::part(label) {
+    width: 120px;
+}
+
+vaadin-combo-box-item {
+    padding: 0;
+    min-height: 0;
 }

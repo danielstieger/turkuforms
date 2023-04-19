@@ -9,7 +9,6 @@ public class ImageViewer extends EditorBasis<TextField> implements IToolkit_Imag
     public ImageViewer() {
         super(new TextField());
         inputField.setSizeFull();
-        inputField.setEnabled(false);
     }
 
     public void setText(String s) {
