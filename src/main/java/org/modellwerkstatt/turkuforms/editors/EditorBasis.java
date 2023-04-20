@@ -14,16 +14,13 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
+import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-abstract public class EditorBasis<T extends Component & HasValidation & HasEnabled & Focusable<?>> implements IToolkit_TextEditor {
-    protected Label label;
-    protected T inputField;
-    protected Component rightPart;
-    protected IDataUxDelegate<?> delegate;
+abstract public class EditorBasis<T extends Component & HasValidation & HasEnabled & Focusable<?>> extends FormChild<T> {
 
     protected boolean issueUpdateEnabled = false;
     protected Button updateConclusionButton;
@@ -34,22 +31,15 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
 
 
     public EditorBasis(T theField) {
-        inputField = theField;
-        rightPart = inputField;
-        label = new Label();
-        label.setMinWidth("200px");
+        super(theField);
         // label.setFor(inputField);
-    }
 
-    public void setDelegate(IDataUxDelegate iDataUxDelegate) { delegate = iDataUxDelegate; }
+        Peculiar.focusMoveEnterHk(false, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
+        Peculiar.focusMoveEnterHk(true, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
+    }
 
     public void enableKeyReleaseEvents() {
         // for textfield only, in case hooks are used (calc tax of value etc.)
-    }
-
-    public void setLabelTooltip(String s) {
-        Tooltip tt = Tooltip.forComponent(label);
-        tt.setText(Workarounds.mlToolTipText(s));
     }
 
     public void setValidationErrorText(String text) {
@@ -60,10 +50,6 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
             inputField.setErrorMessage("");
             inputField.setInvalid(false);
         }
-    }
-
-    public void setLabel(String s) {
-        label.setText(s);
     }
 
     public void setEnabled(boolean b) {
@@ -129,22 +115,6 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
     public void setOption(IToolkit_TextEditor.Option... options) {
     }
 
-    public void turkuFocus() { inputField.focus(); }
-
-    public Object getEditor() { return inputField; }
-
-    public Object getLabel() { return label; }
-
-    public Object getRightPartComponent() { return rightPart; }
-
-    public void gcClear() {
-        delegate = null;
-
-    }
-
-
     @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + " for " + (delegate == null ? "null" : delegate.getPropertyName());
-    }
+    public void turkuFocus() { inputField.focus(); }
 }

@@ -38,10 +38,14 @@ public class Peculiar {
 
     }
 
-    public static void enterHk(Component field, ShortcutEventListener listener) {
+    public static void focusMoveEnterHk(boolean withShift, Component field, ShortcutEventListener listener) {
         ShortcutRegistration reg;
 
-        reg = Shortcuts.addShortcutListener(field, listener, Key.ENTER).listenOn(field);
+        if (withShift) {
+            reg = Shortcuts.addShortcutListener(field, listener, Key.ENTER, KeyModifier.SHIFT).listenOn(field);
+        } else {
+            reg = Shortcuts.addShortcutListener(field, listener, Key.ENTER).listenOn(field).listenOn(field);
+        }
         reg.setBrowserDefaultAllowed(false);
         reg.setEventPropagationAllowed(false);
     }

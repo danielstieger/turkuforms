@@ -1,22 +1,17 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
-import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegateHook;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.editors.DummyEditor;
-import org.modellwerkstatt.turkuforms.editors.EditorBasis;
+import org.modellwerkstatt.turkuforms.editors.FormChild;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +21,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     private FormHeading heading;
     private FormLayout formLayout;
     private List<Integer> colWeights;
-    private List<IDataUxDelegate> delegates;
+    private List<IDataUxDelegate<?>> delegates;
 
     public TurkuDelegatesForm(ITurkuFactory fact) {
         factory = fact;
@@ -59,21 +54,18 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     @Override
     public void addDelegate(IDataUxDelegate iDataUxDelegate) {
 
-        IToolkit_TextEditor editor = iDataUxDelegate.getDelegateUiImpl();
-        Component rightPart = (Component) editor.getRightPartComponent();
-        Component label = (Component) editor.getLabel();
-        Component field = (Component) editor.getEditor();
-
-        Peculiar.enterHk(field, event -> { focusOnNextDlgt(iDataUxDelegate); });
-
+        FormChild<?> child = (FormChild<?>) iDataUxDelegate.getDelegateUiImpl();
+        Component rightPart = (Component) child.getRightPartComponent();
+        Component label = (Component) child.getLabel();
 
         FormLayout.FormItem newItem = formLayout.addFormItem(rightPart, label);
         formLayout.setColspan(newItem, colWeights.get(delegates.size() % colWeights.size()));
-        if (editor instanceof DummyEditor) { newItem.addClassName("InvisibleWhenBelow"); }
+        if (child instanceof DummyEditor) { newItem.addClassName("InvisibleWhenBelow"); }
 
         // Turku.l("TurkuDelegatesForm.addDelegate() added "+ iDataUxDelegate.getPropertyName() + " as "  + numDelegate + " with span  " + colWeights.get(numDelegate % colWeights.size()));
 
         delegates.add(iDataUxDelegate);
+        child.attachedToForm(this);
     }
 
     @Override
@@ -94,13 +86,13 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     @Override
     public Object myRequestFocus() {
 
-        EditorBasis<?> turkuEditor = null;
+        FormChild<?> turkuEditor = null;
         boolean focussed = false;
 
         for (IDataUxDelegate<?> dlgt: delegates) {
             if (dlgt.isRequestFocus()) {
                 focussed = true;
-                turkuEditor = (EditorBasis<?>) dlgt.getDelegateUiImpl();
+                turkuEditor = (FormChild<?>) dlgt.getDelegateUiImpl();
                 turkuEditor.turkuFocus();
                 break;
             }
@@ -110,7 +102,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
             for (IDataUxDelegate<?> dlgt: delegates) {
                 if (dlgt.isEnabled()) {
                     focussed = true;
-                    turkuEditor = (EditorBasis<?>) dlgt.getDelegateUiImpl();
+                    turkuEditor = (FormChild<?>) dlgt.getDelegateUiImpl();
                     turkuEditor.turkuFocus();
                     break;
                 }
@@ -138,7 +130,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         }
 
         if (firstFocus >= 0) {
-            EditorBasis fc = (EditorBasis) this.delegates.get(firstFocus).getDelegateUiImpl();
+            FormChild<?> fc = (FormChild<?>) this.delegates.get(firstFocus).getDelegateUiImpl();
             fc.turkuFocus();
             Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() focussed " + fc);
 
@@ -150,7 +142,8 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
     @Override
     public void gcClear() {
-
+        delegates.clear();
+        factory = null;
     }
 
     @Override
@@ -171,19 +164,24 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         addComponentAtIndex(0, heading);
     }
 
-    public void focusOnNextDlgt(IDataUxDelegate<?> current) {
+    public void focusOnNextDlgt(IDataUxDelegate<?> current, boolean next) {
         int index = delegates.indexOf(current);
-        index ++;
 
-        if (index >= delegates.size()) {
+        if (next) { index ++; }
+        else { index --; }
+
+        if (next && index >= delegates.size()) {
             // we are done - keep focus on last one
 
+        } else if (!next && index <0 ) {
+            // also done - keep focus on first
+
         } else if (delegates.get(index).isEnabled()) {
-            EditorBasis editorBasis = (EditorBasis) delegates.get(index).getDelegateUiImpl();
-            editorBasis.turkuFocus();
+            FormChild<?> FormChild = (FormChild<?>) delegates.get(index).getDelegateUiImpl();
+            FormChild.turkuFocus();
 
         } else {
-            focusOnNextDlgt(delegates.get(index));
+            focusOnNextDlgt(delegates.get(index), next);
 
         }
 

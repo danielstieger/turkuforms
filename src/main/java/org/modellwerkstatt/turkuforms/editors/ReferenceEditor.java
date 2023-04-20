@@ -28,6 +28,7 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
             inputField.setOpened(! inputField.isOpened());
             if (inputField.isOpened()) { selectAll(); }
         });
+
     }
 
 
