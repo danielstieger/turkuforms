@@ -32,14 +32,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
 
     public EditorBasis(T theField) {
         super(theField);
-        // label.setFor(inputField);
-
-        Peculiar.focusMoveEnterHk(false, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
-        Peculiar.focusMoveEnterHk(true, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
-    }
-
-    public void enableKeyReleaseEvents() {
-        // for textfield only, in case hooks are used (calc tax of value etc.)
+        // label.setFor(inputField)
     }
 
     public void setValidationErrorText(String text) {
@@ -67,7 +60,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
         lastIssuedUpdateText = null;
     }
 
-    public void execUpdateConclusion(String newValue) {
+    public boolean execUpdateConclusion(String newValue) {
         // default implementation
         Turku.l("EditorBasis.execUpdateConclusion() [" + issueUpdateEnabled + "] " + lastIssuedUpdateText + " -> " + newValue + " for " + this);
         /* if (newValue == null) {
@@ -76,16 +69,15 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
 
         if (cachedEnabledState && issueUpdateEnabled) {
             if (!SaveObjectComperator.equals(lastIssuedUpdateText, newValue)) {
-                Turku.l("EditorBasis.execUpdateConclusion() STARTING update conclusion.");
-
                 lastIssuedUpdateText = newValue;
                 issueUpdateEnabled = false;
                 delegate.issueUpdateConclusionAfterContentChange();
                 issueUpdateEnabled = true;
-                Turku.l("EditorBasis.execUpdateConclusion() update conclusion PROCESSED 2.");
+                return true;
             }
         }
 
+        return false;
     }
 
     public void updateConclusionButtonClicked() {

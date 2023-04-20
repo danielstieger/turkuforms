@@ -23,6 +23,11 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
         label.setMinWidth("200px");
     }
 
+    public void enableKeyReleaseEvents() {
+        // for textfield only, in case hooks are used (calc tax of value etc.)
+        throw new IllegalStateException("Not implemented. Probably resort to js?");
+    }
+
     public void setDelegate(IDataUxDelegate iDataUxDelegate) { delegate = iDataUxDelegate; }
 
     public void attachedToForm(TurkuDelegatesForm<?> dlgtFrm) { turkuDelegatesForm = dlgtFrm; }

@@ -29,6 +29,8 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
             if (inputField.isOpened()) { selectAll(); }
         });
 
+        Peculiar.focusMoveEnterHk(false, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
+        Peculiar.focusMoveEnterHk(true, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
     }
 
 
@@ -41,9 +43,8 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
     public void setText(String s) {
         boolean valueNull = (s == null);
 
-        Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given("+s+")");
+        // Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given("+s+")");
         if (!SaveObjectComperator.equals(cachedValue, s)) {
-            Turku.l(".... updating combo");
 
             // scope not set at all, okay in case of read only
             if (!valueNull && items == null && !cachedEnabledState) {
@@ -74,7 +75,7 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
     public String getText() {
         // vaadin getValue() returns null for "nothing selected"
         cachedValue = inputField.getValue();
-        Turku.l("ReferenceEditor.getText() cachedValue " + cachedValue);
+        // Turku.l("ReferenceEditor.getText() cachedValue " + cachedValue);
         return cachedValue;
     }
 
@@ -87,7 +88,7 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
 
     @Override
     public void setItems(List<String> given) {
-        Turku.l("ReferenceEditor.setItems() "+ this + " => " + given);
+        // Turku.l("ReferenceEditor.setItems() "+ this + " => " + given);
         items = given;
         inputField.setItems(items);
         // calling vaadin.setItems() will set value to null

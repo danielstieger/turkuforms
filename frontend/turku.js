@@ -32,7 +32,26 @@ window.turku = {
 
     selectAllOnChildInput: function(cmpt) {
         cmpt.querySelector("input").select();
+    },
+
+    replaceEuroSign: function(cmpt) {
+        var theInput = cmpt.querySelector("input");
+
+        theInput.addEventListener('keypress', function (e) {
+            if (e.key == '€') {
+                e.stopPropagation();
+                e.preventDefault();
+
+                var atPos = e.target.selectionStart;
+                var content = e.target.value;
+                e.target.value = content.slice(0, atPos) + 'EUR' + content.slice(atPos);
+
+                atPos += 3;
+                e.target.setSelectionRange(atPos, atPos);
+            }
+        });
     }
+
 
 
 
