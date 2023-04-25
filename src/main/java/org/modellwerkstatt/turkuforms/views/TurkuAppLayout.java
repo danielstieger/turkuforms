@@ -1,5 +1,7 @@
 package org.modellwerkstatt.turkuforms.views;
 
+import com.vaadin.experimental.Feature;
+import com.vaadin.experimental.FeatureFlags;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
@@ -20,6 +22,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.dom.ThemeList;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
@@ -88,6 +92,12 @@ abstract public class TurkuAppLayout extends AppLayout {
         basicSysInfo += ManagementFactory.getRuntimeMXBean().getVmVendor() + " " +
                        ManagementFactory.getRuntimeMXBean().getVmName() + " " +
                        ManagementFactory.getRuntimeMXBean().getVmVersion();
+
+        for (Feature f: FeatureFlags.get(VaadinService.getCurrent().getContext()).getFeatures()) {
+            if (f.isEnabled()) {
+                basicSysInfo += "\nVaadin feature " + f.getTitle();
+            }
+        }
 
 
         sysInfoLabel = new Label("-");
