@@ -5,21 +5,49 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 
-public class DummyEditor extends EditorBasis<TextField> implements IToolkit_TextEditor {
+public class DummyEditor extends FormChild<Label> implements IToolkit_TextEditor {
 
     public DummyEditor() {
-        super(new TextField());
+        super(new Label());
         inputField.setSizeFull();
-        inputField.setEnabled(false);
-        inputField.setVisible(false);
+    }
+
+    @Override
+    public void setValidationErrorText(String s) {
+
+    }
+
+    @Override
+    public void setEnabled(boolean b) {
+
+    }
+
+    @Override
+    public void setEditorPrompt(String s) {
+
+    }
+
+    @Override
+    public void newObjectBound() {
+
+    }
+
+    @Override
+    public void setIssuesUpdateConclusion() {
+        throw new RuntimeException("Not implemented for dummy editor.") ;
+    }
+
+    @Override
+    public void setOption(Option... options) {
+
     }
 
     public void setText(String s) {
-        throw new RuntimeException("Not implemented for this editor.") ;
+        throw new RuntimeException("Not implemented for dummy editor.");
     }
 
     public String getText() {
-        throw new RuntimeException("Not implemented for this editor.") ;
+        throw new RuntimeException("Not implemented for dummy editor.");
     }
 
 }

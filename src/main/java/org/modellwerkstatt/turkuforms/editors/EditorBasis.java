@@ -1,9 +1,6 @@
 package org.modellwerkstatt.turkuforms.editors;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Focusable;
-import com.vaadin.flow.component.HasEnabled;
-import com.vaadin.flow.component.HasValidation;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Label;
@@ -103,6 +100,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
         rightPart = hl;
         issueUpdateEnabled = true;
     }
+
 
     public void setOption(IToolkit_TextEditor.Option... options) {
     }

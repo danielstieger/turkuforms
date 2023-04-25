@@ -63,6 +63,7 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
                 cachedValue = null;
                 lastIssuedUpdateText = null;
                 inputField.clear();
+
             } else {
                 cachedValue = s;
                 lastIssuedUpdateText = s;
@@ -80,13 +81,6 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
     }
 
     @Override
-    public void setOptionalAfterLoad(boolean val) {
-        if (val) {
-            inputField.setRequired(false);
-        }
-    }
-
-    @Override
     public void setItems(List<String> given) {
         // Turku.l("ReferenceEditor.setItems() "+ this + " => " + given);
         items = given;
@@ -94,6 +88,11 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
         // calling vaadin.setItems() will set value to null
         lastIssuedUpdateText = null;
         cachedValue = null;
+    }
+
+    @Override
+    public void setOptionalAfterLoad(boolean val) {
+        inputField.setRequired(! val);
     }
 
     @Override
