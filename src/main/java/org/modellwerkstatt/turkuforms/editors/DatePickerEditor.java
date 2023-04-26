@@ -5,7 +5,6 @@ import com.vaadin.flow.component.datepicker.DatePickerVariant;
 
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -16,11 +15,11 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
-public class DateEditor extends EditorBasis<DatePicker> implements IToolkit_DateOrTimeEditor {
+public class DatePickerEditor extends EditorBasis<DatePicker> implements IToolkit_DateOrTimeEditor {
     static protected HashMap<String, DateTimeFormatter> cachedFormatter = new HashMap<>();
     protected String cachedFormatKey;
 
-    public DateEditor(boolean withPicker) {
+    public DatePickerEditor() {
         super(new DatePicker());
         inputField.addThemeVariants(DatePickerVariant.LUMO_SMALL);
         inputField.setSizeFull();

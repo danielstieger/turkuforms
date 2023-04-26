@@ -12,6 +12,8 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
+import java.awt.*;
+
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public final static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
     private String redirectAfterLogoutPath;
@@ -84,7 +86,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     @Override
     public IToolkit_TextEditor createTextEditor() {
-        return new TextEditor();
+        return new TextEditor(false);
     }
 
     @Override
@@ -103,8 +105,13 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     }
 
     @Override
-    public IToolkit_DateOrTimeEditor createDateEditor(boolean b) {
-        return new DateEditor(b);
+    public IToolkit_DateOrTimeEditor createDateEditor(boolean withPicker) {
+        if (withPicker) {
+            return new DatePickerEditor();
+        } else {
+            return new TextEditor(true);
+        }
+
     }
 
     @Override

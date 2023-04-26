@@ -4,15 +4,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.dom.Element;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
+import org.modellwerkstatt.dataux.runtime.delegates.LocalDateDelegate;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.app.TurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
-public class TextEditor extends EditorBasis<TextField> implements IToolkit_TextEditor {
+public class TextEditor extends EditorBasis<TextField> implements IToolkit_DateOrTimeEditor {
+    protected boolean adjustLocalDateDotsNotConsideringFormat;
 
-    public TextEditor() {
+    public TextEditor(boolean forLocalDate) {
         super(new TextField());
         inputField.setSizeFull();
         inputField.setAutoselect(true);
@@ -34,6 +35,8 @@ public class TextEditor extends EditorBasis<TextField> implements IToolkit_TextE
                     "turku.replaceEuroSign($0)",
                     component);
         }
+
+        adjustLocalDateDotsNotConsideringFormat = forLocalDate;
     }
 
 
@@ -56,10 +59,20 @@ public class TextEditor extends EditorBasis<TextField> implements IToolkit_TextE
             //fallback
             cachedValue = cachedValue.replace("€", "EUR");
         }
+        if (adjustLocalDateDotsNotConsideringFormat) {
+            cachedValue = LocalDateDelegate.adjusDateDotInputText(cachedValue);
+        }
+
         return cachedValue;
     }
 
     /* turkuFocus() autoselect(true) handles selection
      *
      */
+
+    @Override
+    public void setFormatter(String format, String locale, int langIdx) {
+        // just in case the text editor is used as a local date editor.
+        // ignored since format, locale or langIdx are all managed by the delegate
+    }
 }

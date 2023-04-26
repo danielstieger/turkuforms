@@ -30,26 +30,23 @@ public class StatusEditor extends EditorBasis<Select<String>> implements IToolki
 
 
     public void setText(String s) {
-        if (!SaveObjectComperator.equals(cachedValue, s)) {
-            cachedValue = s;
-            lastIssuedUpdateText = null;
-            inputField.setValue(s);
-        }
+        throw new RuntimeException("Not implemented for StatusEditor.");
     }
 
     public String getText() {
-        cachedValue = inputField.getValue();
-        return cachedValue;
+        throw new RuntimeException("Not implemented for StatusEditor.");
     }
 
     @Override
     public int getSelectedIndex() {
-        return items.indexOf(getText());
+        cachedValue = inputField.getValue();
+        return items.indexOf(cachedValue);
     }
 
     @Override
     public void setSelectedIndex(int i) {
-        inputField.setValue(items.get(i));
+        cachedValue = items.get(i);
+        inputField.setValue(cachedValue);
     }
 
     @Override
