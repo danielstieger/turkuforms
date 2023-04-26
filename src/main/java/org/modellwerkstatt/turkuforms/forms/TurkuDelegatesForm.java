@@ -109,7 +109,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
             }
         }
 
-        Turku.l("TurkuDelegatesForm.myRequestFocus() on " + turkuEditor);
+        // Turku.l("TurkuDelegatesForm.myRequestFocus() on " + turkuEditor);
 
         if (!focussed) { return null; }
         else { return turkuEditor.getEditor(); }
@@ -132,11 +132,11 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         if (firstFocus >= 0) {
             FormChild<?> fc = (FormChild<?>) this.delegates.get(firstFocus).getDelegateUiImpl();
             fc.turkuFocus();
-            Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() focussed " + fc);
+            // Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() focussed " + fc);
 
         }
 
-        Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() " + firstErr);
+        // Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() " + firstErr);
         return firstErr;
     }
 

@@ -24,7 +24,6 @@ public class StatusEditor extends EditorBasis<Select<String>> implements IToolki
             }
 
             turkuDelegatesForm.focusOnNextDlgt(delegate, true);
-
         });
     }
 

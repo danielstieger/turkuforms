@@ -59,11 +59,14 @@ public class TextEditor extends EditorBasis<TextField> implements IToolkit_DateO
             //fallback
             cachedValue = cachedValue.replace("€", "EUR");
         }
-        if (adjustLocalDateDotsNotConsideringFormat) {
-            cachedValue = LocalDateDelegate.adjusDateDotInputText(cachedValue);
-        }
 
-        return cachedValue;
+
+        if (adjustLocalDateDotsNotConsideringFormat) {
+            // do not adjust cachedvalue to force an update of the ui on reload etc.
+            return LocalDateDelegate.adjusDateDotInputText(cachedValue);
+        } else {
+            return cachedValue;
+        }
     }
 
     /* turkuFocus() autoselect(true) handles selection

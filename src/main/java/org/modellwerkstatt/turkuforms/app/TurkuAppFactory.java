@@ -25,7 +25,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
 
     public TurkuAppFactory() {
-        super(MoWareTranslations.TranslationSelection.V_TRANSLATIONS);
+        super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
 
         iconTranslator = new DefaultIconTranslator();
         redirectAfterLogoutPath = DEFAULT_REDIRECT_TO_AFTER_LOGOUT;

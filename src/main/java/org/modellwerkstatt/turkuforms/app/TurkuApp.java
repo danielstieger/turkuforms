@@ -71,6 +71,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public void closeWindowAndExit() {
         Turku.l("TurkuApp.closeWindowAndExit()");
         UI.getCurrent().getSession().getSession().invalidate();
+        // TODO: TurkuAppFactory.getRedirectAfterLogoutPat() ??
     }
 
     @Override
