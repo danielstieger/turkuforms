@@ -41,17 +41,17 @@ public class DateTimeEditor extends EditorBasis<DateTimePicker> implements ITool
             turkuDelegatesForm.focusOnNextDlgt(delegate, false);
         });
 
-        // check DatePickerEditor ... but status seems to be inverted compared to DatePicker !
+        // check DatePickerEditor ...
         inputField.addValidationStatusChangeListener(event -> {
             isInvalid = !event.getNewStatus();
-            Turku.l("DatePickerEditor.addValidationStatusChangeListener() isInvalid: " + isInvalid);
+            // Turku.l("DatePickerEditor.addValidationStatusChangeListener() isInvalid: " + isInvalid);
         });
     }
 
     public void setText(String s) {
         boolean valueNull = (s == null || s.equals(""));
 
-        Turku.l("" + this  + " setText(): '" + s + "' " + valueNull);
+        // Turku.l("" + this  + " setText(): '" + s + "' " + valueNull);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
             if (valueNull) {
                 cachedValue = null;
@@ -73,7 +73,7 @@ public class DateTimeEditor extends EditorBasis<DateTimePicker> implements ITool
     public String getText() {
         LocalDateTime ld = inputField.getValue();
 
-        Turku.l("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
+        // Turku.l("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
 
         if (ld != null) {
             LocalDateTime adjusted = ld.withYear(MoWareFormattersFactory.twoToFourDigitYear(ld.getYear()));
@@ -86,7 +86,7 @@ public class DateTimeEditor extends EditorBasis<DateTimePicker> implements ITool
             cachedValue = "";
         }
 
-        Turku.l("" + this  + " getText(): " + cachedValue);
+        // Turku.l("" + this  + " getText(): " + cachedValue);
         return cachedValue;
     }
 
