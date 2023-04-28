@@ -141,7 +141,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
         addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
 
-
         // initialize other stuff
         mainTabImpl.addTabSelectedChangeListener( i -> applicationController.onTabChangeEvent(i));
 

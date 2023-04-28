@@ -27,7 +27,9 @@ public class Menu extends MenuBar {
 
     public Menu() {
         super();
-        addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+        setOpenOnHover(false);
+
+        // addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
     }
 
 
@@ -36,7 +38,7 @@ public class Menu extends MenuBar {
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menu.items) {
             if (currentItem instanceof MenuActionGlue) {
                 // only overflow menu for context menu
-                addActionItem(factory, this, (MenuActionGlue) currentItem);
+                MenuItem button = addActionItem(factory, this, (MenuActionGlue) currentItem);
 
             } else if (currentItem.labelText == null) {
                 // null is separator, ignore that here ...
