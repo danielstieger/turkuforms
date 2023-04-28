@@ -10,6 +10,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import javafx.scene.input.Mnemonic;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
@@ -33,7 +34,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private FormHeading heading;
     private TextField searchField;
     private Button infoCsvButton;
-    private MenuStructure overflowMenu;
+    private Menu overflowMenu;
+    private MenuContext contextMenu;
 
     private Class dtoClass;
     private SelectionGrid<DTO> grid;
@@ -302,11 +304,12 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void addMenuAndSetButtons(MenuSub menuSub) {
-        overflowMenu = new MenuStructure();
-        overflowMenu.initialize(factory, menuSub, grid);
+        overflowMenu = new Menu();
+        overflowMenu.initialize(factory, menuSub);
         topPane.add(overflowMenu);
 
-        grid.addItemDoubleClickListener(e -> { overflowMenu.execDoubleClick(); });
+        contextMenu = new MenuContext<DTO>(factory, grid, menuSub);
+        grid.addItemDoubleClickListener(e -> { contextMenu.execDoubleClick(); });
     }
 
     @Override

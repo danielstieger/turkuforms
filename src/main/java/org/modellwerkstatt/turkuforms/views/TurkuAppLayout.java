@@ -23,7 +23,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
@@ -31,7 +30,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.forms.MenuStructure;
+import org.modellwerkstatt.turkuforms.forms.Menu;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -134,7 +133,7 @@ abstract public class TurkuAppLayout extends AppLayout {
 
         if (mainmenuBar == null) {
             mainmenuBar = new MenuBar();
-            mainmenuBar.setOpenOnHover(true);
+            mainmenuBar.setOpenOnHover(false);
             mainmenuBar.setWidthFull();
             mainmenuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
             mainmenuBar.addClassName("TurkuLayoutMenuBar");
@@ -145,7 +144,7 @@ abstract public class TurkuAppLayout extends AppLayout {
         MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
         root.add(new Text(menuName));
         SubMenu rootSubMenu = root.getSubMenu();
-        return MenuStructure.createMainMenuStructure(turkuFactory, null, rootSubMenu, null, null, null, menu.items);
+        return Menu.addMainMenuStructure(turkuFactory, rootSubMenu, menu.items);
     }
 
     protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList){
