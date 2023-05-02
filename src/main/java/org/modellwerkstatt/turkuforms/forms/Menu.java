@@ -28,8 +28,7 @@ public class Menu extends MenuBar {
     public Menu() {
         super();
         setOpenOnHover(false);
-
-        // addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+        addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
     }
 
 
@@ -37,8 +36,7 @@ public class Menu extends MenuBar {
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menu.items) {
             if (currentItem instanceof MenuActionGlue) {
-                // only overflow menu for context menu
-                MenuItem button = addActionItem(factory, this, (MenuActionGlue) currentItem);
+                MenuItem button = addActionItem(factory, this, (MenuActionGlue) currentItem, true);
 
             } else if (currentItem.labelText == null) {
                 // null is separator, ignore that here ...
@@ -60,7 +58,7 @@ public class Menu extends MenuBar {
 
         for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
             if (currentItem instanceof MenuActionGlue) {
-                addActionItem(turkuFactory, parent, (MenuActionGlue) currentItem);
+                addActionItem(turkuFactory, parent, (MenuActionGlue) currentItem, false);
 
             } else if (currentItem.labelText == null) {
                 // null is separator
@@ -80,22 +78,24 @@ public class Menu extends MenuBar {
 
 
 
-    static public <T> MenuItem addActionItem(ITurkuFactory turkuFactory, HasMenuItems parent, MenuActionGlue glue) {
+    static public <T> MenuItem addActionItem(ITurkuFactory turkuFactory, HasMenuItems parent, MenuActionGlue glue, boolean topLevel) {
         ComponentEventListener<ClickEvent<MenuItem>> execItem = event -> {
             event.getSource().setEnabled(false);
             glue.startCommand();
         };
 
         MenuItem created;
+        String label = glue.labelText;
+        if (! topLevel) { label = turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey); }
+
 
         if (Defs.hasIcon(glue.imageName)) {
             Icon icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
             icon.addClassName("TurkulayoutMenuIcon");
             created = parent.addItem(icon, execItem);
-            created.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey)));
+            created.add(new Text(label));
 
         } else {
-            String label = turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey);
             created = parent.addItem(label, execItem);
 
         }
