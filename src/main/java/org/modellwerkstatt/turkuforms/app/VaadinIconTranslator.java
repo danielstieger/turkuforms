@@ -2,10 +2,10 @@ package org.modellwerkstatt.turkuforms.app;
 
 import java.util.HashMap;
 
-public class DefaultIconTranslator {
+public class VaadinIconTranslator {
     public HashMap<String, String> trans = new HashMap<String, String>();
 
-    public DefaultIconTranslator() {
+    public VaadinIconTranslator() {
         trans.put("new", "vaadin:file-add");
         trans.put("edit", "vaadin:pencil");
         trans.put("add", "vaadin:plus-square-o");

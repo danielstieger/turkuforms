@@ -134,7 +134,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public void endOfInitializationForElementClass(Class theDto) {
         dtoClass = theDto;
 
-        Workarounds.adjustColWidthToCheckbox(colInfo);
+        // Workarounds.adjustColWidthToCheckbox(colInfo);
         colInfo.forEach(colInfo -> {
             grid.getColumns().get(colInfo.position).setWidth("" + colInfo.widthInPercent + "%");
         });

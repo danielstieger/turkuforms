@@ -1,6 +1,8 @@
 package org.modellwerkstatt.turkuforms.util;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
@@ -23,17 +25,28 @@ public class Workarounds {
         return s;
     }
 
-    public static Icon createIconWithCollection(String fullName) {
-        try {
+    public static Component createIconWithCollection(String fullName) {
+        /* try {
+            Icon icon;
+
             if (fullName.contains(":")) {
                 String[] parts = fullName.split(":");
-                return new Icon(parts[0], parts[1]);
+                icon = new Icon(parts[0], parts[1]);
+            } else {
+                icon = new Icon("vaadin", fullName);
             }
-            return new Icon("vaadin", fullName);
+
+            icon.addClassName("TurkulayoutMenuIcon");
+            return icon;
 
         } catch (Throwable t) {
             throw new RuntimeException("While looking for icon '" + fullName + "'", t);
-        }
+        } */
+
+        Span icon = new Span(fullName);
+        icon.getElement().setProperty("style", "font-family: Material Icons; padding-right: 0.5em;");
+        // icon.addClassName("material-icons");
+        return icon;
     }
 
 

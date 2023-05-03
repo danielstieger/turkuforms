@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JavaScript;
@@ -45,8 +46,7 @@ abstract public class Mainwindow extends TurkuAppLayout {
                 Button btn;
 
                 if (Defs.hasIcon(glue.imageName)) {
-                    Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
-                    icn.addClassName("TurkulayoutMenuIcon");
+                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
                     btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, execItem);
 
                 } else {

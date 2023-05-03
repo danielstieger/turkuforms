@@ -12,13 +12,11 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
-import java.awt.*;
-
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public final static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
     private String redirectAfterLogoutPath;
 
-    private DefaultIconTranslator iconTranslator;
+    private VaadinIconTranslator iconTranslator;
 
     /* onTheFly settings can be access statically in the app (factory instance not available?) */
     public static boolean onTheFly_allowEuroSignInDelegates = false;
@@ -27,7 +25,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public TurkuAppFactory() {
         super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
 
-        iconTranslator = new DefaultIconTranslator();
+        iconTranslator = new MaterialIconsTranslator();
         redirectAfterLogoutPath = DEFAULT_REDIRECT_TO_AFTER_LOGOUT;
     }
     public String getRedirectAfterLogoutPath() {

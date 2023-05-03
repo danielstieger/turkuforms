@@ -90,8 +90,7 @@ public class Menu extends MenuBar {
 
 
         if (Defs.hasIcon(glue.imageName)) {
-            Icon icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
-            icon.addClassName("TurkulayoutMenuIcon");
+            Component icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
             created = parent.addItem(icon, execItem);
             created.add(new Text(label));
 

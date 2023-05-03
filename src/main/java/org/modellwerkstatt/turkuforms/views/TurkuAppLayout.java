@@ -2,18 +2,17 @@ package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.experimental.Feature;
 import com.vaadin.experimental.FeatureFlags;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
@@ -44,7 +43,7 @@ abstract public class TurkuAppLayout extends AppLayout {
     private Label sysInfoLabel;
     private Label userInfoLabel;
     private VerticalLayout drawerLayout;
-    private H1 navbarTitle;
+    private Div navbarTitle;
     private MenuBar mainmenuBar;
     protected ITurkuFactory turkuFactory;
     private VerticalLayout drawerCommandsLayout;
@@ -59,9 +58,10 @@ abstract public class TurkuAppLayout extends AppLayout {
         setPrimarySection(Section.NAVBAR);
         setDrawerOpened(false);
 
-        navbarTitle = new H1("");
+        navbarTitle = new Div();
         navbarTitle.setWidthFull();
         navbarTitle.addClassName("TurkuLayoutNavbarTitle");
+
         addToNavbar(toggle, navbarTitle);
 
         Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
@@ -117,9 +117,7 @@ abstract public class TurkuAppLayout extends AppLayout {
         addToDrawer(drawerLayout);
     }
 
-    protected void setNavbarTitle(String title) {
-        navbarTitle.setText(title);
-    }
+    protected void setNavbarTitle(String title) { navbarTitle.setText(title); }
 
     protected void setUserInfo(String info) {
         userInfoLabel.setText(info);
@@ -159,8 +157,7 @@ abstract public class TurkuAppLayout extends AppLayout {
                 Button btn;
 
                 if (Defs.hasIcon(glue.imageName)) {
-                    Icon icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
-                    icn.addClassName("TurkulayoutMenuIcon");
+                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
                     btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, execItem);
 
                 } else {
