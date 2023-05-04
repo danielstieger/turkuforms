@@ -20,7 +20,6 @@ import java.util.List;
 
 abstract public class Mainwindow extends TurkuAppLayout {
 
-
     protected FlexLayout tilesFlexLayout;
 
     public Mainwindow() {

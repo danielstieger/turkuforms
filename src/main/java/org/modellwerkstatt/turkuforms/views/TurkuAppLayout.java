@@ -21,6 +21,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.dom.ThemeList;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.theme.lumo.Lumo;
@@ -38,7 +39,7 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 
 
-abstract public class TurkuAppLayout extends AppLayout {
+abstract public class TurkuAppLayout extends AppLayout implements HasDynamicTitle {
 
     private Label sysInfoLabel;
     private Label userInfoLabel;
@@ -118,6 +119,11 @@ abstract public class TurkuAppLayout extends AppLayout {
     }
 
     protected void setNavbarTitle(String title) { navbarTitle.setText(title); }
+
+    @Override
+    public String getPageTitle() {
+        return navbarTitle.getText();
+    }
 
     protected void setUserInfo(String info) {
         userInfoLabel.setText(info);

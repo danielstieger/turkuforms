@@ -33,9 +33,9 @@ public class FormHeading extends Div {
             Div info =new Div();
             info.setText(prblm.getSimpleUserText());
             if (prblm.isWarningOnly()) {
-                info.addClassName("TurkuWarningColor");
+                info.addClassName("TurkuWarningDiv");
             }else{
-                info.addClassName("TurkuErrorColor");
+                info.addClassName("TurkuErrorDiv");
             }
 
             this.add(info);

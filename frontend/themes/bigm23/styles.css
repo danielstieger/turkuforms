@@ -1,0 +1,12 @@
+/*
+ * vaadin master stylesheet for the bigm23 template
+ *
+ *
+ */
+
+@import url('./mpreis.css');
+@import url('./turku.css');
+
+html {
+
+}

@@ -129,9 +129,9 @@ public class PromptWindow extends Dialog {
             Div textDiv = new Div();
             textDiv.setText(problem.getSimpleUserText());
             if (problem.isWarningOnly()) {
-                textDiv.addClassName("TurkuWarningColor");
+                textDiv.addClassName("TurkuWarningDiv");
             } else {
-                textDiv.addClassName("TurkuErrorColor");
+                textDiv.addClassName("TurkuErrorDiv");
             }
             infoDiv.add(textDiv);
         }

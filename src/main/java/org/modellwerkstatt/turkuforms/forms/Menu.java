@@ -29,6 +29,7 @@ public class Menu extends MenuBar {
         super();
         setOpenOnHover(false);
         addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+        addClassName("TurkuFormMenu");
     }
 
 

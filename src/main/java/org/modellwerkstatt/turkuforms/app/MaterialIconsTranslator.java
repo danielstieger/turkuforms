@@ -14,9 +14,10 @@ public class MaterialIconsTranslator extends VaadinIconTranslator {
         trans.put("label", "label");
         trans.put("search", "search");
         trans.put("settings", "settings");
-        trans.put("status", "status");
+        trans.put("status", "change_circle");
         trans.put("print", "print");
         trans.put("save", "save");
+        trans.put("ok_white", "done");
 
         // system icons ...
         trans.put("arrow_back", "keyboard_arrow_left"); // left ESC button
