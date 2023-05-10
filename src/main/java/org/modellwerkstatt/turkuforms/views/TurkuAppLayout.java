@@ -119,6 +119,7 @@ abstract public class TurkuAppLayout extends AppLayout implements HasDynamicTitl
     }
 
     protected void setNavbarTitle(String title) { navbarTitle.setText(title); }
+    protected String getNavbarTitle() { return navbarTitle.getText(); }
 
     @Override
     public String getPageTitle() {

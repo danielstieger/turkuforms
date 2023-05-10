@@ -24,10 +24,7 @@ import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
 import org.modellwerkstatt.turkuforms.auth.TestLogin;
 import org.modellwerkstatt.turkuforms.util.*;
-import org.modellwerkstatt.turkuforms.views.CmdUiTab;
-import org.modellwerkstatt.turkuforms.views.Mainwindow;
-import org.modellwerkstatt.turkuforms.views.MainwindowTabSheet;
-import org.modellwerkstatt.turkuforms.views.PromptWindow;
+import org.modellwerkstatt.turkuforms.views.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +36,7 @@ import java.util.Map;
 public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener, HasUrlParameter<String> {
     private TurkuApplicationController applicationController;
     private IOFXUserEnvironment userEnvironment;
-    private MainwindowTabSheet mainTabImpl;
+    private ITurkuMainTab mainTabImpl;
     private ParamInfo params;
 
 
@@ -51,7 +48,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         ITurkuFactory factory = servlet.getUiFactory();
 
         // TODO: constructing basis ui later?
-        mainTabImpl = new MainwindowTabSheet();
+        // mainTabImpl = new MainwindowTabSheet();
+        mainTabImpl = new FakeTabSheet();
 
         ITurkuAuthenticate auth = new TestLogin();
         String result = auth.authenticate(factory, servlet.getGuessedServerName(), "", appUiModule);
@@ -178,10 +176,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public void addTab(IToolkit_CommandContainerUI cmdUiTab) {
         Turku.l("TurkuApp.addTab()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
-        if (this.getContent()!= mainTabImpl) {
-            this.setContent(mainTabImpl);
-        }
         mainTabImpl.addTab(tab);
+
+        if (this.getContent() != mainTabImpl) {
+            this.setContent(mainTabImpl.getComponent());
+        }
     }
 
     @Override
@@ -189,6 +188,12 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.focusTab()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.focusTab(tab);
+
+        // unsureTabClose() comes first, then focusTab on the new
+        // current one. showTiles() will be called instead of focusTab()
+        if (mainTabImpl.getComponent() != this.getContent()) {
+            this.setContent(mainTabImpl.getComponent());
+        }
     }
 
     @Override
@@ -196,6 +201,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.ensureTabClosed()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.closeTab(tab);
+
     }
 
     @Override
