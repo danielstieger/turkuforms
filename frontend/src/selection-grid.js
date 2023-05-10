@@ -27,9 +27,7 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
             if (tr && typeof tr.index != 'undefined') {
                 const item = tr._item;
                 const index = tr.index;
-                if (this.selectedItems && this.selectedItems.some((i) => i.key === item.key)) {
-                    // in case current row selected, do nothing, else
-                } else {
+                if (! (this.selectedItems && this.selectedItems.some((i) => i.key === item.key))) {
                     this._selectionGridSelectRow(e);
                 }
             }
@@ -45,11 +43,12 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
             const boundOldClickHandler = oldClickHandler.bind(this);
             boundOldClickHandler(e);
 
-            if (e.originalTarget != 'undefined' && e.originalTarget.type != 'undefined' && e.originalTarget.type == "checkbox") {
+            /* if (! (e.originalTarget != 'undefined' && e.originalTarget.type != 'undefined' && e.originalTarget.type == "checkbox")) {
                 // handled by original grid
-            } else {
-                this._selectionGridSelectRow(e);
-            }
+
+            } */
+            this._selectionGridSelectRow(e);
+
         };
         Grid.prototype.old_onNavigationKeyDown = Grid.prototype._onNavigationKeyDown;
         Grid.prototype._onNavigationKeyDown = function _onNavigationKeyDownOverridden(e, key) {

@@ -8,8 +8,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.Push;
-import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.*;
@@ -30,16 +29,18 @@ import org.modellwerkstatt.turkuforms.views.Mainwindow;
 import org.modellwerkstatt.turkuforms.views.MainwindowTabSheet;
 import org.modellwerkstatt.turkuforms.views.PromptWindow;
 
+import java.util.Arrays;
 import java.util.List;
-
+import java.util.Map;
 
 
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
-public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener {
+public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener, HasUrlParameter<String> {
     private TurkuApplicationController applicationController;
     private IOFXUserEnvironment userEnvironment;
     private MainwindowTabSheet mainTabImpl;
+    private ParamInfo params;
 
 
     public TurkuApp() {
@@ -66,6 +67,24 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         session.getSession().setAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME, applicationController);
         session.getSession().setAttribute("remoteAddr", remoteAddr);
         session.getSession().setAttribute("userName", userEnvironment.getUserName());
+    }
+
+
+    @Override
+    public void setParameter(BeforeEvent event, @WildcardParameter String parameter) {
+        /* in conjunction with @PreserveRefresh only called after an
+         * url change.
+         */
+        Location location = event.getLocation();
+        params = new ParamInfo(parameter, location.getQueryParameters());
+
+
+        for (int i=0; i < params.getNumUrlParts(); i++) {
+            Turku.l("TurkuApp.urlPart(" + i + ") = '" + params.getUrlPart(i) + "'");
+        }
+
+
+        Turku.l("TurkuApp.param myQuery=" + params.getFirstQueryParam("myQuery"));
     }
 
     @Override
