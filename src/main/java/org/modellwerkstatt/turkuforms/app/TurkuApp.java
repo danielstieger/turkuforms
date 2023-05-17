@@ -3,11 +3,7 @@ package org.modellwerkstatt.turkuforms.app;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.dependency.JavaScript;
-import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
@@ -26,9 +22,7 @@ import org.modellwerkstatt.turkuforms.auth.TestLogin;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 
 @PreserveOnRefresh
@@ -133,7 +127,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void setAppInfo(String appName, String version, String dynTitle) {
         super.setSysInfo(appName+ " " + version);
-        super.setNavbarTitle(appName + " " + dynTitle);
+        super.setNavbarTitleDiv(appName + " " + dynTitle);
         super.setUserInfo(userEnvironment.getUserName());
     }
 
@@ -176,11 +170,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public void addTab(IToolkit_CommandContainerUI cmdUiTab) {
         Turku.l("TurkuApp.addTab()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
-        mainTabImpl.addTab(tab);
-
-        if (this.getContent() != mainTabImpl) {
-            this.setContent(mainTabImpl.getComponent());
+        if (this.getContent() != mainTabImpl.getAsComponent()) {
+            this.setContent(mainTabImpl.getAsComponent());
         }
+        mainTabImpl.addTab(tab);
+        setOptionalTabTitleInNavbar(mainTabImpl.getTabTitle());
     }
 
     @Override
@@ -188,12 +182,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.focusTab()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.focusTab(tab);
-
-        // unsureTabClose() comes first, then focusTab on the new
-        // current one. showTiles() will be called instead of focusTab()
-        if (mainTabImpl.getComponent() != this.getContent()) {
-            this.setContent(mainTabImpl.getComponent());
-        }
+        setOptionalTabTitleInNavbar(mainTabImpl.getTabTitle());
     }
 
     @Override
@@ -201,7 +190,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.ensureTabClosed()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.closeTab(tab);
-
+        setOptionalTabTitleInNavbar("");
     }
 
     @Override

@@ -1,18 +1,25 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
-public class FakeTabSheet implements ITurkuMainTab {
-    CmdUiTab primary;
+public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
+    private CmdUiTab current;
+
+
+    public FakeTabSheet() {
+        this.setSizeFull();
+    }
 
     @Override
-    public Component getComponent() {
-        return primary;
+    public Component getAsComponent() {
+        return this;
     }
 
     @Override
     public String getTabTitle() {
-        return primary.getWindowTitle();
+        return current.getWindowTitle();
     }
 
     @Override
@@ -22,21 +29,25 @@ public class FakeTabSheet implements ITurkuMainTab {
 
     @Override
     public void addTab(CmdUiTab tab) {
-        primary = tab;
+        this.removeAll();
+        current = tab;
+        this.add(tab);
     }
 
     @Override
     public void focusTab(CmdUiTab tab) {
-        primary = tab;
+        current = tab;
+        this.add(current);
     }
 
     @Override
     public void closeTab(CmdUiTab tab) {
-        primary = null;
+        current = null;
+        this.removeAll();
     }
 
     @Override
     public boolean hasOpenTabs() {
-        return primary != null;
+        return current != null;
     }
 }

@@ -13,6 +13,10 @@ import java.util.List;
 public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     private List<CmdUiTab> tabsInSheet;
 
+    @Override
+    public Component getAsComponent() {
+        return this;
+    }
 
     public MainwindowTabSheet() {
         super();
@@ -23,13 +27,8 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     }
 
     @Override
-    public Component getComponent() {
-        return this;
-    }
-
-    @Override
     public String getTabTitle() {
-        return null;
+        return "";
     }
 
     @Override

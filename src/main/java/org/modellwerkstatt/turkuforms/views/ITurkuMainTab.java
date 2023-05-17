@@ -5,7 +5,7 @@ import com.vaadin.flow.component.tabs.Tab;
 
 public interface ITurkuMainTab {
 
-    Component getComponent();
+    Component getAsComponent();
 
     String getTabTitle();
 

@@ -5,7 +5,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JavaScript;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @JavaScript("./turku.js")
 
-abstract public class Mainwindow extends TurkuAppLayout {
+abstract public class Mainwindow extends BasicWindow {
 
     protected FlexLayout tilesFlexLayout;
 

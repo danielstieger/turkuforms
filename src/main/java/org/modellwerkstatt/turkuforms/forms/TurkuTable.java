@@ -1,5 +1,8 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.AttachNotifier;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -10,6 +13,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.shared.Registration;
 import javafx.scene.input.Mnemonic;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
@@ -83,7 +87,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid = new SelectionGrid<>();
         // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        grid.hideMultiSelectionColumn();
         grid.setThemeName("dense");
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
@@ -129,6 +132,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
 
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        grid.hideMultiSelectionColumn();
+    }
 
     @Override
     public void endOfInitializationForElementClass(Class theDto) {

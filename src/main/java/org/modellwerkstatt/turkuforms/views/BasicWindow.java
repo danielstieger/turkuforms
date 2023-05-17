@@ -10,10 +10,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -39,17 +36,20 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 
 
-abstract public class TurkuAppLayout extends AppLayout implements HasDynamicTitle {
+abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
 
     private Label sysInfoLabel;
     private Label userInfoLabel;
     private VerticalLayout drawerLayout;
-    private Div navbarTitle;
+    private Div navbarTitleDiv;
+    private String navbarTitle = "";
+    private String optionalTabTitleInNavbar = "";
+
     private MenuBar mainmenuBar;
     protected ITurkuFactory turkuFactory;
     private VerticalLayout drawerCommandsLayout;
 
-    public TurkuAppLayout() {
+    public BasicWindow() {
     }
 
     protected void init(ITurkuFactory factory, String appNavbarTitle) {
@@ -59,11 +59,11 @@ abstract public class TurkuAppLayout extends AppLayout implements HasDynamicTitl
         setPrimarySection(Section.NAVBAR);
         setDrawerOpened(false);
 
-        navbarTitle = new Div();
-        navbarTitle.setWidthFull();
-        navbarTitle.addClassName("TurkuLayoutNavbarTitle");
+        navbarTitleDiv = new Div();
+        navbarTitleDiv.setWidthFull();
+        navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
 
-        addToNavbar(toggle, navbarTitle);
+        addToNavbar(toggle, navbarTitleDiv);
 
         Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();
@@ -118,12 +118,16 @@ abstract public class TurkuAppLayout extends AppLayout implements HasDynamicTitl
         addToDrawer(drawerLayout);
     }
 
-    protected void setNavbarTitle(String title) { navbarTitle.setText(title); }
-    protected String getNavbarTitle() { return navbarTitle.getText(); }
+    protected void setNavbarTitleDiv(String title) {
+        navbarTitle = title;
+        String total = optionalTabTitleInNavbar.isEmpty()? navbarTitle: navbarTitle + " - " + optionalTabTitleInNavbar;
+        navbarTitleDiv.setText(total);
+    }
 
     @Override
     public String getPageTitle() {
-        return navbarTitle.getText();
+        // returns browser tab title
+        return navbarTitleDiv.getText();
     }
 
     protected void setUserInfo(String info) {
@@ -132,6 +136,11 @@ abstract public class TurkuAppLayout extends AppLayout implements HasDynamicTitl
 
     protected void setSysInfo(String info){
         sysInfoLabel.setText(info);
+    }
+
+    protected void setOptionalTabTitleInNavbar(String title) {
+        optionalTabTitleInNavbar = title;
+        setNavbarTitleDiv(navbarTitle);
     }
 
     protected SubMenu addToMainMenu(MenuSub menu, String menuName){
