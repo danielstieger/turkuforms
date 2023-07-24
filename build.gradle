@@ -80,10 +80,14 @@ ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
 
 war {
     dependsOn(mowarePluginAdoption)
-    webXml = file("${warFile}")
+    webXml = file("${customWebXmlFile}")
 
     from(appClassesHome) {
         into 'WEB-INF/classes'
+    }
+
+    from("artefact/") {
+        into("artefact/")
     }
 
     if (project.hasProperty("appClassesHome2")) {

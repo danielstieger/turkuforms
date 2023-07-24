@@ -31,12 +31,14 @@
 
         <init-param>
             <param-name>xmlConfigFile</param-name>
-            <param-value>APPLICATION_CONFIG</param-value>
+            <!-- <param-value>APPLICATION_CONFIG</param-value> -->
+            <param-value>org/modellwerkstatt/simple/o9infra_configs/TurkuConfig.xml</param-value>
         </init-param>
 
         <init-param>
             <param-name>applicationFqName</param-name>
-            <param-value>APPLICATION_FQNAME</param-value>
+            <!-- <param-value>APPLICATION_FQNAME</param-value> -->
+            <param-value>org.modellwerkstatt.simple.o1deploy_simpleApp.App_Desktop_Order</param-value>
         </init-param>
 
     </servlet>
