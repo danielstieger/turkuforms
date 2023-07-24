@@ -22,12 +22,11 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
+import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.forms.Menu;
+import org.modellwerkstatt.turkuforms.forms.TurkuMenu;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -143,7 +142,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         setNavbarTitleDiv(navbarTitle);
     }
 
-    protected SubMenu addToMainMenu(MenuSub menu, String menuName){
+    protected SubMenu addToMainMenu(org.modellwerkstatt.dataux.runtime.genspecifications.Menu menu, String menuName){
 
         if (mainmenuBar == null) {
             mainmenuBar = new MenuBar();
@@ -158,26 +157,26 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
         root.add(new Text(menuName));
         SubMenu rootSubMenu = root.getSubMenu();
-        return Menu.addMainMenuStructure(turkuFactory, rootSubMenu, menu.items);
+        return TurkuMenu.addMainMenuStructure(turkuFactory, rootSubMenu, menu.getAllItems());
     }
 
-    protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList){
+    protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction> menuItemList){
 
-        for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
-            if (currentItem instanceof MenuActionGlue) {
-                MenuActionGlue glue =  (MenuActionGlue) currentItem;
+        for (org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction currentItem : menuItemList) {
+            if (currentItem instanceof CmdAction) {
+                CmdAction glue =  (CmdAction) currentItem;
                 ComponentEventListener<ClickEvent<Button>> execItem = event -> {
                     this.setDrawerOpened(false);
                     glue.startCommand();
                 };
                 Button btn;
 
-                if (Defs.hasIcon(glue.imageName)) {
-                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, execItem);
+                if (Defs.hasIcon(glue.image)) {
+                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image));
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
 
                 } else {
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), execItem);
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), execItem);
 
                 }
 

@@ -1,8 +1,6 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.AttachNotifier;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -13,11 +11,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.shared.Registration;
-import javafx.scene.input.Mnemonic;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
+import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -38,7 +34,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private FormHeading heading;
     private TextField searchField;
     private Button infoCsvButton;
-    private Menu overflowMenu;
+    private TurkuMenu overflowMenu;
     private MenuContext contextMenu;
 
     private Class dtoClass;
@@ -310,8 +306,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
     @Override
-    public void addMenuAndSetButtons(MenuSub menuSub) {
-        overflowMenu = new Menu();
+    public void addMenuAndSetButtons(Menu menuSub) {
+        overflowMenu = new TurkuMenu();
         overflowMenu.initialize(factory, menuSub);
         topPane.add(overflowMenu);
 

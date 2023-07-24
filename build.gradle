@@ -51,14 +51,14 @@ dependencies {
 
 
     // moware dependencies * * * * * * * * * * * * * * * * *
-    implementation files("${mowarePluginHome}/jars/basis/joda-time-2.10.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-core-5.2.9.RELEASE.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-beans-5.2.9.RELEASE.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-context-5.2.9.RELEASE.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-aop-5.2.9.RELEASE.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-jdbc-5.2.9.RELEASE.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-tx-5.2.9.RELEASE.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-expression-5.2.9.RELEASE.jar")
+    implementation files("${mowarePluginHome}/jars/basis/joda-time-2.12.5.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-core-5.3.27.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-beans-5.3.27.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-context-5.3.27.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-aop-5.3.27.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-jdbc-5.3.27.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-tx-5.3.27.jar")
+    implementation files("${mowarePluginHome}/jars/basis/spring-expression-5.3.27.jar")
     implementation files("${mowarePluginHome}/jars/basis/mo-javaxbus-1.0.jar")
 
     implementation files("${mpsHome}/lib/mps-references.jar")

@@ -10,8 +10,9 @@ import com.vaadin.flow.component.grid.contextmenu.GridMenuItem;
 import com.vaadin.flow.component.grid.contextmenu.GridSubMenu;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
+import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
+import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
+import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
@@ -24,21 +25,21 @@ public class MenuContext<T> {
 
     public final static String DOUBLECLICK_HK = "ENTER";
 
-    protected MenuActionGlue doubleClickAction;
+    protected CmdAction doubleClickAction;
 
-    public MenuContext(ITurkuFactory factory, Grid<T> grid, MenuSub menu) {
+    public MenuContext(ITurkuFactory factory, Grid<T> grid, Menu menu) {
 
         GridContextMenu<T> rootGCM = new GridContextMenu<>(grid);
 
-        for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menu.items) {
-            if (currentItem instanceof MenuActionGlue) {
+        for (AbstractAction currentItem : menu.getAllItems()) {
+            if (currentItem instanceof CmdAction) {
                 // only overflow menu for context menu
 
             } else if (currentItem.labelText == null) {
                 // null is separator, ignore that here ...
 
             } else {
-                createMainMenuStructure(factory, grid, rootGCM, null, ((MenuSub) currentItem).items);
+                createMainMenuStructure(factory, grid, rootGCM, null, ((Menu) currentItem).getAllItems());
             }
         }
     }
@@ -54,11 +55,11 @@ public class MenuContext<T> {
                                                       Grid<T> grid,
                                                       GridContextMenu<T> rootGCM,
                                                       GridSubMenu<T> subGCM,
-                                                      List<org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem> menuItemList) {
+                                                      List<AbstractAction> menuItemList) {
 
-        for (org.modellwerkstatt.dataux.runtime.genspecifications.MenuItem currentItem : menuItemList) {
-            if (currentItem instanceof MenuActionGlue) {
-                addContextItem(turkuFactory, grid, rootGCM, subGCM, (MenuActionGlue) currentItem);
+        for (AbstractAction currentItem : menuItemList) {
+            if (currentItem instanceof CmdAction) {
+                addContextItem(turkuFactory, grid, rootGCM, subGCM, (CmdAction) currentItem);
 
             } else {
                 if (currentItem.labelText == null) { // null is separator
@@ -78,7 +79,7 @@ public class MenuContext<T> {
                     }
                     subGCM = createdItem.getSubMenu();
 
-                    createMainMenuStructure(turkuFactory, grid, null, subGCM, ((MenuSub) currentItem).items);
+                    createMainMenuStructure(turkuFactory, grid, null, subGCM, ((Menu) currentItem).getAllItems());
                 }
             }
         }
@@ -87,7 +88,7 @@ public class MenuContext<T> {
 
 
 
-    private void addContextItem(ITurkuFactory turkuFactory, Grid<T> grid, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, MenuActionGlue glue) {
+    private void addContextItem(ITurkuFactory turkuFactory, Grid<T> grid, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, CmdAction glue) {
 
         ComponentEventListener<GridContextMenu.GridContextMenuItemClickEvent<T>> execGCMItem = event -> {
             event.getSource().setEnabled(false);
@@ -100,8 +101,8 @@ public class MenuContext<T> {
 
         MenuItem created;
 
-        if (Defs.hasIcon(glue.imageName)) {
-            Component icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
+        if (Defs.hasIcon(glue.image)) {
+            Component icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image));
 
             if (createRootGCM) {
                 createdGCM = rootGCM.addItem(icon, execGCMItem);
@@ -109,11 +110,11 @@ public class MenuContext<T> {
                 createdGCM = subGCM.addItem(icon, execGCMItem);
             }
 
-            createdGCM.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey)));
+            createdGCM.add(new Text(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey)));
 
 
         } else {
-            String label = turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey);
+            String label = turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey);
 
             if (createRootGCM) {
                 createdGCM = rootGCM.addItem(label, execGCMItem);
@@ -126,11 +127,11 @@ public class MenuContext<T> {
         glue.attachButton2(new TurkuHasEnabled(createdGCM, "Context " + glue.labelText));
 
 
-        if (Defs.needsHkRegistration(glue.public_hotKey)) {
+        if (Defs.needsHkRegistration(glue.hotKey)) {
             Component turkuTable = grid.getParent().get();
-            Peculiar.useGridShortcutHk(turkuTable, glue.public_hotKey, event -> { if (glue.reevalEnabled()) { glue.startCommand(); } });
+            Peculiar.useGridShortcutHk(turkuTable, glue.hotKey, event -> { if (glue.reevalEnabled()) { glue.startCommand(); } });
 
-            if (glue.public_hotKey.equals(DOUBLECLICK_HK)) {
+            if (glue.hotKey.equals(DOUBLECLICK_HK)) {
                 if (doubleClickAction != null) {
                     throw new IllegalStateException("There is already a " + DOUBLECLICK_HK + " hotkey registered for this context menu! Registered " + doubleClickAction + " new to add " + glue);
                 } else {

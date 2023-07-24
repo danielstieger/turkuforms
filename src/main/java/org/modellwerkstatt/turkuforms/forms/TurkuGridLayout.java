@@ -5,7 +5,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.FocusController;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
+import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_FormContainer;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
@@ -19,7 +19,7 @@ import java.util.List;
 public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_FormContainer<DTO> {
     private ITurkuFactory factory;
     private LeftRight topContainer;
-    private Menu menu;
+    private TurkuMenu menu;
     private FormHeading heading;
     private FocusController<IToolkit_Form> focusController;
 
@@ -105,9 +105,9 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     }
 
     @Override
-    public void addMenuAndSetButtons(MenuSub menuSub) {
+    public void addMenuAndSetButtons(Menu menuSub) {
         if (topContainer == null) { installTopContainer(); }
-        menu = new Menu();
+        menu = new TurkuMenu();
         topContainer.add(menu);
         menu.initialize(factory, menuSub);
     }

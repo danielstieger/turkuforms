@@ -9,7 +9,7 @@ import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.*;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuSub;
+import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
@@ -142,12 +142,12 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     }
 
     @Override
-    public void setMenuAndInit(int langIndex, MenuSub start, MenuSub extra, MenuSub help) {
+    public void setMenuAndInit(int langIndex, Menu start, Menu extra, Menu help) {
         SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
 
         Component vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"));
         startMenu.addItem(vaadinPowerOff, event -> { exitRequestedFromMenu(); });
-        addDrawerMenu(start.items);
+        addDrawerMenu(start.getAllItems());
 
         addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
         addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));

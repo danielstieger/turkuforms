@@ -7,7 +7,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import org.modellwerkstatt.dataux.runtime.genspecifications.MenuActionGlue;
+import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
@@ -36,19 +36,19 @@ abstract public class Mainwindow extends BasicWindow {
             tilesFlexLayout.setAlignContent(FlexLayout.ContentAlignment.SPACE_AROUND);
 
             for(TileAction tile: tileActionList) {
-                MenuActionGlue glue = tile.getAction();
+                CmdAction glue = tile.getAction();
                 ComponentEventListener<ClickEvent<Button>> execItem = event -> {
                     this.setDrawerOpened(false);
                     glue.startCommand();
                 };
                 Button btn;
 
-                if (Defs.hasIcon(glue.imageName)) {
-                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.imageName));
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), icn, execItem);
+                if (Defs.hasIcon(glue.image)) {
+                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image));
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
 
                 } else {
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey), execItem);
+                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), execItem);
 
                 }
 
@@ -71,8 +71,8 @@ abstract public class Mainwindow extends BasicWindow {
           int runningIndex = 0;
 
           for(TileAction tile: tileActionList) {
-              MenuActionGlue glue = tile.getAction();
-              ((Button) tilesFlexLayout.getComponentAt(runningIndex)).setText(turkuFactory.translateButtonLabel(glue.labelText, glue.public_hotKey));
+              CmdAction glue = tile.getAction();
+              ((Button) tilesFlexLayout.getComponentAt(runningIndex)).setText(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey));
               runningIndex ++;
           }
 
