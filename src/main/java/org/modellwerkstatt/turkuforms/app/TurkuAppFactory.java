@@ -20,7 +20,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
 
     /* onTheFly settings can be access statically in the app (factory instance not available?) */
     public static boolean onTheFly_allowEuroSignInDelegates = false;
-
+    private boolean compactMode = false;
 
     public TurkuAppFactory() {
         super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
@@ -41,6 +41,12 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public boolean getAllowEuroSign() {
         return onTheFly_allowEuroSignInDelegates;
     }
+
+
+    @Override
+    public boolean isCompactMode() { return compactMode; }
+    public void setCompactMode(boolean val) { compactMode = val; }
+
 
     @Override
     public boolean useBackgroundThread() {

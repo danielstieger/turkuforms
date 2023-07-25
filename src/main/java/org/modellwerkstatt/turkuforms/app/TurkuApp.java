@@ -42,8 +42,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         ITurkuFactory factory = servlet.getUiFactory();
 
         // TODO: constructing basis ui later?
-        // mainTabImpl = new MainwindowTabSheet();
-        mainTabImpl = new FakeTabSheet();
+        if (factory.isCompactMode()) {
+            mainTabImpl = new FakeTabSheet();
+        } else {
+            mainTabImpl = new MainwindowTabSheet();
+        }
 
         ITurkuAuthenticate auth = new TestLogin();
         String result = auth.authenticate(factory, servlet.getGuessedServerName(), "", appUiModule);
@@ -143,14 +146,17 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
     @Override
     public void setMenuAndInit(int langIndex, Menu start, Menu extra, Menu help) {
-        SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
 
-        Component vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"));
-        startMenu.addItem(vaadinPowerOff, event -> { exitRequestedFromMenu(); });
         addDrawerMenu(start.getAllItems());
 
-        addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
-        addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
+        if (!turkuFactory.isCompactMode()) {
+            SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
+            Component vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"));
+            startMenu.addItem(vaadinPowerOff, event -> { exitRequestedFromMenu(); });
+
+            addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
+            addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
+        }
 
         // initialize other stuff
         mainTabImpl.addTabSelectedChangeListener( i -> applicationController.onTabChangeEvent(i));
