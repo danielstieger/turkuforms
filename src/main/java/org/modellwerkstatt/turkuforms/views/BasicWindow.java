@@ -22,7 +22,9 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.Version;
 import com.vaadin.flow.theme.lumo.Lumo;
+import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
+import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
@@ -44,9 +46,11 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     private String navbarTitle = "";
     private String optionalTabTitleInNavbar = "";
 
-    private MenuBar mainmenuBar;
     protected ITurkuFactory turkuFactory;
     private VerticalLayout drawerCommandsLayout;
+
+    protected DrawerToggle drawerToggle;
+    protected MenuBar mainmenuBar;
 
     public BasicWindow() {
     }
@@ -54,7 +58,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     protected void init(ITurkuFactory factory, String appNavbarTitle) {
         turkuFactory = factory;
 
-        DrawerToggle toggle = new DrawerToggle();
+        drawerToggle = new DrawerToggle();
         setPrimarySection(Section.NAVBAR);
         setDrawerOpened(false);
 
@@ -62,7 +66,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         navbarTitleDiv.setWidthFull();
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
 
-        addToNavbar(toggle, navbarTitleDiv);
+        addToNavbar(drawerToggle, navbarTitleDiv);
 
         Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();
@@ -142,7 +146,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         setNavbarTitleDiv(navbarTitle);
     }
 
-    protected SubMenu addToMainMenu(org.modellwerkstatt.dataux.runtime.genspecifications.Menu menu, String menuName){
+    protected SubMenu addToMainMenu(Menu menu, String menuName){
 
         if (mainmenuBar == null) {
             mainmenuBar = new MenuBar();
@@ -160,9 +164,9 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         return TurkuMenu.addMainMenuStructure(turkuFactory, rootSubMenu, menu.getAllItems());
     }
 
-    protected void addDrawerMenu(List<org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction> menuItemList){
+    protected void addDrawerMenu(List<AbstractAction> menuItemList){
 
-        for (org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction currentItem : menuItemList) {
+        for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
                 CmdAction glue =  (CmdAction) currentItem;
                 ComponentEventListener<ClickEvent<Button>> execItem = event -> {
@@ -195,7 +199,6 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
             }
         }
     }
-
 
     abstract protected void exitRequestedFromMenu();
 

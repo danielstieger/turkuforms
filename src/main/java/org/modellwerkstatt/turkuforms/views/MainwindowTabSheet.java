@@ -67,4 +67,18 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     public boolean hasOpenTabs() {
         return tabsInSheet.size() > 0;
     }
+
+    @Override
+    public void setModal(boolean modal) {
+        int selected = getSelectedIndex();
+        for (int i = 0 ; i < tabsInSheet.size(); i++) {
+            if (i == selected) {
+                if (modal) { getTabAt(i).addClassName("ModalTab"); }
+                else { getTabAt(i).removeClassName("ModalTab"); }
+
+            } else {
+                getTabAt(i).setEnabled(! modal);
+            }
+        }
+    }
 }

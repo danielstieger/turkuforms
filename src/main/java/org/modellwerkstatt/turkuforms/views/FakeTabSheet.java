@@ -50,4 +50,9 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     public boolean hasOpenTabs() {
         return current != null;
     }
+
+    @Override
+    public void setModal(boolean modal) {
+        // nothing to do here
+    }
 }

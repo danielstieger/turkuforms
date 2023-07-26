@@ -18,6 +18,8 @@ public interface ITurkuMainTab {
 
     boolean hasOpenTabs();
 
+    void setModal(boolean modal);
+
     interface TabSelectedIndexChanged {
         void selectedIndexChanged(int i);
     }
