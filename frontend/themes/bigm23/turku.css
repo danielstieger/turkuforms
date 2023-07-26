@@ -120,6 +120,17 @@ vaadin-drawer-toggle {
 }
 
 
+/* TabSheet and Tabs * * * * * * * * * * * * */
+
+vaadin-tabsheet::part(content) {
+	padding: 0px !important;
+}
+
+.CmdUiTab {
+    border-top: 4px solid transparent;
+    padding: 4px;
+}
+
 .ModalTab {
     border-top: 4px solid var(--lumo-primary-color);
 }

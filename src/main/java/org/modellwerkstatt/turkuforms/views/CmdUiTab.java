@@ -13,7 +13,7 @@ public class CmdUiTab extends CmdUi {
     public CmdUiTab(ITurkuFactory fact, boolean modal) {
         super(fact);
         Peculiar.shrinkSpace(this);
-
+        setClassName("CmdUiTab");
         isModal = modal;
     }
 
