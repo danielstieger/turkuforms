@@ -128,13 +128,18 @@ vaadin-tabsheet::part(content) {
 
 .CmdUiTab {
     border-top: 4px solid transparent;
-    padding: 4px;
+    padding: 0px 4px 4px 4px;
 }
 
 .ModalTab {
     border-top: 4px solid var(--lumo-primary-color);
 }
 
+.TabLockingMessage {
+    font-weight: bold;
+    padding: 0px 10px 0px 0px;
+    color: var(--lumo-primary-color);
+}
 
 
 /* PromptWindow / CmdUi * * * * * * * * * * */

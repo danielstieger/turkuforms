@@ -2,7 +2,11 @@ package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -25,6 +29,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     protected ITurkuFactory factory;
     protected List<OFXConclusionInformation> conclusionInformations;
     protected List<Button> conclusionButtons;
+    protected IToolkit_Form currentFormToFocus;
+
 
     public CmdUi(ITurkuFactory fact) {
         super();
@@ -54,15 +60,17 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
     }
 
-    public void initialShow(IToolkit_Form content) {
-        this.add((Component) content, conclusionLayout);
+    public void initialShow(IToolkit_Form formAsComponent) {
+        currentFormToFocus = formAsComponent;
+        this.add((Component) currentFormToFocus, conclusionLayout);
     }
 
     @Override
     public void setContent(IToolkit_Form formAsComponent) {
         // changing pane content
+        currentFormToFocus = formAsComponent;
         Component existing = this.getComponentAt(0);
-        this.replace(existing, (Component) formAsComponent);
+        this.replace(existing, (Component) currentFormToFocus);
     }
 
 
@@ -122,16 +130,10 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     }
 
     @Override
-    public void delayedRequestFocus() {
-        Turku.l("CmdUi.delayedRequestFocus() called: " + UI.getCurrent().getSession().getLastRequestTimestamp());
-        ((IToolkit_Form) this.getComponentAt(0)).myRequestFocus();
-    }
+    public void delayedRequestFocus() { currentFormToFocus.myRequestFocus(); }
 
     @Override
-    public void delayedAfterFullUiInitialized() {
-        ((IToolkit_Form) this.getComponentAt(0)).afterFullUiInitialized();
-
-    }
+    public void delayedAfterFullUiInitialized() {  currentFormToFocus.afterFullUiInitialized(); }
 
     @Override
     public void reevalConclusions(List<OFXConclusionInformation> concInfos) {
@@ -143,7 +145,22 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void setNotification(String s) {
-        Notification.show(s, 3000, Notification.Position.TOP_CENTER);
+
+        Div div = new Div(new Text(s));
+        div.addClassName("TabLockingMessage");
+
+        Button closeButton = new Button(Workarounds.createIconWithCollection("close"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        closeButton.getElement().setAttribute("aria-label", "Close");
+
+        HorizontalLayout lyt = new HorizontalLayout();
+        Peculiar.shrinkSpace(lyt);
+        lyt.add(div, closeButton);
+
+        closeButton.addClickListener(event -> {
+            this.remove(lyt);
+        });
+        this.addComponentAtIndex(0, lyt);
     }
 
     @Override
@@ -156,6 +173,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         // needs no implementation for tabs
         factory = null;
         cmdContainer = null;
+        currentFormToFocus = null;
         conclusionButtons.clear();
     }
 
