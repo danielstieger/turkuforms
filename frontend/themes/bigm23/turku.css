@@ -40,6 +40,10 @@
   font-feature-settings: 'liga';
 }
 
+.ModwerkLabel{
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * */
 vaadin-tooltip-overlay::part(content) {

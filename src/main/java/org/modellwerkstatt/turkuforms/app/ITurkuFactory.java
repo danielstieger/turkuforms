@@ -8,6 +8,8 @@ public interface ITurkuFactory extends IToolkit_UiFactory {
 
     boolean isCompactMode();
 
+    String getAuthenticatorClassFqName();
+
     String translateIconName(String name);
     String translateButtonLabel(String label, String hk);
 

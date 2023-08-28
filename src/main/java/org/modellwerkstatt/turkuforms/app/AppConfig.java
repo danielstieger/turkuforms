@@ -12,6 +12,11 @@ import org.modellwerkstatt.turkuforms.util.Turku;
 @Theme("bigm23")
 @Push
 public class AppConfig implements AppShellConfigurator {
+    public static final String MANUAL_THEME_URL_PATH = "artefact/bigm23/";
+    public static final String MANUAL_THEME_LOGINIDENTITYIMG_WIDTH = "330px";
+    public static final String OK_HOKTEY = "F12";
+    public static final String NO_HOKTEY = "ESC";
+
 
     @Override
     public void configurePage(AppShellSettings settings) {

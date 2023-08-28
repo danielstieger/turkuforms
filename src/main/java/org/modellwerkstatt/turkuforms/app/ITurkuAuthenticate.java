@@ -8,4 +8,6 @@ public interface ITurkuAuthenticate {
     public String authenticate(ITurkuFactory factory, String guessedServerName, String userName, IGenAppUiModule appUiModule);
 
     public UserEnvironmentInformation getEnvironment();
+
+
 }

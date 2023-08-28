@@ -30,6 +30,7 @@ public class TurkuServlet extends VaadinServlet {
     private IGenAppUiModule genApplication;
     private ITurkuFactory appFactory;
     private AppJmxRegistration jmxRegistration;
+    private Class authenticatorClass;
 
     public ITurkuFactory getUiFactory() {
         return appFactory;
@@ -73,7 +74,10 @@ public class TurkuServlet extends VaadinServlet {
             Class<?> appBehaviorClass = classLoader.loadClass(appBehaviorFqName);
             genApplication = ((IGenAppUiModule) appContext.getAutowireCapableBeanFactory().createBean(appBehaviorClass));
 
+            authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
+
         } catch (ClassNotFoundException | BeansException e) {
+            Turku.l("Exception in Turkuservlet.init" + e.getMessage());
             throw new RuntimeException(e);
 
         }
@@ -86,13 +90,15 @@ public class TurkuServlet extends VaadinServlet {
     @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
-        RouteConfiguration.forApplicationScope().setRoute("", TurkuApp.class);
-        RouteConfiguration.forApplicationScope().setRoute("login", LoginApp.class);
+
+        RouteConfiguration.forApplicationScope().setRoute("", FirstRouteView.class);
+        RouteConfiguration.forApplicationScope().setRoute("login", FirstRouteView.class);
+        RouteConfiguration.forApplicationScope().setRoute("app", TurkuApp.class);
+
     }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         long startOfRequest = System.currentTimeMillis();
         boolean isVaadinHeartBeat = request.getContentLength() == 0;
         /* Vaadin heartbeats touch the session, therefore extending the TTL. Thus,
@@ -129,6 +135,8 @@ public class TurkuServlet extends VaadinServlet {
     }
 
 
+
+
     @Override
     public void destroy() {
         super.destroy();
@@ -139,6 +147,6 @@ public class TurkuServlet extends VaadinServlet {
         DeprecatedServerDateProvider.shutdownAndGcClean();
         MMStaticAccessHelper.shutdownAndGcClean();
         OFXStringFormatter2.GLOBAL_INSTANCE_DEFAULT_LANG = null;
-        Turku.l("TurkuServlet.destroy(): SEAMS WE ARE DONE HERE.");
+        Turku.l("TurkuServlet.destroy(): servled cleaned up and destroyed.");
     }
 }

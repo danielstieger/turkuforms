@@ -14,19 +14,23 @@ import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public final static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
-    private String redirectAfterLogoutPath;
+    public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.auth.ManualLoginAuthenticator";
 
     private VaadinIconTranslator iconTranslator;
 
     /* onTheFly settings can be access statically in the app (factory instance not available?) */
     public static boolean onTheFly_allowEuroSignInDelegates = false;
+
     private boolean compactMode = false;
+    private String redirectAfterLogoutPath;
+    private String authentiactorClassFqName;
 
     public TurkuAppFactory() {
         super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
 
         iconTranslator = new MaterialIconsTranslator();
         redirectAfterLogoutPath = DEFAULT_REDIRECT_TO_AFTER_LOGOUT;
+        authentiactorClassFqName = DEFAULT_AUTHENTICATOR;
     }
     public String getRedirectAfterLogoutPath() {
         return redirectAfterLogoutPath;
@@ -47,6 +51,14 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public boolean isCompactMode() { return compactMode; }
     public void setCompactMode(boolean val) { compactMode = val; }
 
+    @Override
+    public String getAuthenticatorClassFqName() {
+        return authentiactorClassFqName;
+    }
+
+    public void setAuthenticatorName(String fqName) {
+        authentiactorClassFqName = fqName;
+    }
 
     @Override
     public boolean useBackgroundThread() {

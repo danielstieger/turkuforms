@@ -18,7 +18,12 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.List;
 
+import static org.modellwerkstatt.turkuforms.app.AppConfig.NO_HOKTEY;
+import static org.modellwerkstatt.turkuforms.app.AppConfig.OK_HOKTEY;
+
 public class PromptWindow extends Dialog {
+
+
     private ITurkuFactory uiFactory;
     private int langIndex;
 
@@ -45,10 +50,6 @@ public class PromptWindow extends Dialog {
         this.uiFactory = factory;
         this.langIndex = langIndex;
     }
-
-
-    public static final String OK_HOKTEY = "F12";
-    public static final String NO_HOKTEY = "ESC";
 
     public void rawPrompt(String heading, Component compt, String okButtonText, String cancelButtonTextOrNull, IApplicationController.DlgRunnable dlgRunnable) {
 

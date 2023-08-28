@@ -35,7 +35,6 @@ public class LoginView extends Div implements BeforeEnterObserver, BeforeLeaveOb
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         Turku.l("LoginView.beforeEnter(): "+ event);
-
     }
 
 

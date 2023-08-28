@@ -3,14 +3,19 @@ package org.modellwerkstatt.turkuforms.util;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.server.VaadinServlet;
 import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Workarounds {
+
+    public static TurkuServlet getCurrentTurkuServlet() {
+        return (TurkuServlet) VaadinServlet.getCurrent();
+    }
 
     public static String mlToolTipText(String tooltip){
         // \n is acceptable here for now, since we use

@@ -5,7 +5,6 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.*;
-import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.*;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
@@ -35,7 +34,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
 
     public TurkuApp() {
-        TurkuServlet servlet = (TurkuServlet) VaadinServlet.getCurrent();
+        TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession session = UI.getCurrent().getSession();
 
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
