@@ -14,11 +14,11 @@ import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public final static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
-    public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.auth.ManualLoginAuthenticator";
+    public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator";
 
     private VaadinIconTranslator iconTranslator;
 
-    /* onTheFly settings can be access statically in the app (factory instance not available?) */
+    /* onTheFly settings can be accessed statically in the app (factory instance not available?) */
     public static boolean onTheFly_allowEuroSignInDelegates = false;
 
     private boolean compactMode = false;

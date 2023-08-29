@@ -8,6 +8,7 @@ import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -16,6 +17,7 @@ public class TurkuApplicationController extends ApplicationController implements
     public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.TurkuAppCrtl_";
     public final static String USERNAME_SESSIONATTRIB = "userName";
     public final static String REMOTE_SESSIONATTRIB = "remoteAddr";
+
 
     private String lastHkProcessedInThisRequest = "";
 
@@ -47,6 +49,7 @@ public class TurkuApplicationController extends ApplicationController implements
         session.removeAttribute(sessionName());
     }
 
+
     @Override
     public void valueBound(HttpSessionBindingEvent event) {
         Turku.l("TurkuApplicationController.valueBound() ");
@@ -54,9 +57,9 @@ public class TurkuApplicationController extends ApplicationController implements
 
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
-        Turku.l("TrukuApplicationController.valueUnbound() called");
+        Turku.l("TurkuApplicationController.valueUnbound(): shutdown in progress (" + this.inShutdownMode() + ") or shutdown now.");
         if (!this.inShutdownMode()) {
-            Turku.l("TrukuApplicationController.valueUnbound(): app not in shutdown mode - calling internal_immediatelyShutdown()");
+            // failback only ...
             this.internal_immediatelyShutdown();
         }
     }

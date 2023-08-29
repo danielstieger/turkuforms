@@ -40,16 +40,15 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuFactory factory = servlet.getUiFactory();
 
+        userEnvironment = Workarounds.getAndClearUserEnvFromUi();
+        if (userEnvironment == null) { throw new RuntimeException("This can not happen. UserEnv nul when initializing TurkuApp."); }
+
         // TODO: constructing basis ui later?
         if (factory.isCompactMode()) {
             mainTabImpl = new FakeTabSheet();
         } else {
             mainTabImpl = new MainwindowTabSheet();
         }
-
-        ITurkuAuthenticate auth = new TestLogin();
-        String result = auth.authenticate(factory, servlet.getGuessedServerName(), "", appUiModule);
-        userEnvironment = auth.getEnvironment();
 
         init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
@@ -60,8 +59,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         applicationController.registerOnSession(session.getSession(),remoteAddr, userEnvironment.getUserName());
 
         addDetachListener(detachEvent -> {
+            Turku.l("TurkuApp.detachListener(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
             if (! applicationController.inShutdownMode()) {
-                Turku.l("TurkuApp.detachListener(): appcrtl not in shutdown mode, starting a internal_immediatelyShutdown()");
                 applicationController.internal_immediatelyShutdown();
             }
             applicationController.unregisterFromSession(UI.getCurrent().getSession().getSession());

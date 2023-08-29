@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.auth;
 
 import com.vaadin.flow.component.Component;
-import org.modellwerkstatt.turkuforms.app.ITurkuAuthenticate;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 
 public interface ILoginWindow {

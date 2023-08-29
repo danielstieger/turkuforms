@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.experiment;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -11,14 +11,18 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.WrappedSession;
-import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.app.TurkuApp;
+import org.modellwerkstatt.turkuforms.auth.DefaultLoginWindow;
+import org.modellwerkstatt.turkuforms.auth.ILoginWindow;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 @PreserveOnRefresh
-public class FirstRouteView extends Composite<Component> implements BeforeEnterObserver {
+public class LandingView extends Composite<Component> implements BeforeEnterObserver {
 
-    public FirstRouteView() {
+    public LandingView() {
+
     }
 
     public Component defaultContent() {
@@ -35,13 +39,25 @@ public class FirstRouteView extends Composite<Component> implements BeforeEnterO
 
     @Override
     protected Component initContent() {
+        Turku.l("FirstRouteView.initContent()");
         return defaultContent();
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        // This is not really beforeEnter. This is after the initContent()
+        // was processed, so the view is already constructed and entered - kind of
+        RouteConfiguration.forSessionScope().setRoute("app", TurkuApp.class);
+
+
         WrappedSession session = UI.getCurrent().getSession().getSession();
-        Turku.l("FirstRouteView.beforeEnter():" + event.getLocation().getSegments());
+
+        UserPrincipal principal = UserPrincipal.getUserPrincipal(session);
+        // if (principal == null) { event.forwardTo("login");
+
+
+
+        event.forwardTo("app");
 
     }
 }

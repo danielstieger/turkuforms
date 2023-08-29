@@ -1,9 +1,7 @@
 package org.modellwerkstatt.turkuforms.app;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinServlet;
-import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
@@ -13,7 +11,7 @@ import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.OFXStringFormatter2;
-import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.experiment.LandingView;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.springframework.beans.BeansException;
@@ -51,8 +49,14 @@ public class TurkuServlet extends VaadinServlet {
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-        super.init(servletConfig);
         Turku.clearAndDelete();
+
+        super.init(servletConfig);
+    }
+
+    @Override
+    protected void servletInitialized() throws ServletException {
+        super.servletInitialized();
 
         String servletPath = this.getServletContext().getContextPath();
         //  - main app behavior class will be given via servlet confg
@@ -63,7 +67,6 @@ public class TurkuServlet extends VaadinServlet {
         if (homeScreenParam != null) {
             appFactory.setRedirectAfterLogoutPath(homeScreenParam);
         }
-
 
         guessedServerName = System.getProperty("server.instancename");
         jmxRegistration = new AppJmxRegistration(appBehaviorFqName, servletPath, servletPath);
@@ -80,7 +83,7 @@ public class TurkuServlet extends VaadinServlet {
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
 
         } catch (ClassNotFoundException | BeansException e) {
-            Turku.l("Exception in Turkuservlet.init" + e.getMessage());
+            Turku.l("TurkuServlet.servletInitialized() " + e.getMessage() + "\n" + OFXConsoleHelper.stackTrace2String(e));
             throw new RuntimeException(e);
 
         }
@@ -88,16 +91,9 @@ public class TurkuServlet extends VaadinServlet {
         appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + genApplication.getShortAppName() + " " + genApplication.getApplicationVersion());
 
         jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName() + " / " + genApplication.getApplicationVersion(), appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
-    }
 
-    @Override
-    protected void servletInitialized() throws ServletException {
-        super.servletInitialized();
-
-        RouteConfiguration.forApplicationScope().setRoute("", FirstRouteView.class);
-        RouteConfiguration.forApplicationScope().setRoute("login", FirstRouteView.class);
-        RouteConfiguration.forApplicationScope().setRoute("app", TurkuApp.class);
-
+        RouteConfiguration.forApplicationScope().setRoute("", LandingView.class);
+        Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }
 
     @Override

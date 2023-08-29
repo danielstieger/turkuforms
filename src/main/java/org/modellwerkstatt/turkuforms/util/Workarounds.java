@@ -1,10 +1,13 @@
 package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.WrappedSession;
+import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
@@ -125,5 +128,17 @@ public class Workarounds {
 
         return null;
     }
+
+    public static UserEnvironmentInformation getAndClearUserEnvFromUi() {
+        WrappedSession session = UI.getCurrent().getSession().getSession();
+        UserEnvironmentInformation env = (UserEnvironmentInformation) session.getAttribute("uiCurrentUserEnv");
+        setUserEnvForUi(null);
+        return env;
+    }
+    public static void setUserEnvForUi(UserEnvironmentInformation env) {
+        WrappedSession session = UI.getCurrent().getSession().getSession();
+        session.setAttribute("uiCurrentUserEnv", env);
+    }
+
 }
 

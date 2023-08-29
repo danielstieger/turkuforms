@@ -1,0 +1,32 @@
+package org.modellwerkstatt.turkuforms.auth;
+
+import com.vaadin.flow.server.WrappedSession;
+
+public class UserPrincipal {
+    public final static String USERPRINCIPAL_SESSIONATTRIB = "userPrincipal";
+
+    protected String userName;
+    protected String password;
+
+    public UserPrincipal(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String toString() {
+        return "Login UserPrincipal";
+    }
+
+
+    public static UserPrincipal getUserPrincipal(WrappedSession session) { return (UserPrincipal) session.getAttribute(USERPRINCIPAL_SESSIONATTRIB); }
+    public static void setUserPrincipal(WrappedSession session, UserPrincipal principal) { session.setAttribute(USERPRINCIPAL_SESSIONATTRIB, principal); }
+}
