@@ -1,7 +1,9 @@
 package org.modellwerkstatt.turkuforms.app;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinServlet;
+import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
@@ -9,9 +11,11 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.OFXStringFormatter2;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -25,7 +29,7 @@ import java.io.IOException;
 
 
 public class TurkuServlet extends VaadinServlet {
-    public final static String APPCRTL_SESSIONATTRIB_NAME = "org.modelwerkstatt.MoWareApplicationController";
+    public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.";
     private String guessedServerName;
     private IGenAppUiModule genApplication;
     private ITurkuFactory appFactory;
@@ -99,38 +103,30 @@ public class TurkuServlet extends VaadinServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        long startOfRequest = System.currentTimeMillis();
+
         boolean isVaadinHeartBeat = request.getContentLength() == 0;
         /* Vaadin heartbeats touch the session, therefore extending the TTL. Thus,
          * setting the session-timeout to e.g. 5 min and the heartberat to 1 min let
          * tomcat close the session, if a browser window is closed unexpectedly after 5 mins.
          */
 
-        TurkuApplicationController crtl = null;
-        HttpSession session = null;
-        String remoteAddr = null;
-        String userName = null;
+        long startOfRequest = -1;
+        HttpSession httpSession = request.getSession(false);
 
-        if (!isVaadinHeartBeat) {
-            session = request.getSession(false);
-            if (session != null) {
-                crtl = Peculiar.getAppCrtlFromSession(session);
-
-                if (crtl != null) {
-                    /* get all relevant information here, since session
-                     * might be invalidated while processing vaadin stuff
-                     */
-                    crtl.startRequest();
-                    remoteAddr = "" + session.getAttribute("remoteAddr");
-                    userName = "" + session.getAttribute("userName");
-                }
+        if (!isVaadinHeartBeat && httpSession != null) {
+            TurkuApplicationController crtl = Workarounds.getControllerFromRequest(request, httpSession);
+            if (crtl != null) {
+                startOfRequest = System.currentTimeMillis();
+                crtl.startRequest();
             }
         }
 
         super.service(request, response);
 
-        if (crtl != null) {
-            jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some interaction", startOfRequest);
+        if (startOfRequest != -1) {
+            String remoteAddr = "" + httpSession.getAttribute("remoteAddr");
+            String userName = "" + httpSession.getAttribute("userName");
+            jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some vaadin interaction", startOfRequest);
         }
     }
 

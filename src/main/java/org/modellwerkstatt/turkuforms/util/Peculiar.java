@@ -11,14 +11,6 @@ import javax.servlet.http.HttpSession;
 
 public class Peculiar {
 
-    public static TurkuApplicationController getAppCrtlFromSession(HttpSession session) {
-        return (TurkuApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
-    }
-
-    public static TurkuApplicationController getAppCrtlFromSession(WrappedSession session) {
-        return (TurkuApplicationController) session.getAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME);
-    }
-
     public static void shrinkSpace(ThemableLayout layout){
         layout.setSpacing(false);
         layout.setPadding(false);

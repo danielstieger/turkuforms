@@ -4,18 +4,20 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.server.VaadinServlet;
+import com.vaadin.flow.server.VaadinSession;
+import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.forms.TurkuTableCol;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Workarounds {
-
-    public static TurkuServlet getCurrentTurkuServlet() {
-        return (TurkuServlet) VaadinServlet.getCurrent();
-    }
+    public final static String INTERNAL_VAADIN_SESSION_NAME = "com.vaadin.flow.server.VaadinSession.loaderservlet";
+    public final static String INTERNAL_VAADIN_UID_NAME = "v-uiId";
 
     public static String mlToolTipText(String tooltip){
         // \n is acceptable here for now, since we use
@@ -82,7 +84,7 @@ public class Workarounds {
     }
 
     public static boolean sameHkInThisRequest(String hk) {
-        TurkuApplicationController crtl = Peculiar.getAppCrtlFromSession(UI.getCurrent().getSession().getSession());
+        TurkuApplicationController crtl = Workarounds.getControllerFormUi(UI.getCurrent());
         return crtl.sameHkInThisRequest(hk);
     }
 
@@ -90,5 +92,38 @@ public class Workarounds {
         return origNameWithDot.replace(".","_");
     }
 
+
+
+
+    /* - - - - - - - - - - - - access to local environment and session - - - - - - - - - - - - */
+    public static TurkuServlet getCurrentTurkuServlet() {
+        return (TurkuServlet) VaadinServlet.getCurrent();
+    }
+
+    public static TurkuApplicationController getControllerFormUi(UI ui) {
+        Component mainComponent = ui.getChildren().findFirst().orElse(null);
+
+        if (mainComponent instanceof TurkuApp) {
+            return ((TurkuApp) mainComponent).getApplicationController();
+        } else {
+            Turku.l("Workarounds.getControllerFrom(): This can not happen, mainComponent of Vaadin UI is " + mainComponent);
+            return null;
+        }
+    }
+
+    public static TurkuApplicationController getControllerFromRequest(HttpServletRequest request, HttpSession httpSession) {
+
+        VaadinSession vaadinSession = (VaadinSession) httpSession.getAttribute(INTERNAL_VAADIN_SESSION_NAME);
+        String[] vuiId = request.getParameterMap().get(INTERNAL_VAADIN_UID_NAME);
+
+        if (vaadinSession != null && vuiId != null && vuiId.length > 0) {
+            int vuiIdAsInteger = Integer.parseInt(vuiId[0]);
+            UI currentUi = vaadinSession.getUIById(vuiIdAsInteger);
+            if (currentUi == null) { throw new RuntimeException("This can not happen, currentUi is null for request"); }
+            return getControllerFormUi(currentUi);
+        }
+
+        return null;
+    }
 }
 

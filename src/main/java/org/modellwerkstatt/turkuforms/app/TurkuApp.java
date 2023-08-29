@@ -57,11 +57,20 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
 
+
         // TODO: correct here?
-        session.getSession().setAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_NAME, applicationController);
+        session.getSession().setAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_PREFIX + this.getClass().getSimpleName() + "_" + this.hashCode(), applicationController);
         session.getSession().setAttribute("remoteAddr", remoteAddr);
         session.getSession().setAttribute("userName", userEnvironment.getUserName());
+
+        addDetachListener(detachEvent -> {
+            if (! applicationController.inShutdownMode()) {
+                Turku.l("TurkuApp.detachListener(): appcrtl not in shutdown mode, starting a internal_immediatelyShutdown()");
+                applicationController.internal_immediatelyShutdown();
+            }
+        });
     }
+
 
 
     @Override
@@ -84,8 +93,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void closeWindowAndExit() {
         Turku.l("TurkuApp.closeWindowAndExit()");
-        UI.getCurrent().getSession().getSession().invalidate();
-        // TODO: TurkuAppFactory.getRedirectAfterLogoutPat() ??
+        applicationController.internal_immediatelyShutdown();
+        // TODO: TurkuAppFactory.getRedirectAfterLogoutPat() - go to login view?
     }
 
     @Override
@@ -244,4 +253,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     protected void exitRequestedFromMenu() {
         applicationController.onExitRequestedEvent(false);
     }
+
+    public TurkuApplicationController getApplicationController() { return applicationController; }
 }

@@ -35,18 +35,13 @@ public class FirstRouteView extends Composite<Component> implements BeforeEnterO
 
     @Override
     protected Component initContent() {
-        TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
-
         return defaultContent();
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         WrappedSession session = UI.getCurrent().getSession().getSession();
-        TurkuApplicationController crtl = Peculiar.getAppCrtlFromSession(session);
-        boolean loggedIn = crtl != null;
-
         Turku.l("FirstRouteView.beforeEnter():" + event.getLocation().getSegments());
-        Turku.l("FirstRouteView.beforeEnter(): already logged in " + loggedIn);
+
     }
 }

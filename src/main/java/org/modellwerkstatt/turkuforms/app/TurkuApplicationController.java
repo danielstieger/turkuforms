@@ -17,12 +17,12 @@ import javax.servlet.http.HttpSessionBindingListener;
 public class TurkuApplicationController extends ApplicationController implements HttpSessionBindingListener {
     private String lastHkProcessedInThisRequest = "";
 
-    // TODO: Alternativeley, should we make the TurkuApp implement the HttpSessionBindingListener?
     public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_Application appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
     }
 
     public void startRequest() {
+        // Vaadin Bug/Problems 23.3 with HK Processing
         lastHkProcessedInThisRequest = "";
     }
 
@@ -41,9 +41,9 @@ public class TurkuApplicationController extends ApplicationController implements
 
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
-        Turku.l("TrukuApplicationController.valueUnbound()");
+        Turku.l("TrukuApplicationController.valueUnbound() called");
         if (!this.inShutdownMode()) {
-            Turku.l("TurkuApplicationController, app not in shutdown mode - shutting it down now!");
+            Turku.l("TrukuApplicationController.valueUnbound(): app not in shutdown mode - calling internal_immediatelyShutdown()");
             this.internal_immediatelyShutdown();
         }
     }
