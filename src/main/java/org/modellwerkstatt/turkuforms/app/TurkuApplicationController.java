@@ -1,20 +1,22 @@
 package org.modellwerkstatt.turkuforms.app;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.server.VaadinSession;
+
+import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
-import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
-
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
 public class TurkuApplicationController extends ApplicationController implements HttpSessionBindingListener {
+    public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.TurkuAppCrtl_";
+    public final static String USERNAME_SESSIONATTRIB = "userName";
+    public final static String REMOTE_SESSIONATTRIB = "remoteAddr";
+
     private String lastHkProcessedInThisRequest = "";
 
     public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_Application appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
@@ -33,6 +35,17 @@ public class TurkuApplicationController extends ApplicationController implements
 
     }
 
+    private String sessionName() {
+        return APPCRTL_SESSIONATTRIB_PREFIX + this.hashCode();
+    }
+    public void registerOnSession(WrappedSession session, String userName, String remoteAddr) {
+        session.setAttribute(sessionName(), this);
+        session.setAttribute(REMOTE_SESSIONATTRIB, remoteAddr);
+        session.setAttribute(USERNAME_SESSIONATTRIB, userName);
+    }
+    public void unregisterFromSession(WrappedSession session) {
+        session.removeAttribute(sessionName());
+    }
 
     @Override
     public void valueBound(HttpSessionBindingEvent event) {

@@ -29,7 +29,6 @@ import java.io.IOException;
 
 
 public class TurkuServlet extends VaadinServlet {
-    public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.";
     private String guessedServerName;
     private IGenAppUiModule genApplication;
     private ITurkuFactory appFactory;
@@ -124,8 +123,8 @@ public class TurkuServlet extends VaadinServlet {
         super.service(request, response);
 
         if (startOfRequest != -1) {
-            String remoteAddr = "" + httpSession.getAttribute("remoteAddr");
-            String userName = "" + httpSession.getAttribute("userName");
+            String remoteAddr = "" + httpSession.getAttribute(TurkuApplicationController.REMOTE_SESSIONATTRIB);
+            String userName = "" + httpSession.getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
             jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some vaadin interaction", startOfRequest);
         }
     }

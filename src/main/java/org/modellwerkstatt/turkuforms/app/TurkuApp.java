@@ -57,17 +57,14 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
 
-
-        // TODO: correct here?
-        session.getSession().setAttribute(TurkuServlet.APPCRTL_SESSIONATTRIB_PREFIX + this.getClass().getSimpleName() + "_" + this.hashCode(), applicationController);
-        session.getSession().setAttribute("remoteAddr", remoteAddr);
-        session.getSession().setAttribute("userName", userEnvironment.getUserName());
+        applicationController.registerOnSession(session.getSession(),remoteAddr, userEnvironment.getUserName());
 
         addDetachListener(detachEvent -> {
             if (! applicationController.inShutdownMode()) {
                 Turku.l("TurkuApp.detachListener(): appcrtl not in shutdown mode, starting a internal_immediatelyShutdown()");
                 applicationController.internal_immediatelyShutdown();
             }
+            applicationController.unregisterFromSession(UI.getCurrent().getSession().getSession());
         });
     }
 
