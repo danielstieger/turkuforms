@@ -100,8 +100,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public void closeWindowAndExit() {
         Turku.l("TurkuApp.closeWindowAndExit()");
         applicationController.internal_immediatelyShutdown();
+        applicationController.unregisterFromSession(VaadinSession.getCurrent());
+        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath();
 
-        // TODO: TurkuAppFactory.getRedirectAfterLogoutPat() - go to login view?
+        UI.getCurrent().getPage().setLocation(redirectTo);
     }
 
     @Override

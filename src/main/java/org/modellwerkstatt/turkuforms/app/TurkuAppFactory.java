@@ -13,7 +13,6 @@ import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
-    public final static String DEFAULT_REDIRECT_TO_AFTER_LOGOUT = ".";
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator";
 
     private VaadinIconTranslator iconTranslator;
@@ -29,7 +28,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
         super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
 
         iconTranslator = new MaterialIconsTranslator();
-        redirectAfterLogoutPath = DEFAULT_REDIRECT_TO_AFTER_LOGOUT;
+        redirectAfterLogoutPath = "(ups not initialized!)";
         authentiactorClassFqName = DEFAULT_AUTHENTICATOR;
     }
     public String getRedirectAfterLogoutPath() {

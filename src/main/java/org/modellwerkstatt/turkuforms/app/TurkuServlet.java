@@ -63,11 +63,6 @@ public class TurkuServlet extends VaadinServlet {
         //  - main app behavior class will be given via servlet confg
         String appBehaviorFqName = getInitParameter("applicationFqName");
         String xmlConfigFile = getInitParameter("xmlConfigFile");
-        // as well as home screen
-        String homeScreenParam = getInitParameter("homeScreenPath");
-        if (homeScreenParam != null) {
-            appFactory.setRedirectAfterLogoutPath(homeScreenParam);
-        }
 
         guessedServerName = System.getProperty("server.instancename");
         jmxRegistration = new AppJmxRegistration(appBehaviorFqName, servletPath, servletPath);
@@ -89,12 +84,19 @@ public class TurkuServlet extends VaadinServlet {
 
         }
 
-        appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + genApplication.getShortAppName() + " " + genApplication.getApplicationVersion());
+        // as well as home screen
+        String homeScreenParam = getInitParameter("mainLandingPagePath");
+        if (homeScreenParam == null) {
+            homeScreenParam = servletPath;
+        } else if (homeScreenParam.charAt(0) != '/') {
+            homeScreenParam = "/" + homeScreenParam;
+        }
+        appFactory.setRedirectAfterLogoutPath(homeScreenParam);
 
+        appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + genApplication.getShortAppName() + " " + genApplication.getApplicationVersion());
         jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName() + " / " + genApplication.getApplicationVersion(), appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
 
         RouteConfiguration.forApplicationScope().setRoute("", authenticatorClass);
-
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }
 
