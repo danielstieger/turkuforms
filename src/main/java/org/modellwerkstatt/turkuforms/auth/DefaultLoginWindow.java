@@ -1,7 +1,9 @@
 package org.modellwerkstatt.turkuforms.auth;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -9,18 +11,29 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.VaadinSession;
+import org.modellwerkstatt.dataux.runtime.core.LoginController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
+import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-import static org.modellwerkstatt.turkuforms.app.AppConfig.*;
+import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.*;
+import static org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator.loginViaLoginCrtl;
 
-public class DefaultLoginWindow extends HorizontalLayout implements ILoginWindow {
+@PreserveOnRefresh
+public class DefaultLoginWindow extends HorizontalLayout {
 
     protected VerticalLayout innerLayout;
     protected H1 appName;
+    protected Div messageDiv;
     protected Button loginButton;
     protected TextField userNameField;
     protected PasswordField passwordField;
@@ -28,18 +41,18 @@ public class DefaultLoginWindow extends HorizontalLayout implements ILoginWindow
 
     protected String userName = "";
     protected String password = "";
-    protected ILoginWindow.IAuthenticateUiCallback callback;
 
     public DefaultLoginWindow() {
-
-    }
-
-    public Component init(TurkuServlet servlet, ILoginWindow.IAuthenticateUiCallback theCallback) {
+        TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuFactory factory = servlet.getUiFactory();
 
-        loginIdentityImage = new Image(MANUAL_THEME_URL_PATH + "img/loginIdentityImg.png", "Identity Image");
+        loginIdentityImage = new Image(MANUAL_THEME_URL_PATH + MANUAL_THEME_LOGINIDENTITYIMG, "Identity Image");
         appName = new H1(appUiModule.getShortAppName() + " " + appUiModule.getApplicationVersion());
+
+        messageDiv = new Div();
+        messageDiv.addClassName("TurkuErrorDiv");
+        messageDiv.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
 
         userNameField = new TextField(factory.getSystemLabel(-1, MoWareTranslations.Key.USERNAME));
         userNameField.setAutoselect(true);
@@ -69,6 +82,7 @@ public class DefaultLoginWindow extends HorizontalLayout implements ILoginWindow
 
         innerLayout.setAlignSelf(Alignment.CENTER, loginIdentityImage);
         innerLayout.setAlignSelf(Alignment.CENTER, appName);
+        innerLayout.setAlignSelf(Alignment.CENTER, messageDiv);
         innerLayout.setAlignSelf(Alignment.CENTER, userNameField);
         innerLayout.setAlignSelf(Alignment.CENTER, passwordField);
         innerLayout.setAlignSelf(Alignment.CENTER, loginButton);
@@ -76,9 +90,6 @@ public class DefaultLoginWindow extends HorizontalLayout implements ILoginWindow
         add(innerLayout);
         setAlignSelf(Alignment.CENTER, innerLayout);
         setHeightFull();
-
-        callback = theCallback;
-        return this;
     }
 
 
@@ -88,11 +99,27 @@ public class DefaultLoginWindow extends HorizontalLayout implements ILoginWindow
         userNameField.setValue("");
         passwordField.setValue("");
 
-        callback.authenticate(userName, password);
+        TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
+        VaadinSession vaadinSession = VaadinSession.getCurrent();
+
+        UserEnvironmentInformation environment = new UserEnvironmentInformation();
+        String msg = loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
+
+        if (msg == null) {
+            if (! RouteConfiguration.forSessionScope().getRoute("app").isPresent()) {
+                RouteConfiguration.forSessionScope().setRoute("app", TurkuApp.class);
+            }
+            RouteConfiguration.forSessionScope().removeRoute("login");
+
+            UserPrincipal userPrincipal = new UserPrincipal(userName, password);
+            UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+            Workarounds.setUserEnvForUi(environment);
+            UI.getCurrent().navigate("app");
+
+        } else {
+            messageDiv.setText(msg);
+        }
+
     }
 
-
-    public void gcClean() {
-        callback = null;
-    }
 }

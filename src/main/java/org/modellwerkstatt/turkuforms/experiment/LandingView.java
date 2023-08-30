@@ -3,6 +3,7 @@ package org.modellwerkstatt.turkuforms.experiment;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,10 +17,11 @@ import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 @PreserveOnRefresh
-public class LandingView extends Composite<Component> implements BeforeEnterObserver {
+public class LandingView extends AppLayout implements BeforeEnterObserver {
 
     public LandingView() {
-
+        Turku.l("FirstRouteView.initContent()");
+        throw new RuntimeException("Hello WORLD");
     }
 
     public Component defaultContent() {
@@ -35,25 +37,10 @@ public class LandingView extends Composite<Component> implements BeforeEnterObse
     }
 
     @Override
-    protected Component initContent() {
-        Turku.l("FirstRouteView.initContent()");
-        return defaultContent();
-    }
-
-    @Override
     public void beforeEnter(BeforeEnterEvent event) {
         // This is not really beforeEnter. This is after the initContent()
         // was processed, so the view is already constructed and entered - kind of
         RouteConfiguration.forSessionScope().setRoute("app", TurkuApp.class);
-
-
-        WrappedSession session = UI.getCurrent().getSession().getSession();
-
-        UserPrincipal principal = UserPrincipal.getUserPrincipal(session);
-        // if (principal == null) { event.forwardTo("login");
-
-
-
         event.forwardTo("app");
 
     }

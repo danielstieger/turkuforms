@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.app;
 
+import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
+@PreserveOnRefresh
 public class TurkuServlet extends VaadinServlet {
     private String guessedServerName;
     private IGenAppUiModule genApplication;
@@ -93,7 +94,6 @@ public class TurkuServlet extends VaadinServlet {
         jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName() + " / " + genApplication.getApplicationVersion(), appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
 
         RouteConfiguration.forApplicationScope().setRoute("", authenticatorClass);
-        RouteConfiguration.forApplicationScope().setRoute("login", authenticatorClass);
 
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }

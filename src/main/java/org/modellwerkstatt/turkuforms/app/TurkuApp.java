@@ -41,16 +41,16 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public TurkuApp() {
         Turku.l("TurkuApp.constructor() - start");
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
-        VaadinSession session = UI.getCurrent().getSession();
+        VaadinSession vaadinSession = VaadinSession.getCurrent();
 
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuFactory factory = servlet.getUiFactory();
 
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
-        if (userEnvironment == null) { throw new RuntimeException("This can not happen. UserEnv nul when initializing TurkuApp."); }
 
-        // TODO: constructing basis ui later?
+        if (userEnvironment == null) { throw new RuntimeException("This can not happen. UserEnv null when initializing TurkuApp."); }
+
         if (factory.isCompactMode()) {
             mainTabImpl = new FakeTabSheet();
         } else {
@@ -59,18 +59,18 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
         init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
-        String remoteAddr =  session.getBrowser().getAddress();
+        String remoteAddr =  vaadinSession.getBrowser().getAddress();
         applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
 
-        applicationController.registerOnSession(session, userEnvironment.getUserName(), remoteAddr);
+        applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
 
         addDetachListener(detachEvent -> {
             if (Workarounds.closedByMissingHearbeat()) {
                 Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
                 if (!applicationController.inShutdownMode()) {
                     applicationController.internal_immediatelyShutdown();
-                    applicationController.unregisterFromSession(VaadinSession.getCurrent());
+                    applicationController.unregisterFromSession(vaadinSession);
                 }
             }
         });
@@ -100,6 +100,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public void closeWindowAndExit() {
         Turku.l("TurkuApp.closeWindowAndExit()");
         applicationController.internal_immediatelyShutdown();
+
         // TODO: TurkuAppFactory.getRedirectAfterLogoutPat() - go to login view?
     }
 

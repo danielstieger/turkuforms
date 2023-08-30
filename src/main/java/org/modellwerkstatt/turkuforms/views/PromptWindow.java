@@ -18,8 +18,8 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.List;
 
-import static org.modellwerkstatt.turkuforms.app.AppConfig.NO_HOKTEY;
-import static org.modellwerkstatt.turkuforms.app.AppConfig.OK_HOKTEY;
+import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.NO_HOKTEY;
+import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
 
 public class PromptWindow extends Dialog {
 
