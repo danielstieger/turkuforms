@@ -2,7 +2,6 @@ package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     private CmdUiTab current;

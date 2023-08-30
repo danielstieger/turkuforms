@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.app;
 
 
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
@@ -8,8 +9,8 @@ import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
-import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
+
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
@@ -40,12 +41,14 @@ public class TurkuApplicationController extends ApplicationController implements
     private String sessionName() {
         return APPCRTL_SESSIONATTRIB_PREFIX + this.hashCode();
     }
-    public void registerOnSession(WrappedSession session, String userName, String remoteAddr) {
+    public void registerOnSession(VaadinSession vaadinSession, String userName, String remoteAddr) {
+        WrappedSession session = vaadinSession.getSession();
         session.setAttribute(sessionName(), this);
         session.setAttribute(REMOTE_SESSIONATTRIB, remoteAddr);
         session.setAttribute(USERNAME_SESSIONATTRIB, userName);
     }
-    public void unregisterFromSession(WrappedSession session) {
+    public void unregisterFromSession(VaadinSession vaadinSession) {
+        WrappedSession session = vaadinSession.getSession();
         session.removeAttribute(sessionName());
     }
 

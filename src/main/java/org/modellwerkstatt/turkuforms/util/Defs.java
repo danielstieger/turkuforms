@@ -1,11 +1,5 @@
 package org.modellwerkstatt.turkuforms.util;
 
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.ShortcutEvent;
-
-import java.util.Set;
-
 public class Defs {
     public static boolean hasIcon(String iconname) {
         return iconname != null && !"".equals(iconname);

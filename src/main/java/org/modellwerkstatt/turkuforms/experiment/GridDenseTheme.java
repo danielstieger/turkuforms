@@ -1,4 +1,5 @@
 package org.modellwerkstatt.turkuforms.experiment;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
@@ -8,7 +9,6 @@ import org.modellwerkstatt.turkuforms.components.SelectionGrid;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Route("grid-dense-theme")

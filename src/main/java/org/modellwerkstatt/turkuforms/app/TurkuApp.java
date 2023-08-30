@@ -6,18 +6,23 @@ import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.dataux.runtime.core.*;
+import org.modellwerkstatt.dataux.runtime.core.IApplicationController;
+import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
+import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
+import org.modellwerkstatt.dataux.runtime.core.UxEvent;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
-import org.modellwerkstatt.objectflow.runtime.*;
+import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
+import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
+import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
-import org.modellwerkstatt.turkuforms.auth.TestLogin;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
@@ -34,6 +39,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
 
     public TurkuApp() {
+        Turku.l("TurkuApp.constructor() - start");
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession session = UI.getCurrent().getSession();
 
@@ -41,6 +47,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         ITurkuFactory factory = servlet.getUiFactory();
 
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
+        Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
         if (userEnvironment == null) { throw new RuntimeException("This can not happen. UserEnv nul when initializing TurkuApp."); }
 
         // TODO: constructing basis ui later?
@@ -56,15 +63,18 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
         applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
 
-        applicationController.registerOnSession(session.getSession(),remoteAddr, userEnvironment.getUserName());
+        applicationController.registerOnSession(session, userEnvironment.getUserName(), remoteAddr);
 
         addDetachListener(detachEvent -> {
-            Turku.l("TurkuApp.detachListener(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
-            if (! applicationController.inShutdownMode()) {
-                applicationController.internal_immediatelyShutdown();
+            if (Workarounds.closedByMissingHearbeat()) {
+                Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
+                if (!applicationController.inShutdownMode()) {
+                    applicationController.internal_immediatelyShutdown();
+                    applicationController.unregisterFromSession(VaadinSession.getCurrent());
+                }
             }
-            applicationController.unregisterFromSession(UI.getCurrent().getSession().getSession());
         });
+        Turku.l("TurkuApp.constructor() - done");
     }
 
 

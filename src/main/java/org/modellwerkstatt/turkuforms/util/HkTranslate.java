@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.Key;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 
 import java.util.HashMap;
 

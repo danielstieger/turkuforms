@@ -1,8 +1,6 @@
 package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.textfield.TextField;
-import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 
 public class DummyEditor extends FormChild<Label> implements IToolkit_TextEditor {

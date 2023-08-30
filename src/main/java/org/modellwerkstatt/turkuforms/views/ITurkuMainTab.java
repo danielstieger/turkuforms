@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.tabs.Tab;
 
 public interface ITurkuMainTab {
 

@@ -1,11 +1,12 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ShortcutEvent;
+import com.vaadin.flow.component.ShortcutEventListener;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
@@ -14,11 +15,9 @@ import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
-import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
-import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
+import org.modellwerkstatt.turkuforms.util.*;
 
 import java.util.ArrayList;
 import java.util.List;

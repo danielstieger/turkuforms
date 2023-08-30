@@ -3,11 +3,6 @@ package org.modellwerkstatt.turkuforms.util;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
-import com.vaadin.flow.server.WrappedSession;
-import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
-import org.modellwerkstatt.turkuforms.app.TurkuServlet;
-
-import javax.servlet.http.HttpSession;
 
 public class Peculiar {
 

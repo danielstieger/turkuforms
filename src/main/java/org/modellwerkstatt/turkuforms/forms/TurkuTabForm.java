@@ -10,7 +10,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TabForm;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 
-
 import java.util.List;
 
 public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO> {

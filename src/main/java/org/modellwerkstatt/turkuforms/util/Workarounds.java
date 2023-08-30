@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
@@ -17,6 +18,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+
+
+/*
+ * Temporary Workarounds for Vaadin 23+, primarily to access and work with server state
+ *
+ * Have also a look at the TurkuAppCrtl for "within a request" workarounds.
+ *
+ *
+ *
+ */
 
 public class Workarounds {
     public final static String INTERNAL_VAADIN_SESSION_NAME = "com.vaadin.flow.server.VaadinSession.loaderservlet";
@@ -99,6 +110,14 @@ public class Workarounds {
 
 
     /* - - - - - - - - - - - - access to local environment and session - - - - - - - - - - - - */
+    public static boolean closedByMissingHearbeat() {
+        // @PreserveOnRefresh also issues attach and detach events when swapping UI instances.
+        // Thus we can not simply call internal_shutdown on detach. Maybe the TurkuApp is reattached
+        // in the same request.
+
+        return OFXConsoleHelper._____organizeCurrentStacktrace_____().contains("removeClosedUIs");
+    }
+
     public static TurkuServlet getCurrentTurkuServlet() {
         return (TurkuServlet) VaadinServlet.getCurrent();
     }
@@ -130,14 +149,15 @@ public class Workarounds {
     }
 
     public static UserEnvironmentInformation getAndClearUserEnvFromUi() {
-        WrappedSession session = UI.getCurrent().getSession().getSession();
-        UserEnvironmentInformation env = (UserEnvironmentInformation) session.getAttribute("uiCurrentUserEnv");
+        UI current = UI.getCurrent();
+        UserEnvironmentInformation env = (UserEnvironmentInformation) ComponentUtil.getData(current,"uiCurrentUserEnv");
         setUserEnvForUi(null);
         return env;
     }
+
     public static void setUserEnvForUi(UserEnvironmentInformation env) {
-        WrappedSession session = UI.getCurrent().getSession().getSession();
-        session.setAttribute("uiCurrentUserEnv", env);
+        UI current = UI.getCurrent();
+        ComponentUtil.setData(current,"uiCurrentUserEnv", env);
     }
 
 }

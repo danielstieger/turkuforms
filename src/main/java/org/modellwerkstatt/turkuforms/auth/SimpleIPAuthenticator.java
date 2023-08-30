@@ -8,6 +8,7 @@ import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 public class SimpleIPAuthenticator extends VerticalLayout implements BeforeEnterObserver {
@@ -25,11 +26,14 @@ public class SimpleIPAuthenticator extends VerticalLayout implements BeforeEnter
 
         WrappedSession session = UI.getCurrent().getSession().getSession();
 
-        UserPrincipal principal = UserPrincipal.getUserPrincipal(session);
+        // UserPrincipal principal = UserPrincipal.getUserPrincipal(session);
         // if (principal == null) { event.forwardTo("login");
 
         // no double registration for route !
-        RouteConfiguration.forSessionScope().setRoute("app", TurkuApp.class);
+        if (! RouteConfiguration.forSessionScope().getRoute("app").isPresent()) {
+            RouteConfiguration.forSessionScope().setRoute("app", TurkuApp.class);
+        }
+
         Workarounds.setUserEnvForUi(new UserEnvironmentInformation());
         beforeEnterEvent.forwardTo("app");
     }

@@ -12,11 +12,8 @@ import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
-import org.modellwerkstatt.turkuforms.auth.DefaultLoginWindow;
-import org.modellwerkstatt.turkuforms.auth.ILoginWindow;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 @PreserveOnRefresh
 public class LandingView extends Composite<Component> implements BeforeEnterObserver {
