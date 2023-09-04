@@ -19,10 +19,10 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
@@ -44,7 +44,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         VaadinSession vaadinSession = VaadinSession.getCurrent();
 
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
-        ITurkuFactory factory = servlet.getUiFactory();
+        ITurkuAppFactory factory = servlet.getUiFactory();
 
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
@@ -98,9 +98,12 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
     @Override
     public void closeWindowAndExit() {
+        // This is basically the logout? Unclear if we want to set the principal null
         Turku.l("TurkuApp.closeWindowAndExit()");
         applicationController.internal_immediatelyShutdown();
         applicationController.unregisterFromSession(VaadinSession.getCurrent());
+        UserPrincipal.setUserPrincipal(VaadinSession.getCurrent(), null);
+
         String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath();
 
         UI.getCurrent().getPage().setLocation(redirectTo);

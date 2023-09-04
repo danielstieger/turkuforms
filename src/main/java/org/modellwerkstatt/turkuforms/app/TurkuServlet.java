@@ -3,7 +3,6 @@ package org.modellwerkstatt.turkuforms.app;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinServlet;
-import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
@@ -30,11 +29,11 @@ import java.io.IOException;
 public class TurkuServlet extends VaadinServlet {
     private String guessedServerName;
     private IGenAppUiModule genApplication;
-    private ITurkuFactory appFactory;
+    private ITurkuAppFactory appFactory;
     private AppJmxRegistration jmxRegistration;
     private Class authenticatorClass;
 
-    public ITurkuFactory getUiFactory() {
+    public ITurkuAppFactory getUiFactory() {
         return appFactory;
     }
     public IGenAppUiModule getAppBehaviour() {
@@ -70,7 +69,7 @@ public class TurkuServlet extends VaadinServlet {
         try {
             //  - okay, wire up everything
             ApplicationContext appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
-            appFactory = ((ITurkuFactory) appContext.getBean(IToolkit_UiFactory.class));
+            appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
 
             ClassLoader classLoader = this.getClass().getClassLoader();
             Class<?> appBehaviorClass = classLoader.loadClass(appBehaviorFqName);

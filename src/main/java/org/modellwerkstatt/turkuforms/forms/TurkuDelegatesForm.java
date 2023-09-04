@@ -7,7 +7,7 @@ import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.editors.DummyEditor;
 import org.modellwerkstatt.turkuforms.editors.FormChild;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_DelegateForm<DTO> {
-    private ITurkuFactory factory;
+    private ITurkuAppFactory factory;
     private FormHeading heading;
     private FormLayout formLayout;
     private List<Integer> colWeights;
     private List<IDataUxDelegate<?>> delegates;
 
-    public TurkuDelegatesForm(ITurkuFactory fact) {
+    public TurkuDelegatesForm(ITurkuAppFactory fact) {
         factory = fact;
         Peculiar.shrinkSpace(this);
 

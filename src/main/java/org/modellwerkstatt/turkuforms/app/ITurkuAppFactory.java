@@ -1,8 +1,9 @@
 package org.modellwerkstatt.turkuforms.app;
 
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
+import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 
-public interface ITurkuFactory extends IToolkit_UiFactory {
+public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     void setRedirectAfterLogoutPath(String homePath);
     String getRedirectAfterLogoutPath();
@@ -10,6 +11,8 @@ public interface ITurkuFactory extends IToolkit_UiFactory {
     boolean isCompactMode();
 
     String getAuthenticatorClassFqName();
+
+    IMoLdapService getLdapServiceIfPresent();
 
     String translateIconName(String name);
     String translateButtonLabel(String label, String hk);

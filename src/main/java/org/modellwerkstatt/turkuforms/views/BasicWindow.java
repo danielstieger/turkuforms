@@ -26,7 +26,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.TurkuMenu;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -46,7 +46,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     private String navbarTitle = "";
     private String optionalTabTitleInNavbar = "";
 
-    protected ITurkuFactory turkuFactory;
+    protected ITurkuAppFactory turkuFactory;
     private VerticalLayout drawerCommandsLayout;
 
     protected DrawerToggle drawerToggle;
@@ -55,7 +55,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     public BasicWindow() {
     }
 
-    protected void init(ITurkuFactory factory, String appNavbarTitle) {
+    protected void init(ITurkuAppFactory factory, String appNavbarTitle) {
         turkuFactory = factory;
 
         drawerToggle = new DrawerToggle();

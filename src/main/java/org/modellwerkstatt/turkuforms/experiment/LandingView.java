@@ -1,8 +1,6 @@
 package org.modellwerkstatt.turkuforms.experiment;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -11,9 +9,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
-import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
-import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 @PreserveOnRefresh

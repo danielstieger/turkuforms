@@ -12,7 +12,7 @@ import com.vaadin.flow.component.html.Hr;
 import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
@@ -26,7 +26,7 @@ public class MenuContext<T> {
 
     protected CmdAction doubleClickAction;
 
-    public MenuContext(ITurkuFactory factory, Grid<T> grid, Menu menu) {
+    public MenuContext(ITurkuAppFactory factory, Grid<T> grid, Menu menu) {
 
         GridContextMenu<T> rootGCM = new GridContextMenu<>(grid);
 
@@ -50,11 +50,11 @@ public class MenuContext<T> {
     }
 
 
-    private void createMainMenuStructure(ITurkuFactory turkuFactory,
-                                                      Grid<T> grid,
-                                                      GridContextMenu<T> rootGCM,
-                                                      GridSubMenu<T> subGCM,
-                                                      List<AbstractAction> menuItemList) {
+    private void createMainMenuStructure(ITurkuAppFactory turkuFactory,
+                                         Grid<T> grid,
+                                         GridContextMenu<T> rootGCM,
+                                         GridSubMenu<T> subGCM,
+                                         List<AbstractAction> menuItemList) {
 
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
@@ -87,7 +87,7 @@ public class MenuContext<T> {
 
 
 
-    private void addContextItem(ITurkuFactory turkuFactory, Grid<T> grid, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, CmdAction glue) {
+    private void addContextItem(ITurkuAppFactory turkuFactory, Grid<T> grid, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, CmdAction glue) {
 
         ComponentEventListener<GridContextMenu.GridContextMenuItemClickEvent<T>> execGCMItem = event -> {
             event.getSource().setEnabled(false);

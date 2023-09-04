@@ -22,7 +22,7 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.objectflow.runtime.Selection;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.components.SelectionGrid;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -32,7 +32,7 @@ import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableForm<DTO> {
-    private ITurkuFactory factory;
+    private ITurkuAppFactory factory;
 
     private LeftRight topPane;
     private FormHeading heading;
@@ -56,7 +56,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
 
 
-    public TurkuTable(ITurkuFactory fact) {
+    public TurkuTable(ITurkuAppFactory fact) {
         factory = fact;
         Peculiar.shrinkSpace(this);
         this.setSizeFull();

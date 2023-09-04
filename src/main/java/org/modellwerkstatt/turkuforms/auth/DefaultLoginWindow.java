@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.auth;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -14,12 +13,10 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.dataux.runtime.core.LoginController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
-import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
@@ -45,7 +42,7 @@ public class DefaultLoginWindow extends HorizontalLayout {
     public DefaultLoginWindow() {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
-        ITurkuFactory factory = servlet.getUiFactory();
+        ITurkuAppFactory factory = servlet.getUiFactory();
 
         loginIdentityImage = new Image(MANUAL_THEME_URL_PATH + MANUAL_THEME_LOGINIDENTITYIMG, "Identity Image");
         appName = new H1(appUiModule.getShortAppName() + " " + appUiModule.getApplicationVersion());
@@ -78,7 +75,7 @@ public class DefaultLoginWindow extends HorizontalLayout {
         loginButton.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
 
         innerLayout = new VerticalLayout();
-        innerLayout.add(loginIdentityImage, appName, userNameField, passwordField, loginButton);
+        innerLayout.add(loginIdentityImage, appName, messageDiv, userNameField, passwordField, loginButton);
 
         innerLayout.setAlignSelf(Alignment.CENTER, loginIdentityImage);
         innerLayout.setAlignSelf(Alignment.CENTER, appName);
@@ -93,11 +90,16 @@ public class DefaultLoginWindow extends HorizontalLayout {
     }
 
 
-    public void processInput() {
+    public void prepareInput() {
         userName = userNameField.getValue().trim();
         password = passwordField.getValue().trim();
         userNameField.setValue("");
         passwordField.setValue("");
+    }
+
+    public void processInput() {
+
+        prepareInput();
 
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();

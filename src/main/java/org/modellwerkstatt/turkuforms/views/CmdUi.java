@@ -15,7 +15,7 @@ import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
 import org.modellwerkstatt.turkuforms.util.*;
 
@@ -25,13 +25,13 @@ import java.util.List;
 abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI, ShortcutEventListener {
     protected ICommandContainer cmdContainer;
     protected LeftRight conclusionLayout;
-    protected ITurkuFactory factory;
+    protected ITurkuAppFactory factory;
     protected List<OFXConclusionInformation> conclusionInformations;
     protected List<Button> conclusionButtons;
     protected IToolkit_Form currentFormToFocus;
 
 
-    public CmdUi(ITurkuFactory fact) {
+    public CmdUi(ITurkuAppFactory fact) {
         super();
         factory = fact;
         conclusionButtons = new ArrayList<>();

@@ -13,7 +13,7 @@ import org.modellwerkstatt.dataux.runtime.core.IApplicationController;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.List;
@@ -24,7 +24,7 @@ import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
 public class PromptWindow extends Dialog {
 
 
-    private ITurkuFactory uiFactory;
+    private ITurkuAppFactory uiFactory;
     private int langIndex;
 
     public PromptWindow(boolean restrictSize) {
@@ -45,7 +45,7 @@ public class PromptWindow extends Dialog {
         addThemeVariants(DialogVariant.LUMO_NO_PADDING);
     }
 
-    public PromptWindow(ITurkuFactory factory, int langIndex) {
+    public PromptWindow(ITurkuAppFactory factory, int langIndex) {
         this(true);
         this.uiFactory = factory;
         this.langIndex = langIndex;

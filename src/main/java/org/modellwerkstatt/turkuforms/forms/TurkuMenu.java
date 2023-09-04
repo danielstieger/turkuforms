@@ -14,7 +14,7 @@ import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -31,7 +31,7 @@ public class TurkuMenu extends MenuBar {
     }
 
 
-    public <T> void initialize(ITurkuFactory factory, Menu menu) {
+    public <T> void initialize(ITurkuAppFactory factory, Menu menu) {
 
         for (AbstractAction currentItem : menu.getAllItems()) {
             if (currentItem instanceof CmdAction) {
@@ -51,7 +51,7 @@ public class TurkuMenu extends MenuBar {
 
 
 
-    static public <T> SubMenu addMainMenuStructure(ITurkuFactory turkuFactory,
+    static public <T> SubMenu addMainMenuStructure(ITurkuAppFactory turkuFactory,
                                                    SubMenu parent,
                                                    List<AbstractAction> menuItemList) {
 
@@ -77,7 +77,7 @@ public class TurkuMenu extends MenuBar {
 
 
 
-    static public <T> MenuItem addActionItem(ITurkuFactory turkuFactory, HasMenuItems parent, CmdAction glue, boolean topLevel) {
+    static public <T> MenuItem addActionItem(ITurkuAppFactory turkuFactory, HasMenuItems parent, CmdAction glue, boolean topLevel) {
         ComponentEventListener<ClickEvent<MenuItem>> execItem = event -> {
             event.getSource().setEnabled(false);
             glue.startCommand();

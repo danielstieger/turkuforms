@@ -3,6 +3,7 @@ package org.modellwerkstatt.turkuforms.app;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.turkuforms.editors.*;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
@@ -12,7 +13,7 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
-public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
+public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator";
 
     private VaadinIconTranslator iconTranslator;
@@ -44,7 +45,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
     public boolean getAllowEuroSign() {
         return onTheFly_allowEuroSignInDelegates;
     }
-
 
     @Override
     public boolean isCompactMode() { return compactMode; }
@@ -144,6 +144,11 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuFactory {
         return new TextAreaEditor();
     }
 
+
+    public IMoLdapService getLdapServiceIfPresent() {
+        IMoLdapService instance = this.context.getAutowireCapableBeanFactory().getBean(IMoLdapService.class);
+        return instance;
+    }
 
     @Override
     public String translateIconName(String name) {

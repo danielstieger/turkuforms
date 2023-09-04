@@ -2,7 +2,7 @@ package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.HasSize;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class CmdUiTab extends CmdUi {
@@ -10,7 +10,7 @@ public class CmdUiTab extends CmdUi {
     private String windowTitle;
 
 
-    public CmdUiTab(ITurkuFactory fact, boolean modal) {
+    public CmdUiTab(ITurkuAppFactory fact, boolean modal) {
         super(fact);
         Peculiar.shrinkSpace(this);
         setClassName("CmdUiTab");

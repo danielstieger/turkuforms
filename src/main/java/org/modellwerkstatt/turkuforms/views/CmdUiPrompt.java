@@ -1,14 +1,14 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 
 public class CmdUiPrompt extends CmdUi {
     protected PromptWindow promptWindow;
     protected boolean fullSize;
 
 
-    public CmdUiPrompt(ITurkuFactory fact, boolean fullSize) {
+    public CmdUiPrompt(ITurkuAppFactory fact, boolean fullSize) {
         super(fact);
         this.fullSize = fullSize;
 

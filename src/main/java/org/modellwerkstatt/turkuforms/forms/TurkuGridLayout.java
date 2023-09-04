@@ -10,14 +10,14 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_FormContainer;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
-import org.modellwerkstatt.turkuforms.app.ITurkuFactory;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_FormContainer<DTO> {
-    private ITurkuFactory factory;
+    private ITurkuAppFactory factory;
     private LeftRight topContainer;
     private TurkuMenu menu;
     private FormHeading heading;
@@ -32,7 +32,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     private FlexComponent containerToAddComponent;
 
 
-    public TurkuGridLayout(ITurkuFactory factory) {
+    public TurkuGridLayout(ITurkuAppFactory factory) {
         super();
         this.factory = factory;
         containerToAddComponent = this;
