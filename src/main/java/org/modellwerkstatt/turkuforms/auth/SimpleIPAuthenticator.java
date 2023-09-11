@@ -17,6 +17,7 @@ import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -25,6 +26,7 @@ import java.util.Optional;
 import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.*;
 
 public class SimpleIPAuthenticator extends HorizontalLayout implements BeforeEnterObserver {
+    protected ParamInfo paramInfo;
     protected VerticalLayout innerLayout;
     protected H1 appName;
     protected Image loginIdentityImage;
@@ -40,7 +42,7 @@ public class SimpleIPAuthenticator extends HorizontalLayout implements BeforeEnt
         messageDiv.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
 
         loginButton = new Button("login", event -> {
-            UI.getCurrent().navigate("login");
+            AuthUtil.forwareToLogin(paramInfo);
         });
         Peculiar.useButtonShortcutHk(loginButton, OK_HOKTEY);
         loginButton.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
@@ -64,6 +66,7 @@ public class SimpleIPAuthenticator extends HorizontalLayout implements BeforeEnt
         // This is not really beforeEnter. This is after the initContent()
         // was processed, so the view is already constructed and entered - kind of
 
+        paramInfo = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
         AuthUtil.ensureLoginPresent(DefaultLoginWindow.class);
 
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
@@ -93,7 +96,7 @@ public class SimpleIPAuthenticator extends HorizontalLayout implements BeforeEnt
             if (msg == null) {
                 // ok, access to app given ..
                 Workarounds.setUserEnvForUi(environment);
-                AuthUtil.ensureAppRoutPresentAndForward(beforeEnterEvent);
+                AuthUtil.ensureAppRoutPresentAndForward(beforeEnterEvent, paramInfo);
 
             } else {
                 messageDiv.setText(msg);

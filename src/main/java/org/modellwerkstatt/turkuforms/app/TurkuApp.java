@@ -32,11 +32,11 @@ import java.util.List;
 
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
-public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener {
+public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener, BeforeEnterObserver {
     private TurkuApplicationController applicationController;
     private IOFXUserEnvironment userEnvironment;
     private ITurkuMainTab mainTabImpl;
-    private ParamInfo params;
+    private ParamInfo initialStartupParams;
 
 
     public TurkuApp() {
@@ -51,7 +51,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
         if (userEnvironment == null) {
-            Notification notification = new Notification("API error. Application can not be accessed directly via this url.");
+            Notification notification = new Notification("API error! Sorry, the application can not be accessed directly via this url . . .");
             notification.setPosition(Notification.Position.MIDDLE);
             notification.open();
 
@@ -80,9 +80,24 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
                     }
                 }
             });
-
         }
         Turku.l("TurkuApp.constructor() - done");
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        // start a command?
+        if (initialStartupParams == null) {
+            initialStartupParams = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+        } else {
+            Notification.show("API Error! Sorry, reloading this application does not work . . .", 5000, Notification.Position.TOP_CENTER);
+        }
+
+        if (applicationController != null && initialStartupParams.hasCommandToStart()) {
+            applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStart(), initialStartupParams.getFirstParam());
+        }
+
+        Turku.l("TurkuApp.beforeEnter() ");
     }
 
     @Override

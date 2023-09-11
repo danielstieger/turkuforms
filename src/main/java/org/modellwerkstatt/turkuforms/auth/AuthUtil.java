@@ -13,6 +13,7 @@ import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.ParamInfo;
 
 import java.util.Optional;
 
@@ -42,6 +43,10 @@ public class AuthUtil {
         RouteConfiguration.forSessionScope().removeRoute("login");
     }
 
+    public static void forwareToLogin(ParamInfo paramInfo) {
+        UI.getCurrent().navigate("login" + paramInfo.getParamsToForwardIfAny());
+    }
+
     public static void ensureLoginPresent(Class<? extends Component> loginComponent) {
         // no double registration for route !
         if (! RouteConfiguration.forSessionScope().getRoute("login").isPresent()) {
@@ -49,16 +54,16 @@ public class AuthUtil {
         }
     }
 
-    public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull) {
+    public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
         if (! RouteConfiguration.forSessionScope().getRoute("main").isPresent()) {
             RouteConfiguration.forSessionScope().setRoute("main", TurkuApp.class);
         }
 
         if (evOrNull == null) {
-            UI.getCurrent().navigate("main");
+            UI.getCurrent().navigate("main" + paramInfo.getParamsToForwardIfAny());
 
         } else {
-            evOrNull.forwardTo("main");
+            evOrNull.forwardTo("main" + paramInfo.getParamsToForwardIfAny());
         }
     }
 

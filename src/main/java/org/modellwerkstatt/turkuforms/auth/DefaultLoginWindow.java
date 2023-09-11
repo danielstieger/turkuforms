@@ -10,6 +10,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
@@ -19,13 +21,15 @@ import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.*;
 
 @PreserveOnRefresh
-public class DefaultLoginWindow extends HorizontalLayout {
+public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterObserver {
+    protected ParamInfo paramInfo;
 
     protected VerticalLayout innerLayout;
     protected H1 appName;
@@ -113,7 +117,7 @@ public class DefaultLoginWindow extends HorizontalLayout {
             UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
             Workarounds.setUserEnvForUi(environment);
 
-            AuthUtil.ensureAppRoutPresentAndForward(null);
+            AuthUtil.ensureAppRoutPresentAndForward(null, paramInfo);
 
         } else {
             messageDiv.setText(msg);
@@ -121,4 +125,8 @@ public class DefaultLoginWindow extends HorizontalLayout {
 
     }
 
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        paramInfo = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+    }
 }

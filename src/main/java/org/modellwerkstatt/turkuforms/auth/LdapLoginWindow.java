@@ -11,10 +11,12 @@ import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterObserver {
+    protected ParamInfo paramInfo;
 
     public LdapLoginWindow() {
         super();
@@ -61,7 +63,7 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
                 UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
                 Workarounds.setUserEnvForUi(environment);
 
-                AuthUtil.ensureAppRoutPresentAndForward(null);
+                AuthUtil.ensureAppRoutPresentAndForward(null, paramInfo);
 
             } else {
                 messageDiv.setText(message);
@@ -78,13 +80,15 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
         UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
 
+        paramInfo = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+
         if (userPrincipal != null) {
             UserEnvironmentInformation environment = new UserEnvironmentInformation();
             String message = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
 
             if (message == null) {
                 Workarounds.setUserEnvForUi(environment);
-                AuthUtil.ensureAppRoutPresentAndForward(null);
+                AuthUtil.ensureAppRoutPresentAndForward(null, paramInfo);
 
             } else {
                 messageDiv.setText(message);
