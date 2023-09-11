@@ -23,7 +23,6 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.*;
-import static org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator.loginViaLoginCrtl;
 
 @PreserveOnRefresh
 public class DefaultLoginWindow extends HorizontalLayout {
@@ -105,18 +104,16 @@ public class DefaultLoginWindow extends HorizontalLayout {
         VaadinSession vaadinSession = VaadinSession.getCurrent();
 
         UserEnvironmentInformation environment = new UserEnvironmentInformation();
-        String msg = loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
+        String msg = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
 
         if (msg == null) {
-            if (! RouteConfiguration.forSessionScope().getRoute("app").isPresent()) {
-                RouteConfiguration.forSessionScope().setRoute("app", TurkuApp.class);
-            }
-            RouteConfiguration.forSessionScope().removeRoute("login");
+            AuthUtil.removeLoginRoute();
 
             UserPrincipal userPrincipal = new UserPrincipal(userName, password);
             UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
             Workarounds.setUserEnvForUi(environment);
-            UI.getCurrent().navigate("app");
+
+            AuthUtil.ensureAppRoutPresentAndForward(null);
 
         } else {
             messageDiv.setText(msg);

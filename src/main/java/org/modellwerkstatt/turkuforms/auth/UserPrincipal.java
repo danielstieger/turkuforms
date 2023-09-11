@@ -37,4 +37,6 @@ public class UserPrincipal {
         WrappedSession session = vaadinSession.getSession();
         session.setAttribute(USERPRINCIPAL_SESSIONATTRIB, principal);
     }
+
+
 }

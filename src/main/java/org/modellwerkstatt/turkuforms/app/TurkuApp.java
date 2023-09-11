@@ -22,6 +22,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
+import org.modellwerkstatt.turkuforms.auth.AuthUtil;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
@@ -31,7 +32,7 @@ import java.util.List;
 
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
-public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener, HasUrlParameter<String> {
+public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener {
     private TurkuApplicationController applicationController;
     private IOFXUserEnvironment userEnvironment;
     private ITurkuMainTab mainTabImpl;
@@ -49,51 +50,39 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
-        if (userEnvironment == null) { throw new RuntimeException("This can not happen. UserEnv null when initializing TurkuApp."); }
+        if (userEnvironment == null) {
+            Notification notification = new Notification("API error. Application can not be accessed directly via this url.");
+            notification.setPosition(Notification.Position.MIDDLE);
+            notification.open();
 
-        if (factory.isCompactMode()) {
-            mainTabImpl = new FakeTabSheet();
         } else {
-            mainTabImpl = new MainwindowTabSheet();
-        }
 
-        init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
-
-        String remoteAddr =  vaadinSession.getBrowser().getAddress();
-        applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
-        applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr,"");
-
-        applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
-
-        addDetachListener(detachEvent -> {
-            if (Workarounds.closedByMissingHearbeat()) {
-                Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
-                if (!applicationController.inShutdownMode()) {
-                    applicationController.internal_immediatelyShutdown();
-                    applicationController.unregisterFromSession(vaadinSession);
-                }
+            if (factory.isCompactMode()) {
+                mainTabImpl = new FakeTabSheet();
+            } else {
+                mainTabImpl = new MainwindowTabSheet();
             }
-        });
-        Turku.l("TurkuApp.constructor() - done");
-    }
 
+            init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
+            String remoteAddr = vaadinSession.getBrowser().getAddress();
+            applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
+            applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
-    @Override
-    public void setParameter(BeforeEvent event, @WildcardParameter String parameter) {
-        /* in conjunction with @PreserveRefresh only called after an
-         * url change.
-         */
-        Location location = event.getLocation();
-        params = new ParamInfo(parameter, location.getQueryParameters());
+            applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
 
+            addDetachListener(detachEvent -> {
+                if (Workarounds.closedByMissingHearbeat()) {
+                    Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
+                    if (!applicationController.inShutdownMode()) {
+                        applicationController.internal_immediatelyShutdown();
+                        applicationController.unregisterFromSession(vaadinSession);
+                    }
+                }
+            });
 
-        for (int i=0; i < params.getNumUrlParts(); i++) {
-            Turku.l("TurkuApp.urlPart(" + i + ") = '" + params.getUrlPart(i) + "'");
         }
-
-
-        Turku.l("TurkuApp.param myQuery=" + params.getFirstQueryParam("myQuery"));
+        Turku.l("TurkuApp.constructor() - done");
     }
 
     @Override
@@ -102,10 +91,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.closeWindowAndExit()");
         applicationController.internal_immediatelyShutdown();
         applicationController.unregisterFromSession(VaadinSession.getCurrent());
+        // This requires a re-login
         UserPrincipal.setUserPrincipal(VaadinSession.getCurrent(), null);
 
-        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath();
-
+        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath() + AuthUtil.LOGOUT_POSTFIX;
         UI.getCurrent().getPage().setLocation(redirectTo);
     }
 

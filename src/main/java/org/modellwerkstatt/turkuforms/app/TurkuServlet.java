@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @PreserveOnRefresh
+@SuppressWarnings("unchecked")
 public class TurkuServlet extends VaadinServlet {
     private String guessedServerName;
     private IGenAppUiModule genApplication;
@@ -95,7 +96,7 @@ public class TurkuServlet extends VaadinServlet {
         appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + genApplication.getShortAppName() + " " + genApplication.getApplicationVersion());
         jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName() + " / " + genApplication.getApplicationVersion(), appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
 
-        RouteConfiguration.forApplicationScope().setRoute("", authenticatorClass);
+        RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }
 

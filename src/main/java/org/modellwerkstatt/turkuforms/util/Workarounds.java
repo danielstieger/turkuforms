@@ -127,7 +127,7 @@ public class Workarounds {
         if (mainComponent instanceof TurkuApp) {
             return ((TurkuApp) mainComponent).getApplicationController();
         } else {
-            Turku.l("Workarounds.getControllerFrom(): This can not happen, mainComponent of Vaadin UI is " + mainComponent);
+            // LoginComponents etc. ?
             return null;
         }
     }

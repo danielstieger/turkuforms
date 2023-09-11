@@ -14,8 +14,6 @@ import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-import static org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator.loginViaLoginCrtl;
-
 public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterObserver {
 
     public LdapLoginWindow() {
@@ -28,6 +26,8 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
         if (ldapService == null) {
             throw new RuntimeException("LdapLoginWindow needs an instance of the ldap service but found none.");
         }
+
+
 
     }
 
@@ -52,19 +52,16 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
         } else {
             // (2) Authenticate via application
             UserEnvironmentInformation environment = new UserEnvironmentInformation();
-            String message = loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
+            String message = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
 
             if (message == null) {
-                if (! RouteConfiguration.forSessionScope().getRoute("app").isPresent()) {
-                    RouteConfiguration.forSessionScope().setRoute("app", TurkuApp.class);
-                }
-                RouteConfiguration.forSessionScope().removeRoute("login");
+                AuthUtil.removeLoginRoute();
 
                 UserPrincipal userPrincipal = new UserPrincipal(userName, password);
                 UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
                 Workarounds.setUserEnvForUi(environment);
 
-                UI.getCurrent().navigate("app");
+                AuthUtil.ensureAppRoutPresentAndForward(null);
 
             } else {
                 messageDiv.setText(message);
@@ -83,11 +80,11 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
 
         if (userPrincipal != null) {
             UserEnvironmentInformation environment = new UserEnvironmentInformation();
-            String message = loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
+            String message = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
 
             if (message == null) {
                 Workarounds.setUserEnvForUi(environment);
-                UI.getCurrent().navigate("app");
+                AuthUtil.ensureAppRoutPresentAndForward(null);
 
             } else {
                 messageDiv.setText(message);
