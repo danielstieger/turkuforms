@@ -55,8 +55,8 @@ public class AuthUtil {
     }
 
     public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
-        if (! RouteConfiguration.forSessionScope().getRoute("main").isPresent()) {
-            RouteConfiguration.forSessionScope().setRoute("main", TurkuApp.class);
+        if (! RouteConfiguration.forSessionScope().getRoute("main/:cmdName?").isPresent()) {
+            RouteConfiguration.forSessionScope().setRoute("main/:cmdName?", TurkuApp.class);
         }
 
         if (evOrNull == null) {
