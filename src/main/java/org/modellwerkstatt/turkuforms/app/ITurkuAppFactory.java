@@ -9,6 +9,7 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     String getRedirectAfterLogoutPath();
 
     boolean isCompactMode();
+    boolean isCheckDeployedVersion();
 
     String getAuthenticatorClassFqName();
 

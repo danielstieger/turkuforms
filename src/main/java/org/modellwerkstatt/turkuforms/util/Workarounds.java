@@ -133,7 +133,6 @@ public class Workarounds {
     }
 
     public static TurkuApplicationController getControllerFromRequest(HttpServletRequest request, HttpSession httpSession) {
-
         VaadinSession vaadinSession = (VaadinSession) httpSession.getAttribute(INTERNAL_VAADIN_SESSION_NAME);
         String[] vuiId = request.getParameterMap().get(INTERNAL_VAADIN_UID_NAME);
 

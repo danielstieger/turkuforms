@@ -51,7 +51,15 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
         if (userEnvironment == null) {
+            //TODO: report that on portj
             Notification notification = new Notification("API error! Sorry, the application can not be accessed directly via this url . . .");
+            notification.setPosition(Notification.Position.MIDDLE);
+            notification.open();
+
+        } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardAll() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardNotDirty()) {
+            //TODO: report that on portj
+
+            Notification notification = new Notification("API error! Sorry, the application is marked as an old version . . .");
             notification.setPosition(Notification.Position.MIDDLE);
             notification.open();
 
@@ -76,7 +84,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
                     Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
                     if (!applicationController.inShutdownMode()) {
                         applicationController.internal_immediatelyShutdown();
-                        applicationController.unregisterFromSession(vaadinSession);
+                        applicationController.unregisterFromSessionOthersPresent(vaadinSession);
                     }
                 }
             });
@@ -105,14 +113,28 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         // This is basically the logout? Unclear if we want to set the principal null
         Turku.l("TurkuApp.closeWindowAndExit()");
         applicationController.internal_immediatelyShutdown();
-        applicationController.unregisterFromSession(VaadinSession.getCurrent());
+        applicationController.unregisterFromSessionOthersPresent(VaadinSession.getCurrent());
         // This requires a re-login
         UserPrincipal.setUserPrincipal(VaadinSession.getCurrent(), null);
 
         String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath() + AuthUtil.LOGOUT_POSTFIX;
         UI.getCurrent().getPage().setLocation(redirectTo);
     }
+    
+    @Override
+    public void parDeploymentForwardNow() {
+        // kill session in case no other appCrtls are present in session
+        applicationController.internal_immediatelyShutdown();
+        boolean others = applicationController.unregisterFromSessionOthersPresent(VaadinSession.getCurrent());
 
+        if (!others) {
+            VaadinSession.getCurrent().getSession().invalidate();
+        }
+
+        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath() + AuthUtil.LOGOUT_POSTFIX;
+        UI.getCurrent().getPage().setLocation(redirectTo);
+    }
+    
     @Override
     public void showDialog(DlgType dlgType, String text, IApplicationController.DlgRunnable dlgRunnable) {
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
@@ -160,12 +182,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
     @Override
     public void lockInterface(boolean b) {
-        Turku.l("TurkuApp.lockInterface() " + b);
+
     }
 
     @Override
     public void setCurrentTabModal(boolean modal) {
-
         if (mainmenuBar != null) { mainmenuBar.setEnabled(! modal); }
         drawerToggle.setEnabled(! modal);
         if (modal) { setDrawerOpened(false); }
@@ -271,4 +292,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     }
 
     public TurkuApplicationController getApplicationController() { return applicationController; }
+
+
+
 }

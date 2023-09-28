@@ -80,6 +80,8 @@ ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
 
 war {
     dependsOn(mowarePluginAdoption)
+
+    archiveName = "${appName}##${appVersion}.war"
     webXml = file("${customWebXmlFile}")
 
     from(appClassesHome) {

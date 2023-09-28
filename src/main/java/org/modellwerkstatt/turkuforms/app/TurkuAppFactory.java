@@ -22,6 +22,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public static boolean onTheFly_allowEuroSignInDelegates = false;
 
     private boolean compactMode = false;
+    private boolean deployedVersionCheck = true;
     private String redirectAfterLogoutPath;
     private String authentiactorClassFqName;
 
@@ -49,6 +50,12 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     @Override
     public boolean isCompactMode() { return compactMode; }
     public void setCompactMode(boolean val) { compactMode = val; }
+
+    @Override
+    public boolean isCheckDeployedVersion() {
+        return deployedVersionCheck;
+    }
+    public void setCheckDeployedVersion(boolean val) { deployedVersionCheck = val; }
 
     @Override
     public String getAuthenticatorClassFqName() {
@@ -144,6 +151,10 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         return new TextAreaEditor();
     }
 
+    @Override
+    public IToolkit_UploadEditor createUploadEditor() {
+        throw new RuntimeException("Not implemented yet.");
+    }
 
     public IMoLdapService getLdapServiceIfPresent() {
         IMoLdapService instance = this.context.getAutowireCapableBeanFactory().getBean(IMoLdapService.class);

@@ -8,10 +8,7 @@ import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
-import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
-import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
-import org.modellwerkstatt.objectflow.runtime.OFXStringFormatter2;
+import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.springframework.beans.BeansException;
@@ -29,6 +26,8 @@ import java.io.IOException;
 @SuppressWarnings("unchecked")
 public class TurkuServlet extends VaadinServlet {
     private String guessedServerName;
+    private String deployedAsVersion;
+    private String appBehaviorFqName;
     private IGenAppUiModule genApplication;
     private ITurkuAppFactory appFactory;
     private AppJmxRegistration jmxRegistration;
@@ -41,12 +40,14 @@ public class TurkuServlet extends VaadinServlet {
         return genApplication;
     }
 
+    public String getDeployedAsVersion() { return deployedAsVersion; }
     public String getGuessedServerName() {
         return guessedServerName;
     }
     public AppJmxRegistration getJmxRegistration() {
         return jmxRegistration;
     }
+
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -61,10 +62,18 @@ public class TurkuServlet extends VaadinServlet {
 
         String servletPath = this.getServletContext().getContextPath();
         //  - main app behavior class will be given via servlet confg
-        String appBehaviorFqName = getInitParameter("applicationFqName");
+        appBehaviorFqName = getInitParameter("applicationFqName");
         String xmlConfigFile = getInitParameter("xmlConfigFile");
 
         guessedServerName = System.getProperty("server.instancename");
+
+        String realPath = this.getServletContext().getRealPath("/");
+        int startOfVersion = realPath.indexOf("##");
+        if (startOfVersion > 0 && realPath.length() > startOfVersion + 2) {
+            deployedAsVersion = realPath.substring(startOfVersion + 2);
+            deployedAsVersion = deployedAsVersion.substring(0, deployedAsVersion.length()-1).replace("_", ".");
+        }
+
         jmxRegistration = new AppJmxRegistration(appBehaviorFqName, servletPath, servletPath);
 
         try {
@@ -84,6 +93,10 @@ public class TurkuServlet extends VaadinServlet {
 
         }
 
+        if (appFactory.isCheckDeployedVersion() && !genApplication.getApplicationVersion().equals(deployedAsVersion)) {
+            throw new RuntimeException("Application deployed as '"+ deployedAsVersion + "' does not match app version '" + genApplication.getApplicationVersion() +"'.");
+        }
+
         // as well as home screen
         String homeScreenParam = getInitParameter("mainLandingPagePath");
         if (homeScreenParam == null) {
@@ -94,7 +107,7 @@ public class TurkuServlet extends VaadinServlet {
         appFactory.setRedirectAfterLogoutPath(homeScreenParam);
 
         appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + genApplication.getShortAppName() + " " + genApplication.getApplicationVersion());
-        jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName() + " / " + genApplication.getApplicationVersion(), appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
+        jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName() + " " + genApplication.getApplicationVersion()+ " (par deployed as '"+ deployedAsVersion + "')", appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
 
         RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
@@ -131,6 +144,12 @@ public class TurkuServlet extends VaadinServlet {
 
 
 
+    public void logOnPortJTrace(String source, String ipAddr, String msg) {
+        CoreReporterInfo info = new CoreReporterInfo(IOFXCoreReporter.Type.APP_TRACE, appBehaviorFqName, genApplication.getApplicationVersion(),
+                source, "", "", IOFXCoreReporter.LogPriority.TRACE, 0, "", "", "",
+                ipAddr, MoVersion.MOWARE_PLUGIN_VERSION, IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, guessedServerName, msg);
+        appFactory.report(info);
+    }
 
     @Override
     public void destroy() {
