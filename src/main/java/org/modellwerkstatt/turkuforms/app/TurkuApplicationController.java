@@ -47,16 +47,23 @@ public class TurkuApplicationController extends ApplicationController implements
         session.setAttribute(REMOTE_SESSIONATTRIB, remoteAddr);
         session.setAttribute(USERNAME_SESSIONATTRIB, userName);
     }
-    public boolean unregisterFromSessionOthersPresent(VaadinSession vaadinSession) {
+    public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession) {
         WrappedSession session = vaadinSession.getSession();
         session.removeAttribute(sessionName());
 
+        boolean others = false;
         // other appcrtls present?
         for (String name: session.getAttributeNames()){
             if (name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX)) {
-                return true;
+                others = true;
+                break;
             }
         }
+
+        if (!others) {
+            VaadinSession.getCurrent().getSession().invalidate();
+        }
+
         return false;
     }
 

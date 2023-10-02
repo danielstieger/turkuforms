@@ -46,20 +46,23 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
+        String remoteAddr = vaadinSession.getBrowser().getAddress();
+
 
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
         if (userEnvironment == null) {
-            //TODO: report that on portj
-            Notification notification = new Notification("API error! Sorry, the application can not be accessed directly via this url . . .");
+            String msg = "API error! Sorry, the application can not be accessed directly via this url . . .";
+            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
+            Notification notification = new Notification(msg);
             notification.setPosition(Notification.Position.MIDDLE);
             notification.open();
 
         } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardAll() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardNotDirty()) {
-            //TODO: report that on portj
-
-            Notification notification = new Notification("API error! Sorry, the application is marked as an old version . . .");
+            String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";
+            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
+            Notification notification = new Notification(msg);
             notification.setPosition(Notification.Position.MIDDLE);
             notification.open();
 
@@ -73,7 +76,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
             init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
-            String remoteAddr = vaadinSession.getBrowser().getAddress();
             applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
             applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
@@ -84,7 +86,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
                     Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
                     if (!applicationController.inShutdownMode()) {
                         applicationController.internal_immediatelyShutdown();
-                        applicationController.unregisterFromSessionOthersPresent(vaadinSession);
+                        applicationController.unregisterFromSessionTryInvalidate(vaadinSession);
                     }
                 }
             });
@@ -113,7 +115,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         // This is basically the logout? Unclear if we want to set the principal null
         Turku.l("TurkuApp.closeWindowAndExit()");
         applicationController.internal_immediatelyShutdown();
-        applicationController.unregisterFromSessionOthersPresent(VaadinSession.getCurrent());
+        applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent());
         // This requires a re-login
         UserPrincipal.setUserPrincipal(VaadinSession.getCurrent(), null);
 
@@ -125,13 +127,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public void parDeploymentForwardNow() {
         // kill session in case no other appCrtls are present in session
         applicationController.internal_immediatelyShutdown();
-        boolean others = applicationController.unregisterFromSessionOthersPresent(VaadinSession.getCurrent());
+        boolean others = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent());
 
-        if (!others) {
-            VaadinSession.getCurrent().getSession().invalidate();
-        }
-
-        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath() + AuthUtil.LOGOUT_POSTFIX;
+        // no LOGOUT_POSTFIX, since we forward to new version and might prevent a manual login
+        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath();
         UI.getCurrent().getPage().setLocation(redirectTo);
     }
     

@@ -71,10 +71,11 @@ public class TurkuServlet extends VaadinServlet {
         int startOfVersion = realPath.indexOf("##");
         if (startOfVersion > 0 && realPath.length() > startOfVersion + 2) {
             deployedAsVersion = realPath.substring(startOfVersion + 2);
-            deployedAsVersion = deployedAsVersion.substring(0, deployedAsVersion.length()-1).replace("_", ".");
+            deployedAsVersion = deployedAsVersion.substring(0, deployedAsVersion.length()-1);
         }
 
-        jmxRegistration = new AppJmxRegistration(appBehaviorFqName, servletPath, servletPath);
+        jmxRegistration = new AppJmxRegistration(appBehaviorFqName, deployedAsVersion, realPath, servletPath);
+        deployedAsVersion = deployedAsVersion.replace("_", ".");
 
         try {
             //  - okay, wire up everything
