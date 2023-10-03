@@ -40,7 +40,6 @@ group 'org.modellwerkstatt'
 dependencies {
     implementation enforcedPlatform("com.vaadin:vaadin-bom:$vaadinVersion")
 
-
     // Vaadin
     implementation("com.vaadin:vaadin-core")
     providedCompile "javax.servlet:javax.servlet-api:3.1.0"
@@ -55,56 +54,56 @@ dependencies {
     implementation files("${mowarePluginHome}/jars/basis/spring-core-5.3.27.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-beans-5.3.27.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-context-5.3.27.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-aop-5.3.27.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-jdbc-5.3.27.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-tx-5.3.27.jar")
-    implementation files("${mowarePluginHome}/jars/basis/spring-expression-5.3.27.jar")
-    implementation files("${mowarePluginHome}/jars/basis/mo-javaxbus-1.0.jar")
+    // implementation files("${mowarePluginHome}/jars/basis/spring-aop-5.3.27.jar")
+    // implementation files("${mowarePluginHome}/jars/basis/spring-jdbc-5.3.27.jar")
+    // implementation files("${mowarePluginHome}/jars/basis/spring-tx-5.3.27.jar")
+    // implementation files("${mowarePluginHome}/jars/basis/spring-expression-5.3.27.jar")
+    // implementation files("${mowarePluginHome}/jars/basis/mo-javaxbus-1.0.jar")
 
-    implementation files("${mpsHome}/lib/mps-references.jar")
-    implementation files("${mpsHome}/lib/mps-collections.jar")
-    implementation files("${mpsHome}/lib/mps-closures.jar")
-    implementation files("${mpsHome}/lib/commons-lang-2.4.jar")
+    // implementation files("${mpsHome}/lib/mps-references.jar")
+    // implementation files("${mpsHome}/lib/mps-collections.jar")
+    // implementation files("${mpsHome}/lib/mps-closures.jar")
+    // implementation files("${mpsHome}/lib/commons-lang-2.4.jar")
 
 
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.manmap.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.objectflow.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.dataux.runtime.jar")
-
-    if (project.hasProperty("additionalLib1")) {
-        implementation files("${appClassesHome}${additionalLib1}")
-    }
 }
 
-ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
+// ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
+ant.importBuild "${mowareHome}/turkuforms/assembly/build.xml"
+
+compileJava {
+    dependsOn("bmoware.mowarePluginAdoption")
+}
 
 war {
-    dependsOn(mowarePluginAdoption)
-
-    archiveName = "${appName}##${appVersion}.war"
-    webXml = file("${customWebXmlFile}")
-
-    from(appClassesHome) {
-        into 'WEB-INF/classes'
-    }
+    archiveName = "turkuforms.war"
 
     from("artefact/") {
         into("artefact/")
     }
 
-    if (project.hasProperty("appClassesHome2")) {
-        from(appClassesHome2) {
-            into 'WEB-INF/classes'
-        }
-    }
-
+    rootSpec.exclude('**/org.modellwerkstatt.*.jar')
+    rootSpec.exclude('**/spring-*.jar')
+    rootSpec.exclude('**/joda-*.jar')
 }
 
 
-task ZZ_tomcatHotDeploy(type: Copy) {
+
+task ZZ_mowareIntegrate(type: Copy) {
     dependsOn(war)
     from war.archivePath
-    into "${tomcatHome}/webapps"
+    into "${mowareHome}/turkuforms/jars"
+}
+
+
+
+task zz_buildSimpleOne() {
+    dependsOn(ZZ_mowareIntegrate)
+    dependsOn("bmoware.mowareUpdatePluginForTukru")
+    dependsOn(mowareBuildSimpleOne)
 }
 
 
