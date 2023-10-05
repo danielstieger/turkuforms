@@ -62,6 +62,7 @@ public class TurkuApplicationController extends ApplicationController implements
 
         if (!others) {
             VaadinSession.getCurrent().getSession().invalidate();
+            return true;
         }
 
         return false;

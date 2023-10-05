@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class Turku {
     public static final String INTERNAL_VERSION = "Turkuforms (moware11) 0.1";
-    public static final boolean DEBUG_HARDLOG = true;
+    public static final boolean DEBUG_HARDLOG = false;
 
     private static final String HARDLOG_DIR = "/Users/danielstieger/";
     private static final String HARDLOG_FILENAME = HARDLOG_DIR + "turkulog.log";

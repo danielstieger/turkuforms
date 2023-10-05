@@ -104,6 +104,7 @@ task zz_buildSimpleOne() {
     dependsOn(ZZ_mowareIntegrate)
     dependsOn("bmoware.mowareUpdatePluginForTukru")
     dependsOn(mowareBuildSimpleOne)
+    dependsOn(redeployOnly)
 }
 
 

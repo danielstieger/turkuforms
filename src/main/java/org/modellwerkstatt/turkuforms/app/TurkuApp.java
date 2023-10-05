@@ -115,9 +115,13 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         // This is basically the logout? Unclear if we want to set the principal null
         Turku.l("TurkuApp.closeWindowAndExit()");
         applicationController.internal_immediatelyShutdown();
-        applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent());
-        // This requires a re-login
-        UserPrincipal.setUserPrincipal(VaadinSession.getCurrent(), null);
+
+
+        boolean invalidated = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent());
+        if (!invalidated) {
+            // This requires a re-login
+            UserPrincipal.setUserPrincipal(VaadinSession.getCurrent(), null);
+        }
 
         String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath() + AuthUtil.LOGOUT_POSTFIX;
         UI.getCurrent().getPage().setLocation(redirectTo);
