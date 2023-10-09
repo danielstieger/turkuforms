@@ -18,14 +18,14 @@ public class AboutView extends VerticalLayout {
         this.setSizeFull();
 
         Div messageDiv = new Div();
-        List<Person> personList = getItems();
+        List<Person> personList = Person.getAllPersons();
         Grid<Person> grid = new Grid<>();
         grid.setSizeFull();
         grid.setItems(personList);
 
 
         Grid.Column<Person> persCol = grid.addColumn(Person::getFirstName).setHeader("First Name");
-        grid.addColumn(Person::getAge).setHeader("Age");
+        grid.addColumn(Person::getBirthDate).setHeader("Birthdate");
 
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
 
@@ -41,15 +41,4 @@ public class AboutView extends VerticalLayout {
         // grid.focusOnCell(personList.get(0), persCol);
         grid.focus();
     }
-
-    private List<Person> getItems() {
-        List<Person> p =  new ArrayList<Person>();
-
-        for (int i = 1; i < 200; i++) {
-            p.add(new Person(i));
-        }
-
-        return p;
-    }
-
 }

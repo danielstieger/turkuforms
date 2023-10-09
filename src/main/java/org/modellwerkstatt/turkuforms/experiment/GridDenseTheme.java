@@ -21,22 +21,7 @@ public class GridDenseTheme extends VerticalLayout {
 
         this.setSizeFull();
 
-        List<Person> data = new ArrayList<>();
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-        data.add(new Person("Dan", "Man", LocalDate.now()));
-
+        List<Person> data = Person.getAllPersons();
         grid.setItems(data);
         // grid.setThemeName("dense");
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -44,42 +29,9 @@ public class GridDenseTheme extends VerticalLayout {
         grid.setSizeFull();
         add(grid);
 
-        Button b = new Button("Focus on ", event -> { grid.focusOnCell(data.get(5));});
+        Button b = new Button("Focus on ", event -> {
+            grid.focusOnCell(data.get(5));
+        });
         add(b);
-    }
-
-    public static class Person {
-        private String firstName, lastName;
-        private LocalDate birthDate;
-
-        public Person(String firstName, String lastName, LocalDate birthDate) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.birthDate = birthDate;
-        }
-
-        public LocalDate getBirthDate() {
-            return birthDate;
-        }
-
-        public void setBirthDate(LocalDate birthDate) {
-            this.birthDate = birthDate;
-        }
-
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
     }
 }

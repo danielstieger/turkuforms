@@ -27,6 +27,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.grid.GridSelectionModel;
+import com.vaadin.flow.component.gridpro.GridPro;
 import com.vaadin.flow.data.provider.DataCommunicator;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
@@ -43,7 +44,7 @@ import java.util.stream.Stream;
 @CssImport(value = "./styles/grid.css", themeFor = "vaadin-selection-grid")
 @JsModule("./src/vcf-selection-grid.js")
 @JsModule("./src/selection-grid.js")
-public class SelectionGrid<T> extends Grid<T> {
+public class SelectionGrid<T> extends GridPro<T> {
     private Method dataCommunicatorFetchFromProvider;
     private Method dataCommunicatorGetDataProviderSize;
     private Method columnGetInternalId;
@@ -70,11 +71,11 @@ public class SelectionGrid<T> extends Grid<T> {
      * @param beanType          - the bean type to use, not null
      * @param autoCreateColumns – when true, columns are created automatically for the properties of the beanType
      * @see Grid#Grid(Class, boolean)
-     */
+     *
     public SelectionGrid(Class<T> beanType, boolean autoCreateColumns) {
         super(beanType, autoCreateColumns);
         reflectMethods();
-    }
+    } */
 
     /**
      * @param beanType - the bean type to use, not null
