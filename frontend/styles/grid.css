@@ -14,6 +14,12 @@
 :host([theme~="dense"]) [part~="cell"] {
   min-height: var(--lumo-size-xs);
 }
+
+:host([theme~="dense"]) [part~="editable-cell"] {
+  background-color: rgb(245, 248, 253);
+}
+
+
 :host([theme~="dense"]) {
   font-size: var(--lumo-font-size-xs);
 }
@@ -26,4 +32,9 @@
   border-top: 0;
   min-height: calc(var(--lumo-size-xs) - var(--_lumo-grid-border-width));
 }
+
+/* check turku.css table section for adoption on
+ * vaadin-grid-pro-edit-text-field
+ */
+
 

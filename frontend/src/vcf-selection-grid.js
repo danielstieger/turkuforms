@@ -20,7 +20,8 @@
 
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin';
-import { GridElement } from  '@vaadin/vaadin-grid/src/vaadin-grid.js';
+import { GridPro } from  '@vaadin/grid-pro/src/vaadin-grid-pro.js';
+// import { GridElement } from  '@vaadin/vaadin-grid/src/vaadin-grid.js';
 
 import {
     _getItemOverriden,
@@ -28,7 +29,7 @@ import {
     _selectionGridSelectRowWithItem
 } from './helpers';
 
-class VcfSelectionGridElement extends ElementMixin(ThemableMixin(GridElement)) {
+class VcfSelectionGridElement extends ElementMixin(ThemableMixin(GridPro)) {
 
     constructor() {
         super();

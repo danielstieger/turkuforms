@@ -1,4 +1,4 @@
-:host([theme~="dense"]) [part~="cell"] {
+/* :host([theme~="dense"]) [part~="cell"] {
   min-height: var(--lumo-size-xxs);
 }
 :host([theme~="dense"]) {
@@ -12,5 +12,5 @@
   [part~="cell"]:not([part~="details-cell"]) {
   border-top: 0;
   min-height: calc(var(--lumo-size-xxs) - var(--_lumo-grid-border-width));
-}
+} */
 

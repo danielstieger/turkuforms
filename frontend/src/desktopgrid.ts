@@ -1,3 +1,9 @@
+/*
+ * desktopgrid.ts. Some tests by dan...
+ *
+ *
+ */
+
 import { LitElement, customElement, state, html, css} from 'lit-element';
 import '@vaadin/grid';
 import '@vaadin/grid/vaadin-grid-selection-column.js';

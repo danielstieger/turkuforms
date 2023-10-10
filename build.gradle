@@ -81,8 +81,8 @@ compileJava {
 war {
     archiveName = "turkuforms.war"
 
-    from("artefact/") {
-        into("artefact/")
+    from("static/") {
+        into("static/")
     }
 
     rootSpec.exclude('**/org.modellwerkstatt.*.jar')

@@ -48,6 +48,7 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
 
             } */
             this._selectionGridSelectRow(e);
+            // console.log('SELECTION GRID: Click received and executed.');
 
         };
         Grid.prototype.old_onNavigationKeyDown = Grid.prototype._onNavigationKeyDown;

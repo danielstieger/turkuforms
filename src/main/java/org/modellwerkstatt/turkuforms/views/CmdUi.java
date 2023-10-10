@@ -42,6 +42,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void onShortcut(ShortcutEvent event) {
         String keyName = HkTranslate.trans(event.getKey());
         Turku.l("CmdUi.onShortcut() received " + keyName + " hash " + event.hashCode());
+        Turku.l("CmdUi.onShortcut() " + event.getSource().getElement() + "/" + event.getSource());
 
         if (Workarounds.sameHkInThisRequest(keyName)) {
             return;
@@ -50,7 +51,11 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         // check conclusion first
         for (OFXConclusionInformation info: conclusionInformations) {
             if (keyName.equals(info.hotkey)) {
-                cmdContainer.receiveAndProcess(new ConclusionEvent(info.conclusionHashCode, info.buttonTitle));
+                if (info.enabled) {
+                    cmdContainer.receiveAndProcess(new ConclusionEvent(info.conclusionHashCode, info.buttonTitle));
+                } else {
+                    Turku.l("CmdUi.onShortcut() conclusion '" + info.buttonTitle + "' received, but not enabled.");
+                }
                 return;
             }
         }

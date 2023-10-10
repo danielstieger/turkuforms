@@ -7,18 +7,24 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
+import com.vaadin.flow.component.gridpro.GridPro;
+import com.vaadin.flow.component.gridpro.GridProVariant;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.function.ValueProvider;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.dataux.runtime.utils.ValueObjectReplacementFacility;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.objectflow.runtime.Selection;
@@ -85,6 +91,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(infoCsvButton);
 
         grid = new SelectionGrid<>();
+        grid.setEditOnClick(true);
+        grid.setEnterNextRow(true);
+        grid.addThemeVariants(GridProVariant.LUMO_HIGHLIGHT_EDITABLE_CELLS);
+
         // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setThemeName("dense");
@@ -168,21 +178,38 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         } else {
             colInfo.add(new TurkuTableCol(colInfo.size(), property, label, converter, width));
 
-            String litPropName = Workarounds.litPropertyName(property);
-            String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
-            String fontWeight = important ? "font-weight:800;" : "";
+            Grid.Column<DTO> col;
+            if (editable) {
+                EditColumnConfigurator<DTO> editableCol = grid.addEditColumn(item -> converter.convert(MoJSON.get(item, property)) );
+                editableCol.text((item, newValue) ->
+                        {
+                            try {
+                                Object val = converter.convertBack(newValue);
+                                ValueObjectReplacementFacility.put(item, property, val);
+                            } catch (Exception e) {
+                                Notification.show("Text not accepted! " + e.getMessage(), 4000, Notification.Position.TOP_END);
+                            }
+                        });
 
-            Grid.Column<DTO> col = grid.addColumn(LitRenderer.<DTO>of(template).
-                    withProperty(litPropName, item -> { return converter.convert(MoJSON.get(item, property)); }).
-                    withProperty(litPropName + "Style", item -> {
-                        String color = converter.getBgColor(MoJSON.get(item, property));
-                        return color == null ? fontWeight: fontWeight + "color:" + color + ";";
-                    }));
+                col = editableCol.getColumn();
+            } else {
+                String litPropName = Workarounds.litPropertyName(property);
+                String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
+                String fontWeight = important ? "font-weight:800;" : "";
+
+                col = grid.addColumn(LitRenderer.<DTO>of(template).
+                        withProperty(litPropName, item -> {
+                            return converter.convert(MoJSON.get(item, property));
+                        }).
+                        withProperty(litPropName + "Style", item -> {
+                            String color = converter.getBgColor(MoJSON.get(item, property));
+                            return color == null ? fontWeight : fontWeight + "color:" + color + ";";
+                        }));
+            }
 
             col.setHeader(Workarounds.niceGridHeaderLabel(label));
             col.setResizable(true);
             col.setTextAlign(converter.isRightAligned() ? ColumnTextAlign.END : ColumnTextAlign.START);
-
             col.setSortable(true);
             col.setComparator((dto1, dto2) -> {
                 Comparable v1 = MoJSON.get(dto1, property);
