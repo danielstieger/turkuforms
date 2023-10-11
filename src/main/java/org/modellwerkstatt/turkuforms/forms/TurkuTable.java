@@ -8,7 +8,6 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
-import com.vaadin.flow.component.gridpro.GridPro;
 import com.vaadin.flow.component.gridpro.GridProVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
@@ -17,7 +16,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.function.ValueProvider;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
@@ -95,6 +93,25 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid.setEnterNextRow(true);
         grid.addThemeVariants(GridProVariant.LUMO_HIGHLIGHT_EDITABLE_CELLS);
 
+        /* grid.getElement().addEventListener("selected-items-changed", e -> {
+            Turku.l("Turkutable.grid.addEventListener() SELECTED-ITEMS-CHANGED " + e.getType() + " / " + e.getEventData());
+        }); */
+
+        grid.getElement().addEventListener("cell-edit-started", e -> {
+            int idx = Workarounds.getRowToSelectWhileEdit(e.getEventData());
+            Turku.l("Turkutable.grid.addEventListener() cell-edit-started. We have to select " + idx);
+            if (idx > 0) {
+                selectionHandlerEnabled = false;
+                grid.deselectAll();
+                selectionHandlerEnabled = true;
+
+                grid.select(dataView.getItem(idx - 1));
+            }
+        });
+
+
+
+
         // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setThemeName("dense");
@@ -105,10 +122,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
                 Set<DTO> allSelected = event.getAllSelectedItems();
-                Turku.l("selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
+                Turku.l("TukruTable.selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
 
                 Selection sel = new Selection(dtoClass);
-                sel.setIssuer(this.hashCode());
+                sel.setIssuer(TurkuTable.this.hashCode());
 
                 if (allSelected.size() > 0) {
                     sel.setObjects(new ArrayList(allSelected));
@@ -192,6 +209,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                         });
 
                 col = editableCol.getColumn();
+
             } else {
                 String litPropName = Workarounds.litPropertyName(property);
                 String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
@@ -229,7 +247,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
-        // Turku.l("TurkuTable.selectionChanged() " + iofxSelection);
+        boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
+        Turku.l("TurkuTable.selectionChanged() " + iofxSelection + " ignore: " + issuedFromSelectionHandler);
+        if (issuedFromSelectionHandler) { return true; }
+
         selectionHandlerEnabled = false;
 
         selectionModel.deselectAll();
@@ -248,7 +269,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
-        // Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
+        Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
 
         selectionHandlerEnabled = false;
         // (0) SelCrtl clears selection if sel not in newList

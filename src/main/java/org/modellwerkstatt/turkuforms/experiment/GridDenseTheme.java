@@ -7,8 +7,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.modellwerkstatt.turkuforms.components.SelectionGrid;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Route("grid-dense-theme")

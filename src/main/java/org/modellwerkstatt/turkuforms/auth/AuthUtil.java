@@ -15,8 +15,6 @@ import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.ParamInfo;
 
-import java.util.Optional;
-
 
 @SuppressWarnings("unchecked")
 public class AuthUtil {

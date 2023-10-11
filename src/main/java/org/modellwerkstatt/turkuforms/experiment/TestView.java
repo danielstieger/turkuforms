@@ -7,6 +7,8 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
+
 import java.time.LocalDate;
 
 @Route("test")
@@ -36,6 +38,19 @@ public class TestView<DTO> extends HorizontalLayout {
                 }
                 }).setHeader("BirthDate");
 
+
+        /* gp.getElement().addEventListener("active-item-changed", e -> {
+            Turku.l("Turkutable.grid.addEventListener() ACTIVE-ITEM-CHANGED " + e.getType() + " / " + e.getEventData());
+        });
+
+        gp.getElement().addEventListener("cell-activate", e -> {
+            Turku.l("Turkutable.grid.addEventListener() CELL-ACTIVATED " + e.getType() + " / " + e.getEventData() + " / " + e.getSource());
+        });
+
+*/
+        gp.getElement().addEventListener("cell-edit-started", e -> {
+            Turku.l("Turkutable.grid.addEventListener() CELL-EDIT-STARTED " + e.getType() + " / " + e.getEventData() + " / " + e.getSource());
+        });
 
         add(gp);
 

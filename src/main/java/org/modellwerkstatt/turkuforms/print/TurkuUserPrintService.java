@@ -1,10 +1,9 @@
 package org.modellwerkstatt.turkuforms.print;
 
 import com.vaadin.flow.component.UI;
-import org.modellwerkstatt.objectflow.runtime.OFXFatClientFopUserPrintService;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
+import org.modellwerkstatt.objectflow.runtime.OFXFatClientFopUserPrintService;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.io.File;
 

@@ -135,4 +135,8 @@ public class TurkuTableDataView<DTO> {
     private boolean isNoSearch(){
         return "".equals(searchForWhat);
     }
+
+    public DTO getItem(int index) {
+        return filteredList.get(index);
+    }
 }

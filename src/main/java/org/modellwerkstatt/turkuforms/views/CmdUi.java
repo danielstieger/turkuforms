@@ -42,7 +42,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void onShortcut(ShortcutEvent event) {
         String keyName = HkTranslate.trans(event.getKey());
         Turku.l("CmdUi.onShortcut() received " + keyName + " hash " + event.hashCode());
-        Turku.l("CmdUi.onShortcut() " + event.getSource().getElement() + "/" + event.getSource());
+        // Turku.l("CmdUi.onShortcut() " + event.getSource().getElement() + "/" + event.getSource());
 
         if (Workarounds.sameHkInThisRequest(keyName)) {
             return;
