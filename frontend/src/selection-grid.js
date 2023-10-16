@@ -20,6 +20,7 @@
 customElements.whenDefined("vaadin-selection-grid").then(() => {
     const Grid = customElements.get("vaadin-selection-grid");
     if (Grid) {
+
         const oldOnContextMenuHandler = Grid.prototype._onContextMenu;
         Grid.prototype._onContextMenu = function _onContextMenu(e) {
 

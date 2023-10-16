@@ -109,6 +109,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             }
         });
 
+        grid.getElement().addEventListener("item-property-changed", e -> {
+           Turku.l("Turkutable.grid.addEventListener(): item-property-changed - was this an esc? Fires only on value change?  ");
+        });
+
 
 
 
