@@ -24,6 +24,7 @@ public class DatePickerEditor extends EditorBasis<DatePicker> implements IToolki
         inputField.setSizeFull();
         inputField.setAutoOpen(true);
         inputField.setRequired(true);
+        inputField.setRequiredIndicatorVisible(false);
         inputField.setMax(LocalDate.of(2049, 1, 1));
         inputField.setMin(LocalDate.of(1951, 1, 1));
 

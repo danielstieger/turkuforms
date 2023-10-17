@@ -14,6 +14,8 @@ window.turku = {
     },
 
     copyToClipboard : async function(view, text) {
+
+        // this is only working when serving over https
         try {
             await navigator.clipboard.writeText(text);
 

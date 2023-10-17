@@ -15,11 +15,13 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
 
     public ReferenceEditor() {
         super(new ComboBox<>());
+
         inputField.setSizeFull();
         inputField.setAutoOpen(true);
         inputField.setAllowCustomValue(false);
         inputField.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
         inputField.setRequired(true);
+        inputField.setRequiredIndicatorVisible(false);
         inputField.addThemeVariants(ComboBoxVariant.LUMO_SMALL);
 
         Peculiar.crtlSpaceCrtlAHk(inputField, event -> {

@@ -234,3 +234,10 @@ vaadin-combo-box-item {
     padding: 0;
     min-height: 0;
 }
+
+vaadin-form-item::part(label) {
+    text-align: right;
+}
+
+
+/* Delegates * * * * * * * * * * * * * * * * * * * **/
