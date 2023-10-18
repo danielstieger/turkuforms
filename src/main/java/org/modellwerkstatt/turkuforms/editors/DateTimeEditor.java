@@ -7,6 +7,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -24,11 +25,16 @@ public class DateTimeEditor extends EditorBasis<DateTimePicker> implements ITool
     public DateTimeEditor() {
         super(new DateTimePicker());
         inputField.addThemeVariants(DateTimePickerVariant.LUMO_SMALL);
-        inputField.setSizeFull();
+        // inputField.setSizeFull();
         inputField.setAutoOpen(true);
         inputField.setMax(LocalDateTime.of(2049, 1, 1, 1, 0));
         inputField.setMin(LocalDateTime.of(1951, 1, 1, 1, 0));
         inputField.setStep(Duration.ofMinutes(1));
+
+        inputField.addAttachListener(e -> {
+            inputField.getElement().executeJs("turku.adjustDateTimeTimePicker($0)", inputField.getElement());
+        });
+
 
         Peculiar.focusMoveEnterHk(false, inputField, event -> {
             turkuDelegatesForm.focusOnNextDlgt(delegate, true);

@@ -20,7 +20,6 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
         inputField = theField;
         rightPart = inputField;
         label = new Label();
-        label.setMinWidth("180px");
     }
 
     public void enableKeyReleaseEvents() {

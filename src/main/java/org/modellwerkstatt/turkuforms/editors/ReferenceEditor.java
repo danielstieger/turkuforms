@@ -93,6 +93,7 @@ public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IT
     @Override
     public void setOptionalAfterLoad(boolean val) {
         inputField.setRequired(! val);
+        inputField.setRequiredIndicatorVisible(false);
     }
 
     @Override
