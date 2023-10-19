@@ -162,7 +162,9 @@ vaadin-tabsheet::part(content) {
     font-size: var(--lumo-font-size-xs);
 }
 
-
+vaadin-button::part(prefix) {
+    margin-bottom: -4px;
+}
 
 
 

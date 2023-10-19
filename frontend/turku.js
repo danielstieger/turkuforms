@@ -8,14 +8,9 @@
 window.turku = {
 
     adjustDateTimeTimePicker : function(element) {
-        console.log('adjustDateTimeTimePicker() ');
         var picker = element.querySelector('vaadin-date-time-picker-time-picker');
-        console.log('adjustDateTimeTimePicker() ' + picker);
-
-        picker.style.border = "1px solid red";
+        // picker.style.border = "1px solid red";
         var container = picker.shadowRoot.querySelector('.vaadin-time-picker-container');
-        console.log('adjustDateTimeTimePicker() ' + container);
-
         container.style.width="20%";
     },
 

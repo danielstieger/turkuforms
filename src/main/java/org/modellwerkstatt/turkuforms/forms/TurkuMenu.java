@@ -42,6 +42,7 @@ public class TurkuMenu extends MenuBar {
 
             } else {
                 MenuItem created = this.addItem(Workarounds.createIconWithCollection(factory.translateIconName("table_menu")));
+                if (Defs.hasLabel(currentItem.labelText)) { created.add(new Text(currentItem.labelText)); }
                 SubMenu createdSub = created.getSubMenu();
                 addMainMenuStructure(factory, createdSub, ((Menu) currentItem).getAllItems());
 

@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.forms;
 
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -49,6 +48,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private SelectionGrid<DTO> grid;
     private GridMultiSelectionModel<DTO> selectionModel;
     private TurkuTableDataView<DTO> dataView;
+    private ShortcutRegistration escShortcut;
 
     private IGenSelControlled genFormController;
     private List<TurkuTableCol> colInfo = new ArrayList<>();
@@ -98,6 +98,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         }); */
 
         grid.getElement().addEventListener("cell-edit-started", e -> {
+            escShortcut.setEventPropagationAllowed(false);
+
             int idx = Workarounds.getRowToSelectWhileEdit(e.getEventData());
             Turku.l("Turkutable.grid.addEventListener() cell-edit-started. We have to select " + idx);
             if (idx > 0) {
@@ -109,10 +111,20 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             }
         });
 
+        /* docu wrong? fire s always, also when value not changes, but not no ESC */
         grid.getElement().addEventListener("item-property-changed", e -> {
-           Turku.l("Turkutable.grid.addEventListener(): item-property-changed - was this an esc? Fires only on value change?  ");
+           Turku.l("Turkutable.grid.addEventListener(): item-property-changed " + e);
         });
 
+        /* not working at all */
+        grid.getEditor().addOpenListener(e -> { Turku.l("Turkutable.grid.editor.openListener() " + e ); });
+        grid.getEditor().addCloseListener(e -> { Turku.l("Turkutable.grid.editor.closeListener() " + e ); });
+        grid.getEditor().addCancelListener(e -> { Turku.l("Turkutable.grid.editor.cancelListener() " + e ); });
+
+        escShortcut = Shortcuts.addShortcutListener(grid, e -> {
+            Turku.l("Turkutable.grid.ShortCutListener() " + grid.getEditor());
+            escShortcut.setEventPropagationAllowed(true);
+            }, Key.ESCAPE).listenOn(grid);
 
 
 
@@ -152,7 +164,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     if (dataView.updateFilterList(grid, curSel)) {
                         // new GridListDataView cleared selections
                         selectionModel.updateSelection(curSel, Collections.emptySet());
-                        // TODO: Not exactly correct. We are loosing the ! in case of empty selections
                         adjustTableInformation("",true);
 
                     }else{
@@ -193,7 +204,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public void addColumn(String property, String label, ITableCellStringConverter<?> converter, int width, boolean editable, boolean folded, boolean important) {
 
-        //TODO: Folded not implemented
+
         if (folded) {
 
         } else {
@@ -201,8 +212,13 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
             Grid.Column<DTO> col;
             if (editable) {
+                TextField editor = new TextField();
+                editor.setWidth("100%");
+                editor.addThemeName("grid-pro-editor");
+                editor.setPlaceholder("BONG");
+
                 EditColumnConfigurator<DTO> editableCol = grid.addEditColumn(item -> converter.convert(MoJSON.get(item, property)) );
-                editableCol.text((item, newValue) ->
+                editableCol.custom(editor, (item, newValue) ->
                         {
                             try {
                                 Object val = converter.convertBack(newValue);
@@ -229,6 +245,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                         }));
             }
 
+
             col.setHeader(Workarounds.niceGridHeaderLabel(label));
             col.setResizable(true);
             col.setTextAlign(converter.isRightAligned() ? ColumnTextAlign.END : ColumnTextAlign.START);
@@ -246,6 +263,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     return v1.compareTo(v2);
                 }
             });
+
         }
     }
 
