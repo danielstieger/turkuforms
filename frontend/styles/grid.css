@@ -19,7 +19,6 @@
   background-color: rgb(245, 248, 253);
 }
 
-
 :host([theme~="dense"]) {
   font-size: var(--lumo-font-size-xs);
 }
@@ -33,8 +32,11 @@
   min-height: calc(var(--lumo-size-xs) - var(--_lumo-grid-border-width));
 }
 
-/* check turku.css table section for adoption on
- * vaadin-grid-pro-edit-text-field
- */
+:host(.editable-custom-effect) [part~="editable-cell"]:hover,
+:host(.editable-custom-effect) [part~="editable-cell"]:focus {
+  background: var(--lumo-contrast-30pct);
+}
 
-
+:host(.editable-custom-effect) [part~="editable-cell"] {
+  background: var(--lumo-contrast-10pct);
+}

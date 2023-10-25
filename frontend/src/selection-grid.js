@@ -21,6 +21,8 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
     const Grid = customElements.get("vaadin-selection-grid");
     if (Grid) {
 
+        // TODO: codesmell - use bind or attach it to the Grid component? but not both...
+
         const oldOnContextMenuHandler = Grid.prototype._onContextMenu;
         Grid.prototype._onContextMenu = function _onContextMenu(e) {
 
@@ -35,6 +37,25 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
 
             const boundOnConextMenuHandler = oldOnContextMenuHandler.bind(this);
             boundOnConextMenuHandler(e);
+        }
+
+        const oldStopEdit = Grid.prototype._stopEdit;
+        Grid.prototype._stopEdit = function _onStopEdit(shouldCancel, shouldRestoreFocus) {
+
+            const boundOldStopEdit = oldStopEdit.bind(this);
+            boundOldStopEdit(shouldCancel, shouldRestoreFocus);
+
+            this.dispatchEvent(
+              new CustomEvent('cell-edit-stopped', {
+                detail: {
+                  cancel: shouldCancel,
+                  restoreFocus: shouldRestoreFocus,
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true,
+              }),
+            );
         }
 
 

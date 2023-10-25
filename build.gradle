@@ -74,7 +74,30 @@ dependencies {
 // ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
 ant.importBuild "${mowareHome}/turkuforms/assembly/build.xml"
 
+
+task updateDesktopGrid {
+    delete 'src/main/java/org/modellwerkstatt/desktopgrid'
+    delete 'frontend/src'
+    delete 'frontend/styles'
+
+    copy {
+        from "${mowareHome}/../desktopGrid/src/main/java/org/modellwerkstatt/desktopgrid"
+        into "src/main/java/org/modellwerkstatt/desktopgrid"
+    }
+
+    copy {
+        from "${mowareHome}/../desktopGrid/frontend/src"
+        into "frontend/src"
+    }
+
+    copy {
+        from "${mowareHome}/../desktopGrid/frontend/styles"
+        into "frontend/styles"
+    }
+}
+
 compileJava {
+    dependsOn(updateDesktopGrid)
     dependsOn("bmoware.mowarePluginAdoption")
 }
 

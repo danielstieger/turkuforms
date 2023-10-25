@@ -46,12 +46,7 @@ public class Workarounds {
         return s;
     }
 
-    public static int getRowToSelectWhileEdit(JsonObject data) {
-        JsonObject details = data.getObject("event.detail.item");
-        String key = details.getString("key");
-        boolean selected = details.hasKey("selected") && details.getBoolean("selected");
-        return selected ? -1 : Integer.parseInt(key);
-    }
+
 
     public static Component createIconWithCollection(String fullName) {
         /* try {

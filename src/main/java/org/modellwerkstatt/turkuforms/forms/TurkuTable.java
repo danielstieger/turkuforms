@@ -22,11 +22,12 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.dataux.runtime.utils.ValueObjectReplacementFacility;
+import org.modellwerkstatt.desktopgrid.SelectionGrid;
+import org.modellwerkstatt.desktopgrid.SelectionGridDataView;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.objectflow.runtime.Selection;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.components.SelectionGrid;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -47,11 +48,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private Class dtoClass;
     private SelectionGrid<DTO> grid;
     private GridMultiSelectionModel<DTO> selectionModel;
-    private TurkuTableDataView<DTO> dataView;
-    private ShortcutRegistration escShortcut;
+    private SelectionGridDataView<DTO> dataView;
 
     private IGenSelControlled genFormController;
     private List<TurkuTableCol> colInfo = new ArrayList<>();
+    private int firstEditableCol = -1;
 
     private Label leftLabel;
     private Label rightLabel;
@@ -59,7 +60,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private boolean selectionHandlerEnabled = true;
 
 
-
+    // TODO: SINGLE SELECT MODE when editing?
+    // TODO: Disable stuff when in edit mode?
     public TurkuTable(ITurkuAppFactory fact) {
         factory = fact;
         Peculiar.shrinkSpace(this);
@@ -80,7 +82,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         infoCsvButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY);
 
         infoCsvButton.addClickListener(event -> {
-            UI.getCurrent().getPage().executeJs("turku.copyToClipboard($0, $1)", this, dataView.generateCsv());
+            UI.getCurrent().getPage().executeJs("turku.copyToClipboard($0, $1)", this, this.generateCsv());
         });
 
         topPane.add(heading);
@@ -92,45 +94,29 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid.setEditOnClick(true);
         grid.setEnterNextRow(true);
         grid.addThemeVariants(GridProVariant.LUMO_HIGHLIGHT_EDITABLE_CELLS);
+        // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.setThemeName("dense");
 
-        /* grid.getElement().addEventListener("selected-items-changed", e -> {
-            Turku.l("Turkutable.grid.addEventListener() SELECTED-ITEMS-CHANGED " + e.getType() + " / " + e.getEventData());
-        }); */
 
         grid.getElement().addEventListener("cell-edit-started", e -> {
-            escShortcut.setEventPropagationAllowed(false);
+            grid.disableGlobalEsc();
 
-            int idx = Workarounds.getRowToSelectWhileEdit(e.getEventData());
-            Turku.l("Turkutable.grid.addEventListener() cell-edit-started. We have to select " + idx);
+            int idx = grid.getRowToSelectWhileEdit(e.getEventData());
             if (idx > 0) {
                 selectionHandlerEnabled = false;
                 grid.deselectAll();
                 selectionHandlerEnabled = true;
-
                 grid.select(dataView.getItem(idx - 1));
             }
         });
 
-        /* docu wrong? fire s always, also when value not changes, but not no ESC */
-        grid.getElement().addEventListener("item-property-changed", e -> {
-           Turku.l("Turkutable.grid.addEventListener(): item-property-changed " + e);
+
+        // Open: grid.getEditor().addCancelListener() is not working.
+        grid.getElement().addEventListener("cell-edit-stopped", e -> {
+            grid.enableGlobalEsc();
         });
 
-        /* not working at all */
-        grid.getEditor().addOpenListener(e -> { Turku.l("Turkutable.grid.editor.openListener() " + e ); });
-        grid.getEditor().addCloseListener(e -> { Turku.l("Turkutable.grid.editor.closeListener() " + e ); });
-        grid.getEditor().addCancelListener(e -> { Turku.l("Turkutable.grid.editor.cancelListener() " + e ); });
-
-        escShortcut = Shortcuts.addShortcutListener(grid, e -> {
-            Turku.l("Turkutable.grid.ShortCutListener() " + grid.getEditor());
-            escShortcut.setEventPropagationAllowed(true);
-            }, Key.ESCAPE).listenOn(grid);
-
-
-
-        // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        grid.setThemeName("dense");
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
         selectionModel.setSelectionColumnFrozen(true);
@@ -155,7 +141,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         this.add(topPane, grid);
 
 
-        dataView = new TurkuTableDataView<>(colInfo);
+        dataView = new SelectionGridDataView<>();
         searchField.addValueChangeListener(e -> {
                     Turku.l("SearchField.valueChange(LAZY) for '"+ e.getValue() + "'");
                     dataView.setSearchText(e.getValue());
@@ -174,10 +160,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
 
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        grid.hideMultiSelectionColumn();
-    }
 
     @Override
     public void endOfInitializationForElementClass(Class theDto) {
@@ -188,6 +170,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             grid.getColumns().get(colInfo.position).setWidth("" + colInfo.widthInPercent + "%");
         });
 
+        if (firstEditableCol >= 0) {
+            searchField.setEnabled(false);
+            infoCsvButton.setEnabled(false);
+            grid.getColumns().forEach(it -> { it.setSortable(false); });
+        }
     }
 
 
@@ -212,13 +199,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
             Grid.Column<DTO> col;
             if (editable) {
-                TextField editor = new TextField();
-                editor.setWidth("100%");
-                editor.addThemeName("grid-pro-editor");
-                editor.setPlaceholder("BONG");
+                if (firstEditableCol < 0) { firstEditableCol = colInfo.size() - 1; }
 
                 EditColumnConfigurator<DTO> editableCol = grid.addEditColumn(item -> converter.convert(MoJSON.get(item, property)) );
-                editableCol.custom(editor, (item, newValue) ->
+                editableCol.text((item, newValue) ->
                         {
                             try {
                                 Object val = converter.convertBack(newValue);
@@ -270,7 +254,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
         boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
-        Turku.l("TurkuTable.selectionChanged() " + iofxSelection + " ignore: " + issuedFromSelectionHandler);
+        Turku.l("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
         if (issuedFromSelectionHandler) { return true; }
 
         selectionHandlerEnabled = false;
@@ -291,11 +275,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
-        Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection);
+        Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection + " / " + iofxSelection.getObjectOrNull());
 
         selectionHandlerEnabled = false;
         // (0) SelCrtl clears selection if sel not in newList
-        boolean selCleared = dataView.setNewList(grid, list, iofxSelection);
+        boolean selCleared = dataView.setNewList(grid, list, iofxSelection.getObjects());
         selectionHandlerEnabled = true;
 
         if (selCleared) {
@@ -329,14 +313,19 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public Object myRequestFocus() {
-        grid.getElement().executeJs(
-                "turku.focusGrid($0)",
-                grid.getElement());
 
-        Optional<DTO> first = selectionModel.getFirstSelectedItem();
-        Turku.l("TurkuTable.myRequestFocus() called: " + first);
-        // first.ifPresent(dto -> grid.focusOnCell(dto));
-        grid.focus();
+        Optional<DTO> firstSelected = selectionModel.getFirstSelectedItem();
+        Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
+
+        if (firstSelected.isPresent()) {
+            grid.scrollToIndex(dataView.getIndex(firstSelected.get()));
+            if (firstEditableCol >= 0) {
+                grid.focusOnCell(firstSelected.get(), grid.getColumns().get(firstEditableCol));
+            } else {
+                grid.focusOnCell(firstSelected.get(), grid.getColumns().get(0));
+            }
+        }
+
         return grid;
     }
 
@@ -402,5 +391,32 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public void gcClear() {
         factory = null;
+    }
+
+
+
+    public String generateCsv() {
+        StringBuilder csv = new StringBuilder();
+
+        for (int i = 0; i < colInfo.size(); i++) {
+            TurkuTableCol col = colInfo.get(i);
+            csv.append(col.headerName);
+
+            boolean last = i == (colInfo.size() - 1);
+            csv.append(last ? "\n" : "\t");
+        }
+
+
+        for (DTO item : dataView.getFilteredList())
+            for (int i = 0; i < colInfo.size(); i++) {
+                TurkuTableCol col = colInfo.get(i);
+                String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
+                csv.append(viewed);
+
+                boolean last = i == (colInfo.size() - 1);
+                csv.append(last ? "\n" : "\t");
+            }
+
+        return csv.toString();
     }
 }

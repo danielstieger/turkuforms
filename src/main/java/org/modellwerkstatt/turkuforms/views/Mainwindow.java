@@ -16,7 +16,6 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import java.util.List;
 
 @JavaScript("./turku.js")
-
 abstract public class Mainwindow extends BasicWindow {
 
     protected FlexLayout tilesFlexLayout;
