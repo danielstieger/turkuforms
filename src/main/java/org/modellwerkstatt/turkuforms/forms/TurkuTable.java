@@ -119,7 +119,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
-        selectionModel.setSelectionColumnFrozen(true);
 
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
@@ -136,6 +135,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 adjustTableInformation("", true);
             }
         });
+
         Peculiar.useGridShortcutHk(grid, "A", event -> { selectionModel.selectAll(); });
 
         this.add(topPane, grid);
@@ -318,11 +318,18 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
 
         if (firstSelected.isPresent()) {
-            grid.scrollToIndex(dataView.getIndex(firstSelected.get()));
+            int idx = dataView.getIndex(firstSelected.get());
+            grid.scrollToIndex(idx);
+
             if (firstEditableCol >= 0) {
-                grid.focusOnCell(firstSelected.get(), grid.getColumns().get(firstEditableCol));
+                // grid.focusOnCell(firstSelected.get(), grid.getColumns().get(firstEditableCol));
+                // grid.focus();
+                this.getElement().executeJs("setTimeout(function() { $0.focusOnCell($1, $2) });", grid.getElement(), idx, firstEditableCol);
+
             } else {
-                grid.focusOnCell(firstSelected.get(), grid.getColumns().get(0));
+                // grid.focusOnCell(firstSelected.get(), grid.getColumns().get(0));
+                // grid.focus();
+                this.getElement().executeJs("setTimeout(function() { $0.focusOnCell($1, $2) });", grid.getElement(), idx, 0);
             }
         }
 
@@ -332,17 +339,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public void afterFullUiInitialized() {
         Turku.l("TurkuTable.afterFullUiInitialized() called");
-    }
-
-    private void clearLocalSelectionWithoutPush() {
-        Turku.l("TurkuTable.clearLocalSelectionWithoutPush() clearing local selection!");
-        if (selectionHandlerEnabled) {
-            selectionHandlerEnabled = false;
-            selectionModel.deselectAll();
-            selectionHandlerEnabled = true;
-        } else {
-            selectionModel.deselectAll();
-        }
     }
 
     @Override
