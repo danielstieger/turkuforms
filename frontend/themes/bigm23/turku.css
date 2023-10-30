@@ -18,7 +18,7 @@
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: var(--lumo-font-size-l);  /* Preferred icon size 22px */
+  font-size: 20px !important;  /* Preferred icon size 22px, this is not working anyway */
   display: inline-block;
   text-transform: none;
   letter-spacing: normal;
@@ -209,6 +209,10 @@ vaadin-selection-grid vaadin-checkbox {
     --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2.8));
 }
 
+/* vaadin-button::part(prefix) {
+    margin-bottom: -4px;
+}*/
+
 vaadin-grid-sorter:not([direction])::part(indicators)::before {
   display: none;
 }
@@ -225,6 +229,8 @@ vaadin-selection-grid.editable-custom-effect::part(editable-cell focused-cell) {
 vaadin-selection-grid.editable-custom-effect::part(editable-cell) {
   background: var(--lumo-contrast-5pct);
 }
+
+
 
 
 /* TurkuDelegateForm * * * * * * * * * * * * * * * */

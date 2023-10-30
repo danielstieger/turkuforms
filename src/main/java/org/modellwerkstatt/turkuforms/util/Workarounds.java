@@ -67,7 +67,7 @@ public class Workarounds {
         } */
 
         Span icon = new Span(fullName);
-        icon.getElement().setProperty("style", "font-family: Material Icons; padding-right: 0.5em;");
+        icon.getElement().setProperty("style", "font-family: Material Icons; padding-right: 0.5em; font-size: 18px; vertical-align: middle;");
         // icon.addClassName("material-icons");
         return icon;
     }
