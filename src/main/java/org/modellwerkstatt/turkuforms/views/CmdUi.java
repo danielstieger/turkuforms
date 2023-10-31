@@ -130,6 +130,9 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             if (conclusionButtons.size() == 1) {
                 conclusionLayout.spacer();
             }
+            if (conclusionButtons.size() > 1) {
+                button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            }
         }
     }
 
