@@ -32,11 +32,13 @@
   min-height: calc(var(--lumo-size-xs) - var(--_lumo-grid-border-width));
 }
 
+
+/* 30pct contrast for editable cell ... not working, taken from V23 docu */
 :host(.editable-custom-effect) [part~="editable-cell"]:hover,
 :host(.editable-custom-effect) [part~="editable-cell"]:focus {
-  background: var(--lumo-contrast-30pct);
+  background: #FF0000;
 }
 
 :host(.editable-custom-effect) [part~="editable-cell"] {
-  background: var(--lumo-contrast-10pct);
+  background: #FF0000;
 }

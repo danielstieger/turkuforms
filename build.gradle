@@ -39,9 +39,9 @@ group 'org.modellwerkstatt'
 
 dependencies {
     // IBM CARBON for vaadin ...
-    implementation 'org.vaadin.addons.anezthes:carbon-vaadin:1.0.1'
-    //implementation 'org.vaadin.addons.parttio:parity-theme:1.0.4'
-    //implementation 'org.vaadin.addons.parttio:breeze-theme:1.0.5'
+    // implementation 'org.vaadin.addons.anezthes:carbon-vaadin:1.0.1'
+    // implementation 'org.vaadin.addons.parttio:parity-theme:1.0.4'
+    // implementation 'org.vaadin.addons.parttio:breeze-theme:1.0.5'
 
     implementation enforcedPlatform("com.vaadin:vaadin-bom:$vaadinVersion")
 
@@ -81,22 +81,22 @@ ant.importBuild "${mowareHome}/turkuforms/assembly/build.xml"
 
 
 task updateDesktopGrid {
-    delete 'src/main/java/org/modellwerkstatt/desktopgrid'
+    delete 'src/main/java/org/modellwerkstatt/addons'
     delete 'frontend/src'
     delete 'frontend/styles'
 
     copy {
-        from "${mowareHome}/../desktopGrid/src/main/java/org/modellwerkstatt/desktopgrid"
-        into "src/main/java/org/modellwerkstatt/desktopgrid"
+        from "${mowareHome}/../DesktopGridPro/src/main/java/org/modellwerkstatt/addons/desktopgridpro"
+        into "src/main/java/org/modellwerkstatt/addons/desktopgridpro"
     }
 
     copy {
-        from "${mowareHome}/../desktopGrid/frontend/src"
+        from "${mowareHome}/../DesktopGridPro/src/main/resources/META-INF/resources/frontend/src"
         into "frontend/src"
     }
 
     copy {
-        from "${mowareHome}/../desktopGrid/frontend/styles"
+        from "${mowareHome}/../DesktopGridPro/src/main/resources/META-INF/resources/frontend/styles"
         into "frontend/styles"
     }
 }
@@ -135,6 +135,11 @@ task zz_buildSimpleOne() {
     dependsOn(redeployOnly)
 }
 
+task zz_buildForMoWarePlugin() {
+    dependsOn(vaadinClean)
+    dependsOn(ZZ_mowareIntegrate)
+    dependsOn("bmoware.mowareUpdatePluginForTukru")
+}
 
 /* gradle.taskGraph.whenReady {
     tasks.findByName('vaadinPrepareFrontend').enabled(false)

@@ -15,6 +15,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import org.modellwerkstatt.addons.desktopgridpro.DesktopGridPro;
+import org.modellwerkstatt.addons.desktopgridpro.DesktopGridProDataView;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
@@ -22,8 +24,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.dataux.runtime.utils.ValueObjectReplacementFacility;
-import org.modellwerkstatt.desktopgrid.SelectionGrid;
-import org.modellwerkstatt.desktopgrid.SelectionGridDataView;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.objectflow.runtime.Selection;
@@ -46,9 +46,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private MenuContext contextMenu;
 
     private Class dtoClass;
-    private SelectionGrid<DTO> grid;
+    private DesktopGridPro<DTO> grid;
     private GridMultiSelectionModel<DTO> selectionModel;
-    private SelectionGridDataView<DTO> dataView;
+    private DesktopGridProDataView<DTO> dataView;
 
     private IGenSelControlled genFormController;
     private List<TurkuTableCol> colInfo = new ArrayList<>();
@@ -90,7 +90,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(searchField);
         topPane.add(infoCsvButton);
 
-        grid = new SelectionGrid<>();
+        grid = new DesktopGridPro<>();
         grid.setEditOnClick(true);
         grid.setEnterNextRow(true);
         grid.addThemeVariants(GridProVariant.LUMO_HIGHLIGHT_EDITABLE_CELLS);
@@ -141,7 +141,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         this.add(topPane, grid);
 
 
-        dataView = new SelectionGridDataView<>();
+        dataView = new DesktopGridProDataView<>();
         searchField.addValueChangeListener(e -> {
                     Turku.l("SearchField.valueChange(LAZY) for '"+ e.getValue() + "'");
                     dataView.setSearchText(e.getValue());
