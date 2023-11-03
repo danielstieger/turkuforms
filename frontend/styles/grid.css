@@ -22,23 +22,14 @@
 :host([theme~="dense"]) {
   font-size: var(--lumo-font-size-xs);
 }
+
 :host([theme~="dense"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
   padding: 0px var(--lumo-space-s);
 }
+
 :host([theme~="dense"]:not([theme~="no-row-borders"]))
   [part="row"][first]
   [part~="cell"]:not([part~="details-cell"]) {
   border-top: 0;
   min-height: calc(var(--lumo-size-xs) - var(--_lumo-grid-border-width));
-}
-
-
-/* 30pct contrast for editable cell ... not working, taken from V23 docu */
-:host(.editable-custom-effect) [part~="editable-cell"]:hover,
-:host(.editable-custom-effect) [part~="editable-cell"]:focus {
-  background: #FF0000;
-}
-
-:host(.editable-custom-effect) [part~="editable-cell"] {
-  background: #FF0000;
 }

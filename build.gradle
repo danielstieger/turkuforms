@@ -39,7 +39,7 @@ group 'org.modellwerkstatt'
 
 dependencies {
     // IBM CARBON for vaadin ...
-    // implementation 'org.vaadin.addons.anezthes:carbon-vaadin:1.0.1'
+    implementation 'org.vaadin.addons.anezthes:carbon-vaadin:1.0.1'
     // implementation 'org.vaadin.addons.parttio:parity-theme:1.0.4'
     // implementation 'org.vaadin.addons.parttio:breeze-theme:1.0.5'
 
