@@ -122,17 +122,19 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
+                selectionHandlerEnabled = false;
                 Set<DTO> allSelected = event.getAllSelectedItems();
                 Turku.l("TukruTable.selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
 
                 Selection sel = new Selection(dtoClass);
-                sel.setIssuer(TurkuTable.this.hashCode());
+                // sel.setIssuer(TurkuTable.this.hashCode());
 
                 if (allSelected.size() > 0) {
                     sel.setObjects(new ArrayList(allSelected));
                 }
                 genFormController.pushSelection(sel);
                 adjustTableInformation("", true);
+                selectionHandlerEnabled = true;
             }
         });
 
@@ -212,6 +214,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                             }
                         });
 
+
                 col = editableCol.getColumn();
 
             } else {
@@ -275,17 +278,22 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void loadList(List<DTO> list, IOFXSelection<DTO> iofxSelection) {
-        Turku.l("TurkuTable.loadList() "  + list.size() + " / " + iofxSelection + " / " + iofxSelection.getObjectOrNull());
 
         selectionHandlerEnabled = false;
-        // (0) SelCrtl clears selection if sel not in newList
-        boolean selCleared = dataView.setNewList(grid, list, iofxSelection.getObjects());
+
+        boolean allSelFound = dataView.setNewList(grid, list, iofxSelection.getObjects());
         selectionHandlerEnabled = true;
 
-        if (selCleared) {
+        Turku.l("TurkuTable.loadList() "  + list.size() + ", all sel found " + allSelFound + ", " + iofxSelection + " / " + iofxSelection.getObjectOrNull());
+        Turku.l("                      " + iofxSelection.getIssuer() + " == " + this.hashCode());
+
+        // Und was ist mit sort order?
+        if (allSelFound) {
+            // Besser direkt setzen, statt ueber selectionChanged?
             selectionChanged(iofxSelection);
 
         } else {
+            // Shouldn't we report on selection crtl, that selection was not found?
             adjustTableInformation("", false);
 
         }
@@ -293,10 +301,22 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
 
     void adjustTableInformation(String debugSt, boolean selOfSelCrtlSameAsLocal) {
-        int selCnt = selectionModel.getSelectedItems().size();
+
+        Set<DTO> selection = selectionModel.getSelectedItems();
         int total = dataView.getFilteredTotalCount();
+        int numSelection = selection.size();
+
         if (!selOfSelCrtlSameAsLocal) { debugSt += " !"; }
-        infoCsvButton.setText(debugSt + " " + selCnt + " | " + total);
+
+
+        if (numSelection == 0) {
+
+        } else if (numSelection == 1) {
+            debugSt += " " + dataView.getIndex(selection.iterator().next());
+        } else {
+            debugSt +=" *";
+        }
+        infoCsvButton.setText(debugSt + " / " + total);
     }
 
 
@@ -313,7 +333,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public Object myRequestFocus() {
-
+        // TODO: Better last selected ?
         Optional<DTO> firstSelected = selectionModel.getFirstSelectedItem();
         Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
 
@@ -321,15 +341,12 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             int idx = dataView.getIndex(firstSelected.get());
             grid.scrollToIndex(idx);
 
-            if (firstEditableCol >= 0) {
-                // grid.focusOnCell(firstSelected.get(), grid.getColumns().get(firstEditableCol));
-                // grid.focus();
-                this.getElement().executeJs("setTimeout(function() { $0.focusOnCell($1, $2) });", grid.getElement(), idx, firstEditableCol);
+
+            if (idx >= 0) {
+                grid.focus();
 
             } else {
-                // grid.focusOnCell(firstSelected.get(), grid.getColumns().get(0));
-                // grid.focus();
-                this.getElement().executeJs("setTimeout(function() { $0.focusOnCell($1, $2) });", grid.getElement(), idx, 0);
+                grid.focusOnCell(firstSelected.get(), grid.getColumns().get(0));
             }
         }
 
