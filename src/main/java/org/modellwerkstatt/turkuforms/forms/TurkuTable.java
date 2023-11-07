@@ -59,9 +59,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private boolean hasSummaryLine = false;
     private boolean selectionHandlerEnabled = true;
 
-
-    // TODO: SINGLE SELECT MODE when editing?
-    // TODO: Disable stuff when in edit mode?
     public TurkuTable(ITurkuAppFactory fact) {
         factory = fact;
         Peculiar.shrinkSpace(this);
@@ -176,6 +173,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             searchField.setEnabled(false);
             infoCsvButton.setEnabled(false);
             grid.getColumns().forEach(it -> { it.setSortable(false); });
+            grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         }
     }
 
@@ -257,8 +255,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
         boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
+
         Turku.l("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
-        if (issuedFromSelectionHandler) { return true; }
+        // if (issuedFromSelectionHandler) { return true; }
 
         selectionHandlerEnabled = false;
 
@@ -340,14 +339,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         if (firstSelected.isPresent()) {
             int idx = dataView.getIndex(firstSelected.get());
             grid.scrollToIndex(idx);
-
-
-            if (idx >= 0) {
-                grid.focus();
-
-            } else {
-                grid.focusOnCell(firstSelected.get(), grid.getColumns().get(0));
-            }
+            grid.focus();
         }
 
         return grid;
