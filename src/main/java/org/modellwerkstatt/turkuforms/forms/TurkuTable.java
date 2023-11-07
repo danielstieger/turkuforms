@@ -53,6 +53,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private IGenSelControlled genFormController;
     private List<TurkuTableCol> colInfo = new ArrayList<>();
     private int firstEditableCol = -1;
+    private boolean editPreview = false;
 
     private Label leftLabel;
     private Label rightLabel;
@@ -156,6 +157,16 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
                     }
                 });
+
+        dataView.setFilterMethod((item, text) -> {
+            for (TurkuTableCol col : colInfo) {
+                String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
+                if (viewed.toLowerCase().replace(".", "").contains(text)) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
 
 
@@ -172,8 +183,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         if (firstEditableCol >= 0) {
             searchField.setEnabled(false);
             infoCsvButton.setEnabled(false);
+            searchField.setVisible(false);
             grid.getColumns().forEach(it -> { it.setSortable(false); });
-            grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+
         }
     }
 
@@ -211,7 +223,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                                 Notification.show("Text not accepted! " + e.getMessage(), 4000, Notification.Position.TOP_END);
                             }
                         });
-
 
                 col = editableCol.getColumn();
 
@@ -322,26 +333,44 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public void forceNotEditable() {
         // TODO: Editable Grid not implemented yet
+        // ON SESSION READ ONLY!
     }
 
     @Override
     public void setEditPreview() {
-        // TODO: Edit Preview not implemented yet.
+        editPreview = true;
+        searchField.setEnabled(false);
+        infoCsvButton.setEnabled(false);
+        searchField.setVisible(false);
+        grid.getColumns().forEach(it -> { it.setSortable(false); });
     }
 
 
     @Override
     public Object myRequestFocus() {
-        // TODO: Better last selected ?
+
+
         Optional<DTO> firstSelected = selectionModel.getFirstSelectedItem();
         Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
 
-        if (firstSelected.isPresent()) {
+        // scrolling needed?
+        if ((firstEditableCol >= 0 || editPreview) && firstSelected.isPresent()) {
+            // Lowest Index of selection ?
             int idx = dataView.getIndex(firstSelected.get());
-            grid.scrollToIndex(idx);
-            grid.focus();
+            if (idx > 7) {
+                grid.scrollToIndex(idx - 7);
+            }
         }
 
+
+        if (editPreview) {
+            // should not take over fokus
+            return null;
+
+        } else if (firstSelected.isPresent()) {
+                grid.focus();
+            }
+        // take over focus anyway
         return grid;
     }
 

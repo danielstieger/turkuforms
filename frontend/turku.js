@@ -25,9 +25,8 @@ window.turku = {
         // this is only working when serving over https
         try {
             await navigator.clipboard.writeText(text);
-
           } catch (err) {
-            alert('Failed to copy content to clipboard!\n\n' + err);
+            prompt('Can not paste csv to clipboard. Is this site served via https?', '' + err);
           }
     },
 
