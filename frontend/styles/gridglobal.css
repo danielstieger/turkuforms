@@ -1,0 +1,3 @@
+vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
+  --lumo-text-field-size: 1rem !important;
+}
