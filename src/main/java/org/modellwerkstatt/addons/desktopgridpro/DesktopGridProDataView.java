@@ -117,4 +117,11 @@ public class DesktopGridProDataView<DTO> {
     public static interface TextInDto<DTO> {
         public boolean textInItem(DTO item, String text);
     }
+
+    public void gcClear() {
+        currentDataView = null;
+        filteredList.clear();
+        removedList.clear();
+        originalList.clear();
+    }
 }

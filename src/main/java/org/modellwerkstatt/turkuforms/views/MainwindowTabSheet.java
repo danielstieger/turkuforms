@@ -58,6 +58,7 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         int index = tabsInSheet.indexOf(tab);
         Tab impl = this.getTabAt(index);
         this.remove(impl);
+
         tabsInSheet.remove(tab);
     }
 
