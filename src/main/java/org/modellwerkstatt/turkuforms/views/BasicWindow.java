@@ -66,7 +66,11 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         navbarTitleDiv.setWidthFull();
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
 
-        addToNavbar(drawerToggle, navbarTitleDiv);
+        if (turkuFactory.isCompactMode()) {
+            addToNavbar(drawerToggle, navbarTitleDiv);
+        } else {
+            addToNavbar(navbarTitleDiv);
+        }
 
         Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
             ThemeList themeList = UI.getCurrent().getElement().getThemeList();

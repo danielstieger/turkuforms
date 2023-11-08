@@ -25,13 +25,6 @@ abstract public class Mainwindow extends BasicWindow {
 
     }
 
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
-
-        getElement().executeJs("turku.mainWindowOnAttach");
-    }
-
     protected FlexLayout updateTiles(List<TileAction> tileActionList) {
         if (tilesFlexLayout == null) {
             tilesFlexLayout = new FlexLayout();
@@ -85,7 +78,6 @@ abstract public class Mainwindow extends BasicWindow {
           }
 
         }
-
 
         return tilesFlexLayout;
     }
