@@ -226,8 +226,8 @@ public class DesktopGridPro<T> extends GridPro<T> {
     }
 
     public void gcClean() {
-        getDataCommunicator().getKeyMapper().removeAll();
-        getDataCommunicator().reset();
+        // getDataCommunicator().getKeyMapper().removeAll();
+        // getDataCommunicator().reset();
         dataCommunicatorFetchFromProvider = null;
         dataCommunicatorGetDataProviderSize = null;
         columnGetInternalId = null;

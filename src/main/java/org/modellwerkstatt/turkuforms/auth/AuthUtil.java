@@ -30,7 +30,7 @@ public class AuthUtil {
 
         LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), vaadinSession.getBrowser().getAddress());
 
-        info.setDevice("WebDesktop", "" + vaadinSession.getBrowser().toString(), "");
+        info.setDevice("TurkuDesk", "" + vaadinSession.getBrowser().getBrowserApplication(), "");
 
         String msg = crtl.checkLoginPrepareUserEnv(userName, password, info, appUiModule, factory);
         return msg;
