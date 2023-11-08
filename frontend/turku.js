@@ -20,6 +20,11 @@ window.turku = {
         console.log('TurkuEventListeners registered for ' + view);
     },
 
+    mainWindowOnAttach : function() {
+        console.log("mainWindowOnAttach()");
+        document.querySelectorAll('.MainwindowTileButton').forEach((element) => element.shadowRoot.querySelector('.vaadin-button-container').style="padding: 1em; align-items: start; justify-content: left" );
+    },
+
     copyToClipboard : async function(view, text) {
 
         // this is only working when serving over https

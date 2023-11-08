@@ -6,7 +6,37 @@
 
 @import url('./mpreis.css');
 @import url('./turku.css');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
 html {
 
+    --lumo-font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+
+    --lumo-font-size-xxs: 0.75rem;
+    --lumo-font-size-xs: 0.75rem;
+    --lumo-font-size-s: 0.875rem;
+    --lumo-font-size-m: 1rem;
+    --lumo-font-size-l: 1.125rem;
+    --lumo-font-size-xl: 1.25rem;
+    --lumo-font-size-xxl: 1.5rem;
+    --lumo-font-size-xxxl: 1.75rem;
+
+    --lumo-primary-color: #0087ff;
+    --lumo-primary-text-color: #4b5466;
+
+    background: #f1f1f5;
+
+
+    /* mainwindow landing page with tiles and navbar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    vaadin-app-layout::part(navbar) {
+        background: white;
+    }
+    vaadin-app-layout::part(navbar)::before {
+        background: white;
+        opacity: 0;
+    }
+
+    /* $('.MainwindowTileButton').shadowRoot.querySelector('.vaadin-button-container').style="color:red; padding: 1em; align-items: start; justify-content: left"
+     */
 }

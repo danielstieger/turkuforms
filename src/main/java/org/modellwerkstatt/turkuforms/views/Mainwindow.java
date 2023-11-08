@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.views;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -24,6 +25,12 @@ abstract public class Mainwindow extends BasicWindow {
 
     }
 
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+
+        getElement().executeJs("turku.mainWindowOnAttach");
+    }
 
     protected FlexLayout updateTiles(List<TileAction> tileActionList) {
         if (tilesFlexLayout == null) {
@@ -58,7 +65,9 @@ abstract public class Mainwindow extends BasicWindow {
                 btn.setMinHeight("200px");
                 btn.setMinWidth("200px");
                 btn.addClassName("MainwindowTileButton");
-                btn.getStyle().set("border-bottom", "5px solid " + tile.getColor());
+                btn.getStyle().set("border-bottom", "6px solid " + tile.getColor());
+                btn.getStyle().set("color", tile.getColor());
+
 
                 tilesFlexLayout.setFlexGrow(0d, btn);
                 tilesFlexLayout.setFlexShrink(0d, btn);

@@ -40,11 +40,6 @@
   font-feature-settings: 'liga';
 }
 
-.ModwerkLabel{
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-}
-
 /* * * * * * * * * * * * * * * * * * * * * * */
 vaadin-tooltip-overlay::part(content) {
    white-space: pre;
@@ -83,8 +78,9 @@ vaadin-tooltip-overlay::part(content) {
 
 /* TurkuLayout * * * * * * * * * * * * * * * */
 .TurkuLayoutNavbarTitle {
-    font-size: var(--lumo-font-size-l);
+    font-size: var(--lumo-font-size-m);
     margin-left: 2em;
+    color: var(--lumo-primary-text-color);
 }
 
 vaadin-drawer-toggle {
