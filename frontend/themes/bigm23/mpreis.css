@@ -7,3 +7,8 @@
  */
 
 
+.SpanLogo {
+    background-image: url("./img/mpreis_small_logo.png");
+    width: 103px;
+    height: 21px;
+}

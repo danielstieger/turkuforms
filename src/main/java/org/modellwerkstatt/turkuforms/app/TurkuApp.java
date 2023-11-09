@@ -201,9 +201,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void setMenuAndInit(int langIndex, Menu start, Menu extra, Menu help) {
 
-        addDrawerMenu(start.getAllItems());
+        if (turkuFactory.isCompactMode()) {
+            addDrawerMenu(start.getAllItems());
 
-        if (!turkuFactory.isCompactMode()) {
+        } else {
             SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
             Component vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"));
             startMenu.addItem(vaadinPowerOff, event -> { exitRequestedFromMenu(); });

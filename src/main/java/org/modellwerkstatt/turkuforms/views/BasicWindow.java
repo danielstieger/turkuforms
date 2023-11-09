@@ -11,6 +11,7 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -27,6 +28,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.forms.LeftRight;
 import org.modellwerkstatt.turkuforms.forms.TurkuMenu;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -41,15 +43,15 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
 
     private Label sysInfoLabel;
     private Label userInfoLabel;
-    private VerticalLayout drawerLayout;
     private Div navbarTitleDiv;
     private String navbarTitle = "";
     private String optionalTabTitleInNavbar = "";
 
     protected ITurkuAppFactory turkuFactory;
-    private VerticalLayout drawerCommandsLayout;
+    protected LeftRight topLrLayout;
 
     protected DrawerToggle drawerToggle;
+    protected VerticalLayout drawerCommandsLayout;
     protected MenuBar mainmenuBar;
 
     public BasicWindow() {
@@ -58,71 +60,91 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     protected void init(ITurkuAppFactory factory, String appNavbarTitle) {
         turkuFactory = factory;
 
-        drawerToggle = new DrawerToggle();
-        setPrimarySection(Section.NAVBAR);
-        setDrawerOpened(false);
+        userInfoLabel = new Label("-");
+        sysInfoLabel = new Label("-");
 
+        topLrLayout = new LeftRight("TurkuLayoutNavbarTop");
+        addToNavbar(topLrLayout);
+
+        Span logo = new Span();
+        logo.addClassName("SpanLogo");
         navbarTitleDiv = new Div();
-        navbarTitleDiv.setWidthFull();
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
 
-        if (turkuFactory.isCompactMode()) {
-            addToNavbar(drawerToggle, navbarTitleDiv);
+
+        if (!factory.isCompactMode()) {
+            mainmenuBar = new MenuBar();
+            mainmenuBar.setOpenOnHover(false);
+            mainmenuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+            mainmenuBar.addClassName("TurkuLayoutMenuBar");
+
+            topLrLayout.add(logo);
+            topLrLayout.add(navbarTitleDiv);
+            topLrLayout.spacer();
+            topLrLayout.add(mainmenuBar);
+
         } else {
-            addToNavbar(navbarTitleDiv);
+            drawerToggle = new DrawerToggle();
+            setPrimarySection(Section.NAVBAR);
+            setDrawerOpened(false);
+
+            topLrLayout.add(drawerToggle);
+            topLrLayout.add(navbarTitleDiv);
+            topLrLayout.spacer();
+            topLrLayout.add(logo);
+
+
+            Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
+                ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+
+                if (themeList.contains(Lumo.DARK)) {
+                    themeList.remove(Lumo.DARK);
+                } else {
+                    themeList.add(Lumo.DARK);
+                }
+                this.setDrawerOpened(false);
+            });
+            darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            darkToggle.setSizeUndefined();
+
+            Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_logout")), event -> {
+                this.setDrawerOpened(false);
+                exitRequestedFromMenu();
+            });
+            logout.setSizeUndefined();
+
+
+            String basicSysInfo = MoVersion.MOWARE_PLUGIN_VERSION + "\n" + Turku.INTERNAL_VERSION + "\n";
+            basicSysInfo += "Vaadin Version " + Version.getFullVersion() + "\n";
+            basicSysInfo += ManagementFactory.getRuntimeMXBean().getVmVendor() + " " +
+                    ManagementFactory.getRuntimeMXBean().getVmName() + " " +
+                    ManagementFactory.getRuntimeMXBean().getVmVersion();
+
+            for (Feature f: FeatureFlags.get(VaadinService.getCurrent().getContext()).getFeatures()) {
+                if (f.isEnabled()) {
+                    basicSysInfo += "\nVaadin feature " + f.getTitle();
+                }
+            }
+
+            Tooltip sysInfoTooltip = Tooltip.forComponent(sysInfoLabel);
+            sysInfoTooltip.setText(basicSysInfo);
+            sysInfoTooltip.setPosition(Tooltip.TooltipPosition.TOP_END);
+            sysInfoTooltip.setHideDelay(5000);
+
+            userInfoLabel.setWidthFull();
+            HorizontalLayout drawerBottom = new HorizontalLayout(userInfoLabel, darkToggle, logout);
+            drawerBottom.setWidthFull();
+            drawerBottom.setAlignSelf(FlexComponent.Alignment.CENTER, userInfoLabel);
+
+            drawerCommandsLayout = new VerticalLayout();
+            drawerCommandsLayout.setSizeFull();
+
+            VerticalLayout drawerLayout = new VerticalLayout(drawerCommandsLayout, sysInfoLabel, drawerBottom);
+            drawerLayout.setSizeFull();
+            addToDrawer(drawerLayout);
         }
 
-        Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
-            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
 
-            if (themeList.contains(Lumo.DARK)) {
-                themeList.remove(Lumo.DARK);
-            } else {
-                themeList.add(Lumo.DARK);
-            }
-            this.setDrawerOpened(false);
-        });
-        darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        darkToggle.setSizeUndefined();
-
-        Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_logout")), event -> {
-            this.setDrawerOpened(false);
-            exitRequestedFromMenu();
-        });
-        logout.setSizeUndefined();
-
-        userInfoLabel = new Label("-");
-        userInfoLabel.setWidthFull();
-
-        String basicSysInfo = MoVersion.MOWARE_PLUGIN_VERSION + "\n" + Turku.INTERNAL_VERSION + "\n";
-        basicSysInfo += "Vaadin Version " + Version.getFullVersion() + "\n";
-        basicSysInfo += ManagementFactory.getRuntimeMXBean().getVmVendor() + " " +
-                       ManagementFactory.getRuntimeMXBean().getVmName() + " " +
-                       ManagementFactory.getRuntimeMXBean().getVmVersion();
-
-        for (Feature f: FeatureFlags.get(VaadinService.getCurrent().getContext()).getFeatures()) {
-            if (f.isEnabled()) {
-                basicSysInfo += "\nVaadin feature " + f.getTitle();
-            }
-        }
-
-
-        sysInfoLabel = new Label("-");
-        Tooltip sysInfoTooltip = Tooltip.forComponent(sysInfoLabel);
-        sysInfoTooltip.setText(basicSysInfo);
-        sysInfoTooltip.setPosition(Tooltip.TooltipPosition.TOP_END);
-        sysInfoTooltip.setHideDelay(5000);
-
-        HorizontalLayout drawerBottom = new HorizontalLayout(userInfoLabel, darkToggle, logout);
-        drawerBottom.setWidthFull();
-        drawerBottom.setAlignSelf(FlexComponent.Alignment.CENTER, userInfoLabel);
-
-        drawerCommandsLayout = new VerticalLayout();
-        drawerCommandsLayout.setSizeFull();
-
-        drawerLayout = new VerticalLayout(drawerCommandsLayout, sysInfoLabel, drawerBottom);
-        drawerLayout.setSizeFull();
-        addToDrawer(drawerLayout);
     }
 
     protected void setNavbarTitleDiv(String title) {
@@ -151,16 +173,6 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     }
 
     protected SubMenu addToMainMenu(Menu menu, String menuName){
-
-        if (mainmenuBar == null) {
-            mainmenuBar = new MenuBar();
-            mainmenuBar.setOpenOnHover(false);
-            mainmenuBar.setWidthFull();
-            mainmenuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
-            mainmenuBar.addClassName("TurkuLayoutMenuBar");
-            addToNavbar(mainmenuBar);
-        }
-
 
         MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
         root.add(new Text(menuName));
@@ -205,6 +217,4 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     }
 
     abstract protected void exitRequestedFromMenu();
-
-
 }

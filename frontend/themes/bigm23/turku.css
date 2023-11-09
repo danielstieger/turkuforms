@@ -77,18 +77,16 @@ vaadin-tooltip-overlay::part(content) {
 
 
 /* TurkuLayout * * * * * * * * * * * * * * * */
-.TurkuLayoutNavbarTitle {
-    font-size: var(--lumo-font-size-m);
-    margin-left: 2em;
-    color: var(--lumo-primary-text-color);
-}
-
-vaadin-drawer-toggle {
-    margin-left: 2em;
-}
-
-.TurkuLayoutMenuBar {
+.TurkuLayoutNavbarTop {
+    padding-left: 2em;
     padding-right: 2em;
+    background: white !important;
+}
+
+.TurkuLayoutNavbarTitle {
+    margin-left: 1em;
+    font-size: var(--lumo-font-size-m);
+    color: var(--lumo-primary-text-color);
 }
 
 .TurkuLayoutMenuBar::part(menu-bar-button) {

@@ -30,13 +30,11 @@ html {
 
     /* mainwindow landing page with tiles and navbar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
     vaadin-app-layout::part(navbar) {
-        background: white;
+        background: white !important;
     }
     vaadin-app-layout::part(navbar)::before {
-        background: white;
+        background: white !important;
         opacity: 0;
     }
 
-    /* $('.MainwindowTileButton').shadowRoot.querySelector('.vaadin-button-container').style="color:red; padding: 1em; align-items: start; justify-content: left"
-     */
 }
