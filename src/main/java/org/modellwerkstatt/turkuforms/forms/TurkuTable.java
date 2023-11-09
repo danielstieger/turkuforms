@@ -10,6 +10,7 @@ import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
 import com.vaadin.flow.component.gridpro.GridProVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
@@ -96,26 +97,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setThemeName("dense");
 
-
-        grid.getElement().addEventListener("cell-edit-started", e -> {
-            grid.disableGlobalEsc();
-
-            int idx = grid.getRowToSelectWhileEdit(e.getEventData());
-            if (idx > 0) {
-                selectionHandlerEnabled = false;
-                grid.deselectAll();
-                selectionHandlerEnabled = true;
-                grid.select(dataView.getItem(idx - 1));
-            }
-        });
-
-
-        // Open: grid.getEditor().addCancelListener() is not working.
-        grid.getElement().addEventListener("cell-edit-stopped", e -> {
-            grid.enableGlobalEsc();
-        });
-
-
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
 
         selectionModel.addMultiSelectionListener(event -> {
@@ -186,6 +167,24 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             searchField.setVisible(false);
             grid.getColumns().forEach(it -> { it.setSortable(false); });
 
+            grid.getElement().addEventListener("cell-edit-started", e -> {
+                grid.disableGlobalEsc();
+
+                int idx = grid.getRowToSelectWhileEdit(e.getEventData());
+                if (idx > 0) {
+                    selectionHandlerEnabled = false;
+                    grid.deselectAll();
+                    selectionHandlerEnabled = true;
+                    grid.select(dataView.getItem(idx - 1));
+                }
+            });
+
+
+            // Open: grid.getEditor().addCancelListener() is not working.
+            grid.getElement().addEventListener("cell-edit-stopped", e -> {
+                grid.enableGlobalEsc();
+            });
+
         }
     }
 
@@ -219,8 +218,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                             try {
                                 Object val = converter.convertBack(newValue);
                                 ValueObjectReplacementFacility.put(item, property, val);
+
                             } catch (Exception e) {
-                                Notification.show("Text not accepted! " + e.getMessage(), 4000, Notification.Position.TOP_END);
+                                Notification n = Notification.show(factory.getSystemLabel(-1, MoWareTranslations.Key.TABLE_EDITOR_VALIDATION_ERROR) + "\n", 4000, Notification.Position.TOP_END);
+                                n.addThemeVariants(NotificationVariant.LUMO_ERROR);
                             }
                         });
 
@@ -332,8 +333,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void forceNotEditable() {
-        // TODO: Editable Grid not implemented yet
-        // ON SESSION READ ONLY!
+        //TODO editable ??
+
     }
 
     @Override

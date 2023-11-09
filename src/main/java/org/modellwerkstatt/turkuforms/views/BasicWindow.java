@@ -67,7 +67,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         addToNavbar(topLrLayout);
 
         Span logo = new Span();
-        logo.addClassName("SpanLogo");
+        logo.addClassName("NavBarSmallLogo");
         navbarTitleDiv = new Div();
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
 

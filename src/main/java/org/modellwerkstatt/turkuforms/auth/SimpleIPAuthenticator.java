@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -24,23 +25,25 @@ public class SimpleIPAuthenticator extends HorizontalLayout implements BeforeEnt
     protected ParamInfo paramInfo;
     protected VerticalLayout innerLayout;
     protected H1 appName;
-    protected Image loginIdentityImage;
+    protected Span loginIdentityImage;
     protected Div messageDiv;
     protected Button loginButton;
 
     public SimpleIPAuthenticator() {
-        loginIdentityImage = new Image(MANUAL_THEME_URL_PATH + MANUAL_THEME_LOGINIDENTITYIMG, "Identity Image");
+
+        loginIdentityImage = new Span();
+        loginIdentityImage.addClassName("DefaultLoginLogo");
         appName = new H1();
 
         messageDiv = new Div();
         messageDiv.addClassName("TurkuErrorDiv");
-        messageDiv.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
+        messageDiv.addClassName("DefaultLoginContentWidth");
 
         loginButton = new Button("login", event -> {
             AuthUtil.forwareToLogin(paramInfo);
         });
         Peculiar.useButtonShortcutHk(loginButton, OK_HOKTEY);
-        loginButton.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
+        loginButton.addClassName("DefaultLoginContentWidth");
 
         innerLayout = new VerticalLayout();
         innerLayout.add(loginIdentityImage, appName, messageDiv, loginButton);

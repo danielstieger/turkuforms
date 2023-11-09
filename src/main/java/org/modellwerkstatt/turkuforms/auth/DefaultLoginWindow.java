@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -34,7 +35,7 @@ public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterO
     protected Button loginButton;
     protected TextField userNameField;
     protected PasswordField passwordField;
-    protected Image loginIdentityImage;
+    protected Span loginIdentityImage;
 
     protected String userName = "";
     protected String password = "";
@@ -44,18 +45,20 @@ public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterO
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
 
-        loginIdentityImage = new Image(MANUAL_THEME_URL_PATH + MANUAL_THEME_LOGINIDENTITYIMG, "Identity Image");
+        loginIdentityImage = new Span();
+        loginIdentityImage.addClassName("DefaultLoginLogo");
+
         appName = new H1(appUiModule.getShortAppName() + " " + appUiModule.getApplicationVersion());
 
         messageDiv = new Div();
         messageDiv.addClassName("TurkuErrorDiv");
-        messageDiv.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
+        messageDiv.addClassName("DefaultLoginContentWidth");
 
         userNameField = new TextField(factory.getSystemLabel(-1, MoWareTranslations.Key.USERNAME));
         userNameField.setAutoselect(true);
         userNameField.setAutofocus(true);
         userNameField.setRequired(true);
-        userNameField.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
+        userNameField.addClassName("DefaultLoginContentWidth");
         userNameField.setPlaceholder(factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_EXTENDED_USERNAME));
         userNameField.setValueChangeMode(ValueChangeMode.LAZY);
         Peculiar.focusMoveEnterHk(false, userNameField, event -> {
@@ -64,7 +67,7 @@ public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterO
         });
 
         passwordField = new PasswordField(factory.getSystemLabel(-1, MoWareTranslations.Key.PASSWORD));
-        passwordField.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
+        passwordField.addClassName("DefaultLoginContentWidth");
         passwordField.setValueChangeMode(ValueChangeMode.LAZY);
         Peculiar.focusMoveEnterHk(false, passwordField, event -> {
             processInput();
@@ -72,7 +75,7 @@ public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterO
 
         loginButton = new Button(factory.translateButtonLabel(factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_BUTTON), OK_HOKTEY), event -> { processInput();});
         Peculiar.useButtonShortcutHk(loginButton, OK_HOKTEY);
-        loginButton.setWidth(MANUAL_THEME_LOGINIDENTITYIMG_WIDTH);
+        loginButton.addClassName("DefaultLoginContentWidth");
 
         innerLayout = new VerticalLayout();
         innerLayout.add(loginIdentityImage, appName, messageDiv, userNameField, passwordField, loginButton);

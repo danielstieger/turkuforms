@@ -7,8 +7,18 @@
  */
 
 
-.SpanLogo {
+.NavBarSmallLogo {
     background-image: url("./img/mpreis_small_logo.png");
     width: 103px;
     height: 21px;
+}
+
+.DefaultLoginLogo {
+    background-image: url("./img/mpreis_login_logo.png");
+    width: 330px;
+    height: 330px;
+}
+
+.DefaultLoginContentWidth {
+    width: 330px;
 }

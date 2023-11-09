@@ -120,8 +120,14 @@ public class DesktopGridProDataView<DTO> {
 
     public void gcClear() {
         currentDataView = null;
-        filteredList.clear();
+
+        if (filteredList == originalList) {
+            filteredList = null;
+        } else {
+            filteredList.clear();
+        }
+
         removedList.clear();
-        originalList.clear();
+        originalList = null;
     }
 }

@@ -14,8 +14,9 @@ window.modellwerkstatt_desktopgrid = {
         setTimeout(function() {
 
           let openPromptWindow = document.querySelector('vaadin-dialog-overlay');
-          if (openPromptWindow) {
+          if (openPromptWindow && !openPromptWindow.contains(grid)) {
              // do not handle focus, we are in background
+             // multi edit pattern .. :)
 
           } else {
             let editDiv = grid.shadowRoot.querySelector("[aria-selected='true'] > div[part~='editable-cell']");
