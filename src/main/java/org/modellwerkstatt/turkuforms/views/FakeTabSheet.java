@@ -1,14 +1,17 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     private CmdUiTab current;
+    private DrawerToggle drawerToggle;
 
 
-    public FakeTabSheet() {
+    public FakeTabSheet(DrawerToggle dt) {
         this.setSizeFull();
+        drawerToggle = dt;
     }
 
     @Override
@@ -30,6 +33,7 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     public void addTab(CmdUiTab tab) {
         this.removeAll();
         current = tab;
+        drawerToggle.setEnabled(false);
         this.add(tab);
     }
 
@@ -42,6 +46,7 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     @Override
     public void closeTab(CmdUiTab tab) {
         current = null;
+        drawerToggle.setEnabled(true);
         this.removeAll();
     }
 

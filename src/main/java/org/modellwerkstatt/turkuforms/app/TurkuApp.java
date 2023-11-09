@@ -50,7 +50,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         ITurkuAppFactory factory = servlet.getUiFactory();
         String remoteAddr = vaadinSession.getBrowser().getAddress();
 
-
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
@@ -70,13 +69,13 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
         } else {
 
+            init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
+
             if (factory.isCompactMode()) {
-                mainTabImpl = new FakeTabSheet();
+                mainTabImpl = new FakeTabSheet(drawerToggle);
             } else {
                 mainTabImpl = new MainwindowTabSheet();
             }
-
-            init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
             applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
             applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
