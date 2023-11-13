@@ -123,10 +123,17 @@ vaadin-tooltip-overlay::part(content) {
 vaadin-tabsheet::part(content) {
 	padding: 0px !important;
 }
+vaadin-tab {
+    border-top: 2px solid transparent;
+}
+vaadin-tab[aria-selected~='true']{
+    background: var(--turku-primary-background);
+}
+
 
 .CmdUiTab {
-    border-top: 4px solid transparent;
-    padding: 0px 4px 4px 4px;
+    border-top: 4px solid var(--turku-primary-background);
+    background: var(--turku-primary-background);
 }
 
 .ModalTab {
@@ -193,7 +200,7 @@ vaadin-button::part(prefix) {
 
 
 
-/* TurkuTable * * * * * * * * * * * * * * * */
+/* TurkuTable * * * * * * * * * * * * * * * RAUS ODER NOCHT RAUS VON HIER? */
 
 vaadin-selection-grid {
     height: 100px !important;

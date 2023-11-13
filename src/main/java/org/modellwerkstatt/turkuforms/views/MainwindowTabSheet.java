@@ -4,12 +4,16 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
+import com.vaadin.flow.dom.Style;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     private List<CmdUiTab> tabsInSheet;
+    private Style currentSelectedStyle;
 
     @Override
     public Component getAsComponent() {
@@ -18,9 +22,9 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
     public MainwindowTabSheet() {
         super();
-        setSizeFull();
+        setHeightFull();
         addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
-
+        addClassName("MainwindowTabSheet");
         tabsInSheet = new ArrayList<>();
     }
 
@@ -32,9 +36,11 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     @Override
     public void addTabSelectedChangeListener(TabSelectedIndexChanged change){
         this.addSelectedChangeListener(event ->{
+
             Tab current = event.getSelectedTab();
             if (current != null) {
                 int index = this.getIndexOf(current);
+                addStyle(current, tabsInSheet.get(index));
                 change.selectedIndexChanged(index);
             }
         });
@@ -42,9 +48,10 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
     @Override
     public void addTab(CmdUiTab tab) {
+        tabsInSheet.add(tab);
+
         Tab imp = this.add(tab.getWindowTitle(), tab);
         this.setSelectedTab(imp);
-        tabsInSheet.add(tab);
     }
 
     @Override
@@ -57,9 +64,8 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     public void closeTab(CmdUiTab tab) {
         int index = tabsInSheet.indexOf(tab);
         Tab impl = this.getTabAt(index);
-        this.remove(impl);
-
         tabsInSheet.remove(tab);
+        this.remove(impl);
     }
 
     @Override
@@ -79,5 +85,16 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
                 getTabAt(i).setEnabled(! modal);
             }
         }
+    }
+
+    public void addStyle(Tab tab, CmdUiTab cmdUi){
+        if (currentSelectedStyle != null) {
+            currentSelectedStyle.remove("color");
+            currentSelectedStyle.remove("border-top");
+        }
+
+        String col = cmdUi.getColorOrNull();
+        if (col == null) { col = "var(--lumo-primary-color)"; }
+        currentSelectedStyle = tab.getElement().getStyle().set("color", col).set("border-top", "2px solid " + col);
     }
 }

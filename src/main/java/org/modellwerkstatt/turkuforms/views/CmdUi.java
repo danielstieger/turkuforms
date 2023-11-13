@@ -1,9 +1,6 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ShortcutEvent;
-import com.vaadin.flow.component.ShortcutEventListener;
-import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -29,6 +26,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     protected List<OFXConclusionInformation> conclusionInformations;
     protected List<Button> conclusionButtons;
     protected IToolkit_Form currentFormToFocus;
+    protected String color;
 
 
     public CmdUi(ITurkuAppFactory fact) {
@@ -81,7 +79,9 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void setColor(String col) {
         // in form of #AABBCC or transparent
-        getElement().getStyle().set("border-top", "4px solid " + col);
+        color = col;
+        getElement().getStyle().set("border-top", "4px solid " + color);
+
     }
 
     @Override
@@ -193,4 +193,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void setCommandContainer(ICommandContainer iCommandContainer) {
         cmdContainer = iCommandContainer;
     }
+
+    public String getColorOrNull() { return color; }
 }

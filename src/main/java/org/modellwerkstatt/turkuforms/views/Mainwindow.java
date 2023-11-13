@@ -58,8 +58,11 @@ abstract public class Mainwindow extends BasicWindow {
                 btn.setMinHeight("200px");
                 btn.setMinWidth("200px");
                 btn.addClassName("MainwindowTileButton");
-                btn.getStyle().set("border-bottom", "6px solid " + tile.getColor());
-                btn.getStyle().set("color", tile.getColor());
+
+                String clr = tile.getColor();
+                if (clr == null) { clr = "var(--lumo-primary-color)"; }
+                btn.getStyle().set("border-bottom", "6px solid " + clr);
+                btn.getStyle().set("color", clr);
 
 
                 tilesFlexLayout.setFlexGrow(0d, btn);

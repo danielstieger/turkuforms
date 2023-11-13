@@ -25,7 +25,8 @@ html {
     --lumo-primary-color: #0087ff;
     --lumo-primary-text-color: #4b5466;
 
-    background: #f1f1f5;
+    --turku-primary-background: #f1f1f5;
+    background: var(--turku-primary-background);
 
 
     /* mainwindow landing page with tiles and navbar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -37,4 +38,11 @@ html {
         opacity: 0;
     }
 
+    /* mainwindow tab sheet - - - - - - - - */
+    .MainwindowTabSheet {
+        background: #f7f8fa;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+
+    }
 }
