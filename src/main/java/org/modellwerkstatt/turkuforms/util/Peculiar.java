@@ -60,6 +60,7 @@ public class Peculiar {
     }
 
     public static void useGlobalShortcutHk(Component layout, String hk, ShortcutEventListener listener) {
+        Turku.l("Peculiar.useGlobalShortcutHk() registering HK for " + hk);
         ShortcutRegistration reg;
 
         if (Defs.hkNeedsCrtl(hk)) {
