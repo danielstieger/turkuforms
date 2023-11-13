@@ -33,6 +33,12 @@ public class CmdUiTab extends CmdUi {
     }
 
     @Override
+    public void delayedRequestFocus() {
+        ((MainwindowTabSheet) this.getParent().get()).adjustStyle(this, color);
+        super.delayedRequestFocus();
+    }
+
+    @Override
     public boolean isModalTabWindow() {
         return isModal;
     }

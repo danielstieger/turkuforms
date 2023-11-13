@@ -81,7 +81,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         // in form of #AABBCC or transparent
         color = col;
         getElement().getStyle().set("border-top", "4px solid " + color);
-
     }
 
     @Override
@@ -137,7 +136,9 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     }
 
     @Override
-    public void delayedRequestFocus() { currentFormToFocus.myRequestFocus(); }
+    public void delayedRequestFocus() {
+        currentFormToFocus.myRequestFocus();
+    }
 
     @Override
     public void delayedAfterFullUiInitialized() {  currentFormToFocus.afterFullUiInitialized(); }

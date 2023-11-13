@@ -40,7 +40,6 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
             Tab current = event.getSelectedTab();
             if (current != null) {
                 int index = this.getIndexOf(current);
-                addStyle(current, tabsInSheet.get(index));
                 change.selectedIndexChanged(index);
             }
         });
@@ -87,13 +86,16 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         }
     }
 
-    public void addStyle(Tab tab, CmdUiTab cmdUi){
+    public void adjustStyle(CmdUiTab cmdUi, String col){
+
         if (currentSelectedStyle != null) {
             currentSelectedStyle.remove("color");
             currentSelectedStyle.remove("border-top");
         }
 
-        String col = cmdUi.getColorOrNull();
+        int index = tabsInSheet.indexOf(cmdUi);
+        Tab tab = getTabAt(index);
+
         if (col == null) { col = "var(--lumo-primary-color)"; }
         currentSelectedStyle = tab.getElement().getStyle().set("color", col).set("border-top", "2px solid " + col);
     }
