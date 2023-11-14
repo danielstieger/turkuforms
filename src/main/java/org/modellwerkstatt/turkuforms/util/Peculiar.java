@@ -39,7 +39,8 @@ public class Peculiar {
 
 
 
-    // @Deprecated - remove this one for consistency
+    // Only used for simple button shortcuts, prompt confirmation window
+    // login window, etc.
     public static void useButtonShortcutHk(Button button, String hk) {
         ShortcutRegistration reg;
         if (Defs.hkNeedsCrtl(hk)) { reg = button.addClickShortcut(HkTranslate.trans(hk), KeyModifier.CONTROL); }
@@ -50,6 +51,8 @@ public class Peculiar {
     }
 
     public static void useGridShortcutHk(Component grid, String hk, ShortcutEventListener listener) {
+        Turku.l("Peculiar.useGridShortcutHk() registering HK for " + hk);
+
         ShortcutRegistration reg;
         if (Defs.hkNeedsCrtl(hk)) { reg = Shortcuts.addShortcutListener(grid, listener, HkTranslate.trans(hk), KeyModifier.CONTROL); }
         else { reg = Shortcuts.addShortcutListener(grid, listener, HkTranslate.trans(hk)); }

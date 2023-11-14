@@ -58,7 +58,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             }
         }
 
-        // early returnS above : )
+        // early returns above :(
         cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
     }
 
@@ -119,7 +119,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
             if (Defs.needsHkRegistration(oci.hotkey)) {
                 Peculiar.useGlobalShortcutHk(this, oci.hotkey,this);
-                // Workarounds.useButtonShortcutHk(button, oci.hotkey);
             }
 
             // button.setDisableOnClick(true);
