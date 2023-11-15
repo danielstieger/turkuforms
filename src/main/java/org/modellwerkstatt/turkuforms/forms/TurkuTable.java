@@ -66,6 +66,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         Peculiar.shrinkSpace(this);
         this.setSizeFull();
         this.getStyle().set("gap", "0");
+        addClassName("TurkuTable");
 
         topPane = new LeftRight();
         heading = new FormHeading();
@@ -92,10 +93,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid = new DesktopGridPro<>();
         grid.setEditOnClick(true);
         grid.setEnterNextRow(true);
-        grid.addThemeVariants(GridProVariant.LUMO_HIGHLIGHT_EDITABLE_CELLS);
-        // grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setThemeName("dense");
+        grid.addThemeName("no-border");
+        grid.addThemeName("row-stripes");
+
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
 
@@ -230,7 +232,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             } else {
                 String litPropName = Workarounds.litPropertyName(property);
                 String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
-                String fontWeight = important ? "font-weight:800;" : "";
+                String fontWeight = important ? "font-weight:var(--turku-bold);" : "";
 
                 col = grid.addColumn(LitRenderer.<DTO>of(template).
                         withProperty(litPropName, item -> {
@@ -395,7 +397,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private void initSummaryLine(){
         leftLabel = new Label();
         rightLabel = new Label();
-        LeftRight lr = new LeftRight();
+        LeftRight lr = new LeftRight("TurkuTableSummaryLine");
         lr.add(leftLabel);
         lr.spacer();
         lr.add(rightLabel);

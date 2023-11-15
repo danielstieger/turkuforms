@@ -12,6 +12,7 @@
 html {
 
     --lumo-font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    --turku-bold: 800;
 
     --lumo-font-size-xxs: 0.75rem;
     --lumo-font-size-xs: 0.75rem;
@@ -22,27 +23,16 @@ html {
     --lumo-font-size-xxl: 1.5rem;
     --lumo-font-size-xxxl: 1.75rem;
 
-    --lumo-primary-color: #0087ff;
-    --lumo-primary-text-color: #4b5466;
+    --lumo-primary-color: rgba(23, 132, 200, 1.0);
+    --lumo-primary-text-color: rgba(75, 84, 102, 1.0);
 
+    --lumo-base-color: #f1f1f5;
     --turku-primary-background: #f1f1f5;
     background: var(--turku-primary-background);
 
+    --turku-grid-selected-row-color: rgba(75, 84, 102, 0.3);
+    --turku-hierarchy-spacing: 0.2em;
 
-    /* mainwindow landing page with tiles and navbar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-    vaadin-app-layout::part(navbar) {
-        background: white !important;
-    }
-    vaadin-app-layout::part(navbar)::before {
-        background: white !important;
-        opacity: 0;
-    }
 
-    /* mainwindow tab sheet - - - - - - - - */
-    .MainwindowTabSheet {
-        background: #f7f8fa;
-        padding-left: 0.5em;
-        padding-right: 0.5em;
 
-    }
 }

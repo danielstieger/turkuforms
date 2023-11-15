@@ -36,12 +36,15 @@ public class TurkuMenu extends MenuBar {
         for (AbstractAction currentItem : menu.getAllItems()) {
             if (currentItem instanceof CmdAction) {
                 MenuItem button = addActionItem(factory, this, (CmdAction) currentItem, true);
+                button.addThemeNames("primary");
+                button.addThemeNames("small");
 
             } else if (currentItem.labelText == null) {
                 // null is separator, ignore that here ...
 
             } else {
                 MenuItem created = this.addItem(Workarounds.createIconWithCollection(factory.translateIconName("table_menu")));
+                created.addThemeNames("small");
                 if (Defs.hasLabel(currentItem.labelText)) { created.add(new Text(currentItem.labelText)); }
                 SubMenu createdSub = created.getSubMenu();
                 addMainMenuStructure(factory, createdSub, ((Menu) currentItem).getAllItems());

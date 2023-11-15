@@ -33,7 +33,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         super();
         factory = fact;
         conclusionButtons = new ArrayList<>();
-        conclusionLayout = new LeftRight("ConclusionBtns");
+        conclusionLayout = new LeftRight("BottomConclusionButtons");
     }
 
     @Override

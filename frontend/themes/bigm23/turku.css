@@ -60,18 +60,21 @@ vaadin-tooltip-overlay::part(content) {
 
 @media screen and (max-width: 810px) {
 
-    .LeftRightFlexConclusionBtns {
+    .BottomConclusionButtons {
         flex-wrap: wrap-reverse !important;
         flex-direction: row-reverse;
     }
-
-    .LeftRightFlexSpacerConclusionBtns {
+    .BottomConclusionButtons .LeftRightFlexSpacer {
         display: none;
     }
-
-    .LeftRightFlexChildConclusionBtns {
+    .BottomConclusionButtons .LeftRightFlexChild {
         flex: 1 0 45%;
     }
+    .BottomConclusionButtons vaadin-button:first-child, .BottomConclusionButtons vaadin-button:last-child {
+        margin-right: 0em !important;
+        margin-left: 0em !important;
+    }
+
 
     .InvisibleWhenBelow {
         display: none;
@@ -82,12 +85,21 @@ vaadin-tooltip-overlay::part(content) {
 
 
 /* TurkuLayout * * * * * * * * * * * * * * * */
+
 .TurkuLayoutNavbarTop {
     padding-left: 2em;
     padding-right: 2em;
     background: white !important;
     border-top: 6px solid transparent;
 }
+vaadin-app-layout::part(navbar) {
+    background: white !important;
+}
+vaadin-app-layout::part(navbar)::before {
+    background: white !important;
+    opacity: 0;
+}
+
 
 .TurkuLayoutNavbarTitle {
     margin-left: 1em;
@@ -125,6 +137,9 @@ vaadin-tooltip-overlay::part(content) {
 
 
 /* TabSheet and Tabs * * * * * * * * * * * * */
+.MainwindowTabSheet {
+    background: #f7f8fa;
+}
 
 vaadin-tabs {
     min-height: 35px;
@@ -180,6 +195,15 @@ vaadin-button::part(prefix) {
 }
 
 
+.BottomConclusionButtons {
+    padding: 0.2em 0em;
+}
+.BottomConclusionButtons vaadin-button:first-child {
+    margin-left: 1em;
+}
+.BottomConclusionButtons vaadin-button:last-child {
+    margin-right: 1em;
+}
 
 
 /* TurkuGridLayout (+ gen. form) * * * * * * * * * * * * * * * * */
@@ -191,9 +215,9 @@ vaadin-button::part(prefix) {
     line-height: var(--lumo-font-size-m);
 }
 
-.TurkuFormMenu::part(menu-bar-button) {
+/* .TurkuFormMenu::part(menu-bar-button) {
     margin-left: 1em;
-}
+} removed due to look and feel in table */
 
 .TurkuErrorDiv {
     color: var(--lumo-error-color) !important;
@@ -213,14 +237,25 @@ vaadin-button::part(prefix) {
 
 
 /* TurkuTable * * * * * * * * * * * * * * * RAUS ODER NOCHT RAUS VON HIER? */
+.TurkuTable {
+    padding: var(--turku-hierarchy-spacing);
+}
 
 vaadin-selection-grid {
     height: 100px !important;
 }
 
-vaadin-selection-grid vaadin-checkbox {
-    --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2.8));
+.TurkuTableSummaryLine {
+    font-size: var(--lumo-font-size-xs);
+    font-weight: var(--turku-bold);
 }
+.TurkuTableSummaryLine label:first-child {
+    padding-left: 0.5em;
+}
+.TurkuTableSummaryLine label:last-child {
+    padding-right: 0.5em;
+}
+
 
 /* vaadin-button::part(prefix) {
     margin-bottom: -4px;
@@ -232,15 +267,6 @@ vaadin-grid-sorter:not([direction])::part(indicators)::before {
 
 vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
   --lumo-text-field-size: 1rem !important;
-}
-
-vaadin-selection-grid.editable-custom-effect::part(editable-cell):hover,
-vaadin-selection-grid.editable-custom-effect::part(editable-cell focused-cell) {
-  background: var(--lumo-contrast-10pct);
-}
-
-vaadin-selection-grid.editable-custom-effect::part(editable-cell) {
-  background: var(--lumo-contrast-5pct);
 }
 
 
