@@ -68,7 +68,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         this.getStyle().set("gap", "0");
         addClassName("TurkuTable");
 
-        topPane = new LeftRight();
+        topPane = new LeftRight("TurkuHeadingTopPane");
         heading = new FormHeading();
 
         searchField = new TextField();

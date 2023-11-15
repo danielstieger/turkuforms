@@ -99,14 +99,11 @@ vaadin-app-layout::part(navbar)::before {
     background: white !important;
     opacity: 0;
 }
-
-
 .TurkuLayoutNavbarTitle {
     margin-left: 1em;
     font-size: var(--lumo-font-size-m);
     color: var(--lumo-primary-text-color);
 }
-
 .TurkuLayoutMenuBar::part(menu-bar-button) {
     margin-left: 3em;
 }
@@ -215,16 +212,32 @@ vaadin-button::part(prefix) {
     line-height: var(--lumo-font-size-m);
 }
 
-/* .TurkuFormMenu::part(menu-bar-button) {
-    margin-left: 1em;
-} removed due to look and feel in table */
+/* Table / From top pane search / csv-export / menubar */
+.TurkuHeadingTopPane vaadin-text-field {
+    padding: 0em;
+    margin: 0em;
+    height: var(--turku-form-menu-height);
+}
+.TurkuHeadingTopPane vaadin-button {
+    padding: 0em;
+    margin: 0em;
+    height: var(--turku-form-menu-height);
+    min-width: 8em;
+}
+.TurkuHeadingTopPane vaadin-menu-bar {
+    margin-right: 0.5em;
+}
+.TurkuFormMenu::part(menu-bar-button) {
+    height: var(--turku-form-menu-height);
+    margin: 0em;
+}
+
 
 .TurkuErrorDiv {
     color: var(--lumo-error-color) !important;
     margin: 0.2em 0em 0.2em 0em;
     font-weight: bold;
 }
-
 .TurkuWarningDiv {
     color: #FF6700 !important;
     margin: 0.2em 0em 0.2em 0em;
