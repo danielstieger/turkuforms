@@ -3,6 +3,7 @@ package org.modellwerkstatt.turkuforms.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.modellwerkstatt.turkuforms.app.TurkuApp;
 
 public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     private CmdUiTab current;
@@ -48,11 +49,20 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
         current = null;
         drawerToggle.setEnabled(true);
         this.removeAll();
+
+        if (! hasOpenTabs()) {
+            ((TurkuApp) this.getParent().get()).adjustCmdColor(null);
+        }
     }
 
     @Override
     public boolean hasOpenTabs() {
         return current != null;
+    }
+
+    @Override
+    public void adjustStyle(CmdUiTab ui, String col) {
+        ((TurkuApp) this.getParent().get()).adjustCmdColor(col);
     }
 
     @Override

@@ -216,5 +216,13 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         }
     }
 
+    public void adjustCmdColor(String col){
+        if (col == null) {
+            topLrLayout.getElement().getStyle().remove("border-top");
+        } else {
+            topLrLayout.getElement().getStyle().set("border-top", "6px solid " + col);
+        }
+    }
+
     abstract protected void exitRequestedFromMenu();
 }

@@ -34,7 +34,7 @@ public class CmdUiTab extends CmdUi {
 
     @Override
     public void delayedRequestFocus() {
-        ((MainwindowTabSheet) this.getParent().get()).adjustStyle(this, color);
+        ((ITurkuMainTab) this.getParent().get()).adjustStyle(this, color);
         super.delayedRequestFocus();
     }
 

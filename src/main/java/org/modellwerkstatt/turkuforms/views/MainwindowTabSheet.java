@@ -6,6 +6,7 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.dom.Style;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
+import org.modellwerkstatt.turkuforms.app.TurkuApp;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
@@ -65,6 +66,10 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         Tab impl = this.getTabAt(index);
         tabsInSheet.remove(tab);
         this.remove(impl);
+
+        if (! hasOpenTabs()) {
+            ((TurkuApp) this.getParent().get()).adjustCmdColor(null);
+        }
     }
 
     @Override
@@ -88,15 +93,17 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
     public void adjustStyle(CmdUiTab cmdUi, String col){
 
+        ((TurkuApp) this.getParent().get()).adjustCmdColor(col);
+
         if (currentSelectedStyle != null) {
             currentSelectedStyle.remove("color");
-            currentSelectedStyle.remove("border-top");
+            currentSelectedStyle.remove("border-bottom");
         }
 
         int index = tabsInSheet.indexOf(cmdUi);
         Tab tab = getTabAt(index);
 
         if (col == null) { col = "var(--lumo-primary-color)"; }
-        currentSelectedStyle = tab.getElement().getStyle().set("color", col).set("border-top", "2px solid " + col);
+        currentSelectedStyle = tab.getElement().getStyle().set("color", col).set("border-bottom", "2px solid " + col);
     }
 }

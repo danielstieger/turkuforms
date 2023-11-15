@@ -19,6 +19,8 @@ public interface ITurkuMainTab {
 
     void setModal(boolean modal);
 
+    void adjustStyle(CmdUiTab ui, String col);
+
     interface TabSelectedIndexChanged {
         void selectedIndexChanged(int i);
     }

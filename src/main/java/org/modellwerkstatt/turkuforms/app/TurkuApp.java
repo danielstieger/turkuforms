@@ -39,7 +39,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     private IOFXUserEnvironment userEnvironment;
     private ITurkuMainTab mainTabImpl;
     private ParamInfo initialStartupParams;
-    private List<String> globalHotkeys;
 
 
     public TurkuApp() {
@@ -267,8 +266,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
     @Override
     public void ensureHotkeyAvailable(List<String> list) {
-        globalHotkeys = list;
-        for (String hk: globalHotkeys){
+        for (String hk: list){
             Peculiar.useGlobalShortcutHk(this, hk, this);
         }
         Peculiar.installMowareAddonHotkeys(this, this);

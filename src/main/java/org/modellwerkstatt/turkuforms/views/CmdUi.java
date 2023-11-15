@@ -80,7 +80,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void setColor(String col) {
         // in form of #AABBCC or transparent
         color = col;
-        getElement().getStyle().set("border-top", "4px solid " + color);
+        /* getElement().getStyle().set("border-top", "4px solid " + color); */
     }
 
     @Override
