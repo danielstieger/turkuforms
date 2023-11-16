@@ -12,6 +12,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     private int childsAdded = 0;
     private FlexComponent containerToAddComponent;
+    private int hLevel;
 
 
     public TurkuGridLayout(ITurkuAppFactory factory) {
@@ -39,6 +41,17 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         Peculiar.shrinkSpace(this);
         focusController = new FocusController<>();
 
+    }
+
+    @Override
+    public void setHLevel(int numComponent, int level) {
+        Turku.l("TurkuGrid.setHLevel( " + numComponent + ", " + level);
+
+        hLevel = level;
+        for (IToolkit_Form form: focusController.getChildren()) {
+            form.setHLevel(++numComponent, level);
+        }
+        if (heading != null) { heading.setHLevel(numComponent, level); }
     }
 
     @Override

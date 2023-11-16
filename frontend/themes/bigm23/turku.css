@@ -84,7 +84,7 @@ vaadin-tooltip-overlay::part(content) {
 
 
 
-/* TurkuLayout * * * * * * * * * * * * * * * */
+/* TurkuApplication  * * * * * * * * * * * * * * * */
 
 .TurkuLayoutNavbarTop {
     padding-left: 2em;
@@ -92,6 +92,11 @@ vaadin-tooltip-overlay::part(content) {
     background: white !important;
     border-top: 6px solid transparent;
 }
+
+.TurkuLayoutNavbarTop > *{
+    align-self: center;
+}
+
 vaadin-app-layout::part(navbar) {
     background: white !important;
 }
@@ -205,14 +210,17 @@ vaadin-button::part(prefix) {
 
 /* TurkuGridLayout (+ gen. form) * * * * * * * * * * * * * * * * */
 
-.FormHeading[level~="1"] {
-    font-family: var(--lumo-font-family);
+.FormHeading {
     font-weight: var(--turku-bold);
+    color: var(--lumo-primary-color);
+}
+
+div[pageTitle~"true"] {
     font-size: var(--lumo-font-size-l);
     line-height: var(--lumo-font-size-l);
-    color: var(--lumo-primary-color);
-    margin-left: 0.6em;
-    padding: 1em 0em;
+    margin-left: calc(1.5em - var(--turku-hierarchy-spacing));
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
 }
 
 /* Table / From top pane search / csv-export / menubar */

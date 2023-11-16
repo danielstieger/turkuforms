@@ -9,12 +9,14 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TabForm;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.List;
 
 public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO> {
     private FocusController<IToolkit_Form> focusController;
     private boolean uiInitialized = false;
+    private int hLevel;
 
     public TurkuTabForm() {
         this.setSizeFull();
@@ -26,6 +28,16 @@ public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO>
             int index = this.getIndexOf(current);
             focusController.myRequestFocusOnChild(index);
         });
+    }
+
+    @Override
+    public void setHLevel(int numComponent, int level) {
+        Turku.l("TurkuTabForm.setHLevel( " + numComponent + ", " + level);
+
+        hLevel = level;
+        for (IToolkit_Form form: focusController.getChildren()) {
+            form.setHLevel(++numComponent, level + 1);
+        }
     }
 
     @Override

@@ -7,15 +7,21 @@ import java.util.List;
 
 public class FormHeading extends Div {
     private Div heading;
+    private int hLevel = 0;
+    private boolean pageTitle = false;
 
-    public FormHeading) {
-        int level = 1;
+    public FormHeading() {
         this.addClassName("FormHeading");
-        this.getElement().setAttribute("level", "" + level);
         heading = new Div();
         this.add(heading);
     }
 
+    public void setHLevel(int numComponent, int level) {
+        hLevel = level;
+        if (numComponent == 0) { pageTitle = true; }
+        this.getElement().setAttribute("level", "" + hLevel);
+        heading.getElement().setAttribute("pageTitle", ""+ pageTitle);
+    }
 
     public void setHeading(String label) {
         heading.setText(label);

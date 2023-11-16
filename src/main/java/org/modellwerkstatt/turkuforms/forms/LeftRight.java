@@ -40,9 +40,6 @@ public class LeftRight extends Composite<Component> {
 
     public void add(Component cmpt){
         ((HasStyle) cmpt).addClassName("LeftRightFlexChild");
-        // ((HasSize) cmpt).setSizeUndefined();
-        // flexLayout.setAlignSelf(FlexComponent.Alignment.CENTER, cmpt);
-
         flexLayout.add(cmpt);
     }
 

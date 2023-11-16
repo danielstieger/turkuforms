@@ -5,6 +5,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
@@ -22,6 +23,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     private FormLayout formLayout;
     private List<Integer> colWeights;
     private List<IDataUxDelegate<?>> delegates;
+    private int hLevel;
 
     public TurkuDelegatesForm(ITurkuAppFactory fact) {
         factory = fact;
@@ -31,6 +33,13 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         this.add(formLayout);
 
         delegates = new ArrayList<>();
+    }
+
+    @Override
+    public void setHLevel(int numComponent, int level) {
+        Turku.l("TurkuDelegatesForm.setHLevel( " + numComponent + ", " + level);
+
+        hLevel = level;
     }
 
     @Override

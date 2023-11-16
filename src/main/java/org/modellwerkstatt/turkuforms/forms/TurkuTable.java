@@ -60,6 +60,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private Label rightLabel;
     private boolean hasSummaryLine = false;
     private boolean selectionHandlerEnabled = true;
+    private int hLevel;
 
     public TurkuTable(ITurkuAppFactory fact) {
         factory = fact;
@@ -152,7 +153,12 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         });
     }
 
-
+    @Override
+    public void setHLevel(int numComponent, int level) {
+        Turku.l("TurkuTable.setHLevel( " + numComponent + ", " + level);
+        hLevel = level;
+        heading.setHLevel(numComponent, level);
+    }
 
     @Override
     public void endOfInitializationForElementClass(Class theDto) {
