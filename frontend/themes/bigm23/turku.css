@@ -205,11 +205,14 @@ vaadin-button::part(prefix) {
 
 /* TurkuGridLayout (+ gen. form) * * * * * * * * * * * * * * * * */
 
-.FormHeading {
+.FormHeading[level~="1"] {
     font-family: var(--lumo-font-family);
-    font-size: var(--lumo-font-size-m);
-    font-weight: 500;
-    line-height: var(--lumo-font-size-m);
+    font-weight: var(--turku-bold);
+    font-size: var(--lumo-font-size-l);
+    line-height: var(--lumo-font-size-l);
+    color: var(--lumo-primary-color);
+    margin-left: 0.6em;
+    padding: 1em 0em;
 }
 
 /* Table / From top pane search / csv-export / menubar */
@@ -217,31 +220,39 @@ vaadin-button::part(prefix) {
     padding: 0em;
     margin: 0em;
     height: var(--turku-form-menu-height);
+    align-self: end;
 }
 .TurkuHeadingTopPane vaadin-button {
     padding: 0em;
     margin: 0em;
     height: var(--turku-form-menu-height);
     min-width: 8em;
+    align-self: end;
 }
 .TurkuHeadingTopPane vaadin-menu-bar {
     margin-right: 0.5em;
+    align-self: end;
+    padding: 0em 0.5em;
 }
 .TurkuFormMenu::part(menu-bar-button) {
     height: var(--turku-form-menu-height);
     margin: 0em;
+    align-self: end;
+    padding: 0em 0.5em;
 }
 
 
 .TurkuErrorDiv {
-    color: var(--lumo-error-color) !important;
+    background-color: var(--lumo-error-color) !important;
+    color: white;
     margin: 0.2em 0em 0.2em 0em;
-    font-weight: bold;
+    font-weight: var(--turku-bold);
 }
 .TurkuWarningDiv {
-    color: #FF6700 !important;
+    background-color: #FF6700 !important;
     margin: 0.2em 0em 0.2em 0em;
-    font-weight: bold;
+    font-weight: var(--turku-bold);
+    color: white;
 }
 
 

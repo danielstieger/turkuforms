@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
 public class LeftRight extends Composite<Component> {
     private FlexLayout flexLayout;
+
     private final static String LEFTRIGHT_FLEX_GAPS = "var(--lumo-space-m)";
 
 
@@ -40,7 +41,8 @@ public class LeftRight extends Composite<Component> {
     public void add(Component cmpt){
         ((HasStyle) cmpt).addClassName("LeftRightFlexChild");
         // ((HasSize) cmpt).setSizeUndefined();
-        flexLayout.setAlignSelf(FlexComponent.Alignment.CENTER, cmpt);
+        // flexLayout.setAlignSelf(FlexComponent.Alignment.CENTER, cmpt);
+
         flexLayout.add(cmpt);
     }
 

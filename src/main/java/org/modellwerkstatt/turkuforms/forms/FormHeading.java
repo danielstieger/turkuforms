@@ -8,8 +8,10 @@ import java.util.List;
 public class FormHeading extends Div {
     private Div heading;
 
-    public FormHeading() {
+    public FormHeading) {
+        int level = 1;
         this.addClassName("FormHeading");
+        this.getElement().setAttribute("level", "" + level);
         heading = new Div();
         this.add(heading);
     }
