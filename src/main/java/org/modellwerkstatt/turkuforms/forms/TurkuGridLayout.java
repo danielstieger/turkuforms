@@ -45,13 +45,12 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     @Override
     public void setHLevel(int numComponent, int level) {
-        Turku.l("TurkuGrid.setHLevel( " + numComponent + ", " + level);
-
         hLevel = level;
+        if (heading != null) { heading.setHLevel(numComponent, level); }
+
         for (IToolkit_Form form: focusController.getChildren()) {
             form.setHLevel(++numComponent, level);
         }
-        if (heading != null) { heading.setHLevel(numComponent, level); }
     }
 
     @Override

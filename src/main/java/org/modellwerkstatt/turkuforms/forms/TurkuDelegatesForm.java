@@ -37,9 +37,8 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
     @Override
     public void setHLevel(int numComponent, int level) {
-        Turku.l("TurkuDelegatesForm.setHLevel( " + numComponent + ", " + level);
-
         hLevel = level;
+        if (heading !=null ){ heading.setHLevel(numComponent, level); }
     }
 
     @Override

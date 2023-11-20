@@ -155,7 +155,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void setHLevel(int numComponent, int level) {
-        Turku.l("TurkuTable.setHLevel( " + numComponent + ", " + level);
         hLevel = level;
         heading.setHLevel(numComponent, level);
     }
