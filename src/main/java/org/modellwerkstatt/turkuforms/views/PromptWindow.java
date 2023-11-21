@@ -112,7 +112,7 @@ public class PromptWindow extends Dialog {
 
         } else if (msgType == IToolkit_Application.DlgType.QUESTIONCLOSE_SMALL) {
             headingText = uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.QUESTION);
-            infoDiv.addClassName("PromptWindowQuestionColor");
+            infoDiv.addClassName("PromptWindowQuestion");
             okButtonText = uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.DISCARD_BUTTON);
             cancelButtonText = uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.NO_BUTTON);
 

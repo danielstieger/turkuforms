@@ -261,7 +261,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         else if (event.matches(Key.F5, KeyModifier.SHIFT)) { keyName = "DBG_GRAPH"; }
         else { keyName = HkTranslate.trans(event.getKey()); }
 
-        applicationController.onKeyPressEvent(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
+        if (mainTabImpl.hasOpenTabs() && turkuFactory.isCompactMode()) {
+            // do not forward global hk (start cmd) when cmd is running
+        } else {
+            applicationController.onKeyPressEvent(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
+        }
     }
 
     @Override

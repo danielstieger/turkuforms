@@ -170,7 +170,7 @@ vaadin-tab[aria-selected~='true']{
 }
 
 .TabLockingMessage {
-    font-weight: bold;
+    font-weight: var(--turku-bold);
     padding: 0px 10px 0px 0px;
     color: var(--lumo-primary-color);
 }
@@ -186,7 +186,12 @@ vaadin-tab[aria-selected~='true']{
     padding: 4em;
     white-space: pre;
 }
-.PromptWindowQuestionColor { color: var(--lumo-error-color) !important; }
+
+.PromptWindowQuestion {
+    color: var(--lumo-error-color) !important;
+    font-weight: var(--turku-bold);
+}
+
 .PromptWindowLarge {
     font-family: courier;
     font-size: var(--lumo-font-size-xs);
@@ -219,8 +224,8 @@ vaadin-button::part(prefix) {
 div[pageTitle~"true"] {
     font-size: var(--lumo-font-size-l);
     line-height: var(--lumo-font-size-l);
-    margin-top: 0.8em;
-    margin-bottom: 0.8em;
+    margin-top: var(--turku-hierarchy-spacing);
+    margin-bottom: var(--turku-hierarchy-spacing);
 }
 
 /* Table / From top pane search / csv-export / menubar */

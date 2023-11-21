@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     private CmdUiTab current;
@@ -11,6 +12,7 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
 
 
     public FakeTabSheet(DrawerToggle dt) {
+        Peculiar.shrinkSpace(this);
         this.setSizeFull();
         drawerToggle = dt;
     }
