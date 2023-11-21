@@ -21,7 +21,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     /* onTheFly settings can be accessed statically in the app (factory instance not available?) */
     public static boolean onTheFly_allowEuroSignInDelegates = false;
 
-    private boolean compactMode = true;
+    private boolean compactMode = false;
     private boolean deployedVersionCheck = true;
     private String redirectAfterLogoutPath;
     private String authentiactorClassFqName;

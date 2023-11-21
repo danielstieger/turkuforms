@@ -40,6 +40,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         containerToAddComponent = this;
         Peculiar.shrinkSpace(this);
         focusController = new FocusController<>();
+        addClassName("TurkuGrid");
 
     }
 
@@ -47,6 +48,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     public void setHLevel(int numComponent, int level) {
         hLevel = level;
         if (heading != null) { heading.setHLevel(numComponent, level); }
+        getElement().setAttribute("hlevel", "" + hLevel);
 
         for (IToolkit_Form form: focusController.getChildren()) {
             form.setHLevel(++numComponent, level);

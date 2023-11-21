@@ -28,6 +28,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     public TurkuDelegatesForm(ITurkuAppFactory fact) {
         factory = fact;
         Peculiar.shrinkSpace(this);
+        addClassName("TurkuDelegatesForm");
 
         formLayout = new FormLayout();
         this.add(formLayout);
@@ -39,6 +40,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     public void setHLevel(int numComponent, int level) {
         hLevel = level;
         if (heading !=null ){ heading.setHLevel(numComponent, level); }
+        getElement().setAttribute("hlevel", "" + hLevel);
     }
 
     @Override

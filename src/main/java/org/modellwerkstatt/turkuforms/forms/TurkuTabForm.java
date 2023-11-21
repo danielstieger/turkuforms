@@ -20,6 +20,8 @@ public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO>
 
     public TurkuTabForm() {
         this.setSizeFull();
+        addClassName("TurkuTabForm");
+
         focusController = new FocusController<>();
         addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
 
@@ -31,12 +33,12 @@ public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO>
     }
 
     @Override
-    public void setHLevel(int numComponent, int level) {
-        Turku.l("TurkuTabForm.setHLevel( " + numComponent + ", " + level);
+    public void setHLevel(int numComponent, int level){
+        hLevel = level + 1;
+        getElement().setAttribute("hlevel", "" + hLevel);
 
-        hLevel = level;
         for (IToolkit_Form form: focusController.getChildren()) {
-            form.setHLevel(++numComponent, level + 1);
+            form.setHLevel(++numComponent, hLevel);
         }
     }
 

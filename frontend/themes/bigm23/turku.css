@@ -159,6 +159,33 @@ vaadin-tab[aria-selected~='true']{
     background: var(--turku-primary-background);
 }
 
+vaadin-tabsheet[hlevel~="1"] vaadin-tab[aria-selected~="true"] {
+    background-color: var(--turku-primary-background-hl1);
+}
+
+vaadin-tabsheet[hlevel~="2"] {
+    background-color: var(--turku-primary-background-hl1);
+}
+vaadin-tabsheet[hlevel~="2"] vaadin-tab[aria-selected~="true"]{
+    background-color: var(--turku-primary-background-hl2);
+}
+
+vaadin-tabsheet[hlevel~="3"] {
+    background-color: var(--turku-primary-background-hl2);
+}
+vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
+    background-color: var(--turku-primary-background-hl3);
+}
+
+
+
+
+
+
+
+
+
+
 
 .CmdUiTab {
     /* border-top: 4px solid var(--turku-primary-background); */
@@ -214,6 +241,9 @@ vaadin-button::part(prefix) {
 
 
 /* TurkuGridLayout (+ gen. form) * * * * * * * * * * * * * * * * */
+.TurkuGrid{
+    padding: var(--turku-hierarchy-spacing);
+}
 
 .FormHeading {
     font-weight: var(--turku-bold);
@@ -269,6 +299,22 @@ div[pageTitle~"true"] {
 }
 
 
+.TurkuTabForm {
+    padding: var(--turku-hierarchy-spacing);
+}
+
+
+
+vaadin-tab[aria-selected~="true"][hlevel ~="1"], .TurkuGrid[hlevel ~="1"], .TurkuTable[hlevel ~="1"], .TurkuDelegatesForm[hlevel ~="1"]{
+    background-color: var(--turku-primary-background-hl1);
+}
+vaadin-tab[aria-selected~="true"][hlevel ~="2"], .TurkuGrid[hlevel ~="2"],  .TurkuTable[hlevel ~="2"], .TurkuDelegatesForm[hlevel ~="2"]{
+    background-color: var(--turku-primary-background-hl2);
+}
+vaadin-tab[aria-selected~="true"][hlevel ~="3"], .TurkuGrid[hlevel ~="3"], .TurkuTable[hlevel ~="3"], .TurkuDelegatesForm[hlevel ~="3"]{
+    background-color: var(--turku-primary-background-hl3);
+}
+
 
 
 
@@ -310,6 +356,7 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 
 
 /* TurkuDelegateForm * * * * * * * * * * * * * * * */
+
 vaadin-form-item::part(label) {
     width: 120px;
 }
@@ -325,3 +372,6 @@ vaadin-form-item::part(label) {
 
 
 /* Delegates * * * * * * * * * * * * * * * * * * * **/
+.TurkuDelegatesForm{
+    padding: var(--turku-hierarchy-spacing);
+}

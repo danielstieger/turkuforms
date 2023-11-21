@@ -27,7 +27,12 @@ html {
     --lumo-primary-text-color: rgba(75, 84, 102, 1.0);
 
     --lumo-base-color: #f1f1f5;
+
     --turku-primary-background: #f1f1f5;
+    --turku-primary-background-hl1: #e4e4e8;
+    --turku-primary-background-hl2: #dcdce0;
+    --turku-primary-background-hl3: #d9d9dd;
+
     background: var(--turku-primary-background);
 
     --turku-grid-selected-row-color: rgba(75, 84, 102, 0.3);
