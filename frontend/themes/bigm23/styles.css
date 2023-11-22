@@ -30,8 +30,8 @@ html {
 
     --turku-primary-background: #f1f1f5;
     --turku-primary-background-hl1: #e4e4e8;
-    --turku-primary-background-hl2: #dcdce0;
-    --turku-primary-background-hl3: #d9d9dd;
+    --turku-primary-background-hl2: #d5d5d9;
+    --turku-primary-background-hl3: #c2c2c6;
 
     background: var(--turku-primary-background);
 
