@@ -9,6 +9,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TabForm;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO>
     private int hLevel;
 
     public TurkuTabForm() {
+        super();
+
         this.setSizeFull();
         addClassName("TurkuTabForm");
 

@@ -143,6 +143,10 @@ vaadin-app-layout::part(navbar)::before {
     background: #f7f8fa;
 }
 
+.TurkuTabForm {
+    /* padding on tab form breaks flex and 100% width */
+}
+
 vaadin-tabs {
     min-height: 35px;
     max-height: 35px;
@@ -181,7 +185,15 @@ vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
     border-bottom: 2px solid var(--lumo-primary-color);
 }
 
-
+.TurkuGrid[hlevel ~="1"], .TurkuTable[hlevel ~="1"], .TurkuDelegatesForm[hlevel ~="1"]{
+    background-color: var(--turku-primary-background-hl1);
+}
+.TurkuGrid[hlevel ~="2"],  .TurkuTable[hlevel ~="2"], .TurkuDelegatesForm[hlevel ~="2"]{
+    background-color: var(--turku-primary-background-hl2);
+}
+.TurkuGrid[hlevel ~="3"], .TurkuTable[hlevel ~="3"], .TurkuDelegatesForm[hlevel ~="3"]{
+    background-color: var(--turku-primary-background-hl3);
+}
 
 
 
@@ -307,24 +319,6 @@ div[pageTitle~"true"] {
     font-weight: var(--turku-bold);
     color: white;
 }
-
-
-.TurkuTabForm {
-    padding: var(--turku-hierarchy-spacing);
-}
-
-
-
-vaadin-tab[aria-selected~="true"][hlevel ~="1"], .TurkuGrid[hlevel ~="1"], .TurkuTable[hlevel ~="1"], .TurkuDelegatesForm[hlevel ~="1"]{
-    background-color: var(--turku-primary-background-hl1);
-}
-vaadin-tab[aria-selected~="true"][hlevel ~="2"], .TurkuGrid[hlevel ~="2"],  .TurkuTable[hlevel ~="2"], .TurkuDelegatesForm[hlevel ~="2"]{
-    background-color: var(--turku-primary-background-hl2);
-}
-vaadin-tab[aria-selected~="true"][hlevel ~="3"], .TurkuGrid[hlevel ~="3"], .TurkuTable[hlevel ~="3"], .TurkuDelegatesForm[hlevel ~="3"]{
-    background-color: var(--turku-primary-background-hl3);
-}
-
 
 
 
