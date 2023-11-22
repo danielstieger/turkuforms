@@ -157,10 +157,12 @@ vaadin-tab {
 }
 vaadin-tab[aria-selected~='true']{
     background: var(--turku-primary-background);
+    border-bottom: 2px solid var(--lumo-primary-color);
 }
 
 vaadin-tabsheet[hlevel~="1"] vaadin-tab[aria-selected~="true"] {
     background-color: var(--turku-primary-background-hl1);
+    border-bottom: 2px solid var(--lumo-primary-color);
 }
 
 vaadin-tabsheet[hlevel~="2"] {
@@ -168,6 +170,7 @@ vaadin-tabsheet[hlevel~="2"] {
 }
 vaadin-tabsheet[hlevel~="2"] vaadin-tab[aria-selected~="true"]{
     background-color: var(--turku-primary-background-hl2);
+    border-bottom: 2px solid var(--lumo-primary-color);
 }
 
 vaadin-tabsheet[hlevel~="3"] {
@@ -175,6 +178,7 @@ vaadin-tabsheet[hlevel~="3"] {
 }
 vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
     background-color: var(--turku-primary-background-hl3);
+    border-bottom: 2px solid var(--lumo-primary-color);
 }
 
 
@@ -265,6 +269,12 @@ div[pageTitle~"true"] {
     height: var(--turku-form-menu-height);
     align-self: end;
 }
+.TurkuHeadingTopPane vaadin-text-field input {
+    height: var(--turku-form-menu-height);
+    min-height: var(--turku-form-menu-height);
+}
+
+
 .TurkuHeadingTopPane vaadin-button {
     padding: 0em;
     margin: 0em;
