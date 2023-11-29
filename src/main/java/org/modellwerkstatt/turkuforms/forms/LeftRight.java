@@ -7,8 +7,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
-public class LeftRight extends Composite<Component> {
-    private FlexLayout flexLayout;
+public class LeftRight extends FlexLayout {
 
     private final static String LEFTRIGHT_FLEX_GAPS = "var(--lumo-space-m)";
 
@@ -16,41 +15,33 @@ public class LeftRight extends Composite<Component> {
     public LeftRight(String cssName) {
         super();
 
-        flexLayout = new FlexLayout();
-
-        flexLayout.addClassName("LeftRightFlex");
+        this.addClassName("LeftRightFlex");
         if (!"".equals(cssName)) {
-            flexLayout.addClassName(cssName);
+            this.addClassName(cssName);
         }
 
-        flexLayout.setWidthFull();
-        flexLayout.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-        flexLayout.getStyle().set("column-gap", LEFTRIGHT_FLEX_GAPS);
+        this.setWidthFull();
+        this.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+        this.getStyle().set("column-gap", LEFTRIGHT_FLEX_GAPS);
     }
 
     public LeftRight(){
         this("");
     }
 
-
-    @Override
-    protected Component initContent() {
-        return flexLayout;
-    }
-
     public void add(Component cmpt){
         ((HasStyle) cmpt).addClassName("LeftRightFlexChild");
-        flexLayout.add(cmpt);
+        super.add(cmpt);
     }
 
     public void spacer() {
         Div spacer = new Div();
         spacer.addClassName("LeftRightFlexSpacer");
-        flexLayout.add(spacer);
-        flexLayout.expand(spacer);
+        this.add(spacer);
+        this.expand(spacer);
     }
 
     public void clear() {
-        flexLayout.removeAll();
+        this.removeAll();
     }
 }

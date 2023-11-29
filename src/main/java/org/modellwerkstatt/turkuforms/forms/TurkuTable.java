@@ -159,9 +159,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         });
 
 
-        heading.addClickListener(event -> {
-            Turku.l("TurkuTable.headingClickListener(): count is " + event.getClickCount());
-
+        topPane.addClickListener(event -> {
             if (event.getClickCount() == 2) {
                 for(int i=0; i < colInfo.size(); i++) {
                     TurkuTableCol col = colInfo.get(i);

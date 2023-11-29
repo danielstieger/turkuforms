@@ -9,7 +9,8 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
 
     public ImageViewer() {
         super(new Image());
-        inputField.setSizeFull();
+        inputField.setWidth("100%");
+
     }
 
     public void setText(String s) {

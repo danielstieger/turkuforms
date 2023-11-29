@@ -312,12 +312,14 @@ div[pageTitle~"true"] {
     color: white;
     margin: 0.2em 0em 0.2em 0em;
     font-weight: var(--turku-bold);
+    padding: 0em 0.5em;
 }
 .TurkuWarningDiv {
     background-color: #FF6700 !important;
     margin: 0.2em 0em 0.2em 0em;
     font-weight: var(--turku-bold);
     color: white;
+    padding: 0em 0.5em;
 }
 
 
@@ -363,6 +365,11 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 
 vaadin-form-item::part(label) {
     width: 120px;
+    text-align: right;
+}
+
+.TurkuImageFormItem::part(label) {
+    display: none;
 }
 
 vaadin-combo-box-item {
@@ -370,12 +377,8 @@ vaadin-combo-box-item {
     min-height: 0;
 }
 
-vaadin-form-item::part(label) {
-    text-align: right;
-}
 
-
-/* Delegates * * * * * * * * * * * * * * * * * * * **/
 .TurkuDelegatesForm{
     padding: var(--turku-hierarchy-spacing);
 }
+

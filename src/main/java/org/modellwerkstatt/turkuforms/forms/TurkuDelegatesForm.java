@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
@@ -11,6 +12,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.editors.DummyEditor;
 import org.modellwerkstatt.turkuforms.editors.FormChild;
+import org.modellwerkstatt.turkuforms.editors.ImageViewer;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
@@ -70,7 +72,15 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
         FormLayout.FormItem newItem = formLayout.addFormItem(rightPart, label);
         formLayout.setColspan(newItem, colWeights.get(delegates.size() % colWeights.size()));
-        if (child instanceof DummyEditor) { newItem.addClassName("InvisibleWhenBelow"); }
+
+        if (child instanceof DummyEditor) {
+            newItem.addClassName("InvisibleWhenBelow");
+
+        } else if (child instanceof ImageViewer) {
+            newItem.addClassName("TurkuImageFormItem");
+
+        }
+
 
         // Turku.l("TurkuDelegatesForm.addDelegate() added "+ iDataUxDelegate.getPropertyName() + " as "  + numDelegate + " with span  " + colWeights.get(numDelegate % colWeights.size()));
 
