@@ -136,9 +136,10 @@ task zz_buildSimpleOne() {
 }
 
 task zz_buildForMoWarePlugin() {
-    dependsOn(vaadinClean)
     dependsOn(ZZ_mowareIntegrate)
     dependsOn("bmoware.mowareUpdatePluginForTukru")
+    dependsOn(vaadinClean)
+
 }
 
 /* gradle.taskGraph.whenReady {

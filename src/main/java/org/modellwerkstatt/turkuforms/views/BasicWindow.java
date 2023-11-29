@@ -53,12 +53,14 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     protected DrawerToggle drawerToggle;
     protected VerticalLayout drawerCommandsLayout;
     protected MenuBar mainmenuBar;
+    protected boolean appInCompactMode;
 
     public BasicWindow() {
     }
 
-    protected void init(ITurkuAppFactory factory, String appNavbarTitle) {
+    protected void init(ITurkuAppFactory factory, boolean compact, String appNavbarTitle) {
         turkuFactory = factory;
+        appInCompactMode = compact;
 
         userInfoLabel = new Label("-");
         sysInfoLabel = new Label("-");
@@ -72,7 +74,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
 
 
-        if (!factory.isCompactMode()) {
+        if (!appInCompactMode) {
             mainmenuBar = new MenuBar();
             mainmenuBar.setOpenOnHover(false);
             mainmenuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);

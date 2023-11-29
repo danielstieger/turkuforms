@@ -41,6 +41,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     private ParamInfo initialStartupParams;
 
 
+
     public TurkuApp() {
         Turku.l("TurkuApp.constructor() - start");
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
@@ -69,9 +70,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
         } else {
 
-            init(servlet.getUiFactory(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
+            init(servlet.getUiFactory(),  userEnvironment.isProlongedUserSession() || factory.isCompactMode(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
-            if (factory.isCompactMode()) {
+            if (appInCompactMode) {
                 mainTabImpl = new FakeTabSheet(drawerToggle);
             } else {
                 mainTabImpl = new MainwindowTabSheet();
@@ -200,7 +201,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void setMenuAndInit(int langIndex, Menu start, Menu extra, Menu help) {
 
-        if (turkuFactory.isCompactMode()) {
+        if (appInCompactMode) {
             addDrawerMenu(start.getAllItems());
 
         } else {
@@ -261,7 +262,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         else if (event.matches(Key.F5, KeyModifier.SHIFT)) { keyName = "DBG_GRAPH"; }
         else { keyName = HkTranslate.trans(event.getKey()); }
 
-        if (mainTabImpl.hasOpenTabs() && turkuFactory.isCompactMode()) {
+        if (mainTabImpl.hasOpenTabs() && appInCompactMode) {
             // do not forward global hk (start cmd) when cmd is running
         } else {
             applicationController.onKeyPressEvent(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
