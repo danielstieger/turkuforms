@@ -53,6 +53,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     private IGenSelControlled genFormController;
     private List<TurkuTableCol> colInfo = new ArrayList<>();
+    private List<Grid.Column<DTO>> gridColumns;
     private int firstEditableCol = -1;
     private boolean editPreview = false;
 
@@ -143,14 +144,43 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 });
 
         dataView.setFilterMethod((item, text) -> {
-            for (TurkuTableCol col : colInfo) {
-                String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
-                if (viewed.toLowerCase().replace(".", "").contains(text)) {
-                    return true;
+
+            for (int i=0; i < gridColumns.size(); i++) {
+                if (gridColumns.get(i).isVisible()) {
+                    TurkuTableCol col = colInfo.get(i);
+
+                    String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
+                    if (viewed.toLowerCase().replace(".", "").contains(text)) {
+                        return true;
+                    }
                 }
             }
             return false;
         });
+
+
+        heading.addClickListener(event -> {
+            Turku.l("TurkuTable.headingClickListener(): count is " + event.getClickCount());
+
+            if (event.getClickCount() == 2) {
+                for(int i=0; i < colInfo.size(); i++) {
+                    TurkuTableCol col = colInfo.get(i);
+                    if (col.widthInPercent == 0) {
+
+                        Grid.Column<DTO> column = gridColumns.get(i);
+                        if (column.isVisible()) {
+                            column.setVisible(false);
+                            column.setWidth("0%");
+                        } else {
+                            column.setVisible(true);
+                            column.setWidth("5%");
+                        }
+                    }
+
+                }
+            }
+        });
+
     }
 
     @Override
@@ -194,8 +224,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             grid.getElement().addEventListener("cell-edit-stopped", e -> {
                 grid.enableGlobalEsc();
             });
-
         }
+
+        gridColumns = grid.getColumns();
     }
 
 
@@ -213,65 +244,61 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public void addColumn(String property, String label, ITableCellStringConverter<?> converter, int width, boolean editable, boolean folded, boolean important) {
 
 
-        if (folded) {
+        if (folded) { width = 0; }
+        colInfo.add(new TurkuTableCol(colInfo.size(), property, label, converter, width));
+
+        Grid.Column<DTO> col;
+        if (editable) {
+            if (firstEditableCol < 0) { firstEditableCol = colInfo.size() - 1; }
+
+            EditColumnConfigurator<DTO> editableCol = grid.addEditColumn(item -> converter.convert(MoJSON.get(item, property)) );
+            editableCol.text((item, newValue) ->
+                    {
+                        try {
+                            Object val = converter.convertBack(newValue);
+                            ValueObjectReplacementFacility.put(item, property, val);
+
+                        } catch (Exception e) {
+                            Notification n = Notification.show(factory.getSystemLabel(-1, MoWareTranslations.Key.TABLE_EDITOR_VALIDATION_ERROR) + "\n", 4000, Notification.Position.TOP_END);
+                            n.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        }
+                    });
+
+            col = editableCol.getColumn();
 
         } else {
-            colInfo.add(new TurkuTableCol(colInfo.size(), property, label, converter, width));
+            String litPropName = Workarounds.litPropertyName(property);
+            String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
+            String fontWeight = important ? "font-weight:var(--turku-bold);" : "";
 
-            Grid.Column<DTO> col;
-            if (editable) {
-                if (firstEditableCol < 0) { firstEditableCol = colInfo.size() - 1; }
-
-                EditColumnConfigurator<DTO> editableCol = grid.addEditColumn(item -> converter.convert(MoJSON.get(item, property)) );
-                editableCol.text((item, newValue) ->
-                        {
-                            try {
-                                Object val = converter.convertBack(newValue);
-                                ValueObjectReplacementFacility.put(item, property, val);
-
-                            } catch (Exception e) {
-                                Notification n = Notification.show(factory.getSystemLabel(-1, MoWareTranslations.Key.TABLE_EDITOR_VALIDATION_ERROR) + "\n", 4000, Notification.Position.TOP_END);
-                                n.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                            }
-                        });
-
-                col = editableCol.getColumn();
-
-            } else {
-                String litPropName = Workarounds.litPropertyName(property);
-                String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
-                String fontWeight = important ? "font-weight:var(--turku-bold);" : "";
-
-                col = grid.addColumn(LitRenderer.<DTO>of(template).
-                        withProperty(litPropName, item -> {
-                            return converter.convert(MoJSON.get(item, property));
-                        }).
-                        withProperty(litPropName + "Style", item -> {
-                            String color = converter.getBgColor(MoJSON.get(item, property));
-                            return color == null ? fontWeight : fontWeight + "color:" + color + ";";
-                        }));
-            }
-
-
-            col.setHeader(Workarounds.niceGridHeaderLabel(label));
-            col.setResizable(true);
-            col.setTextAlign(converter.isRightAligned() ? ColumnTextAlign.END : ColumnTextAlign.START);
-            col.setSortable(true);
-            col.setComparator((dto1, dto2) -> {
-                Comparable v1 = MoJSON.get(dto1, property);
-                Comparable v2 = MoJSON.get(dto2, property);
-                if (v1 == null && v2 == null) {
-                    return 0;
-                } else if (v1 == null) {
-                    return -1;
-                } else if (v2 == null) {
-                    return +1;
-                } else {
-                    return v1.compareTo(v2);
-                }
-            });
-
+            col = grid.addColumn(LitRenderer.<DTO>of(template).
+                    withProperty(litPropName, item -> {
+                        return converter.convert(MoJSON.get(item, property));
+                    }).
+                    withProperty(litPropName + "Style", item -> {
+                        String color = converter.getBgColor(MoJSON.get(item, property));
+                        return color == null ? fontWeight : fontWeight + "color:" + color + ";";
+                    }));
         }
+
+        if (folded) { col.setVisible(false); }
+        col.setHeader(Workarounds.niceGridHeaderLabel(label));
+        col.setResizable(true);
+        col.setTextAlign(converter.isRightAligned() ? ColumnTextAlign.END : ColumnTextAlign.START);
+        col.setSortable(true);
+        col.setComparator((dto1, dto2) -> {
+            Comparable v1 = MoJSON.get(dto1, property);
+            Comparable v2 = MoJSON.get(dto2, property);
+            if (v1 == null && v2 == null) {
+                return 0;
+            } else if (v1 == null) {
+                return -1;
+            } else if (v2 == null) {
+                return +1;
+            } else {
+                return v1.compareTo(v2);
+            }
+        });
     }
 
     @Override
@@ -420,7 +447,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.add(overflowMenu);
 
         contextMenu = new MenuContext<DTO>(factory, grid, menuSub);
-        grid.addItemDoubleClickListener(e -> { contextMenu.execDoubleClick(); });
+        grid.addItemDoubleClickListener(e -> {
+            contextMenu.execDoubleClick();
+        });
     }
 
     @Override
@@ -453,24 +482,29 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public String generateCsv() {
         StringBuilder csv = new StringBuilder();
 
-        for (int i = 0; i < colInfo.size(); i++) {
-            TurkuTableCol col = colInfo.get(i);
-            csv.append(col.headerName);
+        List<DTO> objectsToExport = dataView.getSelectionInSync(selectionModel.getSelectedItems());
 
-            boolean last = i == (colInfo.size() - 1);
-            csv.append(last ? "\n" : "\t");
+        for (int i=0; i < gridColumns.size(); i++) {
+            if (gridColumns.get(i).isVisible()) {
+                TurkuTableCol col = colInfo.get(i);
+                csv.append(col.headerName + "\t");
+            }
+        }
+        csv.append("\n");
+
+
+        for (Object item : objectsToExport) {
+            for (int i=0; i < gridColumns.size(); i++) {
+                if (gridColumns.get(i).isVisible()) {
+                    TurkuTableCol col = colInfo.get(i);
+
+                    String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
+                    csv.append(viewed + "\t");
+                }
+            }
+            csv.append("\n");
         }
 
-
-        for (DTO item : dataView.getFilteredList())
-            for (int i = 0; i < colInfo.size(); i++) {
-                TurkuTableCol col = colInfo.get(i);
-                String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
-                csv.append(viewed);
-
-                boolean last = i == (colInfo.size() - 1);
-                csv.append(last ? "\n" : "\t");
-            }
 
         return csv.toString();
     }

@@ -96,7 +96,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
             topLrLayout.add(logo);
 
 
-            Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
+            /* Button darkToggle = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_adjust")), event -> {
                 ThemeList themeList = UI.getCurrent().getElement().getThemeList();
 
                 if (themeList.contains(Lumo.DARK)) {
@@ -107,7 +107,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
                 this.setDrawerOpened(false);
             });
             darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-            darkToggle.setSizeUndefined();
+            darkToggle.setSizeUndefined(); */
 
             Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_logout")), event -> {
                 this.setDrawerOpened(false);
@@ -134,7 +134,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
             sysInfoTooltip.setHideDelay(5000);
 
             userInfoLabel.setWidthFull();
-            HorizontalLayout drawerBottom = new HorizontalLayout(userInfoLabel, darkToggle, logout);
+            HorizontalLayout drawerBottom = new HorizontalLayout(userInfoLabel, logout);
             drawerBottom.setWidthFull();
             drawerBottom.setAlignSelf(FlexComponent.Alignment.CENTER, userInfoLabel);
 

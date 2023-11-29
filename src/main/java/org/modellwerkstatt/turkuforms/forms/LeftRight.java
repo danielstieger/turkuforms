@@ -53,5 +53,4 @@ public class LeftRight extends Composite<Component> {
     public void clear() {
         flexLayout.removeAll();
     }
-
 }

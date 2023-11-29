@@ -13,7 +13,7 @@ public class DesktopGridProDataView<DTO> {
     private List<DTO> filteredList;
     private List<DTO> removedList;
 
-    private GridListDataView currentDataView;
+    private GridListDataView<DTO> currentDataView;
     private String filterForWhat = "";
     private TextInDto<DTO> extTextInDtoColsure;
 
@@ -116,6 +116,14 @@ public class DesktopGridProDataView<DTO> {
 
     public static interface TextInDto<DTO> {
         public boolean textInItem(DTO item, String text);
+    }
+
+    public List<DTO> getSelectionInSync(Set<DTO> selection) {
+        List<DTO> inSync = new ArrayList<>();
+
+        currentDataView.getItems().forEach(it -> {if (selection.contains(it)) { inSync.add(it); } });
+
+        return inSync;
     }
 
     public void gcClear() {
