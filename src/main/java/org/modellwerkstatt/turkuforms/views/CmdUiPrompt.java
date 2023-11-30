@@ -10,6 +10,7 @@ public class CmdUiPrompt extends CmdUi {
 
     public CmdUiPrompt(ITurkuAppFactory fact, boolean fullSize) {
         super(fact);
+        setClassName("CmdUiPrompt");
         this.fullSize = fullSize;
 
     }

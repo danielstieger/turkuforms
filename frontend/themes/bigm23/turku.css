@@ -203,9 +203,12 @@ vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
 
 
 
-.CmdUiTab {
+.CmdUiTab, .CmdUiPrompt {
     /* border-top: 4px solid var(--turku-primary-background); */
     background: var(--turku-primary-background);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-m);
+    font-family: var(--lumo-font-family);
 }
 
 .ModalTab {

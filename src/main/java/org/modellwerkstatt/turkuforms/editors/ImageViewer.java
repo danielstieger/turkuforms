@@ -36,7 +36,14 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
     public void setEnabled(boolean b) { }
 
     @Override
-    public void setEditorPrompt(String s) { }
+    public void setEditorPrompt(String promptText) {
+        String[] xySplit = promptText.split(",");
+        String xVal = xySplit[0].trim();
+        String yVal = xySplit[1].trim();
+
+        inputField.setMaxWidth(xVal + "px");
+        inputField.setMaxHeight(yVal + "px");
+    }
 
     @Override
     public void newObjectBound() { }
