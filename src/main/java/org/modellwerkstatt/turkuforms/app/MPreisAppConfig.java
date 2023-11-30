@@ -16,6 +16,7 @@ public class MPreisAppConfig implements AppShellConfigurator {
 
     public static final String OK_HOKTEY = "F12";
     public static final String NO_HOKTEY = "ESC";
+    public static final float DELEGATES_LINE_HIGHT_IN_REM = 1.125f; /* --lumo-font-size-m */
 
 
     @Override

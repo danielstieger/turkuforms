@@ -148,7 +148,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     @Override
     public IToolkit_TextEditor createTextAreaEditor(int i) {
-        return new TextAreaEditor();
+        return new TextAreaEditor(i);
     }
 
     @Override
