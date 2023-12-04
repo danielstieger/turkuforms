@@ -23,8 +23,10 @@ html {
     --lumo-font-size-xxl: 1.5rem;
     --lumo-font-size-xxxl: 1.75rem;
 
+    /* --lumo-primary-color: rgba(30, 206, 201, 1.0); */
     --lumo-primary-color: rgba(23, 132, 200, 1.0);
     --lumo-primary-text-color: rgba(75, 84, 102, 1.0);
+    --turku-shade-disabled: rgba(26, 26, 26, 0.02);
 
     --lumo-base-color: #f1f1f5;
 

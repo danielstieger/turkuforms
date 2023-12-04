@@ -348,11 +348,6 @@ vaadin-selection-grid {
     padding-right: 0.5em;
 }
 
-
-/* vaadin-button::part(prefix) {
-    margin-bottom: -4px;
-}*/
-
 vaadin-grid-sorter:not([direction])::part(indicators)::before {
   display: none;
 }
@@ -380,8 +375,27 @@ vaadin-combo-box-item {
     min-height: 0;
 }
 
-
 .TurkuDelegatesForm{
     padding: var(--turku-hierarchy-spacing);
 }
 
+vaadin-text-field[disabled]::part(input-field),
+vaadin-combo-box[disabled]::part(input-field),
+vaadin-select[disabled]::part(input-field),
+vaadin-date-time-picker-date-picker::part(input-field),
+vaadin-date-time-picker-time-picker::part(input-field)
+{
+	background-color: var(--turku-shade-disabled);
+}
+
+vaadin-text-field > input[disabled],
+vaadin-combo-box > input[disabled],
+vaadin-select > vaadin-select-value-button[disabled],
+vaadin-date-time-picker-date-picker > input[disabled],
+vaadin-date-time-picker-time-picker > input[disabled]
+{
+
+  color: var(--lumo-secondary-text-color);
+  -webkit-text-fill-color: var(--lumo-secondary-text-color);
+  /* font-weight: var(--turku-bold); */
+}
