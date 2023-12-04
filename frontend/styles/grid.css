@@ -17,15 +17,16 @@
   min-height: var(--lumo-size-xs);
 }
 
-:host([hlevel~="1"]) [part~="cell"] {
+:host([hlevel~="1"]) [part~="cell"], :host([hlevel~="1"]) tbody {
     background-color: var(--turku-primary-background-hl1);
 }
-:host([hlevel~="2"]) [part~="cell"] {
+:host([hlevel~="2"]) [part~="cell"], :host([hlevel~="2"]) tbody  {
     background-color: var(--turku-primary-background-hl2);
 }
-:host([hlevel~="3"]) [part~="cell"] {
+:host([hlevel~="3"]) [part~="cell"], :host([hlevel~="3"]) tbody  {
     background-color: var(--turku-primary-background-hl3);
 }
+
 
 :host([theme~="dense"]) [part~="editable-cell"] {
   background-color: rgb(245, 248, 253);
