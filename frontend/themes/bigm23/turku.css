@@ -108,6 +108,7 @@ vaadin-app-layout::part(navbar)::before {
     margin-left: 1em;
     font-size: var(--lumo-font-size-m);
     color: var(--lumo-primary-text-color);
+    font-weight: 500;
 }
 .TurkuLayoutMenuBar::part(menu-bar-button) {
     margin-left: 3em;
@@ -386,25 +387,28 @@ vaadin-combo-box-item {
 
 
 vaadin-text-field[disabled],
+vaadin-text-area[disabled],
 vaadin-combo-box[disabled],
 vaadin-select[disabled],
-vaadin-date-time-picker-date-picker,
-vaadin-date-time-picker-time-picker
+vaadin-date-time-picker-date-picker[disabled],
+vaadin-date-time-picker-time-picker[disabled]
 {
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
 
 vaadin-text-field[disabled]::part(input-field),
+vaadin-text-area[disabled]::part(input-field),
 vaadin-combo-box[disabled]::part(input-field),
 vaadin-select[disabled]::part(input-field),
-vaadin-date-time-picker-date-picker::part(input-field),
-vaadin-date-time-picker-time-picker::part(input-field)
+vaadin-date-time-picker-date-picker[disabled]::part(input-field),
+vaadin-date-time-picker-time-picker[disabled]::part(input-field)
 {
 	background-color: var(--turku-shade-disabled);
 }
 
 vaadin-text-field > input[disabled],
+vaadin-text-area > textarea[disabled],
 vaadin-combo-box > input[disabled],
 vaadin-select > vaadin-select-value-button[disabled],
 vaadin-date-time-picker-date-picker > input[disabled],
