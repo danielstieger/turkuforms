@@ -21,6 +21,8 @@ public class MPreisAppConfig implements AppShellConfigurator {
 
     @Override
     public void configurePage(AppShellSettings settings) {
+
         Turku.l("AppConfig.configurePage()");
+        // settings.addFavIcon("icons");
     }
 }

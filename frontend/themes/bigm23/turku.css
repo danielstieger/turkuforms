@@ -364,6 +364,9 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 vaadin-form-item::part(label) {
     width: 120px;
     text-align: right;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: calc(var(--turku-bold) - 500);
 }
 
 .TurkuImageFormItem::part(label) {
@@ -377,6 +380,19 @@ vaadin-combo-box-item {
 
 .TurkuDelegatesForm{
     padding: var(--turku-hierarchy-spacing);
+    margin-bottom: var(--turku-hierarchy-spacing);
+}
+
+
+
+vaadin-text-field[disabled],
+vaadin-combo-box[disabled],
+vaadin-select[disabled],
+vaadin-date-time-picker-date-picker,
+vaadin-date-time-picker-time-picker
+{
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 
 vaadin-text-field[disabled]::part(input-field),
@@ -397,5 +413,5 @@ vaadin-date-time-picker-time-picker > input[disabled]
 
   color: var(--lumo-secondary-text-color);
   -webkit-text-fill-color: var(--lumo-secondary-text-color);
-  /* font-weight: var(--turku-bold); */
+  font-weight: var(--turku-bold);
 }
