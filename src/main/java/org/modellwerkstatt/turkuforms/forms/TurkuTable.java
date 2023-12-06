@@ -18,6 +18,8 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.modellwerkstatt.addons.desktopgridpro.DesktopGridPro;
 import org.modellwerkstatt.addons.desktopgridpro.DesktopGridProDataView;
+import org.modellwerkstatt.dataux.runtime.delegates.Delegate;
+import org.modellwerkstatt.dataux.runtime.delegates.TableCellBigDecimalConverter;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
@@ -25,6 +27,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.dataux.runtime.utils.ValueObjectReplacementFacility;
+import org.modellwerkstatt.objectflow.runtime.IOFXMetaRangeScale;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.objectflow.runtime.Selection;
@@ -33,6 +36,9 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
+import javax.validation.ValidationException;
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -238,6 +244,24 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     }
 
+    private BigDecimal validate(Object item, String newValue, ITableCellStringConverter<?> genConverter, String property) throws ValidationException {
+        BigDecimal bdValue = null;
+        TableCellBigDecimalConverter converter = (TableCellBigDecimalConverter) genConverter;
+
+        try {
+            bdValue = converter.convertBack(newValue);
+
+        } catch(Exception e) {
+            String msg = String.format(factory.getSystemLabel(-1, MoWareTranslations.Key.DECIMAL_VALIDATION_ERR), converter.formatterToLocalizedPattern(), newValue);
+            throw new ValidationException(msg);
+        }
+
+        IOFXMetaRangeScale<BigDecimal> meta = MoJSON.get(item, Delegate.getMetaDataAccessorToPath(property));
+
+
+        return bdValue;
+    }
+
     @Override
     public void addColumn(String property, String label, ITableCellStringConverter<?> converter, int width, boolean editable, boolean folded, boolean important) {
 
@@ -252,12 +276,13 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             EditColumnConfigurator<DTO> editableCol = grid.addEditColumn(item -> converter.convert(MoJSON.get(item, property)) );
             editableCol.text((item, newValue) ->
                     {
+
                         try {
-                            Object val = converter.convertBack(newValue);
+                            BigDecimal val = validate(item, newValue, converter, property);
                             ValueObjectReplacementFacility.put(item, property, val);
 
-                        } catch (Exception e) {
-                            Notification n = Notification.show(factory.getSystemLabel(-1, MoWareTranslations.Key.TABLE_EDITOR_VALIDATION_ERROR) + "\n", 4000, Notification.Position.TOP_END);
+                        } catch (ValidationException e) {
+                            Notification n = Notification.show(e.getMessage() + "\n", 4000, Notification.Position.TOP_END);
                             n.addThemeVariants(NotificationVariant.LUMO_ERROR);
                         }
                     });
