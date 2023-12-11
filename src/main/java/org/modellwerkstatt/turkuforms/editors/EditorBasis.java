@@ -29,7 +29,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
     }
 
     public void setValidationErrorText(String text) {
-        if (Defs.hasValidationErrorText(text)) {
+        if (Defs.hasText(text)) {
             inputField.setErrorMessage(text);
             inputField.setInvalid(true);
         } else{

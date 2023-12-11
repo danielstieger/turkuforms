@@ -26,6 +26,9 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private String redirectAfterLogoutPath;
     private String authentiactorClassFqName;
 
+    private String uploadLocationStore;
+    private String uploadLocationRetrieve;
+
     public TurkuAppFactory() {
         super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
 
@@ -158,9 +161,16 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     @Override
     public IToolkit_UploadEditor createUploadEditor() {
-        throw new RuntimeException("Not implemented yet.");
+        return new UploadEditor(uploadLocationStore, uploadLocationRetrieve);
     }
 
+
+    public void setUploadLocationRetrieve(String name) {
+        uploadLocationRetrieve = name;
+    }
+    public void setUploadLocationStore(String name) {
+        uploadLocationStore = name;
+    }
     public IMoLdapService getLdapServiceIfPresent() {
         IMoLdapService instance = this.context.getAutowireCapableBeanFactory().getBean(IMoLdapService.class);
         return instance;
