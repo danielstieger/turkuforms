@@ -7,7 +7,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -16,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class  DateTimeEditor extends EditorBasis<DateTimePicker> implements IToolkit_DateOrTimeEditor {
+public class  DateTimeEditor extends EditorBasisFocusable<DateTimePicker> implements IToolkit_DateOrTimeEditor {
 
     static protected HashMap<String, DateTimeFormatter> cachedFormatter = new HashMap<>();
     protected String cachedFormatKey;

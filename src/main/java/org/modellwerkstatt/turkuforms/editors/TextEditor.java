@@ -10,7 +10,7 @@ import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.app.TurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
-public class TextEditor extends EditorBasis<TextField> implements IToolkit_DateOrTimeEditor {
+public class TextEditor extends EditorBasisFocusable<TextField> implements IToolkit_DateOrTimeEditor {
     protected boolean adjustLocalDateDotsNotConsideringFormat;
 
     public TextEditor(boolean forLocalDate) {

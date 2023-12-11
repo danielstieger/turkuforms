@@ -10,7 +10,7 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReferenceEditor extends EditorBasis<ComboBox<String>> implements IToolkit_ReferenceEditor {
+public class ReferenceEditor extends EditorBasisFocusable<ComboBox<String>> implements IToolkit_ReferenceEditor {
     protected List<String> items = null;
 
     public ReferenceEditor() {

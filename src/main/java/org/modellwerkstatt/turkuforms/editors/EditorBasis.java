@@ -7,14 +7,13 @@ import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-abstract public class EditorBasis<T extends Component & HasValidation & HasEnabled & Focusable<?>> extends FormChild<T> {
+abstract public class EditorBasis<T extends Component & HasValidation & HasEnabled> extends FormChild<T> {
 
     protected boolean issueUpdateEnabled = false;
     protected Button updateConclusionButton;
@@ -57,6 +56,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
     public boolean execUpdateConclusion(String newValue) {
         // default implementation
         Turku.l("EditorBasis.execUpdateConclusion() [" + issueUpdateEnabled + "] " + lastIssuedUpdateText + " -> " + newValue + " for " + this);
+
         /* if (newValue == null) {
             Turku.l(OFXConsoleHelper._____organizeCurrentStacktrace_____());
         } */
@@ -65,6 +65,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
             if (!SaveObjectComperator.equals(lastIssuedUpdateText, newValue)) {
                 lastIssuedUpdateText = newValue;
                 issueUpdateEnabled = false;
+                Turku.l("                                   issuing the update now!");
                 delegate.issueUpdateConclusionAfterContentChange();
                 issueUpdateEnabled = true;
                 return true;
@@ -99,9 +100,6 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
     }
 
 
-    public void setOption(IToolkit_TextEditor.Option... options) {
+    public void setOption(Option... options) {
     }
-
-    @Override
-    public void turkuFocus() { inputField.focus(); }
 }

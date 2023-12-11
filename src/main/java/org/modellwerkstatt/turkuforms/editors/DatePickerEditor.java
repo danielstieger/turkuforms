@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
-public class DatePickerEditor extends EditorBasis<DatePicker> implements IToolkit_DateOrTimeEditor {
+public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implements IToolkit_DateOrTimeEditor {
     static protected HashMap<String, DateTimeFormatter> cachedFormatter = new HashMap<>();
     protected String cachedFormatKey;
     protected boolean isInvalid;

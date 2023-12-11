@@ -2,19 +2,13 @@ package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextAreaVariant;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.dom.Element;
-import org.modellwerkstatt.dataux.runtime.delegates.LocalDateDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.app.MPreisAppConfig;
-import org.modellwerkstatt.turkuforms.app.TurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
-public class TextAreaEditor extends EditorBasis<TextArea> implements IToolkit_TextEditor {
+public class TextAreaEditor extends EditorBasisFocusable<TextArea> implements IToolkit_TextEditor {
 
     public TextAreaEditor(int numLines) {
         super(new TextArea());

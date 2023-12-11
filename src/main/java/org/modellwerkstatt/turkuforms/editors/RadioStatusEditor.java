@@ -1,19 +1,21 @@
 package org.modellwerkstatt.turkuforms.editors;
 
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.select.SelectVariant;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_StatusEditor;
+import org.modellwerkstatt.turkuforms.util.Defs;
 
 import java.util.List;
 
-public class StatusEditor extends EditorBasisFocusable<Select<String>> implements IToolkit_StatusEditor {
+public class RadioStatusEditor extends EditorBasis<RadioButtonGroup<String>> implements IToolkit_StatusEditor {
     protected List<String> items = null;
 
-    public StatusEditor() {
-        super(new Select<String>());
+
+
+    public RadioStatusEditor() {
+        super(new RadioButtonGroup<String>());
         inputField.setSizeFull();
-        inputField.setEmptySelectionAllowed(false);
-        inputField.addThemeVariants(SelectVariant.LUMO_SMALL);
 
         inputField.addValueChangeListener(event -> {
             if (issueUpdateEnabled) {
@@ -23,6 +25,7 @@ public class StatusEditor extends EditorBasisFocusable<Select<String>> implement
             turkuDelegatesForm.focusOnNextDlgt(delegate, true);
         });
     }
+
 
 
     public void setText(String s) {
@@ -54,4 +57,6 @@ public class StatusEditor extends EditorBasisFocusable<Select<String>> implement
         lastIssuedUpdateText = null;
         cachedValue = null;
     }
+
+
 }

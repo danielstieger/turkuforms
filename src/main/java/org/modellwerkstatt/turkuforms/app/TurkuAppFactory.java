@@ -117,13 +117,18 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public IToolkit_ReferenceEditor createReferenceEditor() {
+    public IToolkit_ReferenceEditor createReferenceEditor(boolean alter) {
         return new ReferenceEditor();
     }
 
     @Override
-    public IToolkit_StatusEditor createStatusEditor() {
-        return new StatusEditor();
+    public IToolkit_StatusEditor createStatusEditor(boolean alter) {
+        if (alter) {
+            return new RadioStatusEditor();
+
+        } else {
+            return new StatusEditor();
+        }
     }
 
     @Override
