@@ -38,6 +38,7 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import javax.validation.ValidationException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.*;
 
@@ -245,6 +246,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
     private BigDecimal validate(Object item, String newValue, ITableCellStringConverter<?> genConverter, String property) throws ValidationException {
+        int langIndex = -1;
         BigDecimal bdValue = null;
         TableCellBigDecimalConverter converter = (TableCellBigDecimalConverter) genConverter;
 
@@ -252,12 +254,41 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             bdValue = converter.convertBack(newValue);
 
         } catch(Exception e) {
-            String msg = String.format(factory.getSystemLabel(-1, MoWareTranslations.Key.DECIMAL_VALIDATION_ERR), converter.formatterToLocalizedPattern(), newValue);
+            String msg = String.format(factory.getSystemLabel(langIndex, MoWareTranslations.Key.DECIMAL_VALIDATION_ERR), converter.formatterToLocalizedPattern(), newValue);
+            msg += " " + factory.getSystemLabel(langIndex, MoWareTranslations.Key.NOT_TAKEN_OVER_ADDON);
             throw new ValidationException(msg);
         }
 
-        IOFXMetaRangeScale<BigDecimal> meta = MoJSON.get(item, Delegate.getMetaDataAccessorToPath(property));
 
+
+        IOFXMetaRangeScale<BigDecimal> meta = MoJSON.get(item, Delegate.getMetaDataAccessorToPath(property));
+        String errText = null;
+
+        if (meta.getMin() != null && meta.getMax() != null) {
+            if (bdValue.compareTo(meta.getMin()) < 0 || bdValue.compareTo(meta.getMax()) > 0) {
+                errText = String.format(factory.getSystemLabel(langIndex, MoWareTranslations.Key.DECIMAL_BETWEEN_ERR), meta.getMin().toString(), meta.getMax().toString());
+            }
+        } else if (meta.getMin() != null) {
+            if (bdValue.compareTo(meta.getMin()) < 0) {
+                errText = String.format(factory.getSystemLabel(langIndex, MoWareTranslations.Key.DECIMAL_MINIMUM_ERR), meta.getMin().toString());
+            }
+        } else if (meta.getMax() != null) {
+            if (bdValue.compareTo(meta.getMax()) > 0) {
+                errText = String.format(factory.getSystemLabel(langIndex, MoWareTranslations.Key.DECIMAL_MAXIMUM_ERR), meta.getMax().toString());
+            }
+        }
+
+        if (errText == null && meta.getScale() != null) {
+            // check num of decimal points
+            if (bdValue.setScale(meta.getScale(), RoundingMode.HALF_DOWN).compareTo(bdValue) != 0) {
+                errText = String.format(factory.getSystemLabel(langIndex, MoWareTranslations.Key.DECIMAL_SCALE_ERR), meta.getScale().toString());
+            }
+        }
+
+        if (errText != null) {
+            errText += " " + factory.getSystemLabel(langIndex, MoWareTranslations.Key.NOT_TAKEN_OVER_ADDON);
+            throw new ValidationException(errText);
+        }
 
         return bdValue;
     }

@@ -363,7 +363,7 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 /* TurkuDelegateForm * * * * * * * * * * * * * * * */
 
 vaadin-form-item::part(label) {
-    width: 120px;
+    width: 100px;
     text-align: right;
     margin-top: 0px;
     margin-bottom: 0px;
