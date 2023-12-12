@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.editors;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -7,9 +8,12 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UploadEditor;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.objectflow.runtime.CoreReporterInfo;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.io.File;
 
@@ -60,12 +64,17 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
             } catch (Throwable e) {
                 Notification n = Notification.show(e.getMessage(), 4000, Notification.Position.TOP_END);
                 n.addThemeVariants(NotificationVariant.LUMO_ERROR);
+
+                Workarounds.getControllerFormUi(UI.getCurrent()).logFrmwrkProblem("", "", UploadEditor.class.getName(), e, "Problem in success listener of upload editor.");
             }
         });
 
         inputField.addFailedListener(event -> {
             Notification n = Notification.show(event.getReason().getMessage(), 4000, Notification.Position.TOP_END);
             n.addThemeVariants(NotificationVariant.LUMO_ERROR);
+
+            Workarounds.getControllerFormUi(UI.getCurrent()).logFrmwrkProblem("", "", UploadEditor.class.getName(), event.getReason(), "Problem in failed listener of upload editor.");
+
         });
 
     }
