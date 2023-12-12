@@ -3,17 +3,26 @@ package org.modellwerkstatt.turkuforms.editors;
 import com.vaadin.flow.component.html.Image;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ImageEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
+import org.modellwerkstatt.turkuforms.util.Defs;
 
 public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEditor {
     protected String cachedValue;
+    protected String retrieveLocationStore;
 
-    public ImageViewer() {
+
+    public ImageViewer(String rls) {
         super(new Image());
+        retrieveLocationStore = rls;
         inputField.setWidth("100%");
 
     }
 
     public void setText(String s) {
+
+        if (Defs.hasText(retrieveLocationStore)) {
+            s = retrieveLocationStore + s;
+        }
+
         if (!SaveObjectComperator.equals(s, cachedValue)) {
             cachedValue = s;
             inputField.setSrc(s);
@@ -22,7 +31,7 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
     }
 
     public String getText() {
-        return inputField.getSrc();
+        throw new RuntimeException("Not implemented");
     }
 
 

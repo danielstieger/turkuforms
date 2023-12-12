@@ -1,28 +1,28 @@
 package org.modellwerkstatt.turkuforms.editors;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UploadEditor;
+import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
+import java.io.File;
 
-// (1) Kein Problem, wenn wir Button tauschen?
-//
+
+
 public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEditor {
-    protected String uploadLocationStore;
-    protected String uploadLocationRetrieve;
+    protected String uploadFsLocationStore;
 
-    protected String uploadedFileName;
+    protected String currentFilename;
 
-    public UploadEditor(String uploadLocationStore, String uploadLocationRetrieve) {
+    public UploadEditor(String uls, ITurkuAppFactory factory) {
         super(new Upload());
-        this.uploadLocationStore = uploadLocationStore;
-        this.uploadLocationRetrieve = uploadLocationRetrieve;
+        uploadFsLocationStore = uls;
 
         inputField.setMaxFiles(1);
         inputField.setMaxFileSize(2000000);
@@ -32,8 +32,35 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
         FileBuffer singleFileBuffer = new FileBuffer();
         inputField.setReceiver(singleFileBuffer);
         inputField.addSucceededListener(event -> {
-            Notification.show("SUCCESS: " + event.getFileName() + " / " + singleFileBuffer.getFileData().getFile().getAbsolutePath());
-            Turku.l("SUCCESS: " + event.getFileName() + " / " + singleFileBuffer.getFileData().getFile().getAbsolutePath());
+
+            try {
+                File newFile;
+                if (Defs.hasText(uploadFsLocationStore)) {
+                    newFile = new File(uploadFsLocationStore + event.getFileName());
+                } else {
+                    newFile = new File(singleFileBuffer.getFileData().getFile().getParentFile().getAbsolutePath() + File.separator + event.getFileName());
+                }
+
+                boolean ok = singleFileBuffer.getFileData().getFile().renameTo(newFile);
+                if (!ok) {
+                    throw new RuntimeException("Not able to move file to " + newFile.getAbsolutePath() + " after upload.");
+                }
+
+                if (Defs.hasText(uploadFsLocationStore)) {
+                    setText(event.getFileName());
+
+                } else {
+                    setText(newFile.getAbsolutePath());
+
+                }
+
+                Notification n = Notification.show(String.format(factory.getSystemLabel(-1, MoWareTranslations.Key.UPLOAD_SUCCESS), event.getFileName()), 4000, Notification.Position.TOP_END);
+                n.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+
+            } catch (Throwable e) {
+                Notification n = Notification.show(e.getMessage(), 4000, Notification.Position.TOP_END);
+                n.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
         });
 
         inputField.addFailedListener(event -> {
@@ -45,7 +72,15 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
 
     @Override
     public void setValidationErrorText(String s) {
-        inputField.setDropLabel(new Label(s));
+        if (Defs.hasText(s)) {
+            inputField.addClassName("uploadEditorError");
+            inputField.setDropLabel(new Label(s));
+
+        } else {
+            inputField.removeClassName("uploadEditorError");
+            inputField.setDropLabel(new Label(""));
+        }
+
     }
 
     @Override
@@ -66,15 +101,16 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
     @Override
     public void setText(String s) {
         if (Defs.hasText(s)) {
-            uploadedFileName = s;
-            inputField.setDropLabel(new Label(s));
+            currentFilename = s;
+            // do not show full path.
+            inputField.setDropLabel(new Label(removePath(s)));
         }
     }
 
     @Override
     public String getText() {
         // return filename only, without dirs
-        return uploadedFileName;
+        return currentFilename;
     }
 
     @Override
@@ -85,5 +121,13 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
     @Override
     public void setOption(Option... options) {
 
+    }
+
+
+    public static String removePath(String filePath) {
+        int li = filePath.lastIndexOf(File.separator);
+        Turku.l("UploadEditor() searching for " + File.separator + " in " + filePath + " ==> " + li);
+        if (li < 0) { return filePath; }
+        return filePath.substring(li + 1);
     }
 }

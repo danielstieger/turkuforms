@@ -13,6 +13,8 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
+import java.io.File;
+
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator";
 
@@ -26,8 +28,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private String redirectAfterLogoutPath;
     private String authentiactorClassFqName;
 
-    private String uploadLocationStore;
-    private String uploadLocationRetrieve;
+    // Empty, app has to handle stuff, i.e. empty = return full path
+    // for uploadLocations
 
     public TurkuAppFactory() {
         super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
@@ -151,7 +153,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     @Override
     public IToolkit_ImageEditor createImageEditor() {
-        return new ImageViewer();
+        return new ImageViewer(uploadLocationRetrieve);
     }
 
     @Override
@@ -161,16 +163,9 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     @Override
     public IToolkit_UploadEditor createUploadEditor() {
-        return new UploadEditor(uploadLocationStore, uploadLocationRetrieve);
+        return new UploadEditor(uploadFsLocationStore, this);
     }
 
-
-    public void setUploadLocationRetrieve(String name) {
-        uploadLocationRetrieve = name;
-    }
-    public void setUploadLocationStore(String name) {
-        uploadLocationStore = name;
-    }
     public IMoLdapService getLdapServiceIfPresent() {
         IMoLdapService instance = this.context.getAutowireCapableBeanFactory().getBean(IMoLdapService.class);
         return instance;

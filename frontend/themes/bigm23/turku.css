@@ -419,3 +419,7 @@ vaadin-date-time-picker-time-picker > input[disabled]
   -webkit-text-fill-color: var(--lumo-secondary-text-color);
   font-weight: var(--turku-bold);
 }
+
+.uploadEditorError {
+    border: 2px solid var(--lumo-error-color);
+}
