@@ -363,7 +363,7 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 /* TurkuDelegateForm * * * * * * * * * * * * * * * */
 
 vaadin-form-item::part(label) {
-    width: 100px;
+    width: 120px;
     text-align: right;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -391,7 +391,8 @@ vaadin-text-area[disabled],
 vaadin-combo-box[disabled],
 vaadin-select[disabled],
 vaadin-date-time-picker-date-picker[disabled],
-vaadin-date-time-picker-time-picker[disabled]
+vaadin-date-time-picker-time-picker[disabled],
+vaadin-radio-group[disabled]
 {
 	padding-top: 0px;
 	padding-bottom: 0px;
@@ -412,12 +413,21 @@ vaadin-text-area > textarea[disabled],
 vaadin-combo-box > input[disabled],
 vaadin-select > vaadin-select-value-button[disabled],
 vaadin-date-time-picker-date-picker > input[disabled],
-vaadin-date-time-picker-time-picker > input[disabled]
+vaadin-date-time-picker-time-picker > input[disabled],
+vaadin-radio-button > label[disabled]
 {
 
   color: var(--lumo-secondary-text-color);
   -webkit-text-fill-color: var(--lumo-secondary-text-color);
   font-weight: var(--turku-bold);
+}
+
+vaadin-radio-button[disabled]::part(radio) {
+    display: none;
+}
+
+vaadin-select::part(input-field)::part(toggle-button) {
+    display: none;
 }
 
 .uploadEditorError {

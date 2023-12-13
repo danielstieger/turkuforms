@@ -15,6 +15,8 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
         retrieveLocationStore = rls;
         inputField.setWidth("100%");
 
+        // another idea would be to retrieve the available
+        // space in grid, then scale img
     }
 
     public void setText(String s) {
