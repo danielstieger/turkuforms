@@ -43,10 +43,10 @@ public class RadioStatusEditor extends EditorBasis<RadioButtonGroup<String>> imp
     }
 
     protected void adjustEnabled() {
-        if (! cachedEnabledState) {
+        /* if (! cachedEnabledState) {
             inputField.setItems(cachedValue);
             inputField.setValue(cachedValue);
-        }
+        }*/
     }
 
     @Override

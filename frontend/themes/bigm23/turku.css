@@ -426,10 +426,6 @@ vaadin-radio-button[disabled]::part(radio) {
     display: none;
 }
 
-vaadin-select::part(input-field)::part(toggle-button) {
-    display: none;
-}
-
 .uploadEditorError {
     border: 2px solid var(--lumo-error-color);
 }
