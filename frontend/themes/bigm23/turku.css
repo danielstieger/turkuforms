@@ -425,6 +425,10 @@ vaadin-radio-button > label[disabled]
 vaadin-radio-button[disabled]::part(radio) {
     display: none;
 }
+vaadin-radio-button[disabled]:not([checked]) {
+    display: none;
+}
+
 
 .uploadEditorError {
     border: 2px solid var(--lumo-error-color);

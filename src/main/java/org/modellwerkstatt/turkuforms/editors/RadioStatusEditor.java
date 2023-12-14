@@ -42,25 +42,11 @@ public class RadioStatusEditor extends EditorBasis<RadioButtonGroup<String>> imp
         return items.indexOf(cachedValue);
     }
 
-    protected void adjustEnabled() {
-        /* if (! cachedEnabledState) {
-            inputField.setItems(cachedValue);
-            inputField.setValue(cachedValue);
-        }*/
-    }
-
     @Override
     public void setSelectedIndex(int i) {
         cachedValue = items.get(i);
         lastIssuedUpdateText = cachedValue;
         inputField.setValue(cachedValue);
-        adjustEnabled();
-    }
-
-    @Override
-    public void setEnabled(boolean b) {
-        super.setEnabled(b);
-        adjustEnabled();
     }
 
     @Override
