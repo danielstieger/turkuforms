@@ -29,7 +29,7 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
         uploadFsLocationStore = uls;
 
         inputField.setMaxFiles(1);
-        inputField.setMaxFileSize(2000000);
+        inputField.setMaxFileSize(factory.getUploadMaxSize());
         inputField.setDropAllowed(true);
         inputField.setAutoUpload(true);
 
