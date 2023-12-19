@@ -1,10 +1,8 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
 public class LeftRight extends FlexLayout {

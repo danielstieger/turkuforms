@@ -6,7 +6,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
-import elemental.json.JsonObject;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;

@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;

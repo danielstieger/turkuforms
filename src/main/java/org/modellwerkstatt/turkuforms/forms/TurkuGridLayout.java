@@ -12,7 +12,6 @@ import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;

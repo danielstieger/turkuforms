@@ -5,7 +5,6 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.material.Material;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 

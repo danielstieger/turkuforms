@@ -8,9 +8,7 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UploadEditor;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
-import org.modellwerkstatt.objectflow.runtime.CoreReporterInfo;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -60,6 +58,8 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
 
                 Notification n = Notification.show(String.format(factory.getSystemLabel(-1, MoWareTranslations.Key.UPLOAD_SUCCESS), event.getFileName()), 4000, Notification.Position.TOP_END);
                 n.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                Workarounds.getControllerFormUi(UI.getCurrent()).logAppTrace("", "", UploadEditor.class.getName(),newFile.getAbsolutePath() + " uploaded successfully.", "", null);
+
 
             } catch (Throwable e) {
                 Notification n = Notification.show(e.getMessage(), 4000, Notification.Position.TOP_END);

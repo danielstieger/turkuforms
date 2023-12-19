@@ -2,11 +2,9 @@ package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;

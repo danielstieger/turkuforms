@@ -3,7 +3,6 @@ package org.modellwerkstatt.turkuforms.auth;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,7 +18,7 @@ import org.modellwerkstatt.turkuforms.util.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.*;
+import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
 
 public class SimpleIPAuthenticator extends HorizontalLayout implements BeforeEnterObserver {
     protected ParamInfo paramInfo;

@@ -1,10 +1,7 @@
 package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.select.SelectVariant;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_StatusEditor;
-import org.modellwerkstatt.turkuforms.util.Defs;
 
 import java.util.List;
 

@@ -1,13 +1,12 @@
 package org.modellwerkstatt.turkuforms.forms;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
-import com.vaadin.flow.component.gridpro.GridProVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -39,7 +38,6 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import javax.validation.ValidationException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
 import java.util.*;
 
 @SuppressWarnings("unchecked")

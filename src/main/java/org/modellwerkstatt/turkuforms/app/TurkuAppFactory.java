@@ -13,8 +13,6 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
-import java.io.File;
-
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.auth.SimpleIPAuthenticator";
 

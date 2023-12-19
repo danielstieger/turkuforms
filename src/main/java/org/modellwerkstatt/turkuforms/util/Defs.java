@@ -1,7 +1,5 @@
 package org.modellwerkstatt.turkuforms.util;
 
-import java.io.File;
-
 public class Defs {
     public static boolean hasIcon(String iconname) {
         return iconname != null && !"".equals(iconname);
