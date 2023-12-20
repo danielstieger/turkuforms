@@ -53,7 +53,7 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
         String yVal = xySplit[1].trim();
 
         if (! "0".equals(xVal)) { inputField.setMaxWidth(xVal + "px"); };
-        if (! "0".equals(yVal)) { inputField.setMaxHeight(yVal + "px"); };
+        if (! "0".equals(yVal)) { inputField.setMaxHeight(yVal + "px"); inputField.setWidth(""); };
     }
 
     @Override
