@@ -192,9 +192,13 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
     @Override
     public void setCurrentTabModal(boolean modal) {
-        if (mainmenuBar != null) { mainmenuBar.setEnabled(! modal); }
-        drawerToggle.setEnabled(! modal);
-        if (modal) { setDrawerOpened(false); }
+        if (! appInCompactMode) {
+            mainmenuBar.setEnabled(!modal);
+        } else {
+            drawerToggle.setEnabled(!modal);
+            if (modal) { setDrawerOpened(false); }
+        }
+
         mainTabImpl.setModal(modal);
     }
 
