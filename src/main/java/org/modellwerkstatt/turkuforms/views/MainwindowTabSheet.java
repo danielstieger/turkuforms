@@ -77,13 +77,12 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
     @Override
     public void setModal(boolean modal) {
+        if (modal) { addClassName("ModalTab"); }
+        else { removeClassName("ModalTab"); }
+
         int selected = getSelectedIndex();
         for (int i = 0 ; i < tabsInSheet.size(); i++) {
-            if (i == selected) {
-                if (modal) { getTabAt(i).addClassName("ModalTab"); }
-                else { getTabAt(i).removeClassName("ModalTab"); }
-
-            } else {
+            if (i != selected) {
                 getTabAt(i).setEnabled(! modal);
             }
         }

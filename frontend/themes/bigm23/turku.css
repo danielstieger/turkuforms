@@ -205,21 +205,14 @@ vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
 
 
 .CmdUiTab, .CmdUiPrompt {
-    /* border-top: 4px solid var(--turku-primary-background); */
     background: var(--turku-primary-background);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
 }
 
-.ModalTab {
-    /* border-top: 4px solid var(--lumo-primary-color); */
-}
-
-.TabLockingMessage {
-    font-weight: var(--turku-bold);
-    padding: 0px 10px 0px 0px;
-    color: var(--lumo-primary-color);
+.ModalTab::part(tabs-container) {
+    background-color: var(--lumo-primary-color);
 }
 
 
@@ -310,6 +303,18 @@ div[pageTitle~"true"] {
     padding: 0em 0.5em;
 }
 
+.TabLockingMessage {
+    background-color: var(--lumo-error-color) !important;
+    color: white;
+    font-weight: var(--turku-bold);
+
+    padding: 0.1em 5em 0.1em 0.1em;
+    margin: var(--turku-hierarchy-spacing);
+}
+.TabLockingButton {
+    color: var(--lumo-error-color);
+    margin-bottom: 0.2em
+}
 
 .TurkuErrorDiv {
     background-color: var(--lumo-error-color) !important;

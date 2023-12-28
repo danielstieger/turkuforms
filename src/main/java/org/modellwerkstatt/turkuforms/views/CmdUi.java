@@ -159,13 +159,13 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void setNotification(String s) {
-
         Div div = new Div(new Text(s));
         div.addClassName("TabLockingMessage");
 
         Button closeButton = new Button(Workarounds.createIconWithCollection("close"));
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.getElement().setAttribute("aria-label", "Close");
+        closeButton.addClassName("TabLockingButton");
 
         HorizontalLayout lyt = new HorizontalLayout();
         Peculiar.shrinkSpace(lyt);
