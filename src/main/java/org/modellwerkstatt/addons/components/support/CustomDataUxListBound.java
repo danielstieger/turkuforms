@@ -43,6 +43,7 @@ public abstract class CustomDataUxListBound<T> implements ICustomDataUxElement<T
     public void addDelegateInfo(String delegateName, String path, String label) {
         labelToPathMap.put(label, path);
     }
+
     public String getString(T obj, String label) {
         if (!labelToPathMap.containsKey(label)) {
             throw new RuntimeException("The requested label " + label + "was not suplied with overwrite labels in the custom ux-element");

@@ -144,7 +144,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     @Override
     public void afterFullUiInitialized() {
-
+        focusController.afterFullUiInitialized();
     }
 
     @Override
