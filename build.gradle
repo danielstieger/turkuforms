@@ -81,7 +81,7 @@ ant.importBuild "${mowareHome}/turkuforms/assembly/build.xml"
 
 
 task updateDesktopGrid {
-    delete 'src/main/java/org/modellwerkstatt/addons'
+    delete 'src/main/java/org/modellwerkstatt/addons/desktopgridpro'
     delete 'frontend/src'
     delete 'frontend/styles'
 
