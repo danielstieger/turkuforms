@@ -30,13 +30,15 @@ public class PieChartToolkitImpl<T> extends Div implements IToolkit_Form<T> {
 
     @Override
     public void afterFullUiInitialized() {
-
+        Configuration conf = chart.getConfiguration();
         PlotOptionsPie opt = new PlotOptionsPie();
         opt.setInnerSize("60%");
         opt.setAnimation(false);
 
-        chart.getConfiguration().setPlotOptions(opt);
+        conf.setPlotOptions(opt);
+        conf.getChart().setStyledMode(true);
     }
+
     @Override
     public void loadList(List<T> list, IOFXSelection<T> iofxSelection) {
 
@@ -64,9 +66,9 @@ public class PieChartToolkitImpl<T> extends Div implements IToolkit_Form<T> {
 
 //            dsi.setDataLabels(new DataLabels(true));
 
-            if (supportColor) {
+            /* if (supportColor) {
                 dsi.setColor(new SolidColor(dataProvider.getString(obj, ExtCmpt.PIECHART_ITEM_COLOR)));
-            }
+            } */
 
             if (last) { dsi.setSliced(true); }
 

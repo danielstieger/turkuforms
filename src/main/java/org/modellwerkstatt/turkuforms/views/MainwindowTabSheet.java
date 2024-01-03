@@ -21,7 +21,7 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
     public MainwindowTabSheet() {
         super();
-        setHeightFull();
+        setSizeFull();
         addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
         addClassName("MainwindowTabSheet");
         tabsInSheet = new ArrayList<>();
