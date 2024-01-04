@@ -1,29 +1,34 @@
 package org.modellwerkstatt.addons.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
 import com.vaadin.flow.component.charts.model.style.SolidColor;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.addons.components.support.CustomDataUxListBound;
 import org.modellwerkstatt.dataux.runtime.customcomponents.ExtCmpt;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
+import org.modellwerkstatt.turkuforms.views.CmdUi;
+import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
 import java.util.List;
+import java.util.Optional;
 
-public class PieChartToolkitImpl<T> extends Div implements IToolkit_Form<T> {
+public class PieChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
     protected CustomDataUxListBound<T> dataProvider;
     protected Chart chart;
 
     public PieChartToolkitImpl(CustomDataUxListBound<T> provider) {
-        super();
+        super(ChartType.PIE);
 
         setSizeFull();
-        chart = new Chart(ChartType.PIE);
+        chart = this;
         chart.setSizeFull();
-        add(chart);
+        // add(chart);  // from experiments with the Height on Flag/Resize bug....
 
         dataProvider = provider;
     }
@@ -37,6 +42,8 @@ public class PieChartToolkitImpl<T> extends Div implements IToolkit_Form<T> {
 
         conf.setPlotOptions(opt);
         conf.getChart().setStyledMode(true);
+        conf.getChart().setHeight("300px");
+
     }
 
     @Override
@@ -96,7 +103,26 @@ public class PieChartToolkitImpl<T> extends Div implements IToolkit_Form<T> {
 
     @Override
     public Object myRequestFocus() {
+        // due to vaadin charts, flexbox issue
+        // https://github.com/vaadin/web-components/issues/2171#issuecomment-934340680
+
+        /* Optional<Component> parent = getParent();
+
+        while (parent.isPresent() && ! (parent.get() instanceof CmdUi)) {
+            if (parent.get() instanceof VerticalLayout) {
+                applyWorkaround((VerticalLayout) parent.get());
+            }
+
+            parent = parent.get().getParent();
+        } */
+
         return null;
+    }
+
+    public void applyWorkaround(VerticalLayout l) {
+        l.getStyle().set("overflow", "hidden");
+        // l.setMinWidth("0");
+        l.setMinHeight("0");
     }
 
     @Override

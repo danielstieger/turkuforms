@@ -199,11 +199,6 @@ vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
 
 
 
-
-
-
-
-
 .CmdUiTab, .CmdUiPrompt {
     background: var(--turku-primary-background);
     font-size: var(--lumo-font-size-m);

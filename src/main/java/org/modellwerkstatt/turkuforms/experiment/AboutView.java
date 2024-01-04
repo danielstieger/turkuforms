@@ -42,7 +42,9 @@ public class AboutView extends VerticalLayout {
         VerticalLayout exchangeableContent = new VerticalLayout();
         exchangeableContent.setSizeFull();
         exchangeableContent.add(l1, chart);
-
+        exchangeableContent.getStyle().set("overflow", "hidden");
+        exchangeableContent.setMinWidth("0");
+        exchangeableContent.setMinHeight("0");
 
 
         /* ------ the application setup  ----- */
