@@ -61,6 +61,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private List<Grid.Column<DTO>> gridColumns;
     private int firstEditableCol = -1;
     private boolean editPreview = false;
+    private boolean generallyEditable = true;
 
     private Label leftLabel;
     private Label rightLabel;
@@ -248,6 +249,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         BigDecimal bdValue = null;
         TableCellBigDecimalConverter converter = (TableCellBigDecimalConverter) genConverter;
 
+        if (! generallyEditable) {
+            String msg = factory.getSystemLabel(langIndex, MoWareTranslations.Key.COMMAND_IN_READONLY);
+            throw new ValidationException(msg);
+        }
+
         try {
             bdValue = converter.convertBack(newValue);
 
@@ -422,8 +428,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void forceNotEditable() {
-        //TODO editable ??
-
+        generallyEditable = false;
     }
 
     @Override
