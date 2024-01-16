@@ -69,6 +69,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private boolean selectionHandlerEnabled = true;
     private int hLevel;
 
+
+
     public TurkuTable(ITurkuAppFactory fact) {
         factory = fact;
         Peculiar.shrinkSpace(this);
@@ -444,16 +446,17 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public Object myRequestFocus() {
 
-
         Optional<DTO> firstSelected = selectionModel.getFirstSelectedItem();
         Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
 
         // scrolling needed?
-        if ((firstEditableCol >= 0 || editPreview) && firstSelected.isPresent()) {
-            // Lowest Index of selection ?
+        if ((factory.isScrollAdjust() || firstEditableCol >= 0 || editPreview) && firstSelected.isPresent()) {
             int idx = dataView.getIndex(firstSelected.get());
-            if (idx > 7) {
-                grid.scrollToIndex(idx - 7);
+            if (idx > 0) {
+                if (idx < (dataView.getFilteredTotalCount() -7)) {
+                    idx -= 7;
+                }
+                grid.scrollToIndex(idx);
             }
         }
 
