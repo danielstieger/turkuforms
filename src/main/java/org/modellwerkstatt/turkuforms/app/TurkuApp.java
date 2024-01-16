@@ -214,7 +214,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             startMenu.addItem(vaadinPowerOff, event -> { exitRequestedFromMenu(); });
 
             addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
-            addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
+            SubMenu helpMenu = addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
+            helpMenu.addItem(turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ABOUT), event -> {
+                String text = applicationController.appUserSystemVersionInfo() + "\n\n" + getTurkuVersionInfo();
+                showDialog(DlgType.INFO_SMALL, text, null);
+            });
         }
 
         // initialize other stuff
@@ -261,7 +265,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void onShortcut(ShortcutEvent event) {
         String keyName;
-        Turku.l("TurkuApp.onShortcut() " + event);
+        Turku.l("TurkuApp.onShortcut() " + event.getKeyModifiers()+ " " + event.getKey().getKeys());
         if (event.matches(Key.F6, KeyModifier.SHIFT)) { keyName = "DBG_SESSION"; }
         else if (event.matches(Key.F5, KeyModifier.SHIFT)) { keyName = "DBG_GRAPH"; }
         else { keyName = HkTranslate.trans(event.getKey()); }

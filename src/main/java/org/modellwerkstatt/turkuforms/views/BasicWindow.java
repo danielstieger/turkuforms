@@ -85,6 +85,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
             topLrLayout.spacer();
             topLrLayout.add(mainmenuBar);
 
+
         } else {
             drawerToggle = new DrawerToggle();
             setPrimarySection(Section.NAVBAR);
@@ -116,20 +117,9 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
             logout.setSizeUndefined();
 
 
-            String basicSysInfo = MoVersion.MOWARE_PLUGIN_VERSION + "\n" + Turku.INTERNAL_VERSION + "\n";
-            basicSysInfo += "Vaadin Version " + Version.getFullVersion() + "\n";
-            basicSysInfo += ManagementFactory.getRuntimeMXBean().getVmVendor() + " " +
-                    ManagementFactory.getRuntimeMXBean().getVmName() + " " +
-                    ManagementFactory.getRuntimeMXBean().getVmVersion();
-
-            for (Feature f: FeatureFlags.get(VaadinService.getCurrent().getContext()).getFeatures()) {
-                if (f.isEnabled()) {
-                    basicSysInfo += "\nVaadin feature " + f.getTitle();
-                }
-            }
 
             Tooltip sysInfoTooltip = Tooltip.forComponent(sysInfoLabel);
-            sysInfoTooltip.setText(basicSysInfo);
+            sysInfoTooltip.setText(getTurkuVersionInfo());
             sysInfoTooltip.setPosition(Tooltip.TooltipPosition.TOP_END);
             sysInfoTooltip.setHideDelay(5000);
 
@@ -224,6 +214,21 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         } else {
             topLrLayout.getElement().getStyle().set("border-top", "6px solid " + col);
         }
+    }
+
+    public String getTurkuVersionInfo() {
+        String basicSysInfo = MoVersion.MOWARE_PLUGIN_VERSION + "\n" + Turku.INTERNAL_VERSION + "\n";
+        basicSysInfo += "Vaadin Version " + Version.getFullVersion() + "\n";
+        basicSysInfo += ManagementFactory.getRuntimeMXBean().getVmVendor() + " " +
+                ManagementFactory.getRuntimeMXBean().getVmName() + " " +
+                ManagementFactory.getRuntimeMXBean().getVmVersion();
+
+        for (Feature f: FeatureFlags.get(VaadinService.getCurrent().getContext()).getFeatures()) {
+            if (f.isEnabled()) {
+                basicSysInfo += "\nVaadin feature " + f.getTitle();
+            }
+        }
+        return basicSysInfo;
     }
 
     abstract protected void exitRequestedFromMenu();
