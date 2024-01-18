@@ -363,25 +363,31 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
-        boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
 
-        Turku.l("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
-        // if (issuedFromSelectionHandler) { return true; }
+        try { // WME BUG in spot ..
+            boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
 
-        selectionHandlerEnabled = false;
+            Turku.l("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
+            // if (issuedFromSelectionHandler) { return true; }
 
-        selectionModel.deselectAll();
+            selectionHandlerEnabled = false;
 
-        // There is actually a filteredList
-        LinkedHashSet<DTO> selection = new LinkedHashSet<>(iofxSelection.getObjects());
-        boolean allSelectionsAvailable = dataView.allSelectionsCurrentlyInFilter(selection);
-        if (allSelectionsAvailable) {
-            selectionModel.updateSelection(selection, Collections.emptySet());
+            selectionModel.deselectAll();
+
+            // There is actually a filteredList
+            LinkedHashSet<DTO> selection = new LinkedHashSet<>(iofxSelection.getObjects());
+            boolean allSelectionsAvailable = dataView.allSelectionsCurrentlyInFilter(selection);
+            if (allSelectionsAvailable) {
+                selectionModel.updateSelection(selection, Collections.emptySet());
+            }
+            adjustTableInformation("", allSelectionsAvailable);
+
+            selectionHandlerEnabled = true;
+            return allSelectionsAvailable;
+
+        } catch (NullPointerException ex) {
+            throw new RuntimeException("Class " + dtoClass.getSimpleName() + " @ " + genFormController.getClass().getSimpleName() + " 2select " + iofxSelection.getObjectOrNull() + " dv " + dataView.getFilteredList(), ex);
         }
-        adjustTableInformation("", allSelectionsAvailable);
-
-        selectionHandlerEnabled = true;
-        return allSelectionsAvailable;
     }
 
     @Override
