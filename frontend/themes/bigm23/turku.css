@@ -148,6 +148,13 @@ vaadin-app-layout::part(navbar)::before {
     /* padding on tab form breaks flex and 100% width */
 }
 
+.TurkuTabForm > .TurkuTable, .TurkuTabForm > .TurkuGrid, .TurkuTabForm > .TurkuDelegatesForm {
+    padding-top: var(--turku-hierarchy-spacing);
+    padding-left: var(--turku-hierarchy-spacing);
+    padding-right: var(--turku-hierarchy-spacing);
+
+}
+
 vaadin-tabs {
     min-height: 35px;
     max-height: 35px;
@@ -204,6 +211,7 @@ vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
+    padding: var(--turku-hierarchy-spacing) calc( 2 * var(--turku-hierarchy-spacing));
 }
 
 .ModalTab::part(tabs-container) {
@@ -240,17 +248,18 @@ vaadin-button::part(prefix) {
 .BottomConclusionButtons {
     padding: 0.2em 0em;
 }
-.BottomConclusionButtons vaadin-button:first-child {
+/* .BottomConclusionButtons vaadin-button:first-child {
     margin-left: 1em;
 }
 .BottomConclusionButtons vaadin-button:last-child {
     margin-right: 1em;
-}
+} */
 
 
 /* TurkuGridLayout (+ gen. form) * * * * * * * * * * * * * * * * */
 .TurkuGrid{
-    padding: var(--turku-hierarchy-spacing);
+    /* grid has no margin, no padding
+     * allowing for grid in grid in grid, without loosing space */
 }
 
 .FormHeading {
@@ -331,7 +340,8 @@ div[pageTitle~"true"] {
 
 /* TurkuTable * * * * * * * * * * * * * * * RAUS ODER NOCHT RAUS VON HIER? */
 .TurkuTable {
-    padding: var(--turku-hierarchy-spacing);
+    /* padding: var(--turku-hierarchy-spacing); */
+    margin-bottom: calc(2 * var(--turku-hierarchy-spacing));
 }
 
 vaadin-selection-grid {
@@ -360,7 +370,7 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 
 
 
-/* TurkuDelegateForm * * * * * * * * * * * * * * * */
+/* TurkuDelegatesForm * * * * * * * * * * * * * * * */
 
 vaadin-form-item::part(label) {
     width: 120px;
@@ -380,8 +390,8 @@ vaadin-combo-box-item {
 }
 
 .TurkuDelegatesForm{
-    padding: var(--turku-hierarchy-spacing);
-    margin-bottom: var(--turku-hierarchy-spacing);
+    /* padding: var(--turku-hierarchy-spacing); */
+    margin-bottom: calc(2 * var(--turku-hierarchy-spacing))
 }
 
 

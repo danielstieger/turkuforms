@@ -89,6 +89,12 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         // in form of #AABBCC or transparent
         color = col;
         /* getElement().getStyle().set("border-top", "4px solid " + color); */
+        setColorOnConclusionButtons();
+    }
+
+    private void setColorOnConclusionButtons() {
+
+        conclusionButtons.stream().skip(1).forEach( btn -> { btn.getElement().getStyle().set("background-color", color); });
     }
 
     @Override
@@ -140,6 +146,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
                 button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             }
         }
+
+        setColorOnConclusionButtons();
     }
 
     @Override
