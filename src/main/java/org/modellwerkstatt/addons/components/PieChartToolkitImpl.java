@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
 import com.vaadin.flow.component.charts.model.style.SolidColor;
+import com.vaadin.flow.component.charts.model.style.Style;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -41,9 +42,14 @@ public class PieChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         opt.setAnimation(false);
 
         conf.setPlotOptions(opt);
-        conf.getChart().setStyledMode(true);
-        conf.getChart().setHeight("300px");
+        // Enables css styling, but disables programmatically setting colors
+        // conf.getChart().setStyledMode(true);
 
+        // pass in as option? on first item?
+        conf.getChart().setHeight("300px");
+        conf.getChart().setBackgroundColor(new SolidColor(255, 255,255 , 0.0));
+        conf.getTitle().getStyle().setColor(new SolidColor(23, 132, 200, 1.0));
+        conf.getTitle().getStyle().setFontSize("14px");
     }
 
     @Override
@@ -73,9 +79,9 @@ public class PieChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
 
 //            dsi.setDataLabels(new DataLabels(true));
 
-            /* if (supportColor) {
+            if (supportColor) {
                 dsi.setColor(new SolidColor(dataProvider.getString(obj, ExtCmpt.PIECHART_ITEM_COLOR)));
-            } */
+            }
 
             if (last) { dsi.setSliced(true); }
 
@@ -107,7 +113,6 @@ public class PieChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         // https://github.com/vaadin/web-components/issues/2171#issuecomment-934340680
 
         /* Optional<Component> parent = getParent();
-
         while (parent.isPresent() && ! (parent.get() instanceof CmdUi)) {
             if (parent.get() instanceof VerticalLayout) {
                 applyWorkaround((VerticalLayout) parent.get());
@@ -120,6 +125,7 @@ public class PieChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
     }
 
     public void applyWorkaround(VerticalLayout l) {
+        // Probably use fixed size
         l.getStyle().set("overflow", "hidden");
         // l.setMinWidth("0");
         l.setMinHeight("0");
