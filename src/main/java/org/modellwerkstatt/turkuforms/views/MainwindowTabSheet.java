@@ -95,12 +95,20 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         if (currentSelectedStyle != null) {
             currentSelectedStyle.remove("color");
             currentSelectedStyle.remove("border-bottom");
+            currentSelectedStyle.remove("background-color");
         }
 
         int index = tabsInSheet.indexOf(cmdUi);
         Tab tab = getTabAt(index);
 
-        if (col == null) { col = "var(--lumo-primary-color)"; }
-        currentSelectedStyle = tab.getElement().getStyle().set("color", col).set("border-bottom", "2px solid " + col);
+        String background;
+        if (col == null) {
+            col = "var(--lumo-primary-color)";
+            background = "var(--lumo-primary-color-selected)";
+        } else {
+            background = col + "10";
+        }
+        currentSelectedStyle = tab.getElement().getStyle().set("color", col).set("border-bottom", "2px solid " + col).set("background-color", background);
+
     }
 }
