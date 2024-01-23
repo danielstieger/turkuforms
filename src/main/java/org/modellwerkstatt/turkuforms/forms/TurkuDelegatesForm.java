@@ -127,7 +127,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
             }
         }
 
-        // Turku.l("TurkuDelegatesForm.myRequestFocus() on " + turkuEditor);
+        Turku.l("TurkuDelegatesForm.myRequestFocus() on " + turkuEditor);
 
         if (!focussed) { return null; }
         else { return turkuEditor.getEditor(); }

@@ -114,6 +114,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         selectionModel.addMultiSelectionListener(event -> {
             if (selectionHandlerEnabled) {
                 selectionHandlerEnabled = false;
+
                 Set<DTO> allSelected = event.getAllSelectedItems();
                 Turku.l("TukruTable.selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
 
@@ -125,6 +126,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 }
                 genFormController.pushSelection(sel);
                 adjustTableInformation("", true);
+
                 selectionHandlerEnabled = true;
             }
         });
@@ -446,6 +448,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         infoCsvButton.setEnabled(false);
         searchField.setVisible(false);
         grid.getColumns().forEach(it -> { it.setSortable(false); });
+
+        grid.setEditPreviewMode();
     }
 
 

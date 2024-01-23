@@ -31,6 +31,7 @@ public class DesktopGridPro<T> extends GridPro<T> {
     private Method columnGetInternalId;
 
     private ShortcutRegistration gridEscShortCut;
+    private boolean editPreviewMode;
 
 
     public DesktopGridPro() {
@@ -66,7 +67,12 @@ public class DesktopGridPro<T> extends GridPro<T> {
         gridEscShortCut.setEventPropagationAllowed(false);
     }
 
+    public void setEditPreviewMode() { editPreviewMode = true; }
+
     private void setupGrid() {
+
+        editPreviewMode = false;
+
         try {
             dataCommunicatorFetchFromProvider = DataCommunicator.class.getDeclaredMethod("fetchFromProvider", int.class, int.class);
             dataCommunicatorFetchFromProvider.setAccessible(true);
@@ -164,6 +170,8 @@ public class DesktopGridPro<T> extends GridPro<T> {
     @ClientCallable
     private void selectRange(int fromIndex, int toIndex) {
 
+        if (editPreviewMode) { return; } // no not accept any selections
+
         GridSelectionModel<T> model = getSelectionModel();
         if (model instanceof GridMultiSelectionModel) {
             DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
@@ -187,7 +195,9 @@ public class DesktopGridPro<T> extends GridPro<T> {
     @ClientCallable
     private void selectRangeOnly(int fromIndex, int toIndex) {
 
-        GridSelectionModel<T> model = getSelectionModel();
+            if (editPreviewMode) { return; } // no not accept any selections
+
+                GridSelectionModel<T> model = getSelectionModel();
         if (model instanceof GridMultiSelectionModel) {
             int from = Math.min(fromIndex, toIndex);
             int to = Math.max(fromIndex, toIndex);

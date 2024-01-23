@@ -74,6 +74,16 @@ public class TextEditor extends EditorBasisFocusable<TextField> implements ITool
      */
 
     @Override
+    public void turkuFocus() {
+        super.turkuFocus();
+
+        Element component = inputField.getElement();
+        component.executeJs(
+                "turku.selectAllOnChildInput($0)",
+                component);
+    }
+
+    @Override
     public void setFormatter(String format, String locale, int langIdx) {
         // just in case the text editor is used as a local date editor.
         // ignored since format, locale or langIdx are all managed by the delegate
