@@ -30,10 +30,10 @@ html {
 
     --lumo-base-color: #f1f1f5;
 
-    --turku-primary-background: #f1f1f5;
-    --turku-primary-background-hl1: #e4e4e8;
-    --turku-primary-background-hl2: #d5d5d9;
-    --turku-primary-background-hl3: #c2c2c6;
+    --turku-primary-background: #fafafa;
+    --turku-primary-background-hl1: #f0f0f0;
+    --turku-primary-background-hl2: #eaeaea;
+    --turku-primary-background-hl3: #e0e0e0;
 
     background: var(--turku-primary-background);
 
