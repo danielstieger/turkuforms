@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.auth;
+package org.modellwerkstatt.turkuforms.mpreisauth;
 
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -8,11 +8,12 @@ import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.NavigationUtil;
 import org.modellwerkstatt.turkuforms.util.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterObserver {
+public class LdapLoginWindow extends SimpleLoginFormCmpt implements BeforeEnterObserver {
     protected ParamInfo paramInfo;
 
     public LdapLoginWindow() {
@@ -32,7 +33,38 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
 
     @Override
     public void processInput() {
-        prepareInput();
+        // prepareInput();
+
+        /* snippet from LoginWindow
+
+            @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        paramInfo = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+    }
+
+
+-------------------------
+
+         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
+        VaadinSession vaadinSession = VaadinSession.getCurrent();
+
+        UserEnvironmentInformation environment = new UserEnvironmentInformation();
+        String msg = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
+
+        if (msg == null) {
+            AuthUtil.removeLoginRoute();
+
+            UserPrincipal userPrincipal = new UserPrincipal(userName, password);
+            UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+            Workarounds.setUserEnvForUi(environment);
+
+            AuthUtil.ensureAppRoutPresentAndForward(null, paramInfo);
+
+        } else {
+            messageDiv.setText(msg);
+        }
+
+         */
 
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         ITurkuAppFactory uiFactory = servlet.getUiFactory();
@@ -51,7 +83,7 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
         } else {
             // (2) Authenticate via application
             UserEnvironmentInformation environment = new UserEnvironmentInformation();
-            String message = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
+            String message = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
 
             if (message == null) {
                 AuthUtil.removeLoginRoute();
@@ -60,7 +92,7 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
                 UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
                 Workarounds.setUserEnvForUi(environment);
 
-                AuthUtil.ensureAppRoutPresentAndForward(null, paramInfo);
+                NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
 
             } else {
                 messageDiv.setText(message);
@@ -81,11 +113,11 @@ public class LdapLoginWindow extends DefaultLoginWindow implements BeforeEnterOb
 
         if (userPrincipal != null) {
             UserEnvironmentInformation environment = new UserEnvironmentInformation();
-            String message = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
+            String message = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
 
             if (message == null) {
                 Workarounds.setUserEnvForUi(environment);
-                AuthUtil.ensureAppRoutPresentAndForward(null, paramInfo);
+                NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
 
             } else {
                 messageDiv.setText(message);

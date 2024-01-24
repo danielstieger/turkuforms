@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.auth;
+package org.modellwerkstatt.turkuforms.mpreisauth;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -9,13 +9,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.PreserveOnRefresh;
-import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
-import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.ParamInfo;
@@ -24,8 +19,7 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
 
-@PreserveOnRefresh
-public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterObserver {
+public class SimpleLoginFormCmpt extends HorizontalLayout {
     protected ParamInfo paramInfo;
 
     protected VerticalLayout innerLayout;
@@ -39,7 +33,10 @@ public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterO
     protected String userName = "";
     protected String password = "";
 
-    public DefaultLoginWindow() {
+    protected OnLogin onLoginCallback;
+
+
+    public SimpleLoginFormCmpt() {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
@@ -88,44 +85,32 @@ public class DefaultLoginWindow extends HorizontalLayout implements BeforeEnterO
 
         add(innerLayout);
         setAlignSelf(Alignment.CENTER, innerLayout);
+        innerLayout.setWidth("50%");
+
+
+        Span largePicture = new Span();
+        largePicture.addClassName("LargeLeftLoginPicture");
+        add(largePicture);
+
         setHeightFull();
     }
 
 
-    public void prepareInput() {
+    public void setCallback(OnLogin o) {
+        onLoginCallback = o;
+    }
+
+    public void processInput() {
         userName = userNameField.getValue().trim();
         password = passwordField.getValue().trim();
         userNameField.setValue("");
         passwordField.setValue("");
+
+        onLoginCallback.process(userName, password);
     }
 
-    public void processInput() {
 
-        prepareInput();
-
-        TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
-        VaadinSession vaadinSession = VaadinSession.getCurrent();
-
-        UserEnvironmentInformation environment = new UserEnvironmentInformation();
-        String msg = AuthUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
-
-        if (msg == null) {
-            AuthUtil.removeLoginRoute();
-
-            UserPrincipal userPrincipal = new UserPrincipal(userName, password);
-            UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
-            Workarounds.setUserEnvForUi(environment);
-
-            AuthUtil.ensureAppRoutPresentAndForward(null, paramInfo);
-
-        } else {
-            messageDiv.setText(msg);
-        }
-
-    }
-
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        paramInfo = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+    public interface OnLogin {
+        void process(String username, String password);
     }
 }

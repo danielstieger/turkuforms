@@ -32,6 +32,7 @@ public class TurkuServlet extends VaadinServlet {
     private ITurkuAppFactory appFactory;
     private AppJmxRegistration jmxRegistration;
     private Class authenticatorClass;
+    private String appNameVersion;
 
     public ITurkuAppFactory getUiFactory() {
         return appFactory;
@@ -47,6 +48,8 @@ public class TurkuServlet extends VaadinServlet {
     public AppJmxRegistration getJmxRegistration() {
         return jmxRegistration;
     }
+
+    public String getAppNameVersion() { return appNameVersion; }
 
 
     @Override
@@ -85,6 +88,7 @@ public class TurkuServlet extends VaadinServlet {
             ClassLoader classLoader = this.getClass().getClassLoader();
             Class<?> appBehaviorClass = classLoader.loadClass(appBehaviorFqName);
             genApplication = ((IGenAppUiModule) appContext.getAutowireCapableBeanFactory().createBean(appBehaviorClass));
+            appNameVersion = genApplication.getShortAppName() + " " + genApplication.getApplicationVersion();
 
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
 
@@ -107,10 +111,14 @@ public class TurkuServlet extends VaadinServlet {
         }
         appFactory.setRedirectAfterLogoutPath(homeScreenParam);
 
-        appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + genApplication.getShortAppName() + " " + genApplication.getApplicationVersion());
-        jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName() + " " + genApplication.getApplicationVersion()+ " (par deployed as '"+ deployedAsVersion + "')", appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
+        appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + appNameVersion);
+        jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, appNameVersion + " (par deployed as '"+ deployedAsVersion + "')", appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
 
         RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
+        RouteConfiguration.forApplicationScope().setRoute("/login", authenticatorClass);
+        RouteConfiguration.forApplicationScope().setRoute("/logout", authenticatorClass);
+
+
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }
 

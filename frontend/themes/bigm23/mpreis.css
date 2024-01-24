@@ -19,6 +19,12 @@
     height: 330px;
 }
 
+.LargeLeftLoginPicture {
+    background-image: url("./img/mpreis_login_picture.jpg");
+    width: 100%;
+    height: 100%;
+}
+
 .DefaultLoginContentWidth {
     width: 330px;
 }

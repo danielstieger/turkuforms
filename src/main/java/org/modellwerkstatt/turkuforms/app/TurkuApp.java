@@ -24,8 +24,8 @@ import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
-import org.modellwerkstatt.turkuforms.auth.AuthUtil;
-import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.mpreisauth.AuthUtil;
+import org.modellwerkstatt.turkuforms.mpreisauth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
