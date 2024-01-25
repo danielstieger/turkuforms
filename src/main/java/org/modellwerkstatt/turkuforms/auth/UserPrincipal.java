@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.mpreisauth;
+package org.modellwerkstatt.turkuforms.auth;
 
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;

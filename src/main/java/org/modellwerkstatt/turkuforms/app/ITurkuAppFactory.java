@@ -5,8 +5,8 @@ import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 
 public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
-    void setRedirectAfterLogoutPath(String homePath);
-    String getRedirectAfterLogoutPath();
+    void setOnLogoutMainLandingPath(String homePath);
+    String getOnLogoutMainLandingPath();
 
     boolean isCompactMode();
     boolean isCheckDeployedVersion();

@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.mpreisauth;
+package org.modellwerkstatt.turkuforms.authmpreis;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -9,11 +9,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
-import org.modellwerkstatt.turkuforms.util.ParamInfo;
+import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -36,15 +35,16 @@ public class SimpleLoginFormCmpt extends HorizontalLayout {
     protected OnLogin onLoginCallback;
 
 
-    public SimpleLoginFormCmpt() {
+    public SimpleLoginFormCmpt(OnLogin onLogin) {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
-        IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
+
+        onLoginCallback = onLogin;
 
         loginIdentityImage = new Span();
         loginIdentityImage.addClassName("DefaultLoginLogo");
 
-        appName = new H1(appUiModule.getShortAppName() + " " + appUiModule.getApplicationVersion());
+        appName = new H1(servlet.getAppNameVersion());
 
         messageDiv = new Div();
         messageDiv.addClassName("TurkuErrorDiv");

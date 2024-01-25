@@ -9,6 +9,7 @@ import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -42,33 +43,39 @@ public class TurkuApplicationController extends ApplicationController implements
     private String sessionName() {
         return APPCRTL_SESSIONATTRIB_PREFIX + this.hashCode();
     }
+
+    public static boolean isTurkuControllerAttribute(String name) {
+        return name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX);
+    }
+
     public void registerOnSession(VaadinSession vaadinSession, String userName, String remoteAddr) {
         WrappedSession session = vaadinSession.getSession();
         session.setAttribute(sessionName(), this);
         session.setAttribute(REMOTE_SESSIONATTRIB, remoteAddr);
         session.setAttribute(USERNAME_SESSIONATTRIB, userName);
     }
-    public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession) {
+
+    public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean tryInvalidate) {
         WrappedSession session = vaadinSession.getSession();
         session.removeAttribute(sessionName());
 
         boolean others = false;
         // other appcrtls present?
         for (String name: session.getAttributeNames()){
-            if (name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX)) {
+            if (isTurkuControllerAttribute(name)) {
                 others = true;
                 break;
             }
         }
 
-        if (!others) {
+        if (!others && tryInvalidate) {
+            UserPrincipal.setUserPrincipal(vaadinSession, null);
             VaadinSession.getCurrent().getSession().invalidate();
             return true;
         }
 
         return false;
     }
-
 
     @Override
     public void valueBound(HttpSessionBindingEvent event) {

@@ -50,6 +50,8 @@ public class TurkuServlet extends VaadinServlet {
     }
 
     public String getAppNameVersion() { return appNameVersion; }
+    public Class getAuthenticatorClass() { return authenticatorClass; }
+
 
 
     @Override
@@ -103,20 +105,21 @@ public class TurkuServlet extends VaadinServlet {
         }
 
         // as well as home screen
-        String homeScreenParam = getInitParameter("mainLandingPagePath");
-        if (homeScreenParam == null) {
-            homeScreenParam = servletPath;
-        } else if (homeScreenParam.charAt(0) != '/') {
-            homeScreenParam = "/" + homeScreenParam;
+        String mainLandingPagePath = getInitParameter("mainLandingPagePath");
+        if (mainLandingPagePath == null) {
+            mainLandingPagePath = servletPath;
+
+        } else if (mainLandingPagePath.charAt(0) != '/') {
+            mainLandingPagePath = "/" + mainLandingPagePath;
         }
-        appFactory.setRedirectAfterLogoutPath(homeScreenParam);
+        appFactory.setOnLogoutMainLandingPath(mainLandingPagePath);
 
         appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + appNameVersion);
         jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, appNameVersion + " (par deployed as '"+ deployedAsVersion + "')", appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
 
-        RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/login", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/logout", authenticatorClass);
+        RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
 
 
         Turku.l("TurkuServlet.servletInitialized() done successfully.");

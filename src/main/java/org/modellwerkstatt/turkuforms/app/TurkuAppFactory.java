@@ -23,7 +23,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     private boolean compactMode = false;
     private boolean deployedVersionCheck = true;
-    private String redirectAfterLogoutPath;
+    private String onLogoutMainLandingPath;
     private String authentiactorClassFqName;
 
     // Empty, app has to handle stuff, i.e. empty = return full path
@@ -33,16 +33,18 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         super(MoWareTranslations.TranslationSelection.MAIN_TRANSLATIONS);
 
         iconTranslator = new MaterialIconsTranslator();
-        redirectAfterLogoutPath = "(ups not initialized!)";
         authentiactorClassFqName = DEFAULT_AUTHENTICATOR;
-    }
-    public String getRedirectAfterLogoutPath() {
-        return redirectAfterLogoutPath;
-    }
-    public void setRedirectAfterLogoutPath(String path) {
-        redirectAfterLogoutPath = path;
+
+        // should be initialized in servlet
+        onLogoutMainLandingPath = null;
     }
 
+    public String getOnLogoutMainLandingPath() {
+        return onLogoutMainLandingPath;
+    }
+    public void setOnLogoutMainLandingPath(String path) {
+        onLogoutMainLandingPath = path;
+    }
     public void setAllowEuroSign(boolean val) {
         onTheFly_allowEuroSignInDelegates = val;
     }

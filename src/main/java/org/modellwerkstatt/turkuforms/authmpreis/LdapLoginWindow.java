@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.mpreisauth;
+package org.modellwerkstatt.turkuforms.authmpreis;
 
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -8,8 +8,9 @@ import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
-import org.modellwerkstatt.turkuforms.util.NavigationUtil;
-import org.modellwerkstatt.turkuforms.util.ParamInfo;
+import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -86,13 +87,13 @@ public class LdapLoginWindow extends SimpleLoginFormCmpt implements BeforeEnterO
             String message = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userName, password);
 
             if (message == null) {
-                AuthUtil.removeLoginRoute();
+                // AuthUtil.removeLoginRoute();
 
                 UserPrincipal userPrincipal = new UserPrincipal(userName, password);
                 UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
                 Workarounds.setUserEnvForUi(environment);
 
-                NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
+                // NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
 
             } else {
                 messageDiv.setText(message);
@@ -117,7 +118,7 @@ public class LdapLoginWindow extends SimpleLoginFormCmpt implements BeforeEnterO
 
             if (message == null) {
                 Workarounds.setUserEnvForUi(environment);
-                NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
+                // NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
 
             } else {
                 messageDiv.setText(message);

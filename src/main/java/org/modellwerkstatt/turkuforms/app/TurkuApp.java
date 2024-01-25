@@ -24,8 +24,9 @@ import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
-import org.modellwerkstatt.turkuforms.mpreisauth.AuthUtil;
-import org.modellwerkstatt.turkuforms.mpreisauth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
+import org.modellwerkstatt.turkuforms.auth.ParamInfo;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
@@ -88,7 +89,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
                     Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
                     if (!applicationController.inShutdownMode()) {
                         applicationController.internal_immediatelyShutdown();
-                        applicationController.unregisterFromSessionTryInvalidate(vaadinSession);
+                        applicationController.unregisterFromSessionTryInvalidate(vaadinSession, true);
                     }
                 }
             });
@@ -116,28 +117,20 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public void closeWindowAndExit() {
         // This is basically the logout? Unclear if we want to set the principal null
         Turku.l("TurkuApp.closeWindowAndExit()");
-        applicationController.internal_immediatelyShutdown();
 
+        applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
 
-        boolean invalidated = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent());
-        if (!invalidated) {
-            // This requires a re-login
-            UserPrincipal.setUserPrincipal(VaadinSession.getCurrent(), null);
-        }
-
-        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath() + AuthUtil.LOGOUT_POSTFIX;
+        // TODO?
+        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;
+        UI.getCurrent().close();
         UI.getCurrent().getPage().setLocation(redirectTo);
     }
     
     @Override
     public void parDeploymentForwardNow() {
-        // kill session in case no other appCrtls are present in session
-        applicationController.internal_immediatelyShutdown();
-        boolean others = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent());
-
-        // no LOGOUT_POSTFIX, since we forward to new version and might prevent a manual login
-        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getRedirectAfterLogoutPath();
-        UI.getCurrent().getPage().setLocation(redirectTo);
+        boolean others = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), false);
+        UI.getCurrent().close();
+        UI.getCurrent().getPage().setLocation("/");
     }
     
     @Override

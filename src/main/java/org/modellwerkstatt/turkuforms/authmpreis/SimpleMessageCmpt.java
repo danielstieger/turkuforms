@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.mpreisauth;
+package org.modellwerkstatt.turkuforms.authmpreis;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -6,15 +6,15 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.modellwerkstatt.turkuforms.util.NavigationUtil;
-import org.modellwerkstatt.turkuforms.util.ParamInfo;
+import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
+import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
 
 public class SimpleMessageCmpt extends HorizontalLayout {
 
-    public SimpleMessageCmpt(String appNameVersion, String buttonText, String msg, ParamInfo info) {
+    public SimpleMessageCmpt(String appNameVersion, String buttonText, String msg, OnLogin process) {
         Span loginIdentityImage = new Span();
         loginIdentityImage.addClassName("DefaultLoginLogo");
 
@@ -26,21 +26,29 @@ public class SimpleMessageCmpt extends HorizontalLayout {
         messageDiv.addClassName("DefaultLoginContentWidth");
         messageDiv.setText(msg);
 
-        Button loginButton = new Button(buttonText, event -> {
-            NavigationUtil.forwareToLogin(info);
-        });
-        Peculiar.useButtonShortcutHk(loginButton, OK_HOKTEY);
-        loginButton.addClassName("DefaultLoginContentWidth");
-
         VerticalLayout innerLayout = new VerticalLayout();
-        innerLayout.add(loginIdentityImage, appName, messageDiv, loginButton);
+        innerLayout.add(loginIdentityImage, appName, messageDiv);
         innerLayout.setAlignSelf(Alignment.CENTER, loginIdentityImage);
         innerLayout.setAlignSelf(Alignment.CENTER, appName);
         innerLayout.setAlignSelf(Alignment.CENTER, messageDiv);
-        innerLayout.setAlignSelf(Alignment.CENTER,loginButton);
+
+        if (buttonText != null) {
+            Button loginButton = new Button(buttonText, event -> {
+                process.process();
+            });
+            Peculiar.useButtonShortcutHk(loginButton, OK_HOKTEY);
+            loginButton.addClassName("DefaultLoginContentWidth");
+            innerLayout.add(loginButton);
+            innerLayout.setAlignSelf(Alignment.CENTER,loginButton);
+        }
 
         add(innerLayout);
         setAlignSelf(Alignment.CENTER, innerLayout);
-        setHeightFull();
+        setSizeFull();
+    }
+
+
+    public interface OnLogin {
+        void process();
     }
 }

@@ -1,6 +1,7 @@
-package org.modellwerkstatt.turkuforms.util;
+package org.modellwerkstatt.turkuforms.auth;
 
 import com.vaadin.flow.router.QueryParameters;
+import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,8 @@ public class ParamInfo {
     public ParamInfo(QueryParameters queryParameters) {
         params = queryParameters.getParameters();
     }
+
+    public boolean wasActiveLogout(){ return params.containsKey(NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM); }
 
     public boolean hasCommandToStart() {
         return params.containsKey("command");
