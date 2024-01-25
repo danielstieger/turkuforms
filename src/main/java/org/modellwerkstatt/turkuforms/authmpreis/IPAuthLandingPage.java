@@ -26,6 +26,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
     public IPAuthLandingPage() {
         // default, not content in landing page
         // registered as / and /login
+        setSizeFull();
     }
 
     @Override
@@ -103,7 +104,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
     }
 
     private void setAsRoot(Component c) {
-        UI.getCurrent().removeAll();
-        UI.getCurrent().add(c);
+        this.removeAll();
+        this.add(c);
     }
 }
