@@ -18,7 +18,7 @@ public class LdapLoginWindow extends SimpleLoginFormCmpt implements BeforeEnterO
     protected ParamInfo paramInfo;
 
     public LdapLoginWindow() {
-        super();
+        super(null);
 
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         ITurkuAppFactory uiFactory = servlet.getUiFactory();

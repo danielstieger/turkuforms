@@ -14,7 +14,7 @@ import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
-    public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.mpreisauth.IPAuthLandingPage";
+    public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.authmpreis.IPAuthLandingPage";
 
     private VaadinIconTranslator iconTranslator;
 

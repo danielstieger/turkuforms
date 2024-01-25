@@ -1,6 +1,8 @@
 package org.modellwerkstatt.turkuforms.authmpreis;
 
 import com.sun.jna.platform.win32.Netapi32Util;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -13,6 +15,7 @@ import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
@@ -27,8 +30,6 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        setSizeFull();
-
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
         ITurkuAppFactory factory = servlet.getUiFactory();
@@ -38,6 +39,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         boolean otherCrtlPresent = vaadinSession.getSession().getAttributeNames()
                 .stream().anyMatch(TurkuApplicationController::isTurkuControllerAttribute);
 
+        Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
         if ("logout".equals(naviPath) || paramInfo.wasActiveLogout()) {
             String buttonName;
             String message = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGOUT_SUCCESS);
@@ -50,27 +52,30 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                 buttonName = factory.translateButtonLabel(factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_BUTTON), OK_HOKTEY);
             }
 
-            add(new SimpleMessageCmpt(servlet.getAppNameVersion(), buttonName, message, () -> {
+            setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), buttonName, message, () -> {
                 // do not forward any params here, just a logout
                 if (otherCrtlPresent) {
-                    event.forwardTo("/");
+                    UI.getCurrent().navigate("/");
                 } else {
-                    event.forwardTo("/login");
+                    UI.getCurrent().navigate("/login");
                 }
 
             }));
 
         } else if ("login".equals(naviPath) && otherCrtlPresent) {
             String msg = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_NOT_POSSIBLE);
-            add(new SimpleMessageCmpt(servlet.getAppNameVersion(), null, msg, () -> {
+
+            setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), null, msg, () -> {
             }));
 
+
         } else if ("login".equals(naviPath)){
-            add(new SimpleLoginFormCmpt((username, password) -> {
+            setAsRoot(new SimpleLoginFormCmpt((username, password) -> {
                 UserPrincipal userPrincipal = new UserPrincipal(username, password);
                 UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
-                event.forwardTo("/" + paramInfo.getParamsToForwardIfAny());
+                UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
             }));
+
 
         } else {
             UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
@@ -88,11 +93,17 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
             } else {
                 String buttonName = factory.translateButtonLabel(factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_BUTTON), OK_HOKTEY);
-                add(new SimpleMessageCmpt(servlet.getAppNameVersion(), buttonName, msg, () -> {
-                    event.forwardTo("/login" + paramInfo.getParamsToForwardIfAny());
+
+                setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), buttonName, msg, () -> {
+                    UI.getCurrent().navigate("/login" + paramInfo.getParamsToForwardIfAny());
                 } ));
             }
 
         }
+    }
+
+    private void setAsRoot(Component c) {
+        UI.getCurrent().removeAll();
+        UI.getCurrent().add(c);
     }
 }

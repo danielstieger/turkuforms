@@ -24,7 +24,7 @@ public class UserPrincipal {
 
     @Override
     public String toString() {
-        return "Login UserPrincipal";
+        return "UserPrincipal";
     }
 
 

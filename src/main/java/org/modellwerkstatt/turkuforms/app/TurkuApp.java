@@ -56,7 +56,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
         if (userEnvironment == null) {
-            String msg = "API error! Sorry, the application can not be accessed directly via this url . . .";
+            String msg = "API error! Sorry, the application can not be accessed directly via this url (login first?).";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
             Notification notification = new Notification(msg);
             notification.setPosition(Notification.Position.MIDDLE);

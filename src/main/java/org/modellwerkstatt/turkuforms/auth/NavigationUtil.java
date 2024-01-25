@@ -23,17 +23,17 @@ public class NavigationUtil {
 
 
     public static void ensureAppRoutPresentAndForward(Class authenticatorCls, BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
-        if (! RouteConfiguration.forSessionScope().getRoute("/:cmdName?").isPresent()) {
-            RouteConfiguration.forSessionScope().setRoute("/login", authenticatorCls);
-            RouteConfiguration.forSessionScope().setRoute("/logout", authenticatorCls);
-            RouteConfiguration.forSessionScope().setRoute("/:cmdName?", TurkuApp.class);
+        if (! RouteConfiguration.forSessionScope().getRoute("/home/:cmdName?").isPresent()) {
+            // RouteConfiguration.forSessionScope().setRoute("/login", authenticatorCls);
+            // RouteConfiguration.forSessionScope().setRoute("/logout", authenticatorCls);
+            RouteConfiguration.forSessionScope().setRoute("/home/:cmdName?", TurkuApp.class);
         }
 
         if (evOrNull == null) {
-            UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
+            UI.getCurrent().navigate("/home/" + paramInfo.getParamsToForwardIfAny());
 
         } else {
-            evOrNull.forwardTo("/" + paramInfo.getParamsToForwardIfAny());
+            evOrNull.forwardTo("/home/" + paramInfo.getParamsToForwardIfAny());
         }
     }
 
