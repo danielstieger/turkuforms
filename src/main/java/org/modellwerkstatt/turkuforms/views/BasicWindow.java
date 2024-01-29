@@ -148,7 +148,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     @Override
     public String getPageTitle() {
         // returns browser tab title
-        return navbarTitleDiv.getText();
+        return navbarTitleDiv != null ? navbarTitleDiv.getText() : "";
     }
 
     protected void setUserInfo(String info) {

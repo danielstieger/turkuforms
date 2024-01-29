@@ -2,8 +2,14 @@ package org.modellwerkstatt.turkuforms.app;
 
 
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
@@ -58,16 +64,12 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         if (userEnvironment == null) {
             String msg = "API error! Sorry, the application can not be accessed directly via this url (login first?).";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
-            Notification notification = new Notification(msg);
-            notification.setPosition(Notification.Position.MIDDLE);
-            notification.open();
+            quickUserInfo(msg);
 
         } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardAll() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardNotDirty()) {
             String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
-            Notification notification = new Notification(msg);
-            notification.setPosition(Notification.Position.MIDDLE);
-            notification.open();
+            quickUserInfo(msg);
 
         } else {
 
@@ -102,8 +104,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         // start a command?
         if (initialStartupParams == null) {
             initialStartupParams = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+
         } else {
-            Notification.show("API Error! Sorry, reloading this application does not work . . .", 5000, Notification.Position.TOP_CENTER);
+            quickUserInfo("API Error! Sorry, reloading this application does not work . . .");
         }
 
         if (applicationController != null && initialStartupParams.hasCommandToStart()) {
@@ -120,7 +123,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
         applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
 
-        // TODO?
         String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;
         UI.getCurrent().close();
         UI.getCurrent().getPage().setLocation(redirectTo);
@@ -129,8 +131,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void parDeploymentForwardNow() {
         boolean others = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), false);
+
+        String redirectTo = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
         UI.getCurrent().close();
-        UI.getCurrent().getPage().setLocation("/");
+        UI.getCurrent().getPage().setLocation(redirectTo);
     }
     
     @Override
@@ -305,5 +309,25 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     public TurkuApplicationController getApplicationController() { return applicationController; }
 
 
+    protected void quickUserInfo(String msg) {
+        Notification notification = new Notification();
+        notification.setPosition(Notification.Position.TOP_CENTER);
+        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+
+        Text text = new Text(msg);
+
+        Button closeButton = new Button(new Icon("lumo", "cross"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        closeButton.getElement().setAttribute("aria-label", "Close");
+        closeButton.addClickListener(event -> {
+            notification.close();
+        });
+
+        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        notification.add(layout);
+        notification.open();
+    }
 
 }

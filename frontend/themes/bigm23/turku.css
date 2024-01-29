@@ -215,7 +215,7 @@ vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
 }
 
 .ModalTab::part(tabs-container) {
-    background-color: var(--lumo-primary-color);
+    background-color: var(--lumo-primary-color-selected);
 }
 
 

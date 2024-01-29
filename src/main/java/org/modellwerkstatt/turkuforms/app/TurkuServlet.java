@@ -33,6 +33,7 @@ public class TurkuServlet extends VaadinServlet {
     private AppJmxRegistration jmxRegistration;
     private Class authenticatorClass;
     private String appNameVersion;
+    private String actualServletUrl;
 
     public ITurkuAppFactory getUiFactory() {
         return appFactory;
@@ -45,6 +46,7 @@ public class TurkuServlet extends VaadinServlet {
     public String getGuessedServerName() {
         return guessedServerName;
     }
+    public String getActualServletUrl() { return actualServletUrl; }
     public AppJmxRegistration getJmxRegistration() {
         return jmxRegistration;
     }
@@ -66,6 +68,8 @@ public class TurkuServlet extends VaadinServlet {
         super.servletInitialized();
 
         String servletPath = this.getServletContext().getContextPath();
+        actualServletUrl = servletPath;
+
         //  - main app behavior class will be given via servlet confg
         appBehaviorFqName = getInitParameter("applicationFqName");
         String xmlConfigFile = getInitParameter("xmlConfigFile");

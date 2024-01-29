@@ -6,6 +6,9 @@ import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import java.util.List;
 import java.util.Map;
 
+import static org.modellwerkstatt.turkuforms.auth.NavigationUtil.CMD_TO_START;
+import static org.modellwerkstatt.turkuforms.auth.NavigationUtil.CMD_TO_START_PARAM;
+
 public class ParamInfo {
     private Map<String, List<String>> params;
 
@@ -16,16 +19,16 @@ public class ParamInfo {
     public boolean wasActiveLogout(){ return params.containsKey(NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM); }
 
     public boolean hasCommandToStart() {
-        return params.containsKey("command");
+        return params.containsKey(CMD_TO_START);
     }
 
     public String getCommandToStart() {
-        return params.get("command").get(0);
+        return params.get(CMD_TO_START).get(0);
     }
 
     public String getFirstParam() {
-        if (params.containsKey("param")) {
-            return params.get("param").get(0);
+        if (params.containsKey(CMD_TO_START_PARAM)) {
+            return params.get(CMD_TO_START_PARAM).get(0);
         }
         return null;
     }
@@ -34,10 +37,10 @@ public class ParamInfo {
         StringBuilder sb = new StringBuilder();
 
         if (hasCommandToStart()) {
-            sb.append("?command=" + getCommandToStart());
+            sb.append("?"+ CMD_TO_START + "=" + getCommandToStart());
 
-            if (params.containsKey("param")) {
-                sb.append("&param=" + params.get("param").get(0));
+            if (params.containsKey(CMD_TO_START_PARAM)) {
+                sb.append("&" + CMD_TO_START_PARAM + "=" + params.get(CMD_TO_START_PARAM).get(0));
             }
         }
 

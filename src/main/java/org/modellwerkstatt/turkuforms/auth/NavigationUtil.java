@@ -16,6 +16,11 @@ import org.modellwerkstatt.turkuforms.app.TurkuServlet;
 @SuppressWarnings("unchecked")
 public class NavigationUtil {
     public static final String WAS_ACTIVE_LOGOUT_PARAM = "wasActiveLogout";
+    public static final String TRY_RELOGIN = "tryRelogin";
+    public static final String CMD_TO_START = "command";
+    public static final String CMD_TO_START_PARAM = "param";
+
+
 
     public static void forwareToLogin(ParamInfo paramInfo) {
         UI.getCurrent().navigate("/login" + paramInfo.getParamsToForwardIfAny());
