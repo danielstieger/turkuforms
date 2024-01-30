@@ -108,11 +108,14 @@ public class SimpleLoginFormCmpt extends HorizontalLayout {
         userNameField.setValue("");
         passwordField.setValue("");
 
-        onLoginCallback.process(userName, password);
+        String msg = onLoginCallback.process(userName, password);
+        if (msg != null) {
+            messageDiv.setText(msg);
+        }
     }
 
 
     public interface OnLogin {
-        void process(String username, String password);
+        String process(String username, String password);
     }
 }
