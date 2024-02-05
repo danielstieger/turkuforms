@@ -21,8 +21,7 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
     const Grid = customElements.get("vaadin-selection-grid");
     if (Grid) {
 
-        // TODO: codesmell - use bind or attach it to the Grid component? but not both...
-
+        // TODO: Dan just wondering, why use bind at all and not attach it straight to the prototyp?
         const oldOnContextMenuHandler = Grid.prototype._onContextMenu;
         Grid.prototype._onContextMenu = function _onContextMenu(e) {
 
@@ -65,13 +64,13 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
             const boundOldClickHandler = oldClickHandler.bind(this);
             boundOldClickHandler(e);
 
+            //x console.log('_onClick ' + e);
+
             /* if (! (e.originalTarget != 'undefined' && e.originalTarget.type != 'undefined' && e.originalTarget.type == "checkbox")) {
                 // handled by original grid
 
             } */
             this._selectionGridSelectRow(e);
-            // console.log('SELECTION GRID: Click received and executed.');
-
         };
         Grid.prototype.old_onNavigationKeyDown = Grid.prototype._onNavigationKeyDown;
         Grid.prototype._onNavigationKeyDown = function _onNavigationKeyDownOverridden(e, key) {
@@ -98,20 +97,19 @@ customElements.whenDefined("vaadin-selection-grid").then(() => {
 
         Grid.prototype.old_onCellNavigation = Grid.prototype._onCellNavigation;
         Grid.prototype._onCellNavigation = function _onCellNavigationOverridden(cell, dx, dy) {
-            console.log('_onCellNavigation ' + cell + "  (" +dx+ ", " + dy + ")");
+            //x console.log('_onCellNavigation ' + cell + "  (" +dx+ ", " + dy + ")");
             this.old_onCellNavigation(cell, dx, dy);
         }
 
         Grid.prototype.old_onRowNavigation = Grid.prototype._onRowNavigation;
         Grid.prototype._onRowNavigation = function _onRowNavigationOverridden(activeRow, dy) {
-            console.log('_onRowNavigation ' + activeRow + "  (" + dy + ")");
+            //x console.log('_onRowNavigation ' + activeRow + "  (" + dy + ")");
             this.old_onRowNavigation(activeRow, dy);
         }
 
         Grid.prototype.old__focusBodyCell = Grid.prototype.__focusBodyCell;
         Grid.prototype.__focusBodyCell = function __focusBodyCellOverridden(param) {
-            console.log('__focusBodyCell ' + param );
-            console.log(param);
+            //x console.log('__focusBodyCell ' + param );
             this.old__focusBodyCell(param);
         }
 

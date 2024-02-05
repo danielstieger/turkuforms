@@ -195,9 +195,9 @@ public class DesktopGridPro<T> extends GridPro<T> {
     @ClientCallable
     private void selectRangeOnly(int fromIndex, int toIndex) {
 
-            if (editPreviewMode) { return; } // no not accept any selections
+        if (editPreviewMode) { return; } // no not accept any selections
 
-                GridSelectionModel<T> model = getSelectionModel();
+        GridSelectionModel<T> model = getSelectionModel();
         if (model instanceof GridMultiSelectionModel) {
             int from = Math.min(fromIndex, toIndex);
             int to = Math.max(fromIndex, toIndex);

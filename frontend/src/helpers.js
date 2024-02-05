@@ -39,22 +39,11 @@ export function _selectionGridSelectRow(e) {
 export function _selectionGridSelectRowWithItem(e, item, index) {
     const ctrlKey = (e.metaKey)?e.metaKey:e.ctrlKey; //(this._ios)?e.metaKey:e.ctrlKey;
 
-    // if click select only this row
-    if (!ctrlKey && !e.shiftKey) {
-        console.log('(1) selectRangeOnly(' + index + ', ' + index + ')');
-        if (this.$server) {
-            this.$server.selectRangeOnly(index, index);
-        } else {
-            this.selectedItems = [];
-            this.selectItem(item);
-        }
-    }
+    //x console.log('(0) selected items currently ' + this.selectedItems);
+    //x console.log('(2) shiftKey ' + e.shiftKey + ', rangeSelectRowFrom ' + this.rangeSelectRowFrom);
 
-    // if ctrl click
-    // TODO: Why double update this? Dan added an else if
-    console.log('(2) shiftKey ' + e.shiftKey + ', rangeSelectRowFrom ' + this.rangeSelectRowFrom);
     if (e.shiftKey && this.rangeSelectRowFrom >= 0) {
-        console.log('(3) index is ' + index + " diff " + (this.rangeSelectRowFrom - index));
+        //x console.log('(3) index is ' + index + " diff " + (this.rangeSelectRowFrom - index));
         if((this.rangeSelectRowFrom - index) !== 0) { // clear text selection, if multiple rows are selected using shift
             const sel = window.getSelection ? window.getSelection() : document.selection;
             if (sel) {
@@ -66,7 +55,7 @@ export function _selectionGridSelectRowWithItem(e, item, index) {
             }
         }
 
-        console.log('(4) selectRangeOnly(' + this.rangeSelectRowFrom + ', ' + index + ')');
+        //x console.log('(4) selectRangeOnly(' + this.rangeSelectRowFrom + ', ' + index + ')');
         if (!ctrlKey) {
             if (this.$server) {
                 this.$server.selectRangeOnly(this.rangeSelectRowFrom, index);
@@ -79,31 +68,34 @@ export function _selectionGridSelectRowWithItem(e, item, index) {
 
     } else {
         if (!ctrlKey) {
-            console.log('(5) selectRangeOnly(' + index + ', ' + index + ')');
+            //x console.log('(5) selectRangeOnly(' + index + ', ' + index + ')');
 
             if (this.$server) {
-                // TODO: Why double update this ?
                 this.$server.selectRangeOnly(index, index);
+            }  else {
+                this.selectedItems = [];
+                this.selectItem(item);
             }
 
+
         } else {
-            console.log('(6) selectedItems ' + this.selectedItems + ', item.key ' + item.key);
+            //x console.log('(6) selectedItems ' + this.selectedItems + ', item.key ' + item.key);
 
             if (this.selectedItems && this.selectedItems.some((i) => i.key === item.key)) {
-                console.log('(7) connectorStuff()');
+                //x console.log('(7) connectorStuff()');
                 if (this.$connector) {
                     this.$connector.doDeselection([item], true);
                 } else {
                     this.deselectItem(item);
                 }
             } else {
-                console.log('(8) selectRange(' + index + ', ' + index + ')');
+                //x console.log('(8) selectRange(' + index + ', ' + index + ')');
                 if (this.$server) {
                     this.$server.selectRange(index, index);
                 }
             }
         }
-        console.log('(9) setting rangeSelectRowFrom to ' + index );
+        //x console.log('(9) setting rangeSelectRowFrom to ' + index );
         this.rangeSelectRowFrom = index;
     }
 }

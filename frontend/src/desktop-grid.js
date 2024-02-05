@@ -19,9 +19,16 @@ window.modellwerkstatt_desktopgrid = {
              // multi edit pattern .. :)
 
           } else {
-            let editDiv = grid.shadowRoot.querySelector("[aria-selected='true'] > div[part~='editable-cell']");
+            let editDiv = grid.shadowRoot.querySelector("[aria-selected='true'] > [part~='editable-cell']");
             if (editDiv) {
-                editDiv.parentElement.focus();
+                // edge on windows?, the div is missing in the td?
+                if (editDiv.tagName.toLowerCase() == 'td') {
+                    editDiv.focus();
+
+                } else {
+                    editDiv.parentElement.focus();
+
+                }
 
             } else {
                 let firstTd = grid.shadowRoot.querySelector('[aria-selected="true"] > td');
