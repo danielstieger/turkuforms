@@ -43,7 +43,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * */
 
 .v-loading-indicator {
-    background: var(--lumo-primary-text-color);
+    background: var(--turku-warning-color);
 }
 
 vaadin-tooltip-overlay::part(content) {
@@ -276,6 +276,10 @@ div[pageTitle~"true"] {
 }
 
 /* Table / From top pane search / csv-export / menubar */
+.TurkuHeadingTopPane {
+    margin-bottom: 2px;
+}
+
 .TurkuHeadingTopPane vaadin-text-field {
     padding: 0em;
     margin: 0em;
@@ -286,8 +290,6 @@ div[pageTitle~"true"] {
     height: var(--turku-form-menu-height);
     min-height: var(--turku-form-menu-height);
 }
-
-
 .TurkuHeadingTopPane vaadin-button {
     padding: 0em;
     margin: 0em;
@@ -328,7 +330,7 @@ div[pageTitle~"true"] {
     padding: 0em 0.5em;
 }
 .TurkuWarningDiv {
-    background-color: #FF6700 !important;
+    background-color: var(--turku-warning-color) !important;
     margin: 0.2em 0em 0.2em 0em;
     font-weight: var(--turku-bold);
     color: white;
@@ -338,7 +340,7 @@ div[pageTitle~"true"] {
 
 
 
-/* TurkuTable * * * * * * * * * * * * * * * RAUS ODER NOCHT RAUS VON HIER? */
+/* TurkuTable * * * * * * * * * * * * * * * */
 .TurkuTable {
     /* padding: var(--turku-hierarchy-spacing); */
     margin-bottom: calc(2 * var(--turku-hierarchy-spacing));

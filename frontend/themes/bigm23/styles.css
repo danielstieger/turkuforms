@@ -28,6 +28,7 @@ html {
     --lumo-primary-color-selected: rgba(23, 132, 200, 0.07);
     --lumo-primary-text-color: rgba(75, 84, 102, 1.0);
     --turku-shade-disabled: rgba(26, 26, 26, 0);
+    --turku-warning-color: #FF6700;
 
     --lumo-base-color: #f1f1f5;
 

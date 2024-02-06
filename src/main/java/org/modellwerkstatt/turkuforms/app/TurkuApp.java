@@ -66,7 +66,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
             quickUserInfo(msg);
 
-        } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardAll() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardNotDirty()) {
+        } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardGracefully() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardImmediate()) {
             String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
             quickUserInfo(msg);
