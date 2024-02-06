@@ -86,17 +86,31 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
             applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
 
-            addDetachListener(detachEvent -> {
-                if (Workarounds.closedByMissingHearbeat()) {
-                    Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
-                    if (!applicationController.inShutdownMode()) {
-                        applicationController.internal_immediatelyShutdown();
-                        applicationController.unregisterFromSessionTryInvalidate(vaadinSession, true);
-                    }
-                }
-            });
         }
         Turku.l("TurkuApp.constructor() - done");
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+
+        if (Workarounds.getCurrentTurkuServlet().isDisableBrowserContextMenu()) {
+            this.getElement().executeJs("turku.disableBrowserContextMenu()");
+        }
+    }
+
+    @Override
+    protected void onDetach(DetachEvent detachEvent) {
+        super.onDetach(detachEvent);
+
+        if (Workarounds.closedByMissingHearbeat()) {
+            Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
+            if (!applicationController.inShutdownMode()) {
+                applicationController.internal_immediatelyShutdown();
+                VaadinSession vaadinSession = VaadinSession.getCurrent();
+                applicationController.unregisterFromSessionTryInvalidate(vaadinSession, true);
+            }
+        }
     }
 
     @Override

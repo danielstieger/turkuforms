@@ -15,9 +15,14 @@ window.turku = {
     },
 
     init : function(view) {
+        // init not used right now, replaced by
         window.onfocus = event => view.$server.turkuOnWindowFocusEvent();
         window.beforeunload = event => view.$server.turkuOnWindowUnload();
         console.log('TurkuEventListeners registered for ' + view);
+    },
+
+    disableBrowserContextMenu : function() {
+        window.addEventListener("contextmenu", function(e) { e.preventDefault(); });
     },
 
     mainWindowOnAttach : function() {

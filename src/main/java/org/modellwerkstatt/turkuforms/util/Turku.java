@@ -16,11 +16,15 @@ import java.util.Map;
 
 public class Turku {
     public static final String INTERNAL_VERSION = "Turkuforms (moware11) 0.1";
-    public static final boolean DEBUG_HARDLOG = true;
-
     private static final String HARDLOG_DIR = "/Users/danielstieger/";
     private static final String HARDLOG_FILENAME = HARDLOG_DIR + "turkulog.log";
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");
+
+
+    public static boolean DEBUG_HARDLOG = true;
+    {
+        DEBUG_HARDLOG = DEBUG_HARDLOG && new File(HARDLOG_DIR).canWrite();
+    }
 
     public static String sessionToString(WrappedSession session) {
         StringBuilder sb = new StringBuilder();
@@ -70,7 +74,7 @@ public class Turku {
     }
 
     public static void l(String text) {
-        if (DEBUG_HARDLOG && new File(HARDLOG_DIR).canWrite()) {
+        if (DEBUG_HARDLOG) {
             try {
                 File logFile = new File(HARDLOG_FILENAME);
                 FileOutputStream out;
@@ -92,7 +96,7 @@ public class Turku {
 
     public static void clearAndDelete() {
 
-        if (DEBUG_HARDLOG && new File(HARDLOG_FILENAME).canWrite()) {
+        if (DEBUG_HARDLOG) {
             File logFile = new File(HARDLOG_FILENAME);
             if (logFile.exists()) {
                 logFile.delete();

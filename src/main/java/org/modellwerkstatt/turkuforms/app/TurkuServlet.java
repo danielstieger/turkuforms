@@ -34,6 +34,8 @@ public class TurkuServlet extends VaadinServlet {
     private Class authenticatorClass;
     private String appNameVersion;
     private String actualServletUrl;
+    private boolean disableBrowserContextMenu;
+
 
     public ITurkuAppFactory getUiFactory() {
         return appFactory;
@@ -54,6 +56,7 @@ public class TurkuServlet extends VaadinServlet {
     public String getAppNameVersion() { return appNameVersion; }
     public Class getAuthenticatorClass() { return authenticatorClass; }
 
+    public boolean isDisableBrowserContextMenu() { return disableBrowserContextMenu; }
 
 
     @Override
@@ -120,6 +123,8 @@ public class TurkuServlet extends VaadinServlet {
 
         appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + appNameVersion);
         jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, appNameVersion + " (par deployed as '"+ deployedAsVersion + "')", appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
+
+        disableBrowserContextMenu = !"devdan".equals(guessedServerName);
 
         RouteConfiguration.forApplicationScope().setRoute("/login", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/logout", authenticatorClass);
