@@ -60,6 +60,7 @@ public class TurkuApplicationController extends ApplicationController implements
         session.removeAttribute(sessionName());
 
         boolean others = false;
+
         // other appcrtls present?
         for (String name: session.getAttributeNames()){
             if (isTurkuControllerAttribute(name)) {
@@ -85,6 +86,8 @@ public class TurkuApplicationController extends ApplicationController implements
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
         Turku.l("TurkuApplicationController.valueUnbound(): shutdown in progress (" + this.inShutdownMode() + ") or shutdown now.");
+
+        // Just this controller, not others of the httpSession
         if (!this.inShutdownMode()) {
             // failback only ...
             this.internal_immediatelyShutdown();

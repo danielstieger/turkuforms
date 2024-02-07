@@ -103,8 +103,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     protected void onDetach(DetachEvent detachEvent) {
         super.onDetach(detachEvent);
 
-        if (Workarounds.closedByMissingHearbeat()) {
-            Turku.l("TurkuApp.valueUnbound(): shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
+        boolean closedByHeartBeat = Workarounds.closedByMissingHearbeat();
+        Turku.l("TurkuApp.onDetach(): closedByHeartBeat "+ closedByHeartBeat + ", shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
+
+        if (closedByHeartBeat) {
             if (!applicationController.inShutdownMode()) {
                 applicationController.internal_immediatelyShutdown();
                 VaadinSession vaadinSession = VaadinSession.getCurrent();
@@ -127,7 +129,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStart(), initialStartupParams.getFirstParam());
         }
 
-        Turku.l("TurkuApp.beforeEnter() ");
+        Turku.l("TurkuApp.beforeEnter() done.");
     }
 
     @Override
@@ -138,17 +140,29 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
 
         String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;
-        UI.getCurrent().close();
+
         UI.getCurrent().getPage().setLocation(redirectTo);
+        UI.getCurrent().close();
     }
     
     @Override
     public void parDeploymentForwardNow() {
-        boolean others = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), false);
+        boolean invalidated = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
+
+        Turku.l("parDeploymentForwardNow() invalidated is " + invalidated);
 
         String redirectTo = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
-        UI.getCurrent().close();
-        UI.getCurrent().getPage().setLocation(redirectTo);
+
+        if (! invalidated) {
+            UI.getCurrent().getPage().setLocation(redirectTo + NavigationUtil.OTHER_TABS_OPEN);
+            UI.getCurrent().close();
+
+
+        } else {
+            UI.getCurrent().getPage().setLocation(redirectTo);
+            UI.getCurrent().close();
+
+        }
     }
     
     @Override

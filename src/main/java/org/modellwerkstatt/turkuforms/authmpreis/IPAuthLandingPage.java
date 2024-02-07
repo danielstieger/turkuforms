@@ -42,6 +42,9 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
         if ("logout".equals(naviPath) || paramInfo.wasActiveLogout()) {
+            // just navigating to /<servletname>/logout will not work, since
+            // the app ui is still in the background - until missing heartbeat will destroy it
+
             String buttonName;
             String message = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGOUT_SUCCESS);
 
