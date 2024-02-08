@@ -22,7 +22,7 @@ public class Turku {
 
 
     public static boolean DEBUG_HARDLOG = true;
-    {
+    static {
         DEBUG_HARDLOG = DEBUG_HARDLOG && new File(HARDLOG_DIR).canWrite();
     }
 
