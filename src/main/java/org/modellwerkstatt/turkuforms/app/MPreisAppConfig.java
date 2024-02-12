@@ -21,7 +21,12 @@ public class MPreisAppConfig implements AppShellConfigurator {
     @Override
     public void configurePage(AppShellSettings settings) {
 
+        settings.setViewport("width=device-width, initial-scale=1");
+        settings.addMetaTag("author", "modellwerkstatt.org");
+        settings.setPageTitle("");
+
+        settings.addFavIcon("icon", "static/favicon-32x32.png", "32x32");
+        settings.addLink("shortcut icon", "static/favicon-32x32.png");
         Turku.l("AppConfig.configurePage()");
-        // settings.addFavIcon("icons");
     }
 }
