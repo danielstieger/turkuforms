@@ -68,6 +68,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private boolean hasSummaryLine = false;
     private boolean selectionHandlerEnabled = true;
     private int hLevel;
+    private String cssRulesToAdd = "";
 
 
 
@@ -235,6 +236,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         }
 
         gridColumns = grid.getColumns();
+
+        if (!"".equals(cssRulesToAdd)) {
+            grid.ensureColorStylesPresent(cssRulesToAdd);
+        }
     }
 
 
@@ -304,7 +309,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public void addColumn(String property, String label, ITableCellStringConverter<?> converter, int width, boolean editable, boolean folded, boolean important) {
 
-
         if (folded) { width = 0; }
         colInfo.add(new TurkuTableCol(colInfo.size(), property, label, converter, width));
 
@@ -330,18 +334,36 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         } else {
             String litPropName = Workarounds.litPropertyName(property);
-            String template = "<span style=\"${item." + litPropName + "Style}\">${item." + litPropName + "}</span>";
-            String fontWeight = important ? "font-weight:var(--turku-bold);" : "";
+            String template = important ? "<span class=\"TurkuTblImportant\">${item." + litPropName + "}</span>" : "${item." + litPropName + "}";
+
 
             col = grid.addColumn(LitRenderer.<DTO>of(template).
                     withProperty(litPropName, item -> {
                         return converter.convert(MoJSON.get(item, property));
-                    }).
-                    withProperty(litPropName + "Style", item -> {
-                        String color = converter.getBgColor(MoJSON.get(item, property));
-                        return color == null ? fontWeight : fontWeight + "color:" + color + ";";
                     }));
+
+
+            String[] colorMap = converter.getColorMapOrNull();
+            if (colorMap != null){
+                col.setClassNameGenerator(item -> {
+                    String color = converter.getBgColor(MoJSON.get(item, property));
+
+                    if (color != null) {
+                        return "TkuCol" + color.substring(1);
+                    }
+                    return "";
+                });
+
+                for (String color: colorMap) {
+                    if (color == null) { break; }
+                    if (cssRulesToAdd.contains(color)) { continue; }
+                    cssRulesToAdd += ".TkuCol" + color.substring(1) + " {color: " + color + "} ";
+                }
+            }
+
         }
+
+
 
         if (folded) { col.setVisible(false); }
         col.setHeader(Workarounds.niceGridHeaderLabel(label));

@@ -39,7 +39,8 @@ html {
 
     background: var(--turku-primary-background);
 
-    --turku-grid-selected-row-color: rgba(75, 84, 102, 0.3);
+    /* --turku-grid-selected-row-color: rgba(75, 84, 102, 0.3); */
+    --turku-grid-selected-row-color: rgba(23, 132, 200, 0.9);
     --turku-hierarchy-spacing: 0.5em;
     --turku-form-menu-height: 1.5rem;
 }

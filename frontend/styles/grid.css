@@ -13,6 +13,10 @@
     --_lumo-grid-selected-row-color: var(--turku-grid-selected-row-color);
 }
 
+:host(:not([reordering])) [part~='row'][selected] [part~='body-cell']:not([part~='details-cell']) {
+  color: white !important;
+}
+
 :host([theme~="dense"]) [part~="cell"] {
   min-height: var(--lumo-size-xs);
 }
@@ -29,7 +33,8 @@
 
 
 :host([theme~="dense"]) [part~="editable-cell"] {
-  background-color: rgb(245, 248, 253);
+  background-color: var(--turku-primary-background);
+  color: var(--turku-grid-selected-row-color);
 }
 
 :host([theme~="dense"]) {

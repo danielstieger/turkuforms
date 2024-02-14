@@ -6,6 +6,7 @@
  */
 
 
+
 /* ---- Material Icons Stuff ------------------------------------------------ */
 @font-face {
   font-family: 'Material Icons';
@@ -360,6 +361,10 @@ vaadin-selection-grid {
 .TurkuTableSummaryLine label:last-child {
     padding-right: 0.5em;
 }
+.TurkuTblImportant {
+    font-weight:var(--turku-bold);
+}
+
 
 vaadin-grid-sorter:not([direction])::part(indicators)::before {
   display: none;

@@ -32,6 +32,7 @@ public class DesktopGridPro<T> extends GridPro<T> {
 
     private ShortcutRegistration gridEscShortCut;
     private boolean editPreviewMode;
+    private String cssRules = "";
 
 
     public DesktopGridPro() {
@@ -42,7 +43,11 @@ public class DesktopGridPro<T> extends GridPro<T> {
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
-        this.hideMultiSelectionColumn();
+        this.runWhenAttached();
+    }
+
+    public void ensureColorStylesPresent(String someCssRules) {
+        cssRules = someCssRules;
     }
 
     @Override
@@ -99,12 +104,10 @@ public class DesktopGridPro<T> extends GridPro<T> {
      * Runs a JavaScript snippet to hide the multi selection / checkbox column on the client side. The column
      * is not removed, but set to "hidden" explicitly.
      */
-    public void hideMultiSelectionColumn() {
+    public void runWhenAttached() {
         getElement().getNode().runWhenAttached(ui ->
                 ui.beforeClientResponse(this, context ->
-                        getElement().executeJs(
-                                "if (this.querySelector('vaadin-grid-flow-selection-column')) {" +
-                                        " this.querySelector('vaadin-grid-flow-selection-column').hidden = true }")));
+                        getElement().executeJs("modellwerkstatt_desktopgrid.onAttach(this, $0)", cssRules)));
     }
 
     @Override
