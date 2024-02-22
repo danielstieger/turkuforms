@@ -8,9 +8,9 @@ import com.vaadin.flow.theme.Theme;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 
-@JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js") // yes works :)
+@JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 @Theme("bigm23")
-@Push
+// @Push
 public class MPreisAppConfig implements AppShellConfigurator {
 
     public static final String OK_HOKTEY = "F12";
@@ -25,8 +25,8 @@ public class MPreisAppConfig implements AppShellConfigurator {
         settings.addMetaTag("author", "modellwerkstatt.org");
         settings.setPageTitle("");
 
-        settings.addFavIcon("icon", "static/favicon-32x32.png", "32x32");
-        settings.addLink("shortcut icon", "static/favicon-32x32.png");
+        settings.addFavIcon("icon", "static/favicon.png", "32x32");
+        settings.addLink("shortcut icon", "static/favicon.png");
         Turku.l("AppConfig.configurePage()");
     }
 }
