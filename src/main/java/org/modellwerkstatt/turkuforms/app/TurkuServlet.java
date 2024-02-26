@@ -1,8 +1,11 @@
 package org.modellwerkstatt.turkuforms.app;
 
+import com.vaadin.flow.function.DeploymentConfiguration;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.ServiceException;
 import com.vaadin.flow.server.VaadinServlet;
+import com.vaadin.flow.server.VaadinServletService;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
@@ -132,6 +135,14 @@ public class TurkuServlet extends VaadinServlet {
 
 
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
+    }
+
+
+    @Override
+    protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
+        TurkuServletService service = new TurkuServletService(this, deploymentConfiguration);
+        service.init();
+        return service;
     }
 
     @Override

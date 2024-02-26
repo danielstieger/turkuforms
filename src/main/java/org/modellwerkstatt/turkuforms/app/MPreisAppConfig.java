@@ -11,7 +11,9 @@ import org.modellwerkstatt.turkuforms.util.Turku;
 
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 @Theme("bigm23")
-// @Push(transport = Transport.WEBSOCKET)
+@Push(transport = Transport.WEBSOCKET)
+// When using WEBSOCKET, the service() of TurkuServlet get s no longer called
+
 public class MPreisAppConfig implements AppShellConfigurator {
 
     public static final String OK_HOKTEY = "F12";
@@ -28,6 +30,7 @@ public class MPreisAppConfig implements AppShellConfigurator {
 
         settings.addFavIcon("icon", "static/favicon.png", "32x32");
         settings.addLink("shortcut icon", "static/favicon.png");
+
         Turku.l("AppConfig.configurePage()");
     }
 }
