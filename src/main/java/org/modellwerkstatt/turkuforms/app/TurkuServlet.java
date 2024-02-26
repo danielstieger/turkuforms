@@ -159,6 +159,8 @@ public class TurkuServlet extends VaadinServlet {
 
         if (crtl != null && request.isRequestedSessionIdValid()) {
             // not invalidated by service()
+            crtl.requestDone();
+
             String remoteAddr = "" + httpSession.getAttribute(TurkuApplicationController.REMOTE_SESSIONATTRIB);
             String userName = "" + httpSession.getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
             jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some vaadin interaction", startOfRequest);

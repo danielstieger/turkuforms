@@ -32,8 +32,11 @@ public class TurkuApplicationController extends ApplicationController implements
         lastHkProcessedInThisRequest = "";
     }
 
+    public void requestDone() {
+        lastHkProcessedInThisRequest = "";
+    }
+
     public boolean sameHkInThisRequest(String newHk) {
-        // TODO: Still necessary?
         boolean result = lastHkProcessedInThisRequest.equals(newHk);
         lastHkProcessedInThisRequest = newHk;
         return result;

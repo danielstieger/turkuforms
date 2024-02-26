@@ -4,13 +4,14 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.AppShellSettings;
+import com.vaadin.flow.shared.ui.Transport;
 import com.vaadin.flow.theme.Theme;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 @Theme("bigm23")
-// @Push
+// @Push(transport = Transport.WEBSOCKET)
 public class MPreisAppConfig implements AppShellConfigurator {
 
     public static final String OK_HOKTEY = "F12";

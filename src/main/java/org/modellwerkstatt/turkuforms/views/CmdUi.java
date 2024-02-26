@@ -43,27 +43,23 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void onShortcut(ShortcutEvent event) {
         String keyName = HkTranslate.trans(event.getKey());
-        Turku.l("CmdUi.onShortcut() received " + keyName + " hash " + event.hashCode());
-        // Turku.l("CmdUi.onShortcut() " + event.getSource().getElement() + "/" + event.getSource());
+        Turku.l(getClass().getSimpleName() + ".onShortcut() received " + keyName + " ignore  " + Workarounds.sameHkInThisRequest(keyName));
 
-        if (Workarounds.sameHkInThisRequest(keyName)) {
-            return;
+        // if (!Workarounds.sameHkInThisRequest(keyName)) {
+        // no longer necessary, Dan Feb, 2024
+        OFXConclusionInformation conclusion = conclusionInformations.stream().filter(e -> keyName.equals(e.hotkey)).findFirst().orElse(null);
+
+        if (conclusion != null && conclusion.enabled) {
+            cmdContainer.receiveAndProcess(new ConclusionEvent(conclusion.conclusionHashCode, conclusion.buttonTitle));
+
+        } else if (conclusion != null){
+            // this is okay, conclusion disabled, but hk still active for the cmdUI
+
+        } else {
+            cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
+
         }
 
-        // check conclusion first
-        for (OFXConclusionInformation info: conclusionInformations) {
-            if (keyName.equals(info.hotkey)) {
-                if (info.enabled) {
-                    cmdContainer.receiveAndProcess(new ConclusionEvent(info.conclusionHashCode, info.buttonTitle));
-                } else {
-                    Turku.l("CmdUi.onShortcut() conclusion '" + info.buttonTitle + "' received, but not enabled.");
-                }
-                return;
-            }
-        }
-
-        // early returns above :(
-        cmdContainer.receiveAndProcess(new KeyEvent(Defs.hkNeedsCrtl(keyName), keyName));
     }
 
     public void initialShow(IToolkit_Form formAsComponent) {
