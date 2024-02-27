@@ -49,7 +49,7 @@ public class NavigationUtil {
 
         LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), vaadinSession.getBrowser().getAddress());
 
-        info.setDevice("TurkuDesk", "" + vaadinSession.getBrowser().getBrowserApplication(), "");
+        info.setDevice("", "" + vaadinSession.getBrowser().getBrowserApplication(), "");
 
         String msg = crtl.checkLoginPrepareUserEnv(userName, password, info, appUiModule, factory);
         return msg;

@@ -40,6 +40,7 @@ public class TurkuServlet extends VaadinServlet {
     private boolean disableBrowserContextMenu;
 
 
+    public TurkuServletService turkuServletService;
     public ITurkuAppFactory getUiFactory() {
         return appFactory;
     }
@@ -90,6 +91,8 @@ public class TurkuServlet extends VaadinServlet {
         }
 
         jmxRegistration = new AppJmxRegistration(appBehaviorFqName, deployedAsVersion, realPath, servletPath);
+        turkuServletService.setJmxRegistration(jmxRegistration);
+
         deployedAsVersion = deployedAsVersion.replace("_", ".");
 
         try {
@@ -133,7 +136,6 @@ public class TurkuServlet extends VaadinServlet {
         RouteConfiguration.forApplicationScope().setRoute("/logout", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
 
-
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }
 
@@ -142,16 +144,19 @@ public class TurkuServlet extends VaadinServlet {
     protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
         TurkuServletService service = new TurkuServletService(this, deploymentConfiguration);
         service.init();
+        turkuServletService = service;
         return service;
     }
 
+
+    /*  Not used when working with WEBSOCKETS. Remove if
+     *  finally WEBSOCKETS are the primary means of communication
+     *
+     *
+     *
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean isVaadinHeartBeat = request.getContentLength() == 0;
-        /* Vaadin heartbeats touch the session, therefore extending the TTL. Thus,
-         * setting the session-timeout to e.g. 5 min and the heartberat to 1 min let
-         * tomcat close the session, if a browser window is closed unexpectedly after 5 mins.
-         */
 
         long startOfRequest = 0;
         TurkuApplicationController crtl = null;
@@ -176,7 +181,7 @@ public class TurkuServlet extends VaadinServlet {
             String userName = "" + httpSession.getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
             jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some vaadin interaction", startOfRequest);
         }
-    }
+    } */
 
 
 
@@ -197,6 +202,7 @@ public class TurkuServlet extends VaadinServlet {
         DeprecatedServerDateProvider.shutdownAndGcClean();
         MMStaticAccessHelper.shutdownAndGcClean();
         OFXStringFormatter2.GLOBAL_INSTANCE_DEFAULT_LANG = null;
+
         Turku.l("TurkuServlet.destroy(): servled cleaned up and destroyed.");
     }
 }

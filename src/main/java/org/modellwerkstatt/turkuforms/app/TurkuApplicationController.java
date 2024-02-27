@@ -21,19 +21,26 @@ public class TurkuApplicationController extends ApplicationController implements
     public final static String REMOTE_SESSIONATTRIB = "remoteAddr";
 
 
+
+    private long lastRequestStarted;
     private String lastHkProcessedInThisRequest = "";
 
     public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_Application appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
+
+        // upon init, take this as req.
+        startRequest();
     }
 
     public void startRequest() {
         // Vaadin Bug/Problems 23.3 with HK Processing
         lastHkProcessedInThisRequest = "";
+        lastRequestStarted = System.currentTimeMillis();
     }
 
-    public void requestDone() {
+    public long requestDone() {
         lastHkProcessedInThisRequest = "";
+        return lastRequestStarted;
     }
 
     public boolean sameHkInThisRequest(String newHk) {

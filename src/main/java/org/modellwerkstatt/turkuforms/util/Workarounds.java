@@ -4,8 +4,11 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.WrappedSession;
+import com.vaadin.flow.shared.ApplicationConstants;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.app.TurkuApp;
@@ -109,6 +112,10 @@ public class Workarounds {
 
 
 
+    public static boolean isHeartBeatRequest(VaadinRequest request) {
+        String rParam = request.getParameter("v-r");
+        return "heartbeat".equals(rParam);
+    }
 
     /* - - - - - - - - - - - - access to local environment and session - - - - - - - - - - - - */
     public static boolean closedByMissingHearbeat() {
@@ -128,12 +135,16 @@ public class Workarounds {
 
         if (mainComponent instanceof TurkuApp) {
             return ((TurkuApp) mainComponent).getApplicationController();
+
         } else {
             // LoginComponents etc. ?
             return null;
         }
     }
 
+    /* Only used when working and reporting on http response basis without websockets.
+     * Probably to remove when finally only working on websockets ...
+     */
     public static TurkuApplicationController getControllerFromRequest(HttpServletRequest request, HttpSession httpSession) {
         VaadinSession vaadinSession = (VaadinSession) httpSession.getAttribute(INTERNAL_VAADIN_SESSION_NAME);
         String[] vuiId = request.getParameterMap().get(INTERNAL_VAADIN_UID_NAME);
@@ -144,7 +155,18 @@ public class Workarounds {
             if (currentUi == null) { throw new RuntimeException("This can not happen, currentUi is null for request"); }
             return getControllerFormUi(currentUi);
         }
+        return null;
+    }
+    public static TurkuApplicationController getControllerFromRequest(VaadinRequest request, WrappedSession wrappedHttpSession) {
+        VaadinSession vaadinSession = (VaadinSession) wrappedHttpSession.getAttribute(INTERNAL_VAADIN_SESSION_NAME);
+        String[] vuiId = request.getParameterMap().get(INTERNAL_VAADIN_UID_NAME);
 
+        if (vaadinSession != null && vuiId != null && vuiId.length > 0) {
+            int vuiIdAsInteger = Integer.parseInt(vuiId[0]);
+            UI currentUi = vaadinSession.getUIById(vuiIdAsInteger);
+            if (currentUi == null) { throw new RuntimeException("This can not happen, currentUi is null for request"); }
+            return getControllerFormUi(currentUi);
+        }
         return null;
     }
 

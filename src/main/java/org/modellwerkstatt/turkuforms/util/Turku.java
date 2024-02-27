@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.util;
 
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.WrappedSession;
 import org.joda.time.DateTime;
@@ -20,7 +21,6 @@ public class Turku {
     private static final String HARDLOG_FILENAME = HARDLOG_DIR + "turkulog.log";
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");
 
-
     public static boolean DEBUG_HARDLOG = true;
     static {
         DEBUG_HARDLOG = DEBUG_HARDLOG && new File(HARDLOG_DIR).canWrite();
@@ -38,6 +38,38 @@ public class Turku {
     }
 
     public static String requestToString(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("HeaderNames: \n");
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            sb.append("     " + key + ": " + value + "\n");
+        }
+
+        sb.append("\nAttributeNames:\n");
+        Enumeration<String> attributeNames = request.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            String key = (String) attributeNames.nextElement();
+            String value = ((String) request.getAttribute(key).toString());
+            sb.append("     " + key + ": " + value);
+        }
+
+        sb.append("\nParameters\n");
+        Map<String, String[]> paramMap = request.getParameterMap();
+        for (String key : paramMap.keySet()) {
+            sb.append("     " + key + ": ");
+            for (String value : paramMap.get(key)) {
+                sb.append("'" + value + "' ");
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    public static String requestToString(VaadinRequest request) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("HeaderNames: \n");
