@@ -22,20 +22,27 @@ public class TurkuApplicationController extends ApplicationController implements
 
 
 
+    private int lastRequestHash = -1;
     private long lastRequestStarted;
-    private String lastHkProcessedInThisRequest = "";
+    private String lastHkProcessedInThisRequest;
 
     public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_Application appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
 
         // upon init, take this as req.
-        startRequest();
+        startRequest(4711);
     }
 
-    public void startRequest() {
-        // Vaadin Bug/Problems 23.3 with HK Processing
-        lastHkProcessedInThisRequest = "";
-        lastRequestStarted = System.currentTimeMillis();
+    public void startRequest(int requestHash) {
+        if (lastRequestHash == requestHash) {
+            // startRequest called multiple times for some request?
+
+        } else {
+
+            lastRequestStarted = System.currentTimeMillis();
+            lastRequestHash = requestHash;
+            lastHkProcessedInThisRequest = "";
+        }
     }
 
     public long requestDone() {
@@ -43,6 +50,7 @@ public class TurkuApplicationController extends ApplicationController implements
         return lastRequestStarted;
     }
 
+    @Deprecated
     public boolean sameHkInThisRequest(String newHk) {
         boolean result = lastHkProcessedInThisRequest.equals(newHk);
         lastHkProcessedInThisRequest = newHk;

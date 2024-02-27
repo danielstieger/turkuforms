@@ -23,23 +23,29 @@ public class TurkuServletService extends VaadinServletService {
     public void requestStart(VaadinRequest request, VaadinResponse response) {
         super.requestStart(request, response);
 
-        boolean isVaadinHeartBeat = Workarounds.isHeartBeatRequest(request);
-        if (!isVaadinHeartBeat) {
-            WrappedSession session = request.getWrappedSession(false);
-            if (session != null) {
-                Turku.l("TurkuServletService.requestStart()");
-                TurkuApplicationController appCrtl = Workarounds.getControllerFromRequest(request, session);
-                Turku.l("TurkuServletService.requestStart() appCrtl = " + appCrtl);
-                if (appCrtl != null) {
-                    appCrtl.startRequest();
-                }
+        /* can not easily determine TurkuAppCrtl from this method here
+         * without traversing session and using vaadin internals. hooked in via
+         * findUi below.
+         */
+    }
+
+    @Override
+    public UI findUI(VaadinRequest request) {
+        UI theUi = super.findUI(request);
+
+        if (theUi != null && !Workarounds.isHeartBeatRequest(request)) {
+
+            TurkuApplicationController crtl = Workarounds.getControllerFormUi(theUi);
+            if (crtl != null) {
+                crtl.startRequest(request.hashCode());
             }
         }
+
+        return theUi;
     }
 
     @Override
     public void requestEnd(VaadinRequest request, VaadinResponse response, VaadinSession session) {
-
 
         boolean isVaadinHeartBeat = Workarounds.isHeartBeatRequest(request);
         UI currentUI = isVaadinHeartBeat ? null : UI.getCurrent();
@@ -55,14 +61,9 @@ public class TurkuServletService extends VaadinServletService {
                 if (reqTime >= MPreisAppConfig.REQUEST_TIME_REPORTING_THRESHOLD) {
                     String remoteAddr = "" + session.getSession().getAttribute(TurkuApplicationController.REMOTE_SESSIONATTRIB);
                     String userName = "" + session.getSession().getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
-                    jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some vaadin interaction", startTime);
+                    jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some turku interaction", startTime);
                 }
-
-                Turku.l("TurkuServletService.requestEnd() vaadin diff = " + reqTime + " ours = " + (System.currentTimeMillis() - startTime) + " - - - - - - - - - - - -");
-
             }
-
-
         }
     }
 }

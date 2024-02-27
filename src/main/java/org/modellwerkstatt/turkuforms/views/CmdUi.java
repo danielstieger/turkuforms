@@ -1,9 +1,6 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ShortcutEvent;
-import com.vaadin.flow.component.ShortcutEventListener;
-import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -42,6 +39,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void onShortcut(ShortcutEvent event) {
+
+
         String keyName = HkTranslate.trans(event.getKey());
         Turku.l(getClass().getSimpleName() + ".onShortcut() received " + keyName + " ignore  " + Workarounds.sameHkInThisRequest(keyName));
 
