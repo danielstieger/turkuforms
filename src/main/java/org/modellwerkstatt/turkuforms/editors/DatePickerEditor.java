@@ -35,7 +35,7 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
         // other invalid attribute listeners are not working.
         // https://github.com/vaadin/platform/issues/3066
         inputField.addValidationStatusChangeListener(event -> {
-            // Turku.l("DatePickerEditor.addValidationStatusChangeListener() NEW STATUS: " + event.getNewStatus() );
+            // Turku.l("DatePickerEditor.addValidationStatusChangeListener() NEW Status: " + event.getNewStatus() );
             isInvalid = !event.getNewStatus();
         });
     }

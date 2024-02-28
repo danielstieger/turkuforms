@@ -42,7 +42,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
 
         String keyName = HkTranslate.trans(event.getKey());
-        Turku.l(getClass().getSimpleName() + ".onShortcut() received " + keyName + " ignore  " + Workarounds.sameHkInThisRequest(keyName));
+        Turku.l(getClass().getSimpleName() + ".onShortcut() received " + keyName);
 
         // if (!Workarounds.sameHkInThisRequest(keyName)) {
         // no longer necessary, Dan Feb, 2024

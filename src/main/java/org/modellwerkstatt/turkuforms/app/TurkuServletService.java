@@ -52,7 +52,7 @@ public class TurkuServletService extends VaadinServletService {
 
         super.requestEnd(request, response, session);
 
-        if (!isVaadinHeartBeat) {
+        if (!isVaadinHeartBeat && currentUI != null) {
             TurkuApplicationController appCrtl = Workarounds.getControllerFormUi(currentUI);
             if (appCrtl != null) { // not login views etc.
                 long startTime = appCrtl.requestDone();

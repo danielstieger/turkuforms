@@ -101,6 +101,7 @@ public class Workarounds {
         }
     }
 
+    @Deprecated
     public static boolean sameHkInThisRequest(String hk) {
         TurkuApplicationController crtl = Workarounds.getControllerFormUi(UI.getCurrent());
         return crtl.sameHkInThisRequest(hk);

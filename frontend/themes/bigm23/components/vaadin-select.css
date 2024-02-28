@@ -1,3 +1,0 @@
-:host([disabled]) vaadin-input-container[part~="input-field"] > div[part$="button"]{
-    display: none;
-}

@@ -409,6 +409,7 @@ vaadin-combo-box[disabled],
 vaadin-select[disabled],
 vaadin-date-time-picker-date-picker[disabled],
 vaadin-date-time-picker-time-picker[disabled],
+vaadin-date-picker[disabled],
 vaadin-radio-group[disabled]
 {
 	padding-top: 0px;
@@ -420,7 +421,8 @@ vaadin-text-area[disabled]::part(input-field),
 vaadin-combo-box[disabled]::part(input-field),
 vaadin-select[disabled]::part(input-field),
 vaadin-date-time-picker-date-picker[disabled]::part(input-field),
-vaadin-date-time-picker-time-picker[disabled]::part(input-field)
+vaadin-date-time-picker-time-picker[disabled]::part(input-field),
+vaadin-date-picker[disabled]::part(input-field)
 {
 	background-color: var(--turku-shade-disabled);
 }
@@ -431,6 +433,7 @@ vaadin-combo-box > input[disabled],
 vaadin-select > vaadin-select-value-button[disabled],
 vaadin-date-time-picker-date-picker > input[disabled],
 vaadin-date-time-picker-time-picker > input[disabled],
+vaadin-date-picker > input[disabled],
 vaadin-radio-button > label[disabled]
 {
 
