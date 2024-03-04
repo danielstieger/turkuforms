@@ -74,33 +74,6 @@ public class Workarounds {
         return icon;
     }
 
-
-    public static <DTO> void adjustColWidthToCheckbox(List<TurkuTableCol> columns) {
-        List<TurkuTableCol> toAdjust = new ArrayList<>(columns);
-        toAdjust.sort((t0, t1) -> Integer.compare(t1.widthInPercent, t0.widthInPercent));
-
-        int alreadyAdjusted = 0;
-        int MAX_TO_ADJUST = 4;
-        for (int i = 0; i < toAdjust.size(); i++) {
-            TurkuTableCol col = toAdjust.get(i);
-            int diff = 0;
-            int width = col.widthInPercent;
-
-            if (width >= 40 && alreadyAdjusted < MAX_TO_ADJUST) {
-                diff = (MAX_TO_ADJUST - alreadyAdjusted);
-
-            } else if (width >= 30 && alreadyAdjusted < MAX_TO_ADJUST) {
-                diff = 2;
-
-            } else if (width >= 10 && alreadyAdjusted < MAX_TO_ADJUST) {
-                diff = 1;
-            }
-
-            col.widthInPercent -= diff;
-            alreadyAdjusted += diff;
-        }
-    }
-
     @Deprecated
     public static boolean sameHkInThisRequest(String hk) {
         TurkuApplicationController crtl = Workarounds.getControllerFormUi(UI.getCurrent());

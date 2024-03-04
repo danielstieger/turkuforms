@@ -201,14 +201,30 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         heading.setHLevel(numComponent, level);
     }
 
+
     @Override
     public void endOfInitializationForElementClass(Class theDto) {
         dtoClass = theDto;
 
-        // Workarounds.adjustColWidthToCheckbox(colInfo);
-        colInfo.forEach(colInfo -> {
-            grid.getColumns().get(colInfo.position).setWidth("" + colInfo.widthInPercent + "%");
-        });
+        int remainingWidth = 99;
+        for (int i = 0; i < colInfo.size(); i++) {
+            boolean lastCol = (i == colInfo.size() - 1);
+            TurkuTableCol col = colInfo.get(i);
+
+            int width = col.widthInPercent;
+
+            if (lastCol) {
+                width = remainingWidth;
+            } else {
+                remainingWidth -= width;
+            }
+
+            grid.getColumns().get(col.position).setWidth(width + "%");
+            if (lastCol && width > 40) {
+                grid.getColumns().get(col.position).setTextAlign(ColumnTextAlign.START);
+            }
+        }
+
 
         if (firstEditableCol >= 0) {
             searchField.setEnabled(false);
@@ -450,7 +466,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         if (numSelection == 0) {
 
         } else if (numSelection == 1) {
-            debugSt += " " + dataView.getIndex(selection.iterator().next());
+            debugSt += " " + (dataView.getIndex(selection.iterator().next()) + 1);
         } else {
             debugSt +=" *";
         }

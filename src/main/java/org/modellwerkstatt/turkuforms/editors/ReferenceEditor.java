@@ -19,7 +19,7 @@ public class ReferenceEditor extends EditorBasisFocusable<ComboBox<String>> impl
         inputField.setSizeFull();
         inputField.setAutoOpen(true);
         inputField.setAllowCustomValue(false);
-        inputField.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
+        inputField.getStyle().set("--vaadin-combo-box-overlay-width", "450px");
         inputField.setRequired(true);
         inputField.setRequiredIndicatorVisible(false);
         inputField.addThemeVariants(ComboBoxVariant.LUMO_SMALL);
