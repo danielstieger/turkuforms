@@ -4,6 +4,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.dom.Element;
+import org.modellwerkstatt.dataux.runtime.delegates.DateTimeDelegate;
 import org.modellwerkstatt.dataux.runtime.delegates.LocalDateDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
@@ -11,9 +12,9 @@ import org.modellwerkstatt.turkuforms.app.TurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class TextEditor extends EditorBasisFocusable<TextField> implements IToolkit_DateOrTimeEditor {
-    protected boolean adjustLocalDateDotsNotConsideringFormat;
+    protected ConfigOption option;
 
-    public TextEditor(boolean forLocalDate) {
+    public TextEditor(ConfigOption opt) {
         super(new TextField());
         inputField.setSizeFull();
         inputField.setAutoselect(true);
@@ -36,7 +37,7 @@ public class TextEditor extends EditorBasisFocusable<TextField> implements ITool
                     component);
         }
 
-        adjustLocalDateDotsNotConsideringFormat = forLocalDate;
+        option = opt;
     }
 
 
@@ -61,9 +62,13 @@ public class TextEditor extends EditorBasisFocusable<TextField> implements ITool
         }
 
 
-        if (adjustLocalDateDotsNotConsideringFormat) {
+        if (option.equals(ConfigOption.FOR_LOCALDATE)) {
             // do not adjust cachedvalue to force an update of the ui on reload etc.
             return LocalDateDelegate.adjusDateDotInputText(cachedValue);
+
+        } else if (option.equals(ConfigOption.FOR_DATETIME)) {
+            return DateTimeDelegate.adjusDateTimeDotInputText(cachedValue);
+
         } else {
             return cachedValue;
         }
@@ -87,5 +92,12 @@ public class TextEditor extends EditorBasisFocusable<TextField> implements ITool
     public void setFormatter(String format, String locale, int langIdx) {
         // just in case the text editor is used as a local date editor.
         // ignored since format, locale or langIdx are all managed by the delegate
+    }
+
+
+    public static enum ConfigOption {
+        NONE(),
+        FOR_LOCALDATE(),
+        FOR_DATETIME()
     }
 }

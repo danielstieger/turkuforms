@@ -15,13 +15,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class  DateTimeEditor extends EditorBasisFocusable<DateTimePicker> implements IToolkit_DateOrTimeEditor {
+public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> implements IToolkit_DateOrTimeEditor {
 
     static protected HashMap<String, DateTimeFormatter> cachedFormatter = new HashMap<>();
     protected String cachedFormatKey;
     protected boolean isInvalid;
 
-    public DateTimeEditor() {
+    public DateTimePickerEditor() {
         super(new DateTimePicker());
         inputField.addThemeVariants(DateTimePickerVariant.LUMO_SMALL);
         // inputField.setSizeFull();
@@ -63,6 +63,7 @@ public class  DateTimeEditor extends EditorBasisFocusable<DateTimePicker> implem
                 cachedValue = s;
                 lastIssuedUpdateText = s;
 
+                // must be parsable to LocaDateTime (containing year etc.) not just java.time.Parsed
                 LocalDateTime notAdjusted = LocalDateTime.parse(cachedValue, cachedFormatter.get(cachedFormatKey));
                 LocalDateTime adjusted = notAdjusted.withYear(MoWareFormattersFactory.twoToFourDigitYear(notAdjusted.getYear()));
                 inputField.setValue(adjusted);
@@ -95,17 +96,23 @@ public class  DateTimeEditor extends EditorBasisFocusable<DateTimePicker> implem
     @Override
     public void setFormatter(String format, String locale, int langIdx) {
         // e.g. "dd.MM.yy HH:mm" splitted by space :)
+        // can not format EEEE dd.MM etc.
 
         String key = format + "_" + locale + "_" + langIdx;
 
         if (!SaveObjectComperator.equals(cachedFormatKey, key)) {
             cachedFormatKey = format;
 
-            // cut of time from format ..
+            // cut of time from format
             String[] splitted = format.split("\\s+");
-            String dateFormat = splitted[1];
-            if (splitted[0].contains("d") || splitted[0].contains("y") || splitted[0].contains("M")) {
-                dateFormat = splitted[0];
+            // German default
+            String dateFormat = "dd.MM.yy";
+
+            for (String part: splitted) {
+                if (part.contains("d") || part.contains("y") || part.contains("M")) {
+                    dateFormat = part;
+                    break;
+                }
             }
 
             Locale loc = Locale.forLanguageTag(locale);

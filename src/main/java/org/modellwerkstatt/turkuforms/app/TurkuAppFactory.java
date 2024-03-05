@@ -113,7 +113,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     @Override
     public IToolkit_TextEditor createTextEditor() {
-        return new TextEditor(false);
+        return new TextEditor(TextEditor.ConfigOption.NONE);
     }
 
     @Override
@@ -141,14 +141,19 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         if (withPicker) {
             return new DatePickerEditor();
         } else {
-            return new TextEditor(true);
+            return new TextEditor(TextEditor.ConfigOption.FOR_LOCALDATE);
         }
 
     }
 
     @Override
-    public IToolkit_DateOrTimeEditor createDateAndTimeEditor() {
-        return new DateTimeEditor();
+    public IToolkit_DateOrTimeEditor createDateAndTimeEditor(boolean withPicker) {
+        if (withPicker) {
+            return new DateTimePickerEditor();
+        } else {
+            return new TextEditor(TextEditor.ConfigOption.FOR_DATETIME);
+        }
+
     }
 
     @Override
