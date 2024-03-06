@@ -97,8 +97,4 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
         rightPart = hl;
         issueUpdateEnabled = true;
     }
-
-
-    public void setOption(Option... options) {
-    }
 }

@@ -71,6 +71,11 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         FormLayout.FormItem newItem = formLayout.addFormItem(rightPart, label);
         formLayout.setColspan(newItem, colWeights.get(delegates.size() % colWeights.size()));
 
+        if (child.isWideOption()) {
+            newItem.addClassName("FormItemWideOption");
+            Turku.l("TurkuDelegateForm.addDelegate() SET WIDE OPTION FOR " + newItem);
+        }
+
         if (child instanceof DummyEditor) {
             newItem.addClassName("InvisibleWhenBelow");
 

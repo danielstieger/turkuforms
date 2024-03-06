@@ -61,7 +61,4 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
 
     @Override
     public void setIssuesUpdateConclusion() { }
-
-    @Override
-    public void setOption(Option... options) {}
 }

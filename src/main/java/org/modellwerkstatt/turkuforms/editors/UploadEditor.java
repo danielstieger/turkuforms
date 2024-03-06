@@ -127,12 +127,6 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
         throw new RuntimeException("Not implemented");
     }
 
-    @Override
-    public void setOption(Option... options) {
-
-    }
-
-
     public static String removePath(String filePath) {
         int li = filePath.lastIndexOf(File.separator);
         Turku.l("UploadEditor() searching for " + File.separator + " in " + filePath + " ==> " + li);

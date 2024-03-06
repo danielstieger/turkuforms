@@ -1,0 +1,3 @@
+:host(.FormItemWideOption) [part$="label"] {
+    display: none;
+}

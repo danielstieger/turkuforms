@@ -35,11 +35,6 @@ public class DummyEditor extends FormChild<Label> implements IToolkit_TextEditor
         throw new RuntimeException("Not implemented for dummy editor.") ;
     }
 
-    @Override
-    public void setOption(Option... options) {
-
-    }
-
     public void setText(String s) {
         throw new RuntimeException("Not implemented for dummy editor.");
     }

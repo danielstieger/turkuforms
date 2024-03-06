@@ -6,6 +6,7 @@ import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 abstract public class FormChild<T extends Component> implements IToolkit_TextEditor {
@@ -15,11 +16,13 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
 
     protected IDataUxDelegate<?> delegate;
     protected TurkuDelegatesForm<?> turkuDelegatesForm;
+    protected boolean wideOption;
 
     public FormChild(T theField) {
         inputField = theField;
         rightPart = inputField;
         label = new Label();
+        wideOption = false;
     }
 
     public void enableKeyReleaseEvents() {
@@ -47,6 +50,17 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
     public Object getLabel() { return label; }
 
     public Object getRightPartComponent() { return rightPart; }
+
+    @Override
+    public void setOption(Option... options) {
+        if (IToolkit_TextEditor.has(Option.WIDE, options)) {
+            wideOption = true;
+        }
+    }
+
+    public boolean isWideOption(){
+        return wideOption;
+    }
 
     @Override
     public String toString() {

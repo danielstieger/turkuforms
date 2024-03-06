@@ -286,6 +286,7 @@ div[pageTitle~"true"] {
     margin: 0em;
     height: var(--turku-form-menu-height);
     align-self: end;
+    width: 150px;
 }
 .TurkuHeadingTopPane vaadin-text-field input {
     height: var(--turku-form-menu-height);
