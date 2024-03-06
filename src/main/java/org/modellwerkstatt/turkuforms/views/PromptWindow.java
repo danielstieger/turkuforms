@@ -37,8 +37,8 @@ public class PromptWindow extends Dialog {
         setDraggable(false);
         setResizable(false);
         if (restrictSize) {
-            setMaxWidth(90f, Unit.PERCENTAGE);
-            setMaxHeight(90f, Unit.PERCENTAGE);
+            setMaxWidth(98f, Unit.PERCENTAGE);
+            setMaxHeight(99f, Unit.PERCENTAGE);
         }
 
         addClassName("PromptWindow");

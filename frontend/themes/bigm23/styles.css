@@ -43,4 +43,6 @@ html {
     --turku-grid-selected-row-color: rgba(23, 132, 200, 0.9);
     --turku-hierarchy-spacing: 0.5em;
     --turku-form-menu-height: 1.5rem;
+
+    --vaadin-field-default-width: 4em;
 }
