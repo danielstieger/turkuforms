@@ -3,9 +3,7 @@ package org.modellwerkstatt.turkuforms.app;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.DeploymentConfiguration;
 import com.vaadin.flow.server.*;
-import com.vaadin.open.App;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 public class TurkuServletService extends VaadinServletService {

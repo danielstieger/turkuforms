@@ -1,9 +1,7 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class LeftRight2 extends HorizontalLayout {

@@ -1,6 +1,9 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ShortcutEvent;
+import com.vaadin.flow.component.ShortcutEventListener;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -14,7 +17,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
-import org.modellwerkstatt.turkuforms.forms.LeftRight2;
 import org.modellwerkstatt.turkuforms.util.*;
 
 import java.util.ArrayList;

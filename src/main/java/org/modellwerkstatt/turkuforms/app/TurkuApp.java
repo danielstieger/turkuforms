@@ -32,7 +32,6 @@ import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
-import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
@@ -341,6 +340,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         Notification notification = new Notification();
         notification.setPosition(Notification.Position.TOP_CENTER);
         notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+        notification.setDuration(20000);
 
         Text text = new Text(msg);
 

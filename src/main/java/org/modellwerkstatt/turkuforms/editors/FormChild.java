@@ -6,7 +6,6 @@ import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 abstract public class FormChild<T extends Component> implements IToolkit_TextEditor {

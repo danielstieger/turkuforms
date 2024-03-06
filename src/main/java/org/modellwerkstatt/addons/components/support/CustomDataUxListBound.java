@@ -1,7 +1,6 @@
 package org.modellwerkstatt.addons.components.support;
 
 
-import com.vaadin.flow.component.html.Div;
 import org.modellwerkstatt.dataux.runtime.core.IDelegateChange;
 import org.modellwerkstatt.dataux.runtime.core.IPagePaneSelCrtl;
 import org.modellwerkstatt.dataux.runtime.core.ISelectionController;

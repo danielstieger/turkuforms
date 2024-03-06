@@ -13,17 +13,12 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.turkuforms.util.Turku;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
