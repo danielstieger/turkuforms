@@ -73,7 +73,6 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
         if (child.isWideOption()) {
             newItem.addClassName("FormItemWideOption");
-            Turku.l("TurkuDelegateForm.addDelegate() SET WIDE OPTION FOR " + newItem);
         }
 
         if (child instanceof DummyEditor) {
