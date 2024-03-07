@@ -46,22 +46,24 @@ public class TurkuServletService extends VaadinServletService {
         return theUi;
     }
 
+    private String readUiId(VaadinRequest req){
+        try {
+            return req.getReader().readLine();
+        } catch (IOException e) {
+            // ignore?
+        }
+        return null;
+    }
+
     @Override
     public void requestEnd(VaadinRequest request, VaadinResponse response, VaadinSession session) {
 
 
         boolean isVaadinHeartBeat = Workarounds.isHeartBeatRequest(request);
-        UI currentUI = isVaadinHeartBeat ? null : UI.getCurrent();
+        boolean isBeacon = request.getPathInfo().equals("/beacon");
 
-        if (request.getPathInfo().equals("/beacon")) {
-            try {
-                Turku.l("TurkuServletService.requestEnd() BEACON " + request.getReader().readLine() + " with ui " + currentUI);
+        UI currentUI = isVaadinHeartBeat || isBeacon ? null : UI.getCurrent();
 
-            } catch (IOException e) {
-                Turku.l(OFXConsoleHelper.stackTrace2String(e));
-            }
-
-        }
 
         super.requestEnd(request, response, session);
 
@@ -78,6 +80,21 @@ public class TurkuServletService extends VaadinServletService {
                     jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some turku interaction", startTime);
                 }
             }
+
+        } else if (isBeacon) {
+            String uiIdSt = readUiId(request);
+            if (uiIdSt != null && session != null) {
+                int uiId = Integer.parseInt(uiIdSt);
+                UI uiToClose = session.getUIById(uiId);
+
+                if (uiToClose != null) {
+                    Turku.l("TurkuServletService.requestEnd() BEACON calling close on " + uiToClose + " now.");
+
+                    // identified as missing heartbeat in turkuapp
+                    uiToClose.close();
+                }
+            }
+
         }
     }
 }

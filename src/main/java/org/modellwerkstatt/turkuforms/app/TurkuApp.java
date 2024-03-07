@@ -98,7 +98,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
 
-        this.getElement().executeJs("turku.installBeacon($0)", this);
+        String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
+        this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
     }
 
     @Override

@@ -62,16 +62,18 @@ window.turku = {
         });
     },
 
-    installBeacon: function(cmpt) {
+    installBeacon: function(servletUrl, uiid) {
         // bei Minimierung?
-        document.addEventListener("visibilitychange", function logData() {
-          if (document.visibilityState === "hidden") {
-            console.log('turku.installBeacon() Issuing request NOW');
-            navigator.sendBeacon("/simpleone/beacon", '1234');
-          }
+        // statt visibilitychange on document
+
+        window.addEventListener("pagehide", function sendRequest(event) {
+
+          console.log('turku.installBeacon() Issuing request NOW, persisted ' + event.persisted);
+          navigator.sendBeacon(  servletUrl + "/beacon", uiid);
+
         });
 
-        console.log('turku.installBeacon() Beacon installed.');
+        console.log('turku.installBeacon() Beacon installed for ' + servletUrl + " and ui " + uiid);
     },
 
     setTurkuCookie: function(value,days) {

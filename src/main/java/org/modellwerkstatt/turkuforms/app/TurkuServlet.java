@@ -130,7 +130,7 @@ public class TurkuServlet extends VaadinServlet {
         RouteConfiguration.forApplicationScope().setRoute("/login", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/logout", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
-        RouteConfiguration.forApplicationScope().setRoute("/home", authenticatorClass);
+        // RouteConfiguration.forApplicationScope().setRoute("/home", authenticatorClass);
 
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }
