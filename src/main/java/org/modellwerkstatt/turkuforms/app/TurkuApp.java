@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.IApplicationController;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -96,6 +97,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         if (Workarounds.getCurrentTurkuServlet().isDisableBrowserContextMenu()) {
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
+
+        this.getElement().executeJs("turku.installBeacon($0)", this);
     }
 
     @Override

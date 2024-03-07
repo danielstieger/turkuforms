@@ -4,7 +4,11 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.DeploymentConfiguration;
 import com.vaadin.flow.server.*;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
+
+import java.io.IOException;
 
 public class TurkuServletService extends VaadinServletService {
     AppJmxRegistration jmxRegistration;
@@ -45,10 +49,22 @@ public class TurkuServletService extends VaadinServletService {
     @Override
     public void requestEnd(VaadinRequest request, VaadinResponse response, VaadinSession session) {
 
+
         boolean isVaadinHeartBeat = Workarounds.isHeartBeatRequest(request);
         UI currentUI = isVaadinHeartBeat ? null : UI.getCurrent();
 
+        if (request.getPathInfo().equals("/beacon")) {
+            try {
+                Turku.l("TurkuServletService.requestEnd() BEACON " + request.getReader().readLine() + " with ui " + currentUI);
+
+            } catch (IOException e) {
+                Turku.l(OFXConsoleHelper.stackTrace2String(e));
+            }
+
+        }
+
         super.requestEnd(request, response, session);
+
 
         if (!isVaadinHeartBeat && currentUI != null) {
             TurkuApplicationController appCrtl = Workarounds.getControllerFormUi(currentUI);

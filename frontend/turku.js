@@ -62,6 +62,18 @@ window.turku = {
         });
     },
 
+    installBeacon: function(cmpt) {
+        // bei Minimierung?
+        document.addEventListener("visibilitychange", function logData() {
+          if (document.visibilityState === "hidden") {
+            console.log('turku.installBeacon() Issuing request NOW');
+            navigator.sendBeacon("/simpleone/beacon", '1234');
+          }
+        });
+
+        console.log('turku.installBeacon() Beacon installed.');
+    },
+
     setTurkuCookie: function(value,days) {
         var expires = '';
         if (days) {
