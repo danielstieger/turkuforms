@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.app;
 
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
@@ -58,7 +59,7 @@ public class TurkuApplicationController extends ApplicationController implements
 
     }
 
-    private String sessionName() {
+    private String appCrtlSessionName() {
         return APPCRTL_SESSIONATTRIB_PREFIX + this.hashCode();
     }
 
@@ -66,16 +67,33 @@ public class TurkuApplicationController extends ApplicationController implements
         return name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX);
     }
 
+    public void shutdownOtherExistingControllers(VaadinSession vaadinSession){
+        WrappedSession session = vaadinSession.getSession();
+        String own = appCrtlSessionName();
+
+        for (String name: session.getAttributeNames()){
+            if (isTurkuControllerAttribute(name) && !name.equals(own)) {
+
+                TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
+
+                crtl.internal_immediatelyShutdown();
+                crtl.unregisterFromSessionTryInvalidate(vaadinSession,false);
+
+                Turku.l("TurkuApplicationController.shutdownOtherExistingControllers() exited " + name);
+            }
+        }
+    }
+
     public void registerOnSession(VaadinSession vaadinSession, String userName, String remoteAddr) {
         WrappedSession session = vaadinSession.getSession();
-        session.setAttribute(sessionName(), this);
+        session.setAttribute(appCrtlSessionName(), this);
         session.setAttribute(REMOTE_SESSIONATTRIB, remoteAddr);
         session.setAttribute(USERNAME_SESSIONATTRIB, userName);
     }
 
     public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean tryInvalidate) {
         WrappedSession session = vaadinSession.getSession();
-        session.removeAttribute(sessionName());
+        session.removeAttribute(appCrtlSessionName());
 
         boolean others = false;
 
@@ -88,6 +106,7 @@ public class TurkuApplicationController extends ApplicationController implements
         }
 
         if (!others && tryInvalidate) {
+            Turku.l("TurkuApplicationController.unregisterFromSessionTryInvalidate() invalidating session");
             UserPrincipal.setUserPrincipal(vaadinSession, null);
             VaadinSession.getCurrent().getSession().invalidate();
             return true;

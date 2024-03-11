@@ -22,6 +22,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public static boolean onTheFly_allowEuroSignInDelegates = false;
 
     private boolean compactMode = false;
+    private boolean appMode = false;
+
     private boolean deployedVersionCheck = true;
     private String onLogoutMainLandingPath;
     private String authentiactorClassFqName;
@@ -55,6 +57,10 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     @Override
     public boolean isCompactMode() { return compactMode; }
     public void setCompactMode(boolean val) { compactMode = val; }
+
+    @Override
+    public boolean isAppMode() { return appMode; }
+    public void setAppMode(boolean val) { appMode = val; }
 
     @Override
     public boolean isCheckDeployedVersion() {

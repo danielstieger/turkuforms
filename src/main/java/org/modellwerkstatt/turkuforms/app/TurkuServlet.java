@@ -20,7 +20,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-@PreserveOnRefresh
 @SuppressWarnings("unchecked")
 public class TurkuServlet extends VaadinServlet {
     private String guessedServerName;

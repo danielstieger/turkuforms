@@ -13,7 +13,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
-import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.IApplicationController;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -86,6 +85,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
             applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
 
+            if (turkuFactory.isAppMode()) {
+                applicationController.shutdownOtherExistingControllers(vaadinSession);
+            }
+
         }
         Turku.l("TurkuApp.constructor() - done");
     }
@@ -98,8 +101,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
 
-        String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
-        this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
+        if (turkuFactory.isAppMode()) {
+            String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
+            this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
+
+        }
     }
 
     @Override

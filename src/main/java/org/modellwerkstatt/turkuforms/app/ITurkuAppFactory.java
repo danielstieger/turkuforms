@@ -11,6 +11,8 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     boolean isCompactMode();
     boolean isCheckDeployedVersion();
 
+    boolean isAppMode();
+
     String getAuthenticatorClassFqName();
 
     IMoLdapService getLdapServiceIfPresent();

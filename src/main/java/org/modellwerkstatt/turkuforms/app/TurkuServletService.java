@@ -94,7 +94,6 @@ public class TurkuServletService extends VaadinServletService {
                     uiToClose.close();
                 }
             }
-
         }
     }
 }
