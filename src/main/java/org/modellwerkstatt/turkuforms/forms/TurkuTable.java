@@ -572,7 +572,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void gcClear() {
-        Turku.l("TurkuTable.gcClear() DOEING SOME CLEANUP.... ");
         selectionHandlerEnabled = false;
         dataView.gcClear();
         grid.setItems(new ArrayList<>());

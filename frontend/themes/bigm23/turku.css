@@ -345,7 +345,7 @@ div[pageTitle~"true"] {
 /* TurkuTable * * * * * * * * * * * * * * * */
 .TurkuTable {
     /* padding: var(--turku-hierarchy-spacing); */
-    margin-bottom: calc(2 * var(--turku-hierarchy-spacing));
+    padding-bottom: calc(2 * var(--turku-hierarchy-spacing));
 }
 
 vaadin-selection-grid {
@@ -399,7 +399,7 @@ vaadin-combo-box-item {
 
 .TurkuDelegatesForm{
     /* padding: var(--turku-hierarchy-spacing); */
-    margin-bottom: calc(2 * var(--turku-hierarchy-spacing))
+    padding-bottom: calc(2 * var(--turku-hierarchy-spacing))
 }
 
 
