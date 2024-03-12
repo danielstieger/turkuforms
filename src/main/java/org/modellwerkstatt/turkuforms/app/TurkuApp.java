@@ -104,7 +104,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         if (turkuFactory.isAppMode()) {
             String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
             this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
-
         }
     }
 

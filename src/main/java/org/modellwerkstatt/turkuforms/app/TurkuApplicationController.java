@@ -12,6 +12,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -75,10 +76,9 @@ public class TurkuApplicationController extends ApplicationController implements
             if (isTurkuControllerAttribute(name) && !name.equals(own)) {
 
                 TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
+                TurkuApp mainWin = (TurkuApp) crtl.getTecMainWindowHandle();
 
-                crtl.internal_immediatelyShutdown();
-                crtl.unregisterFromSessionTryInvalidate(vaadinSession,false);
-
+                mainWin.getUI().get().access(() -> crtl.onExitRequestedEvent(true));
                 Turku.l("TurkuApplicationController.shutdownOtherExistingControllers() exited " + name);
             }
         }
