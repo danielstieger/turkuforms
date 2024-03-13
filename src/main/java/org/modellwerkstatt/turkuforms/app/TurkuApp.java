@@ -101,27 +101,25 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
 
-        if (turkuFactory.isAppMode()) {
-            String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
-            this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
-        }
+        String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
+        this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
     }
 
     @Override
     protected void onDetach(DetachEvent detachEvent) {
         super.onDetach(detachEvent);
 
+
+        // TODO: relying on beacon api, remove heartbeat logic?
         boolean closedByHeartBeat = Workarounds.closedByMissingHearbeat();
-        Turku.l("TurkuApp.onDetach(): closedByHeartBeat "+ closedByHeartBeat + ", shutdown in progress (" + applicationController.inShutdownMode() + ") or shutdown now.");
+        Turku.l("TurkuApp.onDetach(): closedByHeartBeat "+ closedByHeartBeat);
 
         if (closedByHeartBeat) {
-            if (!applicationController.inShutdownMode()) {
-                applicationController.internal_immediatelyShutdown();
-                VaadinSession vaadinSession = VaadinSession.getCurrent();
-                applicationController.unregisterFromSessionTryInvalidate(vaadinSession, true);
-            }
+            applicationController.closeAppCrtlMissingHearbeatOrBeacon(VaadinSession.getCurrent());
         }
     }
+
+
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
@@ -156,6 +154,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     @Override
     public void parDeploymentForwardNow() {
         boolean invalidated = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
+        // leads to valueUnbound() in turn closing app crtl
 
         Turku.l("parDeploymentForwardNow() invalidated is " + invalidated);
 

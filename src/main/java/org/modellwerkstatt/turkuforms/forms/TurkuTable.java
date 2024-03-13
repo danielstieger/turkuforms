@@ -404,11 +404,12 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
 
-        try { // WME BUG in spot ..
+        // TODO: WME initialization BUG in spot ..
+        try {
             boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
 
-            Turku.l("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
-            // if (issuedFromSelectionHandler) { return true; }
+            // Turku.l("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
+            // No longer? if (issuedFromSelectionHandler) { return true; }
 
             selectionHandlerEnabled = false;
 
@@ -438,8 +439,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         boolean allSelFound = dataView.setNewList(grid, list, iofxSelection.getObjects());
         selectionHandlerEnabled = true;
 
-        Turku.l("TurkuTable.loadList() "  + list.size() + ", all sel found " + allSelFound + ", " + iofxSelection + " / " + iofxSelection.getObjectOrNull());
-        Turku.l("                      " + iofxSelection.getIssuer() + " == " + this.hashCode());
+        // Turku.l("TurkuTable.loadList() "  + list.size() + ", all sel found " + allSelFound + ", " + iofxSelection + " / " + iofxSelection.getObjectOrNull());
+        // Turku.l("                      " + iofxSelection.getIssuer() + " == " + this.hashCode());
 
         // Und was ist mit sort order?
         if (allSelFound) {

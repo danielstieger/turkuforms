@@ -90,8 +90,13 @@ public class TurkuServletService extends VaadinServletService {
                 if (uiToClose != null) {
                     Turku.l("TurkuServletService.requestEnd() BEACON calling close on " + uiToClose + " now.");
 
-                    // identified as missing heartbeat in turkuapp
-                    uiToClose.close();
+
+                    uiToClose.access(() -> {
+                        TurkuApplicationController crtl = Workarounds.getControllerFormUi(uiToClose);
+                        if (crtl != null) { crtl.closeAppCrtlMissingHearbeatOrBeacon(session); }
+                        // detach() might not be called imdtly upon ui.close()
+                        uiToClose.close();
+                    });
                 }
             }
         }

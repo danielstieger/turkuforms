@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.app;
 
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
@@ -12,7 +11,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -68,6 +66,12 @@ public class TurkuApplicationController extends ApplicationController implements
         return name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX);
     }
 
+    public void closeAppCrtlMissingHearbeatOrBeacon(VaadinSession session) {
+        Turku.l("TurkuApp.closeAppCrtlMissingHearbeatOrBeacon() shutdown in progress: " + inShutdownMode() + " . . . or shutdown now.");
+        // this will result in a valueUnbound()
+        unregisterFromSessionTryInvalidate(session, true);
+    }
+
     public void shutdownOtherExistingControllers(VaadinSession vaadinSession){
         WrappedSession session = vaadinSession.getSession();
         String own = appCrtlSessionName();
@@ -117,7 +121,7 @@ public class TurkuApplicationController extends ApplicationController implements
 
     @Override
     public void valueBound(HttpSessionBindingEvent event) {
-        Turku.l("TurkuApplicationController.valueBound() ");
+
     }
 
     @Override
