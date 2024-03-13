@@ -85,7 +85,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
             applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
 
-            if (turkuFactory.isAppMode()) {
+            if (turkuFactory.isSingleAppInstanceMode()) {
                 applicationController.shutdownOtherExistingControllers(vaadinSession);
             }
 

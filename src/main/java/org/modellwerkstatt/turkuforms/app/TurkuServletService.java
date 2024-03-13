@@ -9,9 +9,11 @@ import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.io.IOException;
+import java.time.LocalTime;
 
 public class TurkuServletService extends VaadinServletService {
     AppJmxRegistration jmxRegistration;
+    LocalTime killAfterThisTime;
 
     public TurkuServletService(VaadinServlet servlet, DeploymentConfiguration deploymentConfiguration) {
         super(servlet, deploymentConfiguration);
@@ -100,5 +102,7 @@ public class TurkuServletService extends VaadinServletService {
                 }
             }
         }
+
+
     }
 }
