@@ -19,7 +19,8 @@ public class NavigationUtil {
     public static final String TRY_RELOGIN = "tryRelogin";
     public static final String CMD_TO_START = "command";
     public static final String CMD_TO_START_PARAM = "param";
-    public static final String OTHER_TABS_OPEN = "/static/othrsopen.html";
+    public static final String OTHER_TABS_OPEN = "/static/othertabsopen.html";
+    public static final String SESSION_CLOSED_ON_SERVER = "/static/appclosed.html";
 
 
 

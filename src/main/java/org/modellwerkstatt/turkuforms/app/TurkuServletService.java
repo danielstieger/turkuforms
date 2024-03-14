@@ -4,16 +4,13 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.DeploymentConfiguration;
 import com.vaadin.flow.server.*;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.io.IOException;
-import java.time.LocalTime;
 
 public class TurkuServletService extends VaadinServletService {
     AppJmxRegistration jmxRegistration;
-    LocalTime killAfterThisTime;
 
     public TurkuServletService(VaadinServlet servlet, DeploymentConfiguration deploymentConfiguration) {
         super(servlet, deploymentConfiguration);
@@ -59,7 +56,6 @@ public class TurkuServletService extends VaadinServletService {
 
     @Override
     public void requestEnd(VaadinRequest request, VaadinResponse response, VaadinSession session) {
-
 
         boolean isVaadinHeartBeat = Workarounds.isHeartBeatRequest(request);
         boolean isBeacon = request.getPathInfo().equals("/beacon");

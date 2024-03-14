@@ -13,9 +13,6 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.authmpreis.IPAuthLandingPage";
 
@@ -30,7 +27,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private boolean deployedVersionCheck = true;
     private String onLogoutMainLandingPath;
     private String authentiactorClassFqName;
-    private LocalTime killAppAfter = null;
 
 
     // Empty, app has to handle stuff, i.e. empty = return full path
@@ -80,27 +76,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     public void setAuthenticatorName(String fqName) {
         authentiactorClassFqName = fqName;
-    }
-
-    @Override
-    public LocalTime getKillAppsAfter() {
-        return killAppAfter;
-    }
-
-    @Override
-    public void setKillAppsAfter(int hhmm) {
-        int hh = hhmm % 100;
-        int mm = hhmm - hh;
-
-        if (! (hh >= 0 && hh <=23)) {
-            throw new IllegalArgumentException("The hour " + hh + " is not between 0 and 23. Provide hh:mm as hhmm integer value.");
-        }
-
-        if (! (mm >= 0 && mm <=59)) {
-            throw new IllegalArgumentException("The minute " + mm + " is not between 0 and 59. Provide hh:mm as hhmm integer value.");
-        }
-
-        killAppAfter = LocalTime.of(hh, mm, 0);
     }
 
     @Override

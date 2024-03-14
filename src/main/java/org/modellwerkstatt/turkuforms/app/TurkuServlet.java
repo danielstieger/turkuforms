@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.app;
 
 import com.vaadin.flow.function.DeploymentConfiguration;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.ServiceException;
 import com.vaadin.flow.server.VaadinServlet;
@@ -12,6 +11,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
+import org.modellwerkstatt.turkuforms.auth.HomeRedirect;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -129,7 +129,7 @@ public class TurkuServlet extends VaadinServlet {
         RouteConfiguration.forApplicationScope().setRoute("/login", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/logout", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
-        // RouteConfiguration.forApplicationScope().setRoute("/home", authenticatorClass);
+        RouteConfiguration.forApplicationScope().setRoute("/home", HomeRedirect.class);
 
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }
@@ -147,7 +147,7 @@ public class TurkuServlet extends VaadinServlet {
     /*  Not used when working with WEBSOCKETS. Remove if
      *  finally WEBSOCKETS are the primary means of communication
      *
-     *
+     *  TODO: remove this if finally decided
      *
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
