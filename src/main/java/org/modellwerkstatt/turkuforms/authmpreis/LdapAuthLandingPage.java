@@ -5,6 +5,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
@@ -21,7 +22,8 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
 
 
-public class LdapAuthLandingPage extends HorizontalLayout implements BeforeEnterObserver {
+public class LdapAuthLandingPage extends HorizontalLayout implements BeforeEnterObserver, HasDynamicTitle {
+    private String title;
 
     public LdapAuthLandingPage() {
         setSizeFull();
@@ -34,6 +36,7 @@ public class LdapAuthLandingPage extends HorizontalLayout implements BeforeEnter
         ITurkuAppFactory factory = servlet.getUiFactory();
         IMoLdapService ldapService = factory.getLdapServiceIfPresent();
 
+        title = servlet.getAppNameVersion();
         ParamInfo paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
         String naviPath = event.getLocation().getPath();
         boolean otherCrtlPresent = vaadinSession.getSession().getAttributeNames()
@@ -104,6 +107,11 @@ public class LdapAuthLandingPage extends HorizontalLayout implements BeforeEnter
                 }
             }));
         }
+    }
+
+    @Override
+    public String getPageTitle() {
+        return title;
     }
 
     private void setAsRoot(Component c) {

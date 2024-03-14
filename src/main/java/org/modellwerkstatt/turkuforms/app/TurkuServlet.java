@@ -12,6 +12,7 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.turkuforms.auth.HomeRedirect;
+import org.modellwerkstatt.turkuforms.authmpreis.SimpleMessageCmpt;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

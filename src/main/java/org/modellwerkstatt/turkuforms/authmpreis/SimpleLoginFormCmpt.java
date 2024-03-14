@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.HasDynamicTitle;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.app.TurkuServlet;
@@ -112,7 +113,6 @@ public class SimpleLoginFormCmpt extends HorizontalLayout {
             messageDiv.setText(msg);
         }
     }
-
 
     public interface OnLogin {
         String process(String username, String password);

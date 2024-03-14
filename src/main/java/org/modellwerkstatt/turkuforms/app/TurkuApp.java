@@ -84,6 +84,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
             applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
+            vaadinSession.getSession().setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
+
 
             if (turkuFactory.isSingleAppInstanceMode()) {
                 applicationController.shutdownOtherExistingControllers(vaadinSession);
