@@ -12,7 +12,7 @@ import com.vaadin.flow.component.html.Hr;
 import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
-import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;

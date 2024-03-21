@@ -27,7 +27,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
-import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
 import org.modellwerkstatt.turkuforms.forms.TurkuMenu;
 import org.modellwerkstatt.turkuforms.util.Defs;

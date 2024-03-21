@@ -10,9 +10,9 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.app.TurkuApp;
-import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
-import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.infra.TurkuApp;
+import org.modellwerkstatt.turkuforms.infra.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.infra.TurkuServlet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.infra;
 
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;

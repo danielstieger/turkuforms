@@ -8,7 +8,7 @@ import org.modellwerkstatt.dataux.runtime.delegates.DateTimeDelegate;
 import org.modellwerkstatt.dataux.runtime.delegates.LocalDateDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
-import org.modellwerkstatt.turkuforms.app.TurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.TurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class TextEditor extends EditorBasisFocusable<TextField> implements IToolkit_DateOrTimeEditor {

@@ -9,16 +9,16 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.app.TurkuApplicationController;
-import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.infra.TurkuServlet;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
+import static org.modellwerkstatt.turkuforms.infra.MPreisAppConfig.OK_HOKTEY;
 
 
 public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterObserver, HasDynamicTitle {

@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.infra;
 
 import com.vaadin.flow.function.DeploymentConfiguration;
 import com.vaadin.flow.router.RouteConfiguration;
@@ -9,10 +9,10 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.manmap.runtime.IM3DatabaseDescription;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.turkuforms.auth.HomeRedirect;
-import org.modellwerkstatt.turkuforms.authmpreis.SimpleMessageCmpt;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -93,13 +93,15 @@ public class TurkuServlet extends VaadinServlet {
         try {
             //  - okay, wire up everything
             ApplicationContext appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
-            appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
 
             ClassLoader classLoader = this.getClass().getClassLoader();
             Class<?> appBehaviorClass = classLoader.loadClass(appBehaviorFqName);
             genApplication = ((IGenAppUiModule) appContext.getAutowireCapableBeanFactory().createBean(appBehaviorClass));
             appNameVersion = genApplication.getShortAppName() + " " + genApplication.getApplicationVersion();
 
+            appContext.getBean(IM3DatabaseDescription.class).setSessionInfo(appNameVersion + " " + guessedServerName);
+
+            appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
 
         } catch (ClassNotFoundException | BeansException e) {

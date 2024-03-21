@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.app;
+package org.modellwerkstatt.turkuforms.infra;
 
 import java.util.HashMap;
 

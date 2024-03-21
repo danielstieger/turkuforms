@@ -9,9 +9,9 @@ import org.modellwerkstatt.dataux.runtime.core.LoginController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.app.TurkuApp;
-import org.modellwerkstatt.turkuforms.app.TurkuServlet;
+import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.TurkuApp;
+import org.modellwerkstatt.turkuforms.infra.TurkuServlet;
 
 @SuppressWarnings("unchecked")
 public class NavigationUtil {

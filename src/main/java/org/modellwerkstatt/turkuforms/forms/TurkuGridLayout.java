@@ -10,7 +10,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_FormContainer;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
-import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.ArrayList;

@@ -13,13 +13,13 @@ import org.modellwerkstatt.dataux.runtime.core.IApplicationController;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
-import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.List;
 
-import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.NO_HOKTEY;
-import static org.modellwerkstatt.turkuforms.app.MPreisAppConfig.OK_HOKTEY;
+import static org.modellwerkstatt.turkuforms.infra.MPreisAppConfig.NO_HOKTEY;
+import static org.modellwerkstatt.turkuforms.infra.MPreisAppConfig.OK_HOKTEY;
 
 public class PromptWindow extends Dialog {
 

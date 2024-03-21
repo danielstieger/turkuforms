@@ -2,7 +2,7 @@ package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.HasSize;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
-import org.modellwerkstatt.turkuforms.app.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class CmdUiTab extends CmdUi {

@@ -3,7 +3,7 @@ package org.modellwerkstatt.turkuforms.print;
 import org.modellwerkstatt.objectflow.runtime.IOFXPrintFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.IPrintingServiceImpl;
-import org.modellwerkstatt.turkuforms.app.TurkuApp;
+import org.modellwerkstatt.turkuforms.infra.TurkuApp;
 
 public class TurkuPrintFactory implements IOFXPrintFactory {
     protected String templateClassLoaderFqName;
