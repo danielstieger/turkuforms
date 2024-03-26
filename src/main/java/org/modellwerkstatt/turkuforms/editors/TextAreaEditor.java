@@ -5,7 +5,7 @@ import com.vaadin.flow.component.textfield.TextAreaVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
-import org.modellwerkstatt.turkuforms.infra.MPreisAppConfig;
+import org.modellwerkstatt.turkuforms.core.MPreisAppConfig;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class TextAreaEditor extends EditorBasisFocusable<TextArea> implements IToolkit_TextEditor {

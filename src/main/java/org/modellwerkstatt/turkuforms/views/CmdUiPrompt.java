@@ -1,7 +1,7 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
-import org.modellwerkstatt.turkuforms.infra.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 
 public class CmdUiPrompt extends CmdUi {
     protected PromptWindow promptWindow;

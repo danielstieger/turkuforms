@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.infra;
+package org.modellwerkstatt.turkuforms.core;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.DeploymentConfiguration;

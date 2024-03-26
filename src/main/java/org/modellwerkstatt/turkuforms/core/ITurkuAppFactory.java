@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.infra;
+package org.modellwerkstatt.turkuforms.core;
 
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;

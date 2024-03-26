@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.infra;
+package org.modellwerkstatt.turkuforms.core;
 
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.page.AppShellConfigurator;

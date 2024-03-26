@@ -5,7 +5,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.dom.Style;
-import org.modellwerkstatt.turkuforms.infra.TurkuApp;
+import org.modellwerkstatt.turkuforms.core.TurkuApp;
 
 import java.util.ArrayList;
 import java.util.List;

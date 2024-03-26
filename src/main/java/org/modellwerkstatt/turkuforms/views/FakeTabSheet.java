@@ -3,7 +3,7 @@ package org.modellwerkstatt.turkuforms.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.modellwerkstatt.turkuforms.infra.TurkuApp;
+import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {

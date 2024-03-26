@@ -10,8 +10,8 @@ import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-import static org.modellwerkstatt.turkuforms.infra.MPreisAppConfig.HOME_REDIRECT_PREFIX;
-import static org.modellwerkstatt.turkuforms.infra.MPreisAppConfig.OK_HOKTEY;
+import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.HOME_REDIRECT_PREFIX;
+import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class HomeRedirect extends VerticalLayout implements HasDynamicTitle {
 

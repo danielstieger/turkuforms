@@ -8,7 +8,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
-import static org.modellwerkstatt.turkuforms.infra.MPreisAppConfig.OK_HOKTEY;
+import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class SimpleMessageCmpt extends HorizontalLayout {
 
