@@ -23,7 +23,6 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     private FormLayout formLayout;
     private List<Integer> colWeights;
     private List<IDataUxDelegate<?>> delegates;
-    private int hLevel;
 
     public TurkuDelegatesForm(ITurkuAppFactory fact) {
         factory = fact;
@@ -36,12 +35,6 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         delegates = new ArrayList<>();
     }
 
-    @Override
-    public void setHLevel(int numComponent, int level) {
-        hLevel = level;
-        if (heading !=null ){ heading.setHLevel(numComponent, level); }
-        getElement().setAttribute("hlevel", "" + hLevel);
-    }
 
     @Override
     public void setColLayoutConstraints(List<String> weights) {

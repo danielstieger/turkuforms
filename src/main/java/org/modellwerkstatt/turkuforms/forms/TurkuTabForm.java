@@ -14,8 +14,7 @@ import java.util.List;
 
 public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO> {
     private FocusController<IToolkit_Form> focusController;
-    private boolean uiInitialized = false;
-    private int hLevel;
+
 
     public TurkuTabForm() {
         super();
@@ -33,15 +32,6 @@ public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO>
         });
     }
 
-    @Override
-    public void setHLevel(int numComponent, int level){
-        hLevel = level + 1;
-        getElement().setAttribute("hlevel", "" + hLevel);
-
-        for (IToolkit_Form form: focusController.getChildren()) {
-            form.setHLevel(++numComponent, hLevel);
-        }
-    }
 
     @Override
     public void addTab(IToolkit_Form form, String label) {
@@ -89,6 +79,5 @@ public class TurkuTabForm<DTO> extends TabSheet implements IToolkit_TabForm<DTO>
     @Override
     public void afterFullUiInitialized() {
         focusController.afterFullUiInitialized();
-        uiInitialized = true;
     }
 }

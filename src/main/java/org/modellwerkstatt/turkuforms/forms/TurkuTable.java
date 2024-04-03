@@ -67,7 +67,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private Label rightLabel;
     private boolean hasSummaryLine = false;
     private boolean selectionHandlerEnabled = true;
-    private int hLevel;
     private String cssRulesToAdd = "";
 
 
@@ -192,14 +191,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     }
 
-    @Override
-    public void setHLevel(int numComponent, int level) {
-        hLevel = level;
-        getElement().setAttribute("hlevel", "" + hLevel);
-        grid.getElement().setAttribute("hlevel", "" + hLevel);
-
-        heading.setHLevel(numComponent, level);
-    }
 
 
     @Override

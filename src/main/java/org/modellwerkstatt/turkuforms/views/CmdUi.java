@@ -1,14 +1,13 @@
 package org.modellwerkstatt.turkuforms.views;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ShortcutEvent;
-import com.vaadin.flow.component.ShortcutEventListener;
-import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.dom.Element;
+import com.vaadin.flow.dom.Style;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
@@ -31,7 +30,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     protected IToolkit_Form currentFormToFocus;
     protected String color;
 
-
     public CmdUi(ITurkuAppFactory fact) {
         super();
         factory = fact;
@@ -41,7 +39,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void onShortcut(ShortcutEvent event) {
-
 
         String keyName = HkTranslate.trans(event.getKey());
         Turku.l(getClass().getSimpleName() + ".onShortcut() received " + keyName);
@@ -65,7 +62,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     public void initialShow(IToolkit_Form formAsComponent) {
         currentFormToFocus = formAsComponent;
-        currentFormToFocus.setHLevel(0,0);
 
         this.add((Component) currentFormToFocus, conclusionLayout);
     }
@@ -74,7 +70,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void setContent(IToolkit_Form formAsComponent) {
         // changing pane content
         currentFormToFocus = formAsComponent;
-        currentFormToFocus.setHLevel(0,0);
 
         Component existing = this.getComponentAt(0);
         this.replace(existing, (Component) currentFormToFocus);
@@ -85,13 +80,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void setColor(String col) {
         // in form of #AABBCC or transparent
         color = col;
-        /* getElement().getStyle().set("border-top", "4px solid " + color); */
-        setColorOnConclusionButtons();
-    }
-
-    private void setColorOnConclusionButtons() {
-
-        conclusionButtons.stream().skip(1).forEach( btn -> { btn.getElement().getStyle().set("background-color", color); });
+        getElement().executeJs("turku.setTurkuCommandColor($0, $1)", this, color);
     }
 
     @Override
@@ -105,7 +94,9 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             Peculiar.useGlobalShortcutHk(this, hk, this );
         }
 
-        for (OFXConclusionInformation oci : conclusionInfo) {
+
+        for (int i = 0; i < conclusionInfo.size(); i++) {
+            OFXConclusionInformation oci = conclusionInfo.get(i);
 
             if (Defs.needsHkRegistration(oci.hotkey)) {
                 oci.buttonTitle = factory.translateButtonLabel(oci.buttonTitle, oci.hotkey);
@@ -136,15 +127,22 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             conclusionLayout.add(button);
             conclusionButtons.add(button);
 
-            if (conclusionButtons.size() == 1) {
+            if (i == 0) {
+                // first button is ESC
+                button.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+                button.addClassName("TurkuLumoTertiary");
                 conclusionLayout.spacer();
-            }
-            if (conclusionButtons.size() > 1) {
-                button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            }
-        }
 
-        setColorOnConclusionButtons();
+            } else if (i == (conclusionInfo.size() -1)) {
+                // last button to the right is the primary
+                button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                button.addClassName("TurkuLumoPrimary");
+
+            } else {
+                button.addClassName("TurkuLumoSecondary");
+            }
+
+        }
     }
 
     @Override
@@ -206,6 +204,4 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void setCommandContainer(ICommandContainer iCommandContainer) {
         cmdContainer = iCommandContainer;
     }
-
-    public String getColorOrNull() { return color; }
 }

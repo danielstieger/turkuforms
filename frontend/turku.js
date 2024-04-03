@@ -76,6 +76,11 @@ window.turku = {
         console.log('turku.installBeacon() Beacon installed for ' + servletUrl + " and ui " + uiid);
     },
 
+    setTurkuCommandColor(forComponent, colorString) {
+        forComponent.style.setProperty('--turku-cmd-color', colorString);
+        forComponent.style.setProperty('--turku-cmd-color-shade', colorString + "10");
+    },
+
     setTurkuCookie: function(value,days) {
         var expires = '';
         if (days) {

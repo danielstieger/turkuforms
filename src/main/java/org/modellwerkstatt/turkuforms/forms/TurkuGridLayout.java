@@ -30,7 +30,6 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     private int childsAdded = 0;
     private FlexComponent containerToAddComponent;
-    private int hLevel;
 
 
     public TurkuGridLayout(ITurkuAppFactory factory) {
@@ -43,16 +42,6 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     }
 
-    @Override
-    public void setHLevel(int numComponent, int level) {
-        hLevel = level;
-        if (heading != null) { heading.setHLevel(numComponent, level); }
-        getElement().setAttribute("hlevel", "" + hLevel);
-
-        for (IToolkit_Form form: focusController.getChildren()) {
-            form.setHLevel(++numComponent, level);
-        }
-    }
 
     @Override
     public void setLayoutConstraints(List<String> colConstraints, List<String> rowConstraints) {

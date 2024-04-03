@@ -19,7 +19,8 @@ public interface ITurkuMainTab {
 
     void setModal(boolean modal);
 
-    void adjustStyle(CmdUiTab ui, String col);
+    void adjustStyleDynamically(CmdUiTab ui, String col);
+    void adjustTabStyle(CmdUiTab ui, String col);
 
     interface TabSelectedIndexChanged {
         void selectedIndexChanged(int i);

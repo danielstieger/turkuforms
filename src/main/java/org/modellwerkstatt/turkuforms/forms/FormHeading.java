@@ -7,8 +7,6 @@ import java.util.List;
 
 public class FormHeading extends Div {
     private Div heading;
-    private int hLevel = 0;
-    private boolean pageTitle = false;
 
     public FormHeading() {
         this.addClassName("FormHeading");
@@ -16,16 +14,8 @@ public class FormHeading extends Div {
         this.add(heading);
     }
 
-    public void setHLevel(int numComponent, int level) {
-        hLevel = level;
-        if (numComponent == 0) { pageTitle = true; }
-        this.getElement().setAttribute("level", "" + hLevel);
-        heading.getElement().setAttribute("pageTitle", ""+ pageTitle);
-    }
-
     public void setHeading(String label) {
         heading.setText(label);
-
     }
 
     public void flag(List<IOFXProblem> problemList) {

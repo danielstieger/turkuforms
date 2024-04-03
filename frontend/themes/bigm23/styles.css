@@ -57,6 +57,9 @@ html {
     --lumo-font-size-xxxl: 1.75rem;
 
     /* --lumo-primary-color: rgba(30, 206, 201, 1.0); */
+    --turku-cmd-color: rgba(23, 132, 200, 1.0);
+    --turku-cmd-color-shade: rgba(23, 132, 200, 0.1);
+
     --lumo-primary-color: rgba(23, 132, 200, 1.0);
     --lumo-primary-color-selected: rgba(23, 132, 200, 0.07);
     --lumo-primary-text-color: rgba(75, 84, 102, 1.0);
@@ -65,17 +68,17 @@ html {
 
     --lumo-base-color: #f1f1f5;
 
-    --turku-primary-background: #fafafa;
-    --turku-primary-background-hl1: #f0f0f0;
-    --turku-primary-background-hl2: #eaeaea;
-    --turku-primary-background-hl3: #e0e0e0;
-
+    --turku-primary-background: #ffffff;
     background: var(--turku-primary-background);
+    --turku-lrmain-space: 60px;
 
     /* --turku-grid-selected-row-color: rgba(75, 84, 102, 0.3); */
-    --turku-grid-selected-row-color: rgba(23, 132, 200, 0.9);
+    --turku-grid-selected-row-color: rgba(23, 132, 200, 0.8);
     --turku-hierarchy-spacing: 0.5em;
     --turku-form-menu-height: 1.5rem;
+
+    /* button border, tab bottom border */
+    --turku-border-size: 2px;
 
     --vaadin-field-default-width: 4em;
 }

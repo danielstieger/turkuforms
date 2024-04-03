@@ -12,7 +12,6 @@ import java.util.List;
 
 public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     private List<CmdUiTab> tabsInSheet;
-    private Style currentSelectedStyle;
 
     @Override
     public Component getAsComponent() {
@@ -50,6 +49,8 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
         Tab imp = this.add(tab.getWindowTitle(), tab);
         this.setSelectedTab(imp);
+
+        imp.getElement().executeJs("turku.setTurkuCommandColor($0, $1)", imp.getElement(), tab.getCmdColor());
     }
 
     @Override
@@ -66,7 +67,7 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         this.remove(impl);
 
         if (! hasOpenTabs()) {
-            ((TurkuApp) this.getParent().get()).adjustCmdColor(null);
+            ((TurkuApp) this.getParent().get()).adjustTopBarColor(null);
         }
     }
 
@@ -88,27 +89,15 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         }
     }
 
-    public void adjustStyle(CmdUiTab cmdUi, String col){
+    @Override
+    public void adjustStyleDynamically(CmdUiTab ui, String col) {
+        ((TurkuApp) this.getParent().get()).adjustTopBarColor(col);
+    }
 
-        ((TurkuApp) this.getParent().get()).adjustCmdColor(col);
-
-        if (currentSelectedStyle != null) {
-            currentSelectedStyle.remove("color");
-            currentSelectedStyle.remove("border-bottom");
-            currentSelectedStyle.remove("background-color");
-        }
-
-        int index = tabsInSheet.indexOf(cmdUi);
+    @Override
+    public void adjustTabStyle(CmdUiTab ui, String col) {
+        int index = tabsInSheet.indexOf(ui);
         Tab tab = getTabAt(index);
-
-        String background;
-        if (col == null) {
-            col = "var(--lumo-primary-color)";
-            background = "var(--lumo-primary-color-selected)";
-        } else {
-            background = col + "10";
-        }
-        currentSelectedStyle = tab.getElement().getStyle().set("color", col).set("border-bottom", "2px solid " + col).set("background-color", background);
 
     }
 }

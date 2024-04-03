@@ -10,7 +10,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * */
 
 .v-loading-indicator {
-    background: var(--turku-warning-color);
+    background: black;
 }
 
 vaadin-tooltip-overlay::part(content) {
@@ -42,9 +42,13 @@ vaadin-tooltip-overlay::part(content) {
         margin-left: 0em !important;
     }
 
-
     .InvisibleWhenBelow {
         display: none;
+    }
+
+    vaadin-app-layout, .TurkuLayoutNavbarTop {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
     }
 }
 
@@ -54,14 +58,19 @@ vaadin-tooltip-overlay::part(content) {
 /* TurkuApplication  * * * * * * * * * * * * * * * */
 
 .TurkuLayoutNavbarTop {
-    padding-left: 2em;
-    padding-right: 2em;
+    padding-left: var(--turku-lrmain-space);
+    padding-right: var(--turku-lrmain-space);
     background: white !important;
     border-top: 6px solid transparent;
 }
 
 .TurkuLayoutNavbarTop > *{
     align-self: center;
+}
+
+vaadin-app-layout {
+    padding-left: var(--turku-lrmain-space);
+    padding-right: var(--turku-lrmain-space);
 }
 
 vaadin-app-layout::part(navbar) {
@@ -88,6 +97,7 @@ vaadin-app-layout::part(navbar)::before {
 
 .MainwindowTileButton {
     font-size: var(--lumo-font-size-s);
+    background: var(--lumo-contrast-10pct);
     margin: 1em;
 }
 
@@ -117,8 +127,8 @@ vaadin-app-layout::part(navbar)::before {
 
 .TurkuTabForm > .TurkuTable, .TurkuTabForm > .TurkuGrid, .TurkuTabForm > .TurkuDelegatesForm {
     padding-top: var(--turku-hierarchy-spacing);
-    padding-left: var(--turku-hierarchy-spacing);
-    padding-right: var(--turku-hierarchy-spacing);
+/*    padding-left: var(--turku-hierarchy-spacing);
+    padding-right: var(--turku-hierarchy-spacing); */
 
 }
 
@@ -135,39 +145,11 @@ vaadin-tab {
     border-bottom: 2px solid transparent;
 }
 vaadin-tab[aria-selected~='true']{
-    background: var(--turku-primary-background);
-    border-bottom: 2px solid var(--lumo-primary-color);
-}
-
-vaadin-tabsheet[hlevel~="1"] vaadin-tab[aria-selected~="true"] {
-    background-color: var(--turku-primary-background-hl1);
-    border-bottom: 2px solid var(--lumo-primary-color);
-}
-
-vaadin-tabsheet[hlevel~="2"] {
-    background-color: var(--turku-primary-background-hl1);
-}
-vaadin-tabsheet[hlevel~="2"] vaadin-tab[aria-selected~="true"]{
-    background-color: var(--turku-primary-background-hl2);
-    border-bottom: 2px solid var(--lumo-primary-color);
-}
-
-vaadin-tabsheet[hlevel~="3"] {
-    background-color: var(--turku-primary-background-hl2);
-}
-vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
-    background-color: var(--turku-primary-background-hl3);
-    border-bottom: 2px solid var(--lumo-primary-color);
-}
-
-.TurkuGrid[hlevel ~="1"], .TurkuTable[hlevel ~="1"], .TurkuDelegatesForm[hlevel ~="1"]{
-    background-color: var(--turku-primary-background-hl1);
-}
-.TurkuGrid[hlevel ~="2"],  .TurkuTable[hlevel ~="2"], .TurkuDelegatesForm[hlevel ~="2"]{
-    background-color: var(--turku-primary-background-hl2);
-}
-.TurkuGrid[hlevel ~="3"], .TurkuTable[hlevel ~="3"], .TurkuDelegatesForm[hlevel ~="3"]{
-    background-color: var(--turku-primary-background-hl3);
+    /* background: var(--turku-primary-background);
+    border-bottom: 2px solid var(--lumo-primary-color); */
+    color: var(--turku-cmd-color);
+    border-bottom: 2px solid var(--turku-cmd-color);
+    background: var(--turku-cmd-color-shade);
 }
 
 
@@ -178,7 +160,6 @@ vaadin-tabsheet[hlevel~="3"] vaadin-tab[aria-selected~="true"] {
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
-    padding: var(--turku-hierarchy-spacing) calc( 2 * var(--turku-hierarchy-spacing));
 }
 
 .ModalTab::part(tabs-container) {
@@ -215,12 +196,18 @@ vaadin-button::part(prefix) {
 .BottomConclusionButtons {
     padding: 0.2em 0em;
 }
-/* .BottomConclusionButtons vaadin-button:first-child {
-    margin-left: 1em;
+
+.TurkuLumoTertiary {
+    color: var(--turku-cmd-color);
 }
-.BottomConclusionButtons vaadin-button:last-child {
-    margin-right: 1em;
-} */
+.TurkuLumoPrimary {
+    background-color: var(--turku-cmd-color);
+
+}
+.TurkuLumoSecondary {
+    color: var(--turku-cmd-color);
+    border: 2px solid  var(--turku-cmd-color);
+}
 
 
 /* TurkuGridLayout (+ gen. form) * * * * * * * * * * * * * * * * */

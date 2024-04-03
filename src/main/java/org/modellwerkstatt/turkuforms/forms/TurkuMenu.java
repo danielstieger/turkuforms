@@ -36,7 +36,7 @@ public class TurkuMenu extends MenuBar {
         for (AbstractAction currentItem : menu.getAllItems()) {
             if (currentItem instanceof CmdAction) {
                 MenuItem button = addActionItem(factory, this, (CmdAction) currentItem, true);
-                button.addThemeNames("primary");
+                // button.addThemeNames("primary");
                 button.addThemeNames("small");
 
             } else if (currentItem.labelText == null) {
