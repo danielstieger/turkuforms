@@ -125,6 +125,11 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         if (topContainer == null) { installTopContainer(); }
         heading.flag(list);
     }
+    @Override
+    public void rootForm() {
+        if (topContainer == null) { installTopContainer(); }
+        heading.inRootPos();
+    }
 
     @Override
     public Object myRequestFocus() {

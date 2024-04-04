@@ -3,6 +3,7 @@ package org.modellwerkstatt.turkuforms.views;
 import com.vaadin.flow.component.HasSize;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class CmdUiTab extends CmdUi {
@@ -33,8 +34,14 @@ public class CmdUiTab extends CmdUi {
     }
 
     @Override
+    public void setColor(String col) {
+        super.setColor(col);
+        ((ITurkuMainTab) this.getParent().get()).adjustTabStyle(this, col);
+    }
+
+    @Override
     public void delayedRequestFocus() {
-        ((ITurkuMainTab) this.getParent().get()).adjustStyleDynamically(this, color);
+        ((ITurkuMainTab) this.getParent().get()).adjustTopBarColorOrNull(color);
         super.delayedRequestFocus();
     }
 
@@ -44,6 +51,4 @@ public class CmdUiTab extends CmdUi {
     }
 
     public String getWindowTitle() { return windowTitle;}
-
-    public String getCmdColor() { return color; }
 }

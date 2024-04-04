@@ -563,6 +563,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
     @Override
+    public void rootForm() {
+        heading.inRootPos();
+    }
+
+    @Override
     public void gcClear() {
         selectionHandlerEnabled = false;
         dataView.gcClear();

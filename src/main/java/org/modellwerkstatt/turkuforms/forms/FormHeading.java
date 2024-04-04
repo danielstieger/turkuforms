@@ -14,6 +14,10 @@ public class FormHeading extends Div {
         this.add(heading);
     }
 
+    public void inRootPos() {
+        heading.getElement().setAttribute("pageTitle", "true");
+    }
+
     public void setHeading(String label) {
         heading.setText(label);
     }

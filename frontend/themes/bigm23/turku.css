@@ -160,6 +160,7 @@ vaadin-tab[aria-selected~='true']{
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
+    padding-top: 1em;
 }
 
 .ModalTab::part(tabs-container) {
@@ -223,8 +224,8 @@ vaadin-button::part(prefix) {
 }
 
 div[pageTitle~"true"] {
-    font-size: var(--lumo-font-size-l);
-    line-height: var(--lumo-font-size-l);
+    font-size: var(--lumo-font-size-xl);
+    line-height: var(--lumo-font-size-xl);
     margin-top: var(--turku-hierarchy-spacing);
     margin-bottom: var(--turku-hierarchy-spacing);
 }

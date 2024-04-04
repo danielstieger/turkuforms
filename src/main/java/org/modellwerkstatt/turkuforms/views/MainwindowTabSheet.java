@@ -4,7 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
-import com.vaadin.flow.dom.Style;
+import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 
 import java.util.ArrayList;
@@ -49,8 +49,6 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
         Tab imp = this.add(tab.getWindowTitle(), tab);
         this.setSelectedTab(imp);
-
-        imp.getElement().executeJs("turku.setTurkuCommandColor($0, $1)", imp.getElement(), tab.getCmdColor());
     }
 
     @Override
@@ -67,7 +65,7 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         this.remove(impl);
 
         if (! hasOpenTabs()) {
-            ((TurkuApp) this.getParent().get()).adjustTopBarColor(null);
+            adjustTopBarColorOrNull(null);
         }
     }
 
@@ -90,14 +88,15 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
     }
 
     @Override
-    public void adjustStyleDynamically(CmdUiTab ui, String col) {
-        ((TurkuApp) this.getParent().get()).adjustTopBarColor(col);
+    public void adjustTopBarColorOrNull(String col) {
+        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(null);
     }
 
     @Override
     public void adjustTabStyle(CmdUiTab ui, String col) {
         int index = tabsInSheet.indexOf(ui);
-        Tab tab = getTabAt(index);
+        Element tab = getTabAt(index).getElement();
 
+        tab.executeJs("turku.setTurkuCommandColor($0, $1)", tab, col);
     }
 }

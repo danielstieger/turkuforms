@@ -208,7 +208,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         }
     }
 
-    public void adjustTopBarColor(String col){
+    public void adjustTopBarColorOrNull(String col){
         if (col == null) {
             topLrLayout.getElement().getStyle().remove("border-top");
         } else {

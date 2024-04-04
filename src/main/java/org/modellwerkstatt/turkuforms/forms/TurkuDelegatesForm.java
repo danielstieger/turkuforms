@@ -174,6 +174,12 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         heading.flag(list);
     }
 
+    @Override
+    public void rootForm() {
+        if (heading == null) { installHeading(); }
+        heading.inRootPos();
+    }
+
     private void installHeading() {
         heading = new FormHeading();
         addComponentAtIndex(0, heading);

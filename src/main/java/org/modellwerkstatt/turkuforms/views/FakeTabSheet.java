@@ -53,7 +53,7 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
         this.removeAll();
 
         if (! hasOpenTabs()) {
-            ((TurkuApp) this.getParent().get()).adjustTopBarColor(null);
+            adjustTopBarColorOrNull(null);
         }
     }
 
@@ -63,8 +63,8 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     }
 
     @Override
-    public void adjustStyleDynamically(CmdUiTab ui, String col) {
-        ((TurkuApp) this.getParent().get()).adjustTopBarColor(col);
+    public void adjustTopBarColorOrNull(String col) {
+        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(null);
     }
 
     @Override

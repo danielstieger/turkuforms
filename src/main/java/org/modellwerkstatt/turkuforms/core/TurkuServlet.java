@@ -16,6 +16,7 @@ import org.modellwerkstatt.turkuforms.auth.HomeRedirect;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.ServletConfig;
@@ -33,6 +34,7 @@ public class TurkuServlet extends VaadinServlet {
     private String appNameVersion;
     private String actualServletUrl;
     private boolean disableBrowserContextMenu;
+    private AbstractApplicationContext appContext;
 
 
     public TurkuServletService turkuServletService;
@@ -92,7 +94,7 @@ public class TurkuServlet extends VaadinServlet {
 
         try {
             //  - okay, wire up everything
-            ApplicationContext appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
+            appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
 
             ClassLoader classLoader = this.getClass().getClassLoader();
             Class<?> appBehaviorClass = classLoader.loadClass(appBehaviorFqName);
@@ -196,6 +198,14 @@ public class TurkuServlet extends VaadinServlet {
 
         appFactory.getEventBus().close();
         jmxRegistration.gcClean();
+
+        String msg = OFXConsoleHelper.closeConnectionPoolExplicitly(appContext);
+        if (msg != null) {
+            super.log(msg);
+        }
+        appContext.close();
+        appContext = null;
+
 
         DeprecatedServerDateProvider.shutdownAndGcClean();
         MMStaticAccessHelper.shutdownAndGcClean();
