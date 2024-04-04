@@ -64,7 +64,7 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
 
     @Override
     public void adjustTopBarColorOrNull(String col) {
-        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(null);
+        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(col);
     }
 
     @Override

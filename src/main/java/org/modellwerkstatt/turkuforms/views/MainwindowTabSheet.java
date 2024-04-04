@@ -89,7 +89,7 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
 
     @Override
     public void adjustTopBarColorOrNull(String col) {
-        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(null);
+        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(col);
     }
 
     @Override
