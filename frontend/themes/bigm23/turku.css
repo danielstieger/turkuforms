@@ -219,7 +219,7 @@ vaadin-button::part(prefix) {
 
 .FormHeading {
     font-weight: var(--turku-bold);
-    color: var(--lumo-primary-color);
+    color: var(--turku-cmd-color); /* var(--lumo-primary-color); */
     margin-left: 0.2em;
 }
 
@@ -227,7 +227,7 @@ div[pageTitle~"true"] {
     font-size: var(--lumo-font-size-xl);
     line-height: var(--lumo-font-size-xl);
     margin-top: var(--turku-hierarchy-spacing);
-    margin-bottom: var(--turku-hierarchy-spacing);
+    margin-bottom: calc(var(--turku-hierarchy-spacing) * 2);
 }
 
 /* Table / From top pane search / csv-export / menubar */

@@ -341,6 +341,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         } else {
             String litPropName = Workarounds.litPropertyName(property);
+
             String template = important ? "<span class=\"TurkuTblImportant\">${item." + litPropName + "}</span>" : "${item." + litPropName + "}";
 
 
@@ -364,7 +365,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 for (String color: colorMap) {
                     if (color == null) { break; }
                     if (cssRulesToAdd.contains(color)) { continue; }
-                    cssRulesToAdd += ".TkuCol" + color.substring(1) + " {color: " + color + "} ";
+                    cssRulesToAdd += ".TkuCol" + color.substring(1) + " {color:" + color + ";background-color:" + color + "30;border-radius:1.3rem;}";
                 }
             }
 
