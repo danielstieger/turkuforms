@@ -63,7 +63,9 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         appInCompactMode = compact;
 
         userInfoLabel = new Label("-");
+        userInfoLabel.addClassName("TurkuLayoutNavbarText");
         sysInfoLabel = new Label("-");
+        sysInfoLabel.addClassName("TurkuLayoutNavbarText");
 
         topLrLayout = new LeftRight("TurkuLayoutNavbarTop");
         addToNavbar(topLrLayout);
@@ -72,6 +74,8 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         logo.addClassName("NavBarSmallLogo");
         navbarTitleDiv = new Div();
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
+        navbarTitleDiv.addClassName("TurkuLayoutNavbarText");
+
 
 
         if (!appInCompactMode) {
@@ -110,11 +114,12 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
             darkToggle.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             darkToggle.setSizeUndefined(); */
 
-            Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_logout")), event -> {
+            Button logout = new Button(Workarounds.createIconWithCollection(factory.translateIconName("mainmenu_logout"), false), event -> {
                 this.setDrawerOpened(false);
                 exitRequestedFromMenu();
             });
             logout.setSizeUndefined();
+            logout.addClassName("DrawerLogout");
 
 
 
@@ -131,9 +136,10 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
             drawerCommandsLayout = new VerticalLayout();
             drawerCommandsLayout.setSizeFull();
 
-            VerticalLayout drawerLayout = new VerticalLayout(drawerCommandsLayout, sysInfoLabel, drawerBottom);
-            drawerLayout.setSizeFull();
-            addToDrawer(drawerLayout);
+            Label spacer = new Label();
+            drawerCommandsLayout.add(spacer, sysInfoLabel, drawerBottom);
+            drawerCommandsLayout.setFlexGrow(2d, spacer);
+            addToDrawer(drawerCommandsLayout);
         }
 
 
@@ -166,7 +172,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
 
     protected SubMenu addToMainMenu(Menu menu, String menuName){
 
-        MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down")));
+        MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down"), true));
         root.add(new Text(menuName));
         SubMenu rootSubMenu = root.getSubMenu();
         return TurkuMenu.addMainMenuStructure(turkuFactory, rootSubMenu, menu.getAllItems());
@@ -174,6 +180,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
 
     protected void addDrawerMenu(List<AbstractAction> menuItemList){
 
+        int componentIndex = 0;
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
                 CmdAction glue =  (CmdAction) currentItem;
@@ -184,7 +191,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
                 Button btn;
 
                 if (Defs.hasIcon(glue.image)) {
-                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image));
+                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), false);
                     btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
 
                 } else {
@@ -197,7 +204,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
                 btn.setWidthFull();
                 // btn.setDisableOnClick(true);
                 btn.setClassName("MainwindowDrawerCmdButton");
-                drawerCommandsLayout.add(btn);
+                drawerCommandsLayout.addComponentAtIndex(componentIndex++, btn);
 
             } else {
                 if (currentItem.labelText == null) {

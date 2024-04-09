@@ -42,7 +42,7 @@ abstract public class Mainwindow extends BasicWindow {
                 Button btn;
 
                 if (Defs.hasIcon(glue.image)) {
-                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image));
+                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), false);
                     btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
 
                 } else {

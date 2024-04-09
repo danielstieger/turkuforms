@@ -17,14 +17,6 @@ vaadin-tooltip-overlay::part(content) {
    white-space: pre;
 }
 
-.TurkuLabel {
-    color: var(--lumo-primary-text-color);
-    font-family: var(--lumo-font-family);
-    font-size: var(--lumo-font-size-m);
-    line-height: var(--lumo-line-height-xs);
-    font-weight: 500;
-}
-
 @media screen and (max-width: 810px) {
 
     .BottomConclusionButtons {
@@ -55,6 +47,13 @@ vaadin-tooltip-overlay::part(content) {
 
 
 
+.TurkuMaterialIcon {
+    font-family: Material Icons;
+    padding-right: 0.5em;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
 /* TurkuApplication  * * * * * * * * * * * * * * * */
 
 .TurkuLayoutNavbarTop {
@@ -82,10 +81,13 @@ vaadin-app-layout::part(navbar)::before {
 }
 .TurkuLayoutNavbarTitle {
     margin-left: 1em;
+}
+.TurkuLayoutNavbarText {
     font-size: var(--lumo-font-size-m);
     color: var(--lumo-primary-text-color);
     font-weight: 500;
 }
+
 .TurkuLayoutMenuBar::part(menu-bar-button) {
     margin-left: 3em;
 }
@@ -113,6 +115,14 @@ vaadin-app-layout::part(navbar)::before {
 
 .MainwindowDrawerCmdButton {
     font-size: var(--lumo-font-size-s);
+}
+
+vaadin-app-layout::part(drawer) {
+    width: 25em;
+}
+
+.DrawerLogout [slot~='prefix'] {
+    padding: 0px !important;
 }
 
 
@@ -151,7 +161,6 @@ vaadin-tab[aria-selected~='true']{
     border-bottom: 2px solid var(--turku-cmd-color);
     background: var(--turku-cmd-color-shade);
 }
-
 
 
 
@@ -226,7 +235,7 @@ vaadin-button::part(prefix) {
     margin-left: 0.2em;
 }
 
-div[pageTitle~"true"] {
+div[pageTitle~'true'] {
     font-size: var(--lumo-font-size-xl);
     line-height: var(--lumo-font-size-xl);
     margin-top: calc(var(--turku-hierarchy-spacing) * 2);

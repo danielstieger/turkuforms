@@ -106,7 +106,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
             Button button;
             if (Defs.hasIcon(oci.iconName)) {
-                button = new Button(oci.buttonTitle, Workarounds.createIconWithCollection(factory.translateIconName(oci.iconName)), event -> {
+                button = new Button(oci.buttonTitle, Workarounds.createIconWithCollection(factory.translateIconName(oci.iconName), false), event -> {
                     cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
 
                 });
@@ -168,7 +168,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         Div div = new Div(new Text(s));
         div.addClassName("TabLockingMessage");
 
-        Button closeButton = new Button(Workarounds.createIconWithCollection("close"));
+        Button closeButton = new Button(Workarounds.createIconWithCollection("close", false));
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.getElement().setAttribute("aria-label", "Close");
         closeButton.addClassName("TabLockingButton");

@@ -46,27 +46,14 @@ public class Workarounds {
 
 
 
-    public static Component createIconWithCollection(String fullName) {
-        /* try {
-            Icon icon;
-
-            if (fullName.contains(":")) {
-                String[] parts = fullName.split(":");
-                icon = new Icon(parts[0], parts[1]);
-            } else {
-                icon = new Icon("vaadin", fullName);
-            }
-
-            icon.addClassName("TurkulayoutMenuIcon");
-            return icon;
-
-        } catch (Throwable t) {
-            throw new RuntimeException("While looking for icon '" + fullName + "'", t);
-        } */
-
+    public static Component createIconWithCollection(String fullName, boolean needClassWorkaround) {
         Span icon = new Span(fullName);
-        icon.getElement().setProperty("style", "font-family: Material Icons; padding-right: 0.5em; font-size: 18px; vertical-align: middle;");
-        // icon.addClassName("material-icons");
+        if (needClassWorkaround) {
+            icon.getElement().setProperty("style", "font-family: Material Icons; padding-right: 0.5em; font-size: 18px; vertical-align: middle;");
+        } else {
+            icon.addClassName("TurkuMaterialIcon");
+        }
+
         return icon;
     }
 

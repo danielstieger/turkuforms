@@ -85,7 +85,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
         Peculiar.shrinkSpace(hl);
 
         updateConclusionButton = new Button(
-                Workarounds.createIconWithCollection("refresh"),
+                Workarounds.createIconWithCollection("refresh", false),
                 event -> { updateConclusionButtonClicked(); });
         updateConclusionButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         updateConclusionButton.addThemeVariants(ButtonVariant.LUMO_SMALL);

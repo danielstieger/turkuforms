@@ -42,7 +42,7 @@ public class TurkuMenu extends MenuBar {
                 // null is separator, ignore that here ...
 
             } else {
-                MenuItem created = this.addItem(Workarounds.createIconWithCollection(factory.translateIconName("table_menu")));
+                MenuItem created = this.addItem(Workarounds.createIconWithCollection(factory.translateIconName("table_menu"), true));
                 created.addThemeNames("tertiary", "small");
                 if (Defs.hasLabel(currentItem.labelText)) { created.add(new Text(currentItem.labelText)); }
                 SubMenu createdSub = created.getSubMenu();
@@ -92,7 +92,7 @@ public class TurkuMenu extends MenuBar {
 
 
         if (Defs.hasIcon(glue.image)) {
-            Component icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image));
+            Component icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), topLevel);
             created = parent.addItem(icon, execItem);
             created.add(new Text(label));
 

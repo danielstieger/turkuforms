@@ -101,7 +101,7 @@ public class MenuContext<T> {
         MenuItem created;
 
         if (Defs.hasIcon(glue.image)) {
-            Component icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image));
+            Component icon = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), false);
 
             if (createRootGCM) {
                 createdGCM = rootGCM.addItem(icon, execGCMItem);

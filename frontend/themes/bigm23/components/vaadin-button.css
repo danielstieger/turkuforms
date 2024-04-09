@@ -3,3 +3,8 @@
     align-items: start;
     justify-content: left;
 }
+
+:host(.MainwindowDrawerCmdButton) .vaadin-button-container {
+  justify-content: left;
+    padding-left: 1em;
+}

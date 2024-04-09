@@ -244,7 +244,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
         } else {
             SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
-            Component vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"));
+            Component vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"), false);
             startMenu.addItem(vaadinPowerOff, event -> { exitRequestedFromMenu(); });
 
             addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
