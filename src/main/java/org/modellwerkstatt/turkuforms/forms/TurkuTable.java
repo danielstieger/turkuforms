@@ -341,9 +341,20 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         } else {
             String litPropName = Workarounds.litPropertyName(property);
+            String[] colorMap = converter.getColorMapOrNull();
 
-            String template = important ? "<span class=\"TurkuTblImportant\">${item." + litPropName + "}</span>" : "${item." + litPropName + "}";
+            String template = "${item." + litPropName + "}";
 
+            if (important && colorMap == null) {
+                template = "<span class=\"TrkCelImp\">${item." + litPropName + "}</span>";
+
+            } else if (important) {
+                template = "<span class=\"TrkCelColImp\">${item." + litPropName + "}</span>";
+
+            } else if (colorMap != null) {
+                // not important, but we need a span
+                template = "<span class=\"TrkCelCol\">${item." + litPropName + "}</span>";
+            }
 
             col = grid.addColumn(LitRenderer.<DTO>of(template).
                     withProperty(litPropName, item -> {
@@ -351,7 +362,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     }));
 
 
-            String[] colorMap = converter.getColorMapOrNull();
+
             if (colorMap != null){
                 col.setClassNameGenerator(item -> {
                     String color = converter.getBgColor(MoJSON.get(item, property));
@@ -365,7 +376,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 for (String color: colorMap) {
                     if (color == null) { break; }
                     if (cssRulesToAdd.contains(color)) { continue; }
-                    cssRulesToAdd += ".TkuCol" + color.substring(1) + " {color:" + color + ";background-color:" + color + "30;border-radius:1.3rem;}";
+                    cssRulesToAdd += ".TkuCol" + color.substring(1) + " {--turku-CelCol:" + color + ";--turku-CelColBg:" + color + "20;}";
                 }
             }
 

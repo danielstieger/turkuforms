@@ -175,7 +175,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     }
 
     private void installTopContainer() {
-        topContainer = new LeftRight();
+        topContainer = new LeftRight("TurkuHeadingTopPane");
         heading = new FormHeading();
         topContainer.add(heading);
         topContainer.spacer();

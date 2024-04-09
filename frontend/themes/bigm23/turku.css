@@ -96,7 +96,7 @@ vaadin-app-layout::part(navbar)::before {
 }
 
 .MainwindowTileButton {
-    font-size: var(--lumo-font-size-s);
+    font-size: var(--lumo-font-size-m);
     background: var(--lumo-contrast-10pct);
     margin: 1em;
 }
@@ -189,10 +189,13 @@ vaadin-tab[aria-selected~='true']{
     font-size: var(--lumo-font-size-xs);
 }
 
+
 vaadin-button::part(prefix) {
     margin-bottom: -4px;
 }
-
+.MainwindowTileButton::part(prefix) {
+    margin-top: 3px;
+}
 
 .BottomConclusionButtons {
     padding: 0.2em 0em;
@@ -226,8 +229,8 @@ vaadin-button::part(prefix) {
 div[pageTitle~"true"] {
     font-size: var(--lumo-font-size-xl);
     line-height: var(--lumo-font-size-xl);
-    margin-top: var(--turku-hierarchy-spacing);
-    margin-bottom: calc(var(--turku-hierarchy-spacing) * 2);
+    margin-top: calc(var(--turku-hierarchy-spacing) * 2);
+    margin-bottom: calc(var(--turku-hierarchy-spacing) * 3);
 }
 
 /* Table / From top pane search / csv-export / menubar */
@@ -254,9 +257,10 @@ div[pageTitle~"true"] {
     align-self: end;
 }
 .TurkuHeadingTopPane vaadin-menu-bar {
-    margin-right: 0.5em;
+    /* margin-right: 0.5em;
+    padding: 0em 0.5em; */
     align-self: end;
-    padding: 0em 0.5em;
+    --lumo-primary-text-color: var(--turku-cmd-color);
 }
 .TurkuFormMenu::part(menu-bar-button) {
     height: var(--turku-form-menu-height);
@@ -307,18 +311,34 @@ vaadin-selection-grid {
 }
 
 .TurkuTableSummaryLine {
-    font-size: var(--lumo-font-size-xs);
+    font-size: var(--lumo-font-size-s);
     font-weight: var(--turku-bold);
 }
-.TurkuTableSummaryLine label:first-child {
-    padding-left: 0.5em;
+
+.TurkuTableSummaryLine label:first-child, .TurkuTableSummaryLine label:last-child {
+    border-radius: 0.6rem;
+    padding: 0 0.5rem;
+    background-color: var(--lumo-contrast-10pct);
 }
-.TurkuTableSummaryLine label:last-child {
-    padding-right: 0.5em;
-}
-.TurkuTblImportant {
+
+/* cell styling * * * */
+.TrkCelImp {
     font-weight:var(--turku-bold);
 }
+.TrkCelColImp {
+    font-weight:var(--turku-bold);
+    color: var(--turku-CelCol);
+    background-color: var(--turku-CelColBg);
+    border-radius: 0.6rem;
+    padding: 0 0.5rem;
+}
+.TrkCelCol {
+    color: var(--turku-CelCol);
+    background-color: var(--turku-CelColBg);
+    border-radius: 0.6rem;
+    padding: 0 0.5rem;
+}
+
 
 
 vaadin-grid-sorter:not([direction])::part(indicators)::before {
