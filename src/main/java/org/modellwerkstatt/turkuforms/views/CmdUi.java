@@ -159,7 +159,14 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void reevalConclusions(List<OFXConclusionInformation> concInfos) {
         conclusionInformations = concInfos;
         for (int i = 0; i < concInfos.size(); i++) {
-            conclusionButtons.get(i).setEnabled(concInfos.get(i).enabled);
+            if (i == 0 && !concInfos.get(i).enabled) {
+                // this is the ESC
+                conclusionButtons.get(i).setVisible(false);
+
+            } else {
+                conclusionButtons.get(i).setEnabled(concInfos.get(i).enabled);
+
+            }
         }
     }
 

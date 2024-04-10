@@ -1,0 +1,5 @@
+:host(.MainwindowTabSheetTabs) [part$="tabs"] {
+    padding-left: var(--turku-lrmain-space);
+    padding-right: var(--turku-lrmain-space);
+    margin: 0px;
+}

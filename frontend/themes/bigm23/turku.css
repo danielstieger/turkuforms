@@ -67,11 +67,6 @@ vaadin-tooltip-overlay::part(content) {
     align-self: center;
 }
 
-vaadin-app-layout {
-    padding-left: var(--turku-lrmain-space);
-    padding-right: var(--turku-lrmain-space);
-}
-
 vaadin-app-layout::part(navbar) {
     background: white !important;
 }
@@ -170,6 +165,8 @@ vaadin-tab[aria-selected~='true']{
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
     padding-top: 1em;
+    padding-left: var(--turku-lrmain-space);
+    padding-right: var(--turku-lrmain-space);
 }
 
 .ModalTab::part(tabs-container) {

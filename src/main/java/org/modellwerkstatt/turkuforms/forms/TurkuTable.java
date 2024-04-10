@@ -105,7 +105,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid.setEnterNextRow(true);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setThemeName("dense");
-        grid.addThemeName("no-border");
+        // grid.addThemeName("no-border");
         grid.addThemeName("row-stripes");
 
 
