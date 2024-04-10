@@ -108,16 +108,16 @@ vaadin-app-layout::part(navbar)::before {
     padding: var(--lumo-space-xs);
 }
 
-.MainwindowDrawerCmdButton {
-    font-size: var(--lumo-font-size-s);
-}
-
 vaadin-app-layout::part(drawer) {
     width: 25em;
 }
 
 .DrawerLogout [slot~='prefix'] {
     padding: 0px !important;
+}
+
+vaadin-drawer-toggle {
+    margin: 0px;
 }
 
 
@@ -135,12 +135,6 @@ vaadin-app-layout::part(drawer) {
 /*    padding-left: var(--turku-hierarchy-spacing);
     padding-right: var(--turku-hierarchy-spacing); */
 
-}
-
-vaadin-tabs {
-    min-height: 35px;
-    max-height: 35px;
-    height: 35px;
 }
 
 vaadin-tabsheet::part(content) {

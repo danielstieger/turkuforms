@@ -6,5 +6,8 @@
 
 :host(.MainwindowDrawerCmdButton) .vaadin-button-container {
   justify-content: left;
-    padding-left: 1em;
+  padding-left: 1em;
+  /* font-size: var(--lumo-font-size-s); */
 }
+
+

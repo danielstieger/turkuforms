@@ -3,3 +3,9 @@
     padding-right: var(--turku-lrmain-space);
     margin: 0px;
 }
+
+:host() {
+    min-height: 35px;
+    max-height: 35px;
+    height: 35px;
+}
