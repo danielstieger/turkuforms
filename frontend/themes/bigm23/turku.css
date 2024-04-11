@@ -213,7 +213,7 @@ vaadin-button::part(prefix) {
 }
 .TurkuLumoSecondary {
     color: var(--turku-cmd-color);
-    border: 2px solid  var(--turku-cmd-color);
+    border: 1px solid  var(--turku-cmd-color);
 }
 
 
