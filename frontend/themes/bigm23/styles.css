@@ -24,24 +24,27 @@ html {
     --lumo-font-size-xxl: 1.5rem;
     --lumo-font-size-xxxl: 1.75rem;
 
-    /* --lumo-primary-color: rgba(30, 206, 201, 1.0); */
+    /* default fx8 cyan */
     --turku-cmd-color: rgba(23, 132, 200, 1.0);
     --turku-cmd-color-shade: rgba(23, 132, 200, 0.1);
-
     --lumo-primary-color: rgba(23, 132, 200, 1.0);
     --lumo-primary-color-selected: rgba(23, 132, 200, 0.07);
-    --lumo-primary-text-color: rgba(75, 84, 102, 1.0);
+
+
+    --lumo-body-text-color: rgba(24, 39, 57, 0.94);
+    --lumo-primary-text-color: rgba(24, 39, 57, 0.94)
+
     --turku-shade-disabled: rgba(26, 26, 26, 0);
     --turku-warning-color: #FF6700;
 
-    --lumo-base-color: #f1f1f5;
-
+    --lumo-base-color: #ffffff;
     --turku-primary-background: #ffffff;
+    --turku-alternate-background: #fafafa;
+    --turku-alternate-background2: #f0f0f0;
     background: var(--turku-primary-background);
     --turku-lrmain-space: 60px;
 
-    /* --turku-grid-selected-row-color: rgba(75, 84, 102, 0.3); */
-    --turku-grid-selected-row-color: rgba(23, 132, 200, 0.8);
+    --turku-grid-selected-row-color: #CFCFCF;
     --turku-hierarchy-spacing: 0.5em;
     --turku-form-menu-height: 1.5rem;
 

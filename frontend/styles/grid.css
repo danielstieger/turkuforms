@@ -12,14 +12,24 @@
 
     --_lumo-grid-selected-row-color: var(--turku-grid-selected-row-color);
 }
-
+/*
 :host(:not([reordering])) [part~='row'][selected] [part~='body-cell']:not([part~='details-cell']) {
   color: white !important;
   --turku-CelCol: white !important;
+} */
+
+:host([theme~="row-stripes"]) [part~="row"]:not([odd]) [part~="body-cell"],
+:host([theme~="row-stripes"]) [part~="row"]:not([odd]) [part~="details-cell"] {
+background-image: linear-gradient(var(--turku-alternate-background), var(--turku-alternate-background));
+background-repeat: repeat-x;
+}
+
+:host([navigating]) [part~='row']:focus::before, :host([navigating]) [part~='focused-cell']:focus::before {
+    box-shadow: inset 0 0 0 2px #ADADAD !important;
 }
 
 :host([theme~="dense"]) [part~="cell"] {
-  min-height: var(--lumo-size-s);
+  min-height: var(--lumo-size-xs);
 }
 
 /*
@@ -39,7 +49,7 @@
 
 :host([theme~="dense"]) [part~="editable-cell"] {
   background-color: var(--turku-primary-background);
-  color: var(--turku-grid-selected-row-color);
+  color: var(--lumo-body-text-color);
 }
 
 :host([theme~="dense"]) {
@@ -47,12 +57,12 @@
 }
 
 :host([theme~="dense"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
-  padding: 0px var(--lumo-space-s);
+  padding: 0px var(--lumo-space-xs);
 }
 
 :host([theme~="dense"]:not([theme~="no-row-borders"]))
   [part="row"][first]
   [part~="cell"]:not([part~="details-cell"]) {
   border-top: 0;
-  min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
+  min-height: calc(var(--lumo-size-xs) - var(--_lumo-grid-border-width));
 }

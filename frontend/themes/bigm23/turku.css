@@ -159,6 +159,9 @@ vaadin-tab[aria-selected~='true']{
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
     padding-top: 1em;
+}
+
+.CmdUiTab {
     padding-left: var(--turku-lrmain-space);
     padding-right: var(--turku-lrmain-space);
 }
@@ -313,12 +316,13 @@ vaadin-selection-grid {
 .TurkuTableSummaryLine {
     font-size: var(--lumo-font-size-s);
     font-weight: var(--turku-bold);
+    padding-top: 0.3em;
 }
 
 .TurkuTableSummaryLine label:first-child, .TurkuTableSummaryLine label:last-child {
     border-radius: 0.6rem;
     padding: 0 0.5rem;
-    background-color: var(--lumo-contrast-10pct);
+    background-color: var(--turku-alternate-background2);
 }
 
 /* cell styling * * * */
