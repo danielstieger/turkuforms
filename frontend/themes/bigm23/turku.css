@@ -325,6 +325,10 @@ vaadin-selection-grid {
     background-color: var(--turku-alternate-background2);
 }
 
+.TurkuTableSummaryLine label:first-child:empty, .TurkuTableSummaryLine label:last-child:empty {
+    display: none;
+}
+
 /* cell styling * * * */
 .TrkCelImp {
     font-weight:var(--turku-bold);
@@ -359,7 +363,7 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 /* TurkuDelegatesForm * * * * * * * * * * * * * * * */
 
 vaadin-form-item::part(label) {
-    width: 8em;
+    width: 10.5em;
     text-align: right;
     margin-top: 0px;
     margin-bottom: 0px;

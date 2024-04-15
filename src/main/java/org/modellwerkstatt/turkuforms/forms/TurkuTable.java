@@ -8,6 +8,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -86,6 +87,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         searchField.setClearButtonVisible(true);
         searchField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
         searchField.setValueChangeMode(ValueChangeMode.LAZY);
+        searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
 
         infoCsvButton = new Button("*/*");
         infoCsvButton.setTooltipText(factory.getSystemLabel(-1, MoWareTranslations.Key.COPY_CSV_FROM_TABLE));
