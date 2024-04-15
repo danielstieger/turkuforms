@@ -1,3 +1,8 @@
 :host(.FormItemWideOption) [part$="label"] {
     display: none;
 }
+
+:host(.FormItemWideOption) #spacing {
+    display: none;
+}
+
