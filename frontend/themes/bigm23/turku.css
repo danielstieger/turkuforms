@@ -204,14 +204,14 @@ vaadin-button::part(prefix) {
     padding: 0.2em 0em;
 }
 
-.TurkuLumoTertiary {
+.TurkuLumoTertiary:not([disabled]) {
     color: var(--turku-cmd-color);
 }
-.TurkuLumoPrimary {
+.TurkuLumoPrimary:not([disabled])  {
     background-color: var(--turku-cmd-color);
 
 }
-.TurkuLumoSecondary {
+.TurkuLumoSecondary:not([disabled])  {
     color: var(--turku-cmd-color);
     border: 1px solid  var(--turku-cmd-color);
 }

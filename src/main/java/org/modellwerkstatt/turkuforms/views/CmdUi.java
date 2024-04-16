@@ -62,8 +62,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     public void initialShow(IToolkit_Form formAsComponent) {
         currentFormToFocus = formAsComponent;
-        currentFormToFocus.rootForm();
-
         this.add((Component) currentFormToFocus, conclusionLayout);
     }
 
@@ -71,8 +69,6 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void setContent(IToolkit_Form formAsComponent) {
         // changing pane content
         currentFormToFocus = formAsComponent;
-        currentFormToFocus.rootForm();
-
         Component existing = this.getComponentAt(0);
         this.replace(existing, (Component) currentFormToFocus);
     }
