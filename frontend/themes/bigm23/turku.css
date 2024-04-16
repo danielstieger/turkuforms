@@ -234,11 +234,20 @@ vaadin-button::part(prefix) {
     margin-left: 0.2em;
 }
 
-div[pageTitle~'true'] {
-    font-size: var(--lumo-font-size-xl);
-    line-height: var(--lumo-font-size-xl);
+.FormHeading[pageTitle~'true'] {
     margin-top: calc(var(--turku-hierarchy-spacing) * 2);
     margin-bottom: calc(var(--turku-hierarchy-spacing) * 3);
+}
+
+.FormHeading[pageTitle~'true'] .FormHeadingTitle {
+    font-size: var(--lumo-font-size-xl);
+    line-height: var(--lumo-font-size-xl);
+    padding: var(--turku-hierarchy-spacing) 0em;
+}
+
+
+.FormHeading[pageTitle~'true'] .FormHeadingSubTitle {
+    padding: calv(var(--turku-hierarchy-spacing) / 2) 0em;
 }
 
 /* Table / From top pane search / csv-export / menubar */
