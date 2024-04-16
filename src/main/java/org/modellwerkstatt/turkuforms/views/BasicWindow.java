@@ -154,7 +154,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     @Override
     public String getPageTitle() {
         // returns browser tab title
-        return navbarTitleDiv != null ? navbarTitleDiv.getText() : "";
+        return sysInfoLabel != null ? sysInfoLabel.getText() : "";
     }
 
     protected void setUserInfo(String info) {
@@ -178,39 +178,53 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         return TurkuMenu.addMainMenuStructure(turkuFactory, rootSubMenu, menu.getAllItems());
     }
 
+    protected Button createDrawerButton(CmdAction glue) {
+        ComponentEventListener<ClickEvent<Button>> execItem = event -> {
+            this.setDrawerOpened(false);
+            glue.startCommand();
+        };
+        Button btn;
+
+        if (Defs.hasIcon(glue.image)) {
+            Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), false);
+            btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
+
+        } else {
+            btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), execItem);
+
+        }
+
+        glue.attachButton1(new TurkuHasEnabled(btn, "Drawer " + glue.labelText));
+        btn.setTooltipText(Workarounds.mlToolTipText(glue.getToolTip()));
+        btn.setWidthFull();
+        // btn.setDisableOnClick(true);
+        btn.setClassName("MainwindowDrawerCmdButton");
+        return btn;
+    }
+
     protected void addDrawerMenu(List<AbstractAction> menuItemList){
 
         int componentIndex = 0;
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
-                CmdAction glue =  (CmdAction) currentItem;
-                ComponentEventListener<ClickEvent<Button>> execItem = event -> {
-                    this.setDrawerOpened(false);
-                    glue.startCommand();
-                };
-                Button btn;
-
-                if (Defs.hasIcon(glue.image)) {
-                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), false);
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
-
-                } else {
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), execItem);
-
-                }
-
-                glue.attachButton1(new TurkuHasEnabled(btn, "Drawer " + glue.labelText));
-                btn.setTooltipText(Workarounds.mlToolTipText(glue.getToolTip()));
-                btn.setWidthFull();
-                // btn.setDisableOnClick(true);
-                btn.setClassName("MainwindowDrawerCmdButton");
+                Button btn = createDrawerButton((CmdAction) currentItem);
                 drawerCommandsLayout.addComponentAtIndex(componentIndex++, btn);
 
-            } else {
-                if (currentItem.labelText == null) {
+            } else if (currentItem.labelText == null) {
                     // null is separator; not used yet ...
+
+            } else {
+                Label section = new Label(currentItem.labelText);
+                drawerCommandsLayout.addComponentAtIndex(componentIndex++, section);
+
+                for (AbstractAction inFolder : ((Menu) currentItem).getAllItems()) {
+                    if (inFolder instanceof CmdAction) {
+                        Button btn = createDrawerButton((CmdAction) inFolder);
+                        drawerCommandsLayout.addComponentAtIndex(componentIndex++, btn);
+
+                    }
                 }
-                // subfolders not used yet ...
+
             }
         }
     }

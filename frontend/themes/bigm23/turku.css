@@ -120,6 +120,11 @@ vaadin-drawer-toggle {
     margin: 0px;
 }
 
+vaadin-vertical-layout[slot $= "drawer"] label {
+    margin: 2em 2em 0.1em 2em;
+    font-size: var(--lumo-font-size-m);
+}
+
 
 /* TabSheet and Tabs * * * * * * * * * * * * */
 .MainwindowTabSheet {
@@ -384,7 +389,9 @@ vaadin-combo-box-item {
     padding-bottom: calc(2 * var(--turku-hierarchy-spacing))
 }
 
-
+vaadin-form-layout[children$="1"] .FormItemWideOption vaadin-text-area[disabled] {
+    border: 1px solid var(--lumo-contrast-20pct);
+}
 
 vaadin-text-field[disabled],
 vaadin-text-area[disabled],

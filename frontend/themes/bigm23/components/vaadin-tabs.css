@@ -9,3 +9,7 @@
     max-height: 35px;
     height: 35px;
 }
+
+:host() [part$="tabs"] {
+    margin: 0px !important;
+}

@@ -95,7 +95,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
     @Override
     public void afterFullUiInitialized() {
-
+        formLayout.getElement().setAttribute("children", "" + delegates.size());
     }
 
     @Override
