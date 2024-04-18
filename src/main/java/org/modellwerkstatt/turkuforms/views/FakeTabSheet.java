@@ -9,6 +9,7 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     private CmdUiTab current;
     private DrawerToggle drawerToggle;
+    private int numTabs;
 
 
     public FakeTabSheet(DrawerToggle dt) {
@@ -37,7 +38,9 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
         this.removeAll();
         current = tab;
         drawerToggle.setEnabled(false);
+        numTabs++;
         this.add(tab);
+
     }
 
     @Override
@@ -49,17 +52,18 @@ public class FakeTabSheet extends VerticalLayout implements ITurkuMainTab {
     @Override
     public void closeTab(CmdUiTab tab) {
         current = null;
-        drawerToggle.setEnabled(true);
+        numTabs--;
         this.removeAll();
 
         if (! hasOpenTabs()) {
+            drawerToggle.setEnabled(true);
             adjustTopBarColorOrNull(null);
         }
     }
 
     @Override
     public boolean hasOpenTabs() {
-        return current != null;
+        return numTabs > 0;
     }
 
     @Override
