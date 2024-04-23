@@ -127,7 +127,11 @@ public class TurkuServlet extends VaadinServlet {
         appFactory.setOnLogoutMainLandingPath(mainLandingPagePath);
 
         appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + appNameVersion);
-        jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, appNameVersion + " (par deployed as '"+ deployedAsVersion + "')", appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
+        jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName(), deployedAsVersion, appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
+
+        if (appFactory.isAutoParDeploymentForwardGracefully()) {
+            jmxRegistration.enableAutoForwardGracefully();
+        }
 
         disableBrowserContextMenu = !"dandev".equals(guessedServerName);
 

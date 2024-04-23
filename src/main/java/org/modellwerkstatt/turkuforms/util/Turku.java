@@ -16,7 +16,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 public class Turku {
-    public static final String INTERNAL_VERSION = "Turkuforms (moware11) 0.1";
+    public static final String INTERNAL_VERSION = "turkuforms (moware11) spring 24";
     private static final String HARDLOG_DIR = "/Users/danielstieger/";
     private static final String HARDLOG_FILENAME = HARDLOG_DIR + "turkulog.log";
     private static final DateTimeFormatter formatter = MoWareFormattersFactory.forDateTimePattern("hh:mm:ss.SSS", "de");

@@ -20,4 +20,7 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     String translateIconName(String name);
     String translateButtonLabel(String label, String hk);
 
+    void setAutoParDeploymentForwardGracefully(boolean val);
+    boolean isAutoParDeploymentForwardGracefully();
+
 }

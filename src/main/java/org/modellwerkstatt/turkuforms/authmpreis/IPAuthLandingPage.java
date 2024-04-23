@@ -8,6 +8,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
@@ -35,6 +36,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
         ITurkuAppFactory factory = servlet.getUiFactory();
+        IMoLdapService ldapService = factory.getLdapServiceIfPresent();
 
         title = servlet.getAppNameVersion();
         ParamInfo paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
@@ -77,10 +79,24 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
         } else if ("login".equals(naviPath)){
             setAsRoot(new SimpleLoginFormCmpt((username, password) -> {
-                UserPrincipal userPrincipal = new UserPrincipal(username, password);
-                UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
-                UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
-                return null;
+
+                if (ldapService == null) {
+                    String message = "INTERNAL ERROR - NO LDAP SERVICE CONFIGURED! " + factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);
+                    return message;
+                }
+
+                boolean thisAuthenticated = ldapService.authenticateUser(username, password);
+
+                if (!thisAuthenticated) {
+                    String message = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);
+                    return message;
+
+                } else {
+                    UserPrincipal newPrinci = new UserPrincipal(username, password);
+                    UserPrincipal.setUserPrincipal(vaadinSession, newPrinci);
+                    UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
+                    return null;
+                }
             }));
 
 

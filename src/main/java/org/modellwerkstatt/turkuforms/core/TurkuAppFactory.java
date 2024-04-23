@@ -25,6 +25,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private boolean singleAppInstanceMode = false;
 
     private boolean deployedVersionCheck = true;
+    private boolean autoParDeploymentForwardGracefully = false;
     private String onLogoutMainLandingPath;
     private String authentiactorClassFqName;
 
@@ -68,6 +69,16 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         return deployedVersionCheck;
     }
     public void setCheckDeployedVersion(boolean val) { deployedVersionCheck = val; }
+
+    @Override
+    public void setAutoParDeploymentForwardGracefully(boolean val) {
+        autoParDeploymentForwardGracefully = val;
+    }
+
+    @Override
+    public boolean isAutoParDeploymentForwardGracefully() {
+        return autoParDeploymentForwardGracefully;
+    }
 
     @Override
     public String getAuthenticatorClassFqName() {

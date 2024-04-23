@@ -28,6 +28,7 @@ public class TurkuServletService extends VaadinServletService {
          * without traversing session and using vaadin internals. hooked in via
          * findUi below.
          */
+        jmxRegistration.checkMarkAsForwardGracyFully();
     }
 
     @Override
@@ -77,6 +78,14 @@ public class TurkuServletService extends VaadinServletService {
                     String userName = "" + session.getSession().getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
                     jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some turku interaction", startTime);
                 }
+
+                if (appCrtl.isAsyncShutdownRequested()) {
+                    // just a first impl.
+                    appCrtl.internal_immediatelyShutdown();
+
+                }
+
+
             }
 
         } else if (isBeacon) {
