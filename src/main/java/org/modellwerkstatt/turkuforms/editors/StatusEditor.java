@@ -20,6 +20,8 @@ public class StatusEditor extends EditorBasisFocusable<Select<String>> implement
                 boolean updtExecuted = execUpdateConclusion(event.getValue());
             }
 
+            // will also issue a focus after setSelectedIndex on init...
+            // :(
             turkuDelegatesForm.focusOnNextDlgt(delegate, true);
         });
     }

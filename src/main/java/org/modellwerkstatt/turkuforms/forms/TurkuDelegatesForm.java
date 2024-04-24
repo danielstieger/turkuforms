@@ -194,12 +194,12 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         if (next && index >= delegates.size()) {
             // we are done - keep focus on last one
 
-        } else if (!next && index <0 ) {
+        } else if (!next && index < 0) {
             // also done - keep focus on first
 
         } else if (delegates.get(index).isEnabled()) {
-            FormChild<?> FormChild = (FormChild<?>) delegates.get(index).getDelegateUiImpl();
-            FormChild.turkuFocus();
+            FormChild<?> formChild = (FormChild<?>) delegates.get(index).getDelegateUiImpl();
+            formChild.turkuFocus();
 
         } else {
             focusOnNextDlgt(delegates.get(index), next);

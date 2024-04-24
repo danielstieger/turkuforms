@@ -6,6 +6,7 @@ import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ReferenceEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,10 @@ public class ReferenceEditor extends EditorBasisFocusable<ComboBox<String>> impl
             if (inputField.isOpened()) { selectAll(); }
         });
 
-        Peculiar.focusMoveEnterHk(false, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
-        Peculiar.focusMoveEnterHk(true, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
+        Peculiar.focusMoveEnterHk(false, inputField, event -> {
+            turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
+        Peculiar.focusMoveEnterHk(true, inputField, event -> {
+            turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
     }
 
 
