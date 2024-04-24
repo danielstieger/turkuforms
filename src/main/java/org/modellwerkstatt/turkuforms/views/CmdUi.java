@@ -87,9 +87,10 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         conclusionInformations = conclusionInfo;
         conclusionLayout.clear();
         conclusionButtons.clear();
+        HotKeyRecorder recorder = new HotKeyRecorder();
 
         for (String hk: globalHks) {
-            Peculiar.useGlobalShortcutHk(this, hk, this );
+            recorder.remove(Peculiar.useGlobalShortcutHk(this, hk, this ));
         }
 
 
@@ -118,7 +119,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             }
 
             if (Defs.needsHkRegistration(oci.hotkey)) {
-                Peculiar.useGlobalShortcutHk(this, oci.hotkey,this);
+                recorder.remove(Peculiar.useGlobalShortcutHk(this, oci.hotkey,this));
             }
 
             // button.setDisableOnClick(true);
@@ -141,6 +142,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             }
 
         }
+
+        recorder.registerRemaining(this);
     }
 
     @Override
