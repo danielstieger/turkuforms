@@ -6,8 +6,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.dom.Element;
-import com.vaadin.flow.dom.Style;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
@@ -87,7 +85,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         conclusionInformations = conclusionInfo;
         conclusionLayout.clear();
         conclusionButtons.clear();
-        HotKeyRecorder recorder = new HotKeyRecorder();
+        HotKeyPreventer recorder = new HotKeyPreventer();
 
         for (String hk: globalHks) {
             recorder.remove(Peculiar.useGlobalShortcutHk(this, hk, this ));

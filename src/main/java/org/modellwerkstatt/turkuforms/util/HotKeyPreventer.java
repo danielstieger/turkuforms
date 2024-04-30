@@ -4,15 +4,14 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.ShortcutRegistration;
 import com.vaadin.flow.component.Shortcuts;
-import com.vaadin.flow.component.notification.Notification;
 
-public class HotKeyRecorder {
+public class HotKeyPreventer {
 
     // Only single string keys .. : /
-    private Key[] minNecessary = new Key[] {Key.F12, Key.F5};
+    private Key[] minNecessary = new Key[] {Key.F3, Key.F4, Key.F5, Key.F6, Key.F7, Key.F10, Key.F12};
 
 
-    public HotKeyRecorder() {
+    public HotKeyPreventer() {
 
     }
 
