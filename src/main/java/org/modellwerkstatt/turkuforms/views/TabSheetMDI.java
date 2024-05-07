@@ -10,7 +10,7 @@ import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
+public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     private List<CmdUiTab> tabsInSheet;
 
     @Override
@@ -18,7 +18,7 @@ public class MainwindowTabSheet extends TabSheet implements ITurkuMainTab {
         return this;
     }
 
-    public MainwindowTabSheet() {
+    public TabSheetMDI() {
         super();
         setSizeFull();
         addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);

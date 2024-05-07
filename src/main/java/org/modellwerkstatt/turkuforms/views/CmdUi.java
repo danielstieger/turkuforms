@@ -9,7 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
@@ -19,7 +19,7 @@ import org.modellwerkstatt.turkuforms.util.*;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUI, ShortcutEventListener {
+abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandContainerUi, ShortcutEventListener {
     protected ICommandContainer cmdContainer;
     protected LeftRight conclusionLayout;
     protected ITurkuAppFactory factory;

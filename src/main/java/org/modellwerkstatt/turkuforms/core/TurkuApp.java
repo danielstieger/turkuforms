@@ -22,7 +22,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUI;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
@@ -75,9 +75,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
             init(servlet.getUiFactory(),  userEnvironment.isProlongedUserSession() || factory.isCompactMode(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
             if (appInCompactMode) {
-                mainTabImpl = new FakeTabSheet(drawerToggle);
+                mainTabImpl = new TabSheetFake(drawerToggle);
             } else {
-                mainTabImpl = new MainwindowTabSheet();
+                mainTabImpl = new TabSheetMDI();
             }
 
             applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
@@ -270,7 +270,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     }
 
     @Override
-    public void addTab(IToolkit_CommandContainerUI cmdUiTab) {
+    public void addTab(IToolkit_CommandContainerUi cmdUiTab) {
         Turku.l("TurkuApp.addTab()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         if (this.getContent() != mainTabImpl.getAsComponent()) {
@@ -281,7 +281,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     }
 
     @Override
-    public void focusTab(IToolkit_CommandContainerUI cmdUiTab) {
+    public void focusTab(IToolkit_CommandContainerUi cmdUiTab) {
         Turku.l("TurkuApp.focusTab()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.focusTab(tab);
@@ -289,7 +289,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     }
 
     @Override
-    public void ensureTabClosed(IToolkit_CommandContainerUI cmdUiTab) {
+    public void ensureTabClosed(IToolkit_CommandContainerUi cmdUiTab) {
         Turku.l("TurkuApp.ensureTabClosed()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.closeTab(tab);

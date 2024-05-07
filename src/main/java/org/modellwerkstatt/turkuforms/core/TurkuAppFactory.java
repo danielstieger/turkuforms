@@ -120,12 +120,12 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public IToolkit_CommandContainerUI createTabContainerUi(IToolkit_Application iToolkit_application, boolean modal) {
+    public IToolkit_CommandContainerUi createTabContainerUi(IToolkit_Application iToolkit_application, boolean modal) {
         return new CmdUiTab(this, modal);
     }
 
     @Override
-    public IToolkit_CommandContainerUI createPromptContainerUi(IToolkit_Application iToolkit_application, boolean fullSize) {
+    public IToolkit_CommandContainerUi createPromptContainerUi(IToolkit_Application iToolkit_application, boolean fullSize) {
         return new CmdUiPrompt(this, fullSize);
     }
 
