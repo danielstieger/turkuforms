@@ -3,11 +3,11 @@ package org.modellwerkstatt.turkuforms.sditech;
 import org.modellwerkstatt.turkuforms.sditech.uis.CmdUi;
 
 public class EventCommandContainer {
-    private IToolkit_Page page;
+    private IToolkit_Window page;
     private Cmd command;
     private SdiAppCrtl crtl;
 
-    public EventCommandContainer(SdiAppCrtl crtl, IToolkit_Page page, Cmd cmd) {
+    public EventCommandContainer(SdiAppCrtl crtl, IToolkit_Window page, Cmd cmd) {
         this.page = page;
         this.command = cmd;
         this.crtl = crtl;

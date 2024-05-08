@@ -14,7 +14,7 @@ import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.turkuforms.auth.HomeRedirect;
 import org.modellwerkstatt.turkuforms.sditech.LoginTestView;
-import org.modellwerkstatt.turkuforms.sditech.SdiTestView;
+import org.modellwerkstatt.turkuforms.sditech.SdiTestWindow;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.springframework.beans.BeansException;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -143,7 +143,7 @@ public class TurkuServlet extends VaadinServlet {
 
         // V2 SDI tech demo stuff
         RouteConfiguration.forApplicationScope().setRoute("/v2/login", LoginTestView.class);
-        RouteConfiguration.forApplicationScope().setRoute("/v2/:path*", SdiTestView.class);
+        RouteConfiguration.forApplicationScope().setRoute("/v2/:path*", SdiTestWindow.class);
 
         Turku.l("TurkuServlet.servletInitialized() done successfully.");
     }

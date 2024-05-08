@@ -8,7 +8,7 @@ public class SdiAppCrtl {
     public boolean authenticated = false;
     public String userName = "";
 
-    public IToolkit_MainPage mainPage;
+    public IToolkit_MainWindow mainPage;
     public List<EventCommandContainer> otherPages = new ArrayList<>();
 
 
@@ -29,7 +29,7 @@ public class SdiAppCrtl {
         otherPages.stream().forEach(ecc -> ecc.showMessage("Data adjusted to " + data));
     }
 
-    public void startCmdByParams(IToolkit_Page page, DynParams params) {
+    public void startCmdByParams(IToolkit_Window page, DynParams params) {
         if (!isAuthenticated()) {
             throw new RuntimeException("This can not happen - not authenticated!");
 

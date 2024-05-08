@@ -9,11 +9,11 @@ import org.modellwerkstatt.turkuforms.util.Turku;
 
 
 
-public class SdiTestView extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver, IToolkit_Page {
+public class SdiTestWindow extends VerticalLayout implements BeforeEnterObserver, BeforeLeaveObserver, IToolkit_Window {
 
     private Label contentLabel;
 
-    public SdiTestView() {
+    public SdiTestWindow() {
         super();
         this.add(new Label("Turku v2 - the SDI tech (on ui " + UI.getCurrent() + ")"));
      }
