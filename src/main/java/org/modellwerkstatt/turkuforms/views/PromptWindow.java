@@ -23,7 +23,6 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class PromptWindow extends Dialog {
 
-
     private ITurkuAppFactory uiFactory;
     private int langIndex;
 
