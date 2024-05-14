@@ -9,8 +9,8 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.Scroller;
-import org.modellwerkstatt.dataux.runtime.core.IApplicationController;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
+import org.modellwerkstatt.dataux.runtime.core.IApplication;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
@@ -50,7 +50,7 @@ public class PromptWindow extends Dialog {
         this.langIndex = langIndex;
     }
 
-    public void rawPrompt(String heading, Component compt, String okButtonText, String cancelButtonTextOrNull, IApplicationController.DlgRunnable dlgRunnable) {
+    public void rawPrompt(String heading, Component compt, String okButtonText, String cancelButtonTextOrNull, IApplication.DlgRunnable dlgRunnable) {
 
         Button okButton = new Button(uiFactory.translateButtonLabel(okButtonText ,OK_HOKTEY), event -> {
             this.close();
@@ -82,7 +82,7 @@ public class PromptWindow extends Dialog {
     }
 
 
-    public void simplePrompt(IToolkit_Application.DlgType msgType, String text, IApplicationController.DlgRunnable dlgRunnable) {
+    public void simplePrompt(IToolkit_MainWindow.DlgType msgType, String text, IApplication.DlgRunnable dlgRunnable) {
         Div infoDiv = new Div();
         infoDiv.addClassName("PromptWindowInfoDiv");
         infoDiv.setText(text);
@@ -93,23 +93,23 @@ public class PromptWindow extends Dialog {
         String cancelButtonText = null;
         Component center = infoDiv;
 
-        if (msgType == IToolkit_Application.DlgType.INFO_SMALL) {
+        if (msgType == IToolkit_MainWindow.DlgType.INFO_SMALL) {
             // default
-        } else if (msgType == IToolkit_Application.DlgType.INFO_LARGE) {
+        } else if (msgType == IToolkit_MainWindow.DlgType.INFO_LARGE) {
             infoDiv.addClassName("PromptWindowLarge");
             this.setWidthFull();
             center = new Scroller(infoDiv);
 
-        } else if (msgType == IToolkit_Application.DlgType.ERROR_SMALL) {
+        } else if (msgType == IToolkit_MainWindow.DlgType.ERROR_SMALL) {
             headingText = uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ERROR);
 
-        } else if (msgType == IToolkit_Application.DlgType.ERROR_LARGE) {
+        } else if (msgType == IToolkit_MainWindow.DlgType.ERROR_LARGE) {
             headingText = uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ERROR);
             infoDiv.addClassName("PromptWindowLarge");
             this.setWidthFull();
             center = new Scroller(infoDiv);
 
-        } else if (msgType == IToolkit_Application.DlgType.QUESTIONCLOSE_SMALL) {
+        } else if (msgType == IToolkit_MainWindow.DlgType.QUESTIONCLOSE_SMALL) {
             headingText = uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.QUESTION);
             infoDiv.addClassName("PromptWindowQuestion");
             okButtonText = uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.DISCARD_BUTTON);
@@ -121,7 +121,7 @@ public class PromptWindow extends Dialog {
     }
 
 
-    public void simpleProblemDialog(List<IOFXProblem> list, IApplicationController.DlgRunnable dlgRunnable) {
+    public void simpleProblemDialog(List<IOFXProblem> list, IApplication.DlgRunnable dlgRunnable) {
         Div infoDiv = new Div();
         infoDiv.addClassName("PromptWindowInfoDiv");
 

@@ -14,14 +14,14 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.dataux.runtime.core.IApplicationController;
+import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
 import org.modellwerkstatt.dataux.runtime.core.UxEvent;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
@@ -40,7 +40,7 @@ import java.util.List;
 
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
-public class TurkuApp extends Mainwindow implements IToolkit_Application, ShortcutEventListener, BeforeEnterObserver {
+public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, ShortcutEventListener, BeforeEnterObserver {
     private TurkuApplicationController applicationController;
     private IOFXUserEnvironment userEnvironment;
     private ITurkuMainTab mainTabImpl;
@@ -141,9 +141,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     }
 
     @Override
-    public void closeWindowAndExit() {
+    public void closeApplicationAndExit() {
         // This is basically the logout? Unclear if we want to set the principal null
-        Turku.l("TurkuApp.closeWindowAndExit()");
+        Turku.l("TurkuApp.closeApplicationAndExit()");
 
         applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
 
@@ -175,13 +175,13 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
     }
     
     @Override
-    public void showDialog(DlgType dlgType, String text, IApplicationController.DlgRunnable dlgRunnable) {
+    public void showDialog(DlgType dlgType, String text, IApplication.DlgRunnable dlgRunnable) {
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
         window.simplePrompt(dlgType, text, dlgRunnable);
     }
 
     @Override
-    public void showProblemsDialog(List<IOFXProblem> list, IApplicationController.DlgRunnable dlgRunnable) {
+    public void showProblemsDialog(List<IOFXProblem> list, IApplication.DlgRunnable dlgRunnable) {
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
         window.simpleProblemDialog(list, dlgRunnable);
     }
@@ -217,11 +217,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
         super.setSysInfo(appName+ " " + version);
         super.setNavbarTitleDiv(appName + " " + dynTitle);
         super.setUserInfo(userEnvironment.getUserName());
-    }
-
-    @Override
-    public void lockInterface(boolean b) {
-
     }
 
     @Override
@@ -340,7 +335,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_Application, Shortc
 
     @Override
     protected void exitRequestedFromMenu() {
-        applicationController.onExitRequestedEvent(false);
+        applicationController.onExitRequested(false);
     }
 
     public TurkuApplicationController getApplicationController() { return applicationController; }

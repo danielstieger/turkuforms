@@ -3,10 +3,10 @@ package org.modellwerkstatt.turkuforms.core;
 
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
-import org.modellwerkstatt.dataux.runtime.core.ApplicationController;
+import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Application;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
@@ -15,7 +15,7 @@ import org.modellwerkstatt.turkuforms.util.Turku;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-public class TurkuApplicationController extends ApplicationController implements HttpSessionBindingListener {
+public class TurkuApplicationController extends ApplicationMDI implements HttpSessionBindingListener {
     public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.TurkuAppCrtl_";
     public final static String USERNAME_SESSIONATTRIB = "userName";
     public final static String REMOTE_SESSIONATTRIB = "remoteAddr";
@@ -26,7 +26,7 @@ public class TurkuApplicationController extends ApplicationController implements
     private long lastRequestStarted;
     private String lastHkProcessedInThisRequest;
 
-    public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_Application appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
+    public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_MainWindow appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
 
         // upon init, take this as req.
@@ -80,9 +80,9 @@ public class TurkuApplicationController extends ApplicationController implements
             if (isTurkuControllerAttribute(name) && !name.equals(own)) {
 
                 TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
-                TurkuApp mainWin = (TurkuApp) crtl.getTecMainWindowHandle();
+                TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
 
-                mainWin.getUI().get().access(() -> crtl.onExitRequestedEvent(true));
+                mainWin.getUI().get().access(() -> crtl.onExitRequested(true));
                 Turku.l("TurkuApplicationController.shutdownOtherExistingControllers() exited " + name);
             }
         }
