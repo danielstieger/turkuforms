@@ -29,6 +29,7 @@ public class TurkuServletService extends VaadinServletService {
          * findUi below.
          */
         jmxRegistration.checkMarkAsForwardGracyFully();
+        Turku.l("Turku.requestStart() " + Turku.requestToString(request));
     }
 
     @Override

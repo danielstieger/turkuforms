@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
@@ -103,7 +104,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         } else {
             UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
             if (userPrincipal == null) {
-                userPrincipal = new UserPrincipal(vaadinSession.getBrowser().getAddress(), "");
+                userPrincipal = new UserPrincipal(factory.getRemoteAddr(VaadinRequest.getCurrent()), "");
                 UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
             }
 

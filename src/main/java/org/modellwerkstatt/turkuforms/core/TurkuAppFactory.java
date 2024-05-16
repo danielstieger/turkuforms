@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.core;
 
+import com.vaadin.flow.server.VaadinRequest;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -10,6 +11,7 @@ import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
 import org.modellwerkstatt.turkuforms.forms.TurkuTabForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuTable;
 import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
@@ -41,6 +43,19 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
         // should be initialized in servlet
         onLogoutMainLandingPath = null;
+    }
+
+    @Override
+    public String getRemoteAddr(VaadinRequest req) {
+        // Turku.l("TurkuAppFactory.getRemoteAddr() " + Turku.requestToString(req));
+
+        // Browser uses.
+        // nginx and other loadbalancer forwarding.
+        String address = req.getHeader("x-forwarded-for");
+        if (address == null) {
+            address = req.getRemoteAddr();
+        }
+        return address;
     }
 
     public String getOnLogoutMainLandingPath() {

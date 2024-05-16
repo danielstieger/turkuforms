@@ -13,6 +13,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -55,7 +57,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
-        String remoteAddr = vaadinSession.getBrowser().getAddress();
+        String remoteAddr = factory.getRemoteAddr(VaadinRequest.getCurrent());
 
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);

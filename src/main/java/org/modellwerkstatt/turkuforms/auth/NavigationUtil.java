@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.LoginController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
@@ -48,7 +49,7 @@ public class NavigationUtil {
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
 
-        LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), vaadinSession.getBrowser().getAddress());
+        LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), factory.getRemoteAddr(VaadinRequest.getCurrent()));
 
         info.setDevice("", "" + vaadinSession.getBrowser().getBrowserApplication(), "");
 
