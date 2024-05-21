@@ -29,11 +29,11 @@ public class TurkuServletService extends VaadinServletService {
          * findUi below.
          */
         jmxRegistration.checkMarkAsForwardGracyFully();
-        Turku.l("Turku.requestStart() " + Turku.requestToString(request));
     }
 
     @Override
     public UI findUI(VaadinRequest request) {
+        // overwritten to measure with startRequest()
         UI theUi = super.findUI(request);
 
         if (theUi != null && !Workarounds.isHeartBeatRequest(request)) {
@@ -66,6 +66,10 @@ public class TurkuServletService extends VaadinServletService {
 
 
         super.requestEnd(request, response, session);
+
+        Turku.l("Turku.requestEnd() " + Turku.requestToString(request));
+        Turku.l("Turku.requestEnd() " + session);
+        Turku.l("Turku.requestEnd() " + session.getSession());
 
 
         if (!isVaadinHeartBeat && currentUI != null) {
