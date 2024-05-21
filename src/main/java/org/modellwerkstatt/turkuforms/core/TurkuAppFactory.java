@@ -1,6 +1,8 @@
 package org.modellwerkstatt.turkuforms.core;
 
 import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -46,15 +48,14 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public String getRemoteAddr(VaadinRequest req) {
-        // Turku.l("TurkuAppFactory.getRemoteAddr() " + Turku.requestToString(req));
+    public String getRemoteAddr() {
+        WrappedSession session = VaadinSession.getCurrent().getSession();
+        String address = (String) session.getAttribute("x-forwarded-for");
 
-        // Browser uses.
-        // nginx and other loadbalancer forwarding.
-        String address = req.getHeader("x-forwarded-for");
         if (address == null) {
-            address = req.getRemoteAddr();
+            address = VaadinRequest.getCurrent().getRemoteAddr();
         }
+
         return address;
     }
 

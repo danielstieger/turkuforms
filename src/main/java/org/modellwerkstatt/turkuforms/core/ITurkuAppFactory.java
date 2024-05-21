@@ -24,6 +24,6 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     void setAutoParDeploymentForwardGracefully(boolean val);
     boolean isAutoParDeploymentForwardGracefully();
 
-    String getRemoteAddr(VaadinRequest req);
+    String getRemoteAddr();
 
 }

@@ -57,7 +57,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
-        String remoteAddr = factory.getRemoteAddr(VaadinRequest.getCurrent());
+        String remoteAddr = factory.getRemoteAddr();
 
         userEnvironment = Workarounds.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);

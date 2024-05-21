@@ -49,7 +49,7 @@ public class NavigationUtil {
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
 
-        LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), factory.getRemoteAddr(VaadinRequest.getCurrent()));
+        LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), factory.getRemoteAddr());
 
         info.setDevice("", "" + vaadinSession.getBrowser().getBrowserApplication(), "");
 

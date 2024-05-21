@@ -25,11 +25,13 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterObserver, HasDynamicTitle {
     private String title;
+    private boolean showMessage;
 
     public IPAuthLandingPage() {
         // default, not content in landing page
         // registered as / and /login
         setSizeFull();
+        showMessage = false;
     }
 
     @Override
@@ -47,6 +49,8 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
         if ("logout".equals(naviPath) || paramInfo.wasActiveLogout()) {
+            showMessage = true;
+
             // just navigating to /<servletname>/logout will not work, since
             // the app ui is still in the background - until missing heartbeat will destroy it
 
@@ -72,6 +76,8 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             }));
 
         } else if ("login".equals(naviPath) && otherCrtlPresent) {
+            showMessage = true;
+
             String msg = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_NOT_POSSIBLE);
 
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), null, msg, () -> {
@@ -79,6 +85,8 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
 
         } else if ("login".equals(naviPath)){
+            showMessage = true;
+
             setAsRoot(new SimpleLoginFormCmpt((username, password) -> {
 
                 if (ldapService == null) {
@@ -102,9 +110,10 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
 
         } else {
+
             UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
             if (userPrincipal == null) {
-                userPrincipal = new UserPrincipal(factory.getRemoteAddr(VaadinRequest.getCurrent()), "");
+                userPrincipal = new UserPrincipal(factory.getRemoteAddr(), "");
                 UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
             }
 
@@ -112,16 +121,23 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
 
             if (msg == null) {
+                showMessage = true;
                 Workarounds.setUserEnvForUi(environment);
                 NavigationUtil.ensureAppRoutPresentAndForward(servlet.getAuthenticatorClass(), event, paramInfo);
+
+            } else if (! showMessage) {
+                showMessage = true;
+                event.forwardTo("/login" + paramInfo.getParamsToForwardIfAny());
 
             } else {
                 String buttonName = factory.translateButtonLabel(factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_BUTTON), OK_HOKTEY);
 
                 setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), buttonName, msg, () -> {
                     UI.getCurrent().navigate("/login" + paramInfo.getParamsToForwardIfAny());
-                } ));
+                }));
+
             }
+
 
         }
     }

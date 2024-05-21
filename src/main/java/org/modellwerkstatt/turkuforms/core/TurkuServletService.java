@@ -67,14 +67,27 @@ public class TurkuServletService extends VaadinServletService {
 
         super.requestEnd(request, response, session);
 
-        Turku.l("Turku.requestEnd() " + Turku.requestToString(request));
-        Turku.l("Turku.requestEnd() " + session);
-        Turku.l("Turku.requestEnd() " + session.getSession());
+        String onWebSocket = "";
+        if (session != null && session.getSession() != null) {
+            WrappedSession httpSession = session.getSession();
+
+            String xForwardFor = request.getHeader("x-forwarded-for");
+            if (xForwardFor != null) {
+                httpSession.setAttribute("x-forwarded-for", xForwardFor);
+            }
+
+            String webSocket = request.getHeader("sec-fetch-mode");
+            String atmosphereSocket = request.getHeader("X-Atmosphere-Transport");
+
+            onWebSocket = "" + webSocket + " / " + atmosphereSocket;
+            httpSession.setAttribute("websocket", onWebSocket);
+        }
 
 
         if (!isVaadinHeartBeat && currentUI != null) {
             TurkuApplicationController appCrtl = Workarounds.getControllerFormUi(currentUI);
             if (appCrtl != null) { // not login views etc.
+                appCrtl.setuser_connectionInfoAddOn(onWebSocket);
                 long startTime = appCrtl.requestDone();
                 long reqTime = session.getLastRequestDuration();
 
