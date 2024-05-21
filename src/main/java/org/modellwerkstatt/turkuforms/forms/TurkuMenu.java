@@ -101,7 +101,7 @@ public class TurkuMenu extends MenuBar {
 
         }
 
-        glue.attachButton1(new TurkuHasEnabled(created, "Menu " + glue.labelText));
+        glue.attachButton1(new TurkuHasEnabled(glue.hideWhenDisabled, created, "Menu " + glue.labelText));
         Tooltip t = Tooltip.forComponent(created);
         t.setText(Workarounds.mlToolTipText(glue.getToolTip()));
 

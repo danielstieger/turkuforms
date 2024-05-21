@@ -123,7 +123,7 @@ public class MenuContext<T> {
 
         }
 
-        glue.attachButton2(new TurkuHasEnabled(createdGCM, "Context " + glue.labelText));
+        glue.attachButton2(new TurkuHasEnabled(glue.hideWhenDisabled, createdGCM, "Context " + glue.labelText));
 
 
         if (Defs.needsHkRegistration(glue.hotKey)) {

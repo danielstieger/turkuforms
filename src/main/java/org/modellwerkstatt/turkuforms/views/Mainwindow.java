@@ -50,7 +50,7 @@ abstract public class Mainwindow extends BasicWindow {
 
                 }
 
-                glue.attachButton1(new TurkuHasEnabled(btn, "Tile " + glue.labelText));
+                glue.attachButton1(new TurkuHasEnabled(glue.hideWhenDisabled, btn, "Tile " + glue.labelText));
 
                 // btn.setDisableOnClick(true);
                 btn.setTooltipText(Workarounds.mlToolTipText(tile.getAction().getToolTip()));
