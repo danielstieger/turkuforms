@@ -45,6 +45,7 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
 
     @Override
     public void focusTab(CmdUiTab tab) {
+        this.removeAll();
         current = tab;
         this.add(current);
     }
