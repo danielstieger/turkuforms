@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -109,7 +110,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         grid.setThemeName("dense");
         // grid.addThemeName("no-border");
         grid.addThemeName("row-stripes");
+        grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
+        Peculiar.useGlobalShortcutHk(grid, "C", event -> {
+            UI.getCurrent().getPage().executeJs("turku.copyToClipboard($0, $1)", this, this.generateCsv());
+        });
 
         selectionModel = (GridMultiSelectionModel<DTO>) grid.getSelectionModel();
 
@@ -344,28 +349,45 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         } else {
             String litPropName = Workarounds.litPropertyName(property);
             String[] colorMap = converter.getColorMapOrNull();
-
+            boolean dynamicColor = converter.hasDynamicColor();
             String template = "${item." + litPropName + "}";
 
-            if (important && colorMap == null) {
+
+            if (important && dynamicColor) {
+                template = "<span class=\"TrkCelImp\" style=\"color:${item." + litPropName + "__Color}\">${item." + litPropName + "}</span>";
+
+            } else if (important && colorMap == null) {
                 template = "<span class=\"TrkCelImp\">${item." + litPropName + "}</span>";
 
             } else if (important) {
                 template = "<span class=\"TrkCelColImp\">${item." + litPropName + "}</span>";
+
+            } else if (dynamicColor) {
+                template = "<span style=\"color:${item." + litPropName + "__Color}\">${item." + litPropName + "}</span>";
 
             } else if (colorMap != null) {
                 // not important, but we need a span
                 template = "<span class=\"TrkCelCol\">${item." + litPropName + "}</span>";
             }
 
-            col = grid.addColumn(LitRenderer.<DTO>of(template).
-                    withProperty(litPropName, item -> {
-                        return converter.convert(MoJSON.get(item, property));
-                    }));
 
+            if (dynamicColor) {
 
+                col = grid.addColumn(LitRenderer.<DTO>of(template).
+                        withProperty(litPropName, item -> {
+                            return converter.convert(MoJSON.get(item, property));
 
-            if (colorMap != null){
+                        }).withProperty(litPropName + "__Color", item -> {
+                            return converter.getBgColor(MoJSON.get(item, property));
+
+                        }));
+
+            } else if (colorMap != null) {
+                col = grid.addColumn(LitRenderer.<DTO>of(template).
+                        withProperty(litPropName, item -> {
+                            return converter.convert(MoJSON.get(item, property));
+                        }));
+
                 col.setClassNameGenerator(item -> {
                     String color = converter.getBgColor(MoJSON.get(item, property));
 
@@ -380,6 +402,13 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     if (cssRulesToAdd.contains(color)) { continue; }
                     cssRulesToAdd += ".TkuCol" + color.substring(1) + " {--turku-CelCol:" + color + ";--turku-CelColBg:" + color + "20;}";
                 }
+
+
+            } else {
+                col = grid.addColumn(LitRenderer.<DTO>of(template).
+                        withProperty(litPropName, item -> {
+                            return converter.convert(MoJSON.get(item, property));
+                        }));
             }
 
         }

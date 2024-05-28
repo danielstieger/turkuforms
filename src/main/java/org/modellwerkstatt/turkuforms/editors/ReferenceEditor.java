@@ -7,15 +7,16 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ReferenceEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
+import org.vaadin.addons.autoselectcombobox.AutoSelectComboBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReferenceEditor extends EditorBasisFocusable<ComboBox<String>> implements IToolkit_ReferenceEditor {
+public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<String>> implements IToolkit_ReferenceEditor {
     protected List<String> items = null;
 
     public ReferenceEditor() {
-        super(new ComboBox<>());
+        super(new AutoSelectComboBox<>());
 
         inputField.setSizeFull();
         inputField.setAutoOpen(true);

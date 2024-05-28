@@ -29,6 +29,7 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
@@ -178,6 +179,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     
     @Override
     public void showDialog(DlgType dlgType, String text, IApplication.DlgRunnable dlgRunnable) {
+        Turku.l("TurkuApp.showDialog() " + OFXConsoleHelper._____organizeCurrentStacktrace_____());
+
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
         window.simplePrompt(dlgType, text, dlgRunnable);
     }
