@@ -27,12 +27,14 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     protected List<Button> conclusionButtons;
     protected IToolkit_Form currentFormToFocus;
     protected String color;
+    protected HotKeyPreventer recorder;
 
     public CmdUi(ITurkuAppFactory fact) {
         super();
         factory = fact;
         conclusionButtons = new ArrayList<>();
         conclusionLayout = new LeftRight("BottomConclusionButtons");
+        recorder = new HotKeyPreventer();
     }
 
     @Override
@@ -85,7 +87,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         conclusionInformations = conclusionInfo;
         conclusionLayout.clear();
         conclusionButtons.clear();
-        HotKeyPreventer recorder = new HotKeyPreventer();
+
+        recorder.invalidateAllRegistrations();
 
         for (String hk: globalHks) {
             recorder.remove(Peculiar.useGlobalShortcutHk(this, hk, this ));

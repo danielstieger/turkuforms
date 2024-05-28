@@ -62,7 +62,7 @@ public class Peculiar {
         reg.setEventPropagationAllowed(false);
     }
 
-    public static Key useGlobalShortcutHk(Component layout, String hk, ShortcutEventListener listener) {
+    public static ShortcutRegistration useGlobalShortcutHk(Component layout, String hk, ShortcutEventListener listener) {
         // Turku.l("Peculiar.useGlobalShortcutHk() registering HK for " + hk);
         ShortcutRegistration reg;
 
@@ -74,7 +74,7 @@ public class Peculiar {
 
         reg.setEventPropagationAllowed(false);
         reg.setBrowserDefaultAllowed(false);
-        return reg.getKey();
+        return reg;
     }
 
     public static void installMowareAddonHotkeys(Component layout, ShortcutEventListener listener) {
