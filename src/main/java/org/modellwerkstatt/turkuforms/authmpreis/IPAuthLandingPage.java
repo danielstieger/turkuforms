@@ -123,7 +123,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             if (msg == null) {
                 showMessage = true;
                 Workarounds.setUserEnvForUi(environment);
-                NavigationUtil.ensureAppRoutPresentAndForward(servlet.getAuthenticatorClass(), event, paramInfo);
+                NavigationUtil.ensureAppRoutPresentAndForward(factory.isSDIMode(), event, paramInfo);
 
             } else if (! showMessage) {
                 showMessage = true;

@@ -54,6 +54,12 @@ public class DesktopGridProDataView<DTO> {
         int selectionSize = currentTableSelection.size();
         int foundSel = 0;
 
+        if (filteredList == null) {
+            // selectionChanged() called before loadList() - a strange SelectionController relict
+            filteredList = new ArrayList<>();
+            return false;
+        }
+
         for (DTO item: filteredList){
             if (currentTableSelection.contains(item)) {
                 foundSel ++;

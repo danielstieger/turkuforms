@@ -13,6 +13,7 @@ import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.sdicore.TurkuBrowserTab;
 
 @SuppressWarnings("unchecked")
 public class NavigationUtil {
@@ -30,11 +31,13 @@ public class NavigationUtil {
     }
 
 
-    public static void ensureAppRoutPresentAndForward(Class authenticatorCls, BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
+    public static void ensureAppRoutPresentAndForward(boolean isSdi, BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
+        Class appClass = isSdi ? TurkuBrowserTab.class : TurkuApp.class;
+
         if (! RouteConfiguration.forSessionScope().getRoute("/home/:cmdName?").isPresent()) {
             // RouteConfiguration.forSessionScope().setRoute("/login", authenticatorCls);
             // RouteConfiguration.forSessionScope().setRoute("/logout", authenticatorCls);
-            RouteConfiguration.forSessionScope().setRoute("/home/:cmdName?", TurkuApp.class);
+            RouteConfiguration.forSessionScope().setRoute("/home/:cmdName?", appClass);
         }
 
         if (evOrNull == null) {

@@ -81,7 +81,7 @@ public class LdapAuthLandingPage extends HorizontalLayout implements BeforeEnter
 
             if (msg == null) {
                 Workarounds.setUserEnvForUi(environment);
-                NavigationUtil.ensureAppRoutPresentAndForward(servlet.getAuthenticatorClass(), event, paramInfo);
+                NavigationUtil.ensureAppRoutPresentAndForward(factory.isSDIMode(), event, paramInfo);
 
             } else {
                 // This should not be possible? User permissions removed while logged in?

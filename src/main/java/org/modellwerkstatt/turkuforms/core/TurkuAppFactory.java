@@ -26,6 +26,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public static boolean onTheFly_allowEuroSignInDelegates = false;
 
     private boolean compactMode = false;
+    private boolean isSDIMode = false;
     private boolean singleAppInstanceMode = false;
 
     private boolean deployedVersionCheck = true;
@@ -75,6 +76,13 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     @Override
     public boolean isCompactMode() { return compactMode; }
     public void setCompactMode(boolean val) { compactMode = val; }
+
+    @Override
+    public boolean isSDIMode() {
+        return isSDIMode;
+    }
+    public void setSDIMode(boolean val) { isSDIMode = val; }
+
 
     @Override
     public boolean isSingleAppInstanceMode() { return singleAppInstanceMode; }

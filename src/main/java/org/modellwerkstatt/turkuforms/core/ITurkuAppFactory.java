@@ -10,6 +10,9 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     String getOnLogoutMainLandingPath();
 
     boolean isCompactMode();
+
+    boolean isSDIMode();
+
     boolean isCheckDeployedVersion();
 
     boolean isSingleAppInstanceMode();
