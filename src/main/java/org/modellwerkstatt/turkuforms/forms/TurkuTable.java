@@ -1,12 +1,10 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.grid.ColumnTextAlign;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridMultiSelectionModel;
-import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -195,10 +193,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 }
             }
         });
-
     }
-
-
 
     @Override
     public void endOfInitializationForElementClass(Class theDto) {
