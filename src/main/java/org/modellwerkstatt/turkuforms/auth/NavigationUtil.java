@@ -54,7 +54,7 @@ public class NavigationUtil {
 
         LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), factory.getRemoteAddr());
 
-        info.setDevice("", "" + vaadinSession.getBrowser().getBrowserApplication(), "");
+        info.setDevice("", "", "");
 
         String msg = crtl.checkLoginPrepareUserEnv(userName, password, info, appUiModule, factory);
         return msg;
