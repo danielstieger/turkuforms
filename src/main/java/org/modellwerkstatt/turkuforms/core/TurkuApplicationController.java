@@ -50,7 +50,6 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         return lastRequestStarted;
     }
 
-    @Deprecated
     public boolean sameHkInThisRequest(String newHk) {
         boolean result = lastHkProcessedInThisRequest.equals(newHk);
         lastHkProcessedInThisRequest = newHk;
