@@ -34,6 +34,7 @@ public class NavigationUtil {
         if (! RouteConfiguration.forSessionScope().getRoute("/home/:cmdName?").isPresent()) {
             // RouteConfiguration.forSessionScope().setRoute("/login", authenticatorCls);
             // RouteConfiguration.forSessionScope().setRoute("/logout", authenticatorCls);
+            // RouteConfiguration.forApplicationScope().removeRoute("/");
             RouteConfiguration.forSessionScope().setRoute("/home/:cmdName?", TurkuApp.class);
         }
 
