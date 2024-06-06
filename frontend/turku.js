@@ -81,6 +81,10 @@ window.turku = {
         forComponent.style.setProperty('--turku-cmd-color-shade', colorString + "10");
     },
 
+    closeTab: function() {
+        window.close();
+    },
+
     setTurkuCookie: function(value,days) {
         var expires = '';
         if (days) {

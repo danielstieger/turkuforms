@@ -1,5 +1,4 @@
 package org.modellwerkstatt.turkuforms.sditech;
-
 import com.vaadin.flow.router.Location;
 
 import java.util.List;

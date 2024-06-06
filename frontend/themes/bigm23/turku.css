@@ -448,7 +448,14 @@ vaadin-radio-button[disabled]:not([checked]) {
     display: none;
 }
 
-
 .uploadEditorError {
     border: 2px solid var(--lumo-error-color);
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - SDI STUFF - - - - - - - - - - - - - -*/
+.TurkuLayoutNavbarTopSDI {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+     box-sizing: border-box;
 }

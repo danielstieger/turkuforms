@@ -10,12 +10,12 @@ import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
-import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -81,7 +81,7 @@ public class LdapAuthLandingPage extends HorizontalLayout implements BeforeEnter
 
             if (msg == null) {
                 Workarounds.setUserEnvForUi(environment);
-                NavigationUtil.ensureAppRoutPresentAndForward(factory.isSDIMode(), event, paramInfo);
+                NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
 
             } else {
                 // This should not be possible? User permissions removed while logged in?

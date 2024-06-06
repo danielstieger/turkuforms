@@ -1,18 +1,18 @@
 package org.modellwerkstatt.turkuforms.print;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.OFXFatClientFopUserPrintService;
-import org.modellwerkstatt.turkuforms.core.TurkuApp;
 
 import java.io.File;
 
 public class TurkuUserPrintService extends OFXFatClientFopUserPrintService {
-    protected TurkuApp theApp;
+    protected Component theApp;
     protected String httpServedPath;
 
 
-    public TurkuUserPrintService(TurkuApp app, String httpPath, IOFXUserEnvironment userEnv, String classLoadForXslTemplates, String fallBackFsDirForXsltTemplate, String filesSystemOutputPath, boolean useFopland) {
+    public TurkuUserPrintService(Component app, String httpPath, IOFXUserEnvironment userEnv, String classLoadForXslTemplates, String fallBackFsDirForXsltTemplate, String filesSystemOutputPath, boolean useFopland) {
         super(userEnv, classLoadForXslTemplates, fallBackFsDirForXsltTemplate, filesSystemOutputPath, useFopland, false, true);
 
         this.theApp = app;

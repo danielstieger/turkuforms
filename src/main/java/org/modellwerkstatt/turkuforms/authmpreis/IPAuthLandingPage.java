@@ -6,17 +6,16 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
-import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -50,9 +49,6 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
         if ("logout".equals(naviPath) || paramInfo.wasActiveLogout()) {
             showMessage = true;
-
-            // just navigating to /<servletname>/logout will not work, since
-            // the app ui is still in the background - until missing heartbeat will destroy it
 
             String buttonName;
             String message = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGOUT_SUCCESS);
@@ -123,7 +119,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             if (msg == null) {
                 showMessage = true;
                 Workarounds.setUserEnvForUi(environment);
-                NavigationUtil.ensureAppRoutPresentAndForward(factory.isSDIMode(), event, paramInfo);
+                NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
 
             } else if (! showMessage) {
                 showMessage = true;

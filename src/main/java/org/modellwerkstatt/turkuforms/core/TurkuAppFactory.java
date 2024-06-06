@@ -13,12 +13,13 @@ import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
 import org.modellwerkstatt.turkuforms.forms.TurkuTabForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuTable;
 import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.authmpreis.IPAuthLandingPage";
+    public final static String DEFAULT_AUTHENTICATOR_SDI = "org.modellwerkstatt.turkuforms.authmpreis.LdapAuthLandingPageSDI";
+
 
     private VaadinIconTranslator iconTranslator;
 
@@ -26,7 +27,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public static boolean onTheFly_allowEuroSignInDelegates = false;
 
     private boolean compactMode = false;
-    private boolean isSDIMode = false;
     private boolean singleAppInstanceMode = false;
 
     private boolean deployedVersionCheck = true;
@@ -78,10 +78,11 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public void setCompactMode(boolean val) { compactMode = val; }
 
     @Override
-    public boolean isSDIMode() {
-        return isSDIMode;
+    public void setSDIMode(boolean val) {
+        super.setSDIMode(val);
+        // bullshit, not set to false anyway.
+        authentiactorClassFqName = DEFAULT_AUTHENTICATOR_SDI;
     }
-    public void setSDIMode(boolean val) { isSDIMode = val; }
 
 
     @Override

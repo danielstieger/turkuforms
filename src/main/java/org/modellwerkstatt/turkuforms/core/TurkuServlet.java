@@ -141,7 +141,7 @@ public class TurkuServlet extends VaadinServlet {
         RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute("/home", HomeRedirect.class);
 
-        // V2 SDI tech demo stuff
+        // DEMO V2 SDI tech demo stuff
         RouteConfiguration.forApplicationScope().setRoute("/v2/login", LoginTestView.class);
         RouteConfiguration.forApplicationScope().setRoute("/v2/:path*", SdiTestWindow.class);
 

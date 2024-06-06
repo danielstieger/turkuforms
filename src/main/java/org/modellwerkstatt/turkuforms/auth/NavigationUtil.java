@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.RouteConfiguration;
-import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.LoginController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
@@ -13,7 +12,6 @@ import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
-import org.modellwerkstatt.turkuforms.sdicore.TurkuBrowserTab;
 
 @SuppressWarnings("unchecked")
 public class NavigationUtil {
@@ -31,13 +29,12 @@ public class NavigationUtil {
     }
 
 
-    public static void ensureAppRoutPresentAndForward(boolean isSdi, BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
-        Class appClass = isSdi ? TurkuBrowserTab.class : TurkuApp.class;
+    public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
 
         if (! RouteConfiguration.forSessionScope().getRoute("/home/:cmdName?").isPresent()) {
             // RouteConfiguration.forSessionScope().setRoute("/login", authenticatorCls);
             // RouteConfiguration.forSessionScope().setRoute("/logout", authenticatorCls);
-            RouteConfiguration.forSessionScope().setRoute("/home/:cmdName?", appClass);
+            RouteConfiguration.forSessionScope().setRoute("/home/:cmdName?", TurkuApp.class);
         }
 
         if (evOrNull == null) {

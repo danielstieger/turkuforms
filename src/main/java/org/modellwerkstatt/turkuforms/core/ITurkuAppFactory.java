@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.core;
 
-import com.vaadin.flow.server.VaadinRequest;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 
@@ -10,8 +9,6 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     String getOnLogoutMainLandingPath();
 
     boolean isCompactMode();
-
-    boolean isSDIMode();
 
     boolean isCheckDeployedVersion();
 

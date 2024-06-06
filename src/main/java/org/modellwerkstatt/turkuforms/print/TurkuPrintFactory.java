@@ -1,9 +1,9 @@
 package org.modellwerkstatt.turkuforms.print;
 
+import com.vaadin.flow.component.Component;
 import org.modellwerkstatt.objectflow.runtime.IOFXPrintFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.IPrintingServiceImpl;
-import org.modellwerkstatt.turkuforms.core.TurkuApp;
 
 public class TurkuPrintFactory implements IOFXPrintFactory {
     protected String templateClassLoaderFqName;
@@ -29,7 +29,7 @@ public class TurkuPrintFactory implements IOFXPrintFactory {
     }
 
     public IPrintingServiceImpl createConfiguredUserPrintService(Object tecHandle, IOFXUserEnvironment userEnvironment) {
-        TurkuApp appInstance = ((TurkuApp) tecHandle);
+        Component appInstance = ((Component) tecHandle);
         TurkuUserPrintService printService = new TurkuUserPrintService(
                 appInstance,
                 this.httpServedPath,

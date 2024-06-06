@@ -56,6 +56,7 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     public void focusTab(CmdUiTab tab) {
         int index = tabsInSheet.indexOf(tab);
         this.setSelectedIndex(index);
+
     }
 
     @Override
