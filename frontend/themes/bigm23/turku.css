@@ -98,6 +98,11 @@ vaadin-app-layout::part(navbar)::before {
     margin: 1em;
 }
 
+.MainwindowTileButton[disabled] {
+    color: var(--lumo-disabled-text-color) !important;
+    border-bottom: none !important;
+}
+
 .MainwindowTilesGrid {
     margin-top: 3em;
 }

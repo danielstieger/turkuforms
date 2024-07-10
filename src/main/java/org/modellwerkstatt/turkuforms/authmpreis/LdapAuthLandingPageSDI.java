@@ -24,7 +24,10 @@ import java.util.Map;
 
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
-
+/*
+ * Test SDI Infra for the sdicore ...
+ *
+ */
 public class LdapAuthLandingPageSDI extends HorizontalLayout implements BeforeEnterObserver, HasDynamicTitle {
     final static private String APP_IS_AT = "/home";
     private String title;

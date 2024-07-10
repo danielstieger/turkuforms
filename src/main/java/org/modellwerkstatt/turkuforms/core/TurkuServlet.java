@@ -145,7 +145,7 @@ public class TurkuServlet extends VaadinServlet {
         RouteConfiguration.forApplicationScope().setRoute("/v2/login", LoginTestView.class);
         RouteConfiguration.forApplicationScope().setRoute("/v2/:path*", SdiTestWindow.class);
 
-        Turku.l("TurkuServlet.servletInitialized() done successfully.");
+        Turku.l("TurkuServlet.servletInitialized() done successfully with " + authenticatorClass.getName());
     }
 
 

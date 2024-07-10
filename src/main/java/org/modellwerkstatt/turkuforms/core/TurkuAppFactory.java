@@ -46,6 +46,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
         // should be initialized in servlet
         onLogoutMainLandingPath = null;
+        // setSDIMode(true);
     }
 
     @Override
