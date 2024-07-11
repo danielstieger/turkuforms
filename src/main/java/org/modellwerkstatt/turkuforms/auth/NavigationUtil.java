@@ -12,37 +12,34 @@ import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 @SuppressWarnings("unchecked")
 public class NavigationUtil {
     public static final String WAS_ACTIVE_LOGOUT_PARAM = "wasActiveLogout";
-    public static final String TRY_RELOGIN = "tryRelogin";
     public static final String CMD_TO_START = "command";
     public static final String CMD_TO_START_PARAM = "param";
     public static final String OTHER_TABS_OPEN = "/static/othertabsopen.html";
-    public static final String SESSION_CLOSED_ON_SERVER = "/static/appclosed.html";
-
-
-
-    public static void forwareToLogin(ParamInfo paramInfo) {
-        UI.getCurrent().navigate("/login" + paramInfo.getParamsToForwardIfAny());
-    }
 
 
     public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
+        Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... ");
 
-        if (! RouteConfiguration.forSessionScope().getRoute("/home/:cmdName?").isPresent()) {
-            // RouteConfiguration.forSessionScope().setRoute("/login", authenticatorCls);
-            // RouteConfiguration.forSessionScope().setRoute("/logout", authenticatorCls);
-            // RouteConfiguration.forApplicationScope().removeRoute("/");
-            RouteConfiguration.forSessionScope().setRoute("/home/:cmdName?", TurkuApp.class);
+        if (! RouteConfiguration.forSessionScope().getRoute("/:cmdName?").isPresent()) {
+            // necessary, otherwise turkuApp will get login/logout as cmdName
+            RouteConfiguration.forSessionScope().setRoute(TurkuServlet.LOGIN_ROUTE, Workarounds.getCurrentTurkuServlet().getAuthenticatorClass());
+            RouteConfiguration.forSessionScope().setRoute(TurkuServlet.LOGOUT_ROUTE, Workarounds.getCurrentTurkuServlet().getAuthenticatorClass());
+
+            RouteConfiguration.forSessionScope().setRoute("/:cmdName?", TurkuApp.class);
         }
 
-        if (evOrNull == null) {
-            UI.getCurrent().navigate("/home/" + paramInfo.getParamsToForwardIfAny());
+        if (evOrNull != null) {
+            evOrNull.forwardTo("/" + paramInfo.getParamsToForwardIfAny());
 
         } else {
-            evOrNull.forwardTo("/home/" + paramInfo.getParamsToForwardIfAny());
+            UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
+
         }
     }
 

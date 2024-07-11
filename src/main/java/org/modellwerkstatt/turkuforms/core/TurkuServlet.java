@@ -12,7 +12,6 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.IM3DatabaseDescription;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
-import org.modellwerkstatt.turkuforms.auth.HomeRedirect;
 import org.modellwerkstatt.turkuforms.sditech.LoginTestView;
 import org.modellwerkstatt.turkuforms.sditech.SdiTestWindow;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -25,6 +24,11 @@ import javax.servlet.ServletException;
 
 @SuppressWarnings("unchecked")
 public class TurkuServlet extends VaadinServlet {
+    public static final String APP_ROUTE = "/";
+    public static final String LOGIN_ROUTE = "/login";
+    public static final String LOGOUT_ROUTE = "/logout";
+
+
     private String guessedServerName;
     private String deployedAsVersion;
     private String appBehaviorFqName;
@@ -120,7 +124,7 @@ public class TurkuServlet extends VaadinServlet {
         // as well as home screen
         String mainLandingPagePath = getInitParameter("mainLandingPagePath");
         if (mainLandingPagePath == null) {
-            mainLandingPagePath = servletPath;
+            mainLandingPagePath = servletPath + LOGOUT_ROUTE;
 
         } else if (mainLandingPagePath.charAt(0) != '/') {
             mainLandingPagePath = "/" + mainLandingPagePath;
@@ -136,16 +140,15 @@ public class TurkuServlet extends VaadinServlet {
 
         disableBrowserContextMenu = !"dandev".equals(guessedServerName);
 
-        RouteConfiguration.forApplicationScope().setRoute("/login", authenticatorClass);
-        RouteConfiguration.forApplicationScope().setRoute("/logout", authenticatorClass);
-        RouteConfiguration.forApplicationScope().setRoute("/", authenticatorClass);
-        RouteConfiguration.forApplicationScope().setRoute("/home", HomeRedirect.class);
+        RouteConfiguration.forApplicationScope().setRoute(LOGIN_ROUTE, authenticatorClass);
+        RouteConfiguration.forApplicationScope().setRoute(LOGOUT_ROUTE, authenticatorClass);
+        RouteConfiguration.forApplicationScope().setRoute(APP_ROUTE, SimpleHomeScreen.class);
 
         // DEMO V2 SDI tech demo stuff
         RouteConfiguration.forApplicationScope().setRoute("/v2/login", LoginTestView.class);
         RouteConfiguration.forApplicationScope().setRoute("/v2/:path*", SdiTestWindow.class);
 
-        Turku.l("TurkuServlet.servletInitialized() done successfully with " + authenticatorClass.getName());
+        Turku.l("TurkuServlet.servletInitialized() done successfully for '" + servletPath + "' with " + authenticatorClass.getName());
     }
 
 

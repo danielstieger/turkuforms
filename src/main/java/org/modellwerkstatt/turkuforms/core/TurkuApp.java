@@ -27,11 +27,13 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
+import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
@@ -61,9 +63,36 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
         if (userEnvironment == null) {
-            String msg = "API error! Sorry, the application can not be accessed directly via this url (login first?).";
+            // TurkuApp is available for session, but no userEnv? Directly navigated in a new Tab?
+            // Try to log in via principal, i.e. make a copy of the userenv ..
+
+            UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
+            if (userPrincipal == null) {
+
+                String msg = "API error! The application was accessible via url, but no user principal information found in current session.";
+                servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
+                quickUserInfo(msg);
+
+            } else {
+                UserEnvironmentInformation environment = new UserEnvironmentInformation();
+                String loginMsg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
+                if (loginMsg == null) {
+                    // we are logged in ... okay
+                    userEnvironment = environment;
+
+                } else {
+                    String msg = "API error! Tried to log in directly in the app with user principal from session, but '" + loginMsg + "'";
+                    servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
+                    quickUserInfo(msg);
+                }
+            }
+        }
+
+        if (userEnvironment == null) {
+            String msg = "API error! Can not start application, no user environment provied.";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
             quickUserInfo(msg);
+
 
         } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardGracefully() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardImmediate()) {
             String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";

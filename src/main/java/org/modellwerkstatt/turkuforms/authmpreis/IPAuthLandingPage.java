@@ -24,13 +24,11 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterObserver, HasDynamicTitle {
     private String title;
-    private boolean showMessage;
 
     public IPAuthLandingPage() {
         // default, not content in landing page
         // registered as / and /login
         setSizeFull();
-        showMessage = false;
     }
 
     @Override
@@ -42,13 +40,71 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
         title = servlet.getAppNameVersion();
         ParamInfo paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
-        String naviPath = event.getLocation().getPath();
+        String naviPath = "/" + event.getLocation().getPath();
         boolean otherCrtlPresent = vaadinSession.getSession().getAttributeNames()
                 .stream().anyMatch(TurkuApplicationController::isTurkuControllerAttribute);
 
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
-        if ("logout".equals(naviPath) || paramInfo.wasActiveLogout()) {
-            showMessage = true;
+
+
+        if (TurkuServlet.LOGIN_ROUTE.equals(naviPath)) {
+            // this should work, even in case other controllers are present ..
+
+            UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
+            if (userPrincipal == null) {
+                userPrincipal = new UserPrincipal(factory.getRemoteAddr(), "");
+                UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+            }
+
+            UserEnvironmentInformation environment = new UserEnvironmentInformation();
+            String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
+
+            if (msg == null) {
+                Workarounds.setUserEnvForUi(environment);
+                NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
+
+            } else if (otherCrtlPresent) {
+                // strange, this should have worked.
+                String notPossible = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_NOT_POSSIBLE);
+
+                setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), null, notPossible, () -> {
+                }));
+
+            } else {
+
+                setAsRoot(new SimpleLoginFormCmpt((username, password) -> {
+
+                    if (ldapService == null) {
+                        String message = "INTERNAL ERROR - NO LDAP SERVICE CONFIGURED! " + factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);
+                        return message;
+                    }
+
+                    boolean thisAuthenticated = ldapService.authenticateUser(username, password);
+
+                    if (!thisAuthenticated) {
+                        String failed = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);
+                        return failed;
+
+                    } else {
+                        UserPrincipal newPrinci = new UserPrincipal(username, password);
+                        UserPrincipal.setUserPrincipal(vaadinSession, newPrinci);
+
+                        UserEnvironmentInformation ldapUserEnv = new UserEnvironmentInformation();
+                        String viaLoginCrtl = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, ldapUserEnv, newPrinci.getUserName(), newPrinci.getPassword());
+
+                        if (viaLoginCrtl == null) {
+                            Workarounds.setUserEnvForUi(ldapUserEnv);
+                            NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
+                            return null;
+
+                        } else {
+                            return viaLoginCrtl;
+                        }
+                    }
+                }));
+            }
+
+        } else if (TurkuServlet.LOGOUT_ROUTE.equals(naviPath) || paramInfo.wasActiveLogout()) {
 
             String buttonName;
             String message = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGOUT_SUCCESS);
@@ -62,78 +118,11 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             }
 
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), buttonName, message, () -> {
-                // do not forward any params here, just a logout
-                if (otherCrtlPresent) {
-                    UI.getCurrent().navigate("/");
-                } else {
-                    UI.getCurrent().navigate("/login");
-                }
-
+                    UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
             }));
-
-        } else if ("login".equals(naviPath) && otherCrtlPresent) {
-            showMessage = true;
-
-            String msg = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_NOT_POSSIBLE);
-
-            setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), null, msg, () -> {
-            }));
-
-
-        } else if ("login".equals(naviPath)){
-            showMessage = true;
-
-            setAsRoot(new SimpleLoginFormCmpt((username, password) -> {
-
-                if (ldapService == null) {
-                    String message = "INTERNAL ERROR - NO LDAP SERVICE CONFIGURED! " + factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);
-                    return message;
-                }
-
-                boolean thisAuthenticated = ldapService.authenticateUser(username, password);
-
-                if (!thisAuthenticated) {
-                    String message = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);
-                    return message;
-
-                } else {
-                    UserPrincipal newPrinci = new UserPrincipal(username, password);
-                    UserPrincipal.setUserPrincipal(vaadinSession, newPrinci);
-                    UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
-                    return null;
-                }
-            }));
-
 
         } else {
-
-            UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
-            if (userPrincipal == null) {
-                userPrincipal = new UserPrincipal(factory.getRemoteAddr(), "");
-                UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
-            }
-
-            UserEnvironmentInformation environment = new UserEnvironmentInformation();
-            String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
-
-            if (msg == null) {
-                showMessage = true;
-                Workarounds.setUserEnvForUi(environment);
-                NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
-
-            } else if (! showMessage) {
-                showMessage = true;
-                event.forwardTo("/login" + paramInfo.getParamsToForwardIfAny());
-
-            } else {
-                String buttonName = factory.translateButtonLabel(factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_BUTTON), OK_HOKTEY);
-
-                setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), buttonName, msg, () -> {
-                    UI.getCurrent().navigate("/login" + paramInfo.getParamsToForwardIfAny());
-                }));
-
-            }
-
+            throw new RuntimeException("This can not happen. navipath is '" + naviPath + "'");
 
         }
     }

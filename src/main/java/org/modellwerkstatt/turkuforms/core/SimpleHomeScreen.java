@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.auth;
+package org.modellwerkstatt.turkuforms.core;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -10,17 +10,17 @@ import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.HOME_REDIRECT_PREFIX;
+import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.HOME_REDIRECT_PREFIX_LABEL;
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
-public class HomeRedirect extends VerticalLayout implements HasDynamicTitle {
+public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle {
 
     protected String appName;
 
-    public HomeRedirect() {
+    public SimpleHomeScreen() {
 
         appName = Workarounds.getCurrentTurkuServlet().getAppNameVersion();
-        String locationToForward = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
+        String locationToForward = Workarounds.getCurrentTurkuServlet().getActualServletUrl() + TurkuServlet.LOGIN_ROUTE;
 
         Span loginIdentityImage = new Span();
         loginIdentityImage.addClassName("DefaultLoginLogo");
@@ -32,7 +32,7 @@ public class HomeRedirect extends VerticalLayout implements HasDynamicTitle {
         add(appNameH1);
         setAlignSelf(Alignment.CENTER, appNameH1);
 
-        Button button = new Button (HOME_REDIRECT_PREFIX + " " + appName, event -> {
+        Button button = new Button (HOME_REDIRECT_PREFIX_LABEL + " " + appName, event -> {
             VaadinSession.getCurrent().getSession().invalidate();
             UI.getCurrent().getPage().setLocation(locationToForward);
         });

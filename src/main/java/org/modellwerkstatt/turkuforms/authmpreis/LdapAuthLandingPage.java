@@ -43,7 +43,11 @@ public class LdapAuthLandingPage extends HorizontalLayout implements BeforeEnter
                 .stream().anyMatch(TurkuApplicationController::isTurkuControllerAttribute);
         UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
 
-        Turku.l("LdapAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
+        Turku.l("LdapAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al=" + paramInfo.wasActiveLogout());
+
+
+        if (TurkuServlet.LOGIN_ROUTE.equals(naviPath))
+
         if ("logout".equals(naviPath) || paramInfo.wasActiveLogout()) {
             String buttonName;
             String message = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGOUT_SUCCESS);

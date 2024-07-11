@@ -44,12 +44,11 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void onShortcut(ShortcutEvent event) {
 
         String keyName = HkTranslate.trans(event.getKey());
-        Turku.l(getClass().getSimpleName() + ".onShortcut() received " + keyName);
+        Turku.l(getClass().getSimpleName() + ".onShortcut() received " + keyName + " for " + cmdContainer);
 
         // e.g. ESC problem, closing multiple GO s from Search
         if (Workarounds.sameHkInThisRequest(keyName)) { return; }
 
-        // no longer necessary, Dan Feb, 2024
         OFXConclusionInformation conclusion = conclusionInformations.stream().filter(e -> keyName.equals(e.hotkey)).findFirst().orElse(null);
 
         if (conclusion != null && conclusion.enabled) {
