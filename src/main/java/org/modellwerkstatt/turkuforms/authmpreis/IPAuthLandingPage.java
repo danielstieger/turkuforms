@@ -7,6 +7,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
@@ -31,6 +32,11 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         setSizeFull();
     }
 
+
+    protected  UserPrincipal tryIpLogin(ITurkuAppFactory factory) {
+        return new UserPrincipal(factory.getRemoteAddr(), "");
+    }
+
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
@@ -51,20 +57,33 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             // this should work, even in case other controllers are present ..
 
             UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
+
             if (userPrincipal == null) {
-                userPrincipal = new UserPrincipal(factory.getRemoteAddr(), "");
-                UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+                userPrincipal = tryIpLogin(factory);
             }
 
-            UserEnvironmentInformation environment = new UserEnvironmentInformation();
-            String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
 
-            if (msg == null) {
-                Workarounds.setUserEnvForUi(environment);
-                NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
+            boolean loginDone = false;
+            if (userPrincipal != null) {
+                // try auto login
+                UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+                UserEnvironmentInformation environment = new UserEnvironmentInformation();
+                String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
+
+                if (msg == null) {
+                    loginDone = true;
+                    Workarounds.setUserEnvForUi(environment);
+                    NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
+                }
+
+            }
+
+            if (loginDone) {
+                // no action needed here.
 
             } else if (otherCrtlPresent) {
-                // strange, this should have worked.
+                // strange, this should happen actually. In case otherCrtl is present, we should also have a valid
+                // userprincipal ..
                 String notPossible = factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_NOT_POSSIBLE);
 
                 setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), null, notPossible, () -> {
