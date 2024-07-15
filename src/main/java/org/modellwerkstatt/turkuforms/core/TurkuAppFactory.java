@@ -111,7 +111,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         return authentiactorClassFqName;
     }
 
-    public void setAuthenticatorName(String fqName) {
+    public void setAuthenticatorClassFqName(String fqName) {
         authentiactorClassFqName = fqName;
     }
 

@@ -189,7 +189,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         Turku.l("parDeploymentForwardNow() invalidated is " + invalidated);
 
-        String redirectTo = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
+        String redirectTo = Workarounds.getCurrentTurkuServlet().getActualServletUrl() + TurkuServlet.LOGIN_ROUTE;
 
         if (! invalidated) {
             UI.getCurrent().getPage().setLocation(redirectTo + NavigationUtil.OTHER_TABS_OPEN);
