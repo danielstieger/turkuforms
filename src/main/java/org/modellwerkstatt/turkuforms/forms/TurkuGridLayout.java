@@ -42,6 +42,10 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
     }
 
+    @Override
+    public void skipFocus(int i) {
+        focusController.skipFocus(i);
+    }
 
     @Override
     public void setLayoutConstraints(List<String> colConstraints, List<String> rowConstraints) {
