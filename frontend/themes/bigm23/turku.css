@@ -20,8 +20,10 @@ vaadin-tooltip-overlay::part(content) {
 @media screen and (max-width: 810px) {
 
     .BottomConclusionButtons {
-        flex-wrap: wrap-reverse !important;
-        flex-direction: row-reverse;
+       /*
+        * flex-wrap: wrap-reverse !important;
+        * flex-direction: row-reverse;
+        */
     }
     .BottomConclusionButtons .LeftRightFlexSpacer {
         display: none;

@@ -35,7 +35,7 @@ public class SimpleLoginFormCmpt extends HorizontalLayout {
     protected OnLogin onLoginCallback;
 
 
-    public SimpleLoginFormCmpt(OnLogin onLogin) {
+    public SimpleLoginFormCmpt(String userNameDefault, OnLogin onLogin) {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         ITurkuAppFactory factory = servlet.getUiFactory();
 
@@ -61,6 +61,7 @@ public class SimpleLoginFormCmpt extends HorizontalLayout {
             passwordField.setValue("");
             passwordField.focus();
         });
+        userNameField.setValue(userNameDefault);
 
         passwordField = new PasswordField(factory.getSystemLabel(-1, MoWareTranslations.Key.PASSWORD));
         passwordField.addClassName("DefaultLoginContentWidth");
@@ -110,6 +111,7 @@ public class SimpleLoginFormCmpt extends HorizontalLayout {
         String msg = onLoginCallback.process(userName, password);
         if (msg != null) {
             messageDiv.setText(msg);
+            userNameField.focus();
         }
     }
 

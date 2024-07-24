@@ -18,7 +18,7 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
     protected String cachedFormatKey;
     protected boolean isInvalid;
 
-    public DatePickerEditor() {
+    public DatePickerEditor(DatePicker.DatePickerI18n extI18n) {
         super(new DatePicker());
         inputField.addThemeVariants(DatePickerVariant.LUMO_SMALL);
         inputField.setSizeFull();
@@ -28,6 +28,8 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
         inputField.setMax(LocalDate.of(2049, 1, 1));
         inputField.setMin(LocalDate.of(1951, 1, 1));
 
+
+        inputField.setI18n(extI18n);
 
         Peculiar.focusMoveEnterHk(false, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
         Peculiar.focusMoveEnterHk(true, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
@@ -93,7 +95,7 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
             Locale loc = Locale.forLanguageTag(locale);
             inputField.setLocale(loc);
 
-            DatePicker.DatePickerI18n i18n = new DatePicker.DatePickerI18n();
+            DatePicker.DatePickerI18n i18n = inputField.getI18n();
             i18n.setReferenceDate(LocalDate.of(MoWareFormattersFactory.PIVOT_YEAR, 1, 1));
             i18n.setDateFormat(format);
             inputField.setI18n(i18n);

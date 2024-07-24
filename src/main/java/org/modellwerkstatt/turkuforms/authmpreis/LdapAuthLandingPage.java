@@ -30,7 +30,7 @@ public class LdapAuthLandingPage extends IPAuthLandingPage implements BeforeEnte
     }
 
     @Override
-    protected UserPrincipal tryIpLogin(ITurkuAppFactory factory) {
+    protected UserPrincipal tryIpOrParamLogin(ParamInfo params, ITurkuAppFactory factory) {
         return null;
     }
 }

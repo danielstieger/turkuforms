@@ -20,6 +20,7 @@ public class NavigationUtil {
     public static final String WAS_ACTIVE_LOGOUT_PARAM = "wasActiveLogout";
     public static final String CMD_TO_START = "command";
     public static final String CMD_TO_START_PARAM = "param";
+    public static final String USERNAME_PARAM = "username";
     public static final String OTHER_TABS_OPEN = "/static/othertabsopen.html";
 
 

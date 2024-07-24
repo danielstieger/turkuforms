@@ -21,7 +21,7 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
     protected String cachedFormatKey;
     protected boolean isInvalid;
 
-    public DateTimePickerEditor() {
+    public DateTimePickerEditor(DatePicker.DatePickerI18n extI18n) {
         super(new DateTimePicker());
         inputField.addThemeVariants(DateTimePickerVariant.LUMO_SMALL);
         // inputField.setSizeFull();
@@ -29,6 +29,7 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
         inputField.setMax(LocalDateTime.of(2049, 1, 1, 1, 0));
         inputField.setMin(LocalDateTime.of(1951, 1, 1, 1, 0));
         inputField.setStep(Duration.ofMinutes(1));
+        inputField.setDatePickerI18n(extI18n);
 
         inputField.addAttachListener(e -> {
             inputField.getElement().executeJs("turku.adjustDateTimeTimePicker($0)", inputField.getElement());
@@ -118,7 +119,7 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
             Locale loc = Locale.forLanguageTag(locale);
             inputField.setLocale(loc);
 
-            DatePicker.DatePickerI18n i18n = new DatePicker.DatePickerI18n();
+            DatePicker.DatePickerI18n i18n = inputField.getDatePickerI18n();
             i18n.setReferenceDate(LocalDate.of(MoWareFormattersFactory.PIVOT_YEAR, 1, 1));
             i18n.setDateFormat(dateFormat);
             inputField.setDatePickerI18n(i18n);

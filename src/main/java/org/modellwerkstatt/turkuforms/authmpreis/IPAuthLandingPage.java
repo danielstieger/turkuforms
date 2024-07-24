@@ -7,7 +7,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
@@ -33,8 +32,10 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
     }
 
 
-    protected  UserPrincipal tryIpLogin(ITurkuAppFactory factory) {
-        return new UserPrincipal(factory.getRemoteAddr(), "");
+    protected  UserPrincipal tryIpOrParamLogin(ParamInfo params, ITurkuAppFactory factory) {
+        String name = factory.getRemoteAddr();
+        if (params.hasUsername()) { name = params.getUsername(); }
+        return new UserPrincipal(name, "");
     }
 
     @Override
@@ -57,9 +58,10 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             // this should work, even in case other controllers are present ..
 
             UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
+            String userNameDefault = paramInfo.hasUsername() ? paramInfo.getUsername() : "";
 
             if (userPrincipal == null) {
-                userPrincipal = tryIpLogin(factory);
+                userPrincipal = tryIpOrParamLogin(paramInfo, factory);
             }
 
 
@@ -91,7 +93,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
             } else {
 
-                setAsRoot(new SimpleLoginFormCmpt((username, password) -> {
+                setAsRoot(new SimpleLoginFormCmpt(userNameDefault, (username, password) -> {
 
                     if (ldapService == null) {
                         String message = "INTERNAL ERROR - NO LDAP SERVICE CONFIGURED! " + factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);

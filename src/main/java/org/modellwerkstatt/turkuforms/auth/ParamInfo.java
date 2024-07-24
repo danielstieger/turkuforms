@@ -5,8 +5,7 @@ import com.vaadin.flow.router.QueryParameters;
 import java.util.List;
 import java.util.Map;
 
-import static org.modellwerkstatt.turkuforms.auth.NavigationUtil.CMD_TO_START;
-import static org.modellwerkstatt.turkuforms.auth.NavigationUtil.CMD_TO_START_PARAM;
+import static org.modellwerkstatt.turkuforms.auth.NavigationUtil.*;
 
 public class ParamInfo {
     private Map<String, List<String>> params;
@@ -45,4 +44,7 @@ public class ParamInfo {
 
         return sb.toString();
     }
+
+    public boolean hasUsername() { return params.containsKey(USERNAME_PARAM); }
+    public String getUsername() { return params.get(USERNAME_PARAM).get(0); }
 }

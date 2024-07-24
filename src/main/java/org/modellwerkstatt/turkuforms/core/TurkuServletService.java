@@ -92,8 +92,9 @@ public class TurkuServletService extends VaadinServletService {
                 long reqTime = session.getLastRequestDuration();
 
                 if (reqTime >= MPreisAppConfig.REQUEST_TIME_REPORTING_THRESHOLD) {
-                    String remoteAddr = "" + session.getSession().getAttribute(TurkuApplicationController.REMOTE_SESSIONATTRIB);
-                    String userName = "" + session.getSession().getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
+                    WrappedSession httpSession = session.getSession();
+                    String remoteAddr = "" + httpSession.getAttribute(TurkuApplicationController.REMOTE_SESSIONATTRIB);
+                    String userName = "" + httpSession.getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
                     jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some turku interaction", startTime);
                 }
 

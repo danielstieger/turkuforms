@@ -75,7 +75,7 @@ public class LdapAuthLandingPageSDI extends HorizontalLayout implements BeforeEn
 
         } else {
 
-            setAsRoot(new SimpleLoginFormCmpt((username, password) -> {
+            setAsRoot(new SimpleLoginFormCmpt("", (username, password) -> {
 
                 if (ldapService == null) {
                     String message = "INTERNAL ERROR - NO LDAP SERVICE CONFIGURED! " + factory.getSystemLabel(-1, MoWareTranslations.Key.LOGIN_FAILED);

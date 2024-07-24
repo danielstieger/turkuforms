@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.core;
 
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
@@ -15,6 +16,8 @@ import org.modellwerkstatt.turkuforms.forms.TurkuTable;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
+
+import java.util.List;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.authmpreis.IPAuthLandingPage";
@@ -183,7 +186,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     @Override
     public IToolkit_DateOrTimeEditor createDateEditor(boolean withPicker) {
         if (withPicker) {
-            return new DatePickerEditor();
+            return new DatePickerEditor(createGermanI18n());
         } else {
             return new TextEditor(TextEditor.ConfigOption.FOR_LOCALDATE);
         }
@@ -193,7 +196,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     @Override
     public IToolkit_DateOrTimeEditor createDateAndTimeEditor(boolean withPicker) {
         if (withPicker) {
-            return new DateTimePickerEditor();
+            return new DateTimePickerEditor(createGermanI18n());
         } else {
             return new TextEditor(TextEditor.ConfigOption.FOR_DATETIME);
         }
@@ -233,5 +236,19 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         }
 
         return fullLabel;
+    }
+
+
+    public static DatePicker.DatePickerI18n createGermanI18n() {
+        DatePicker.DatePickerI18n dpI18n = new DatePicker.DatePickerI18n();
+        dpI18n.setDateFormat("dd.MM.yyyy");
+        dpI18n.setFirstDayOfWeek(1);
+        dpI18n.setToday("Heute");
+        dpI18n.setCancel("Abbrechen");
+        dpI18n.setMonthNames(List.of("Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
+                "August", "September", "Oktober", "November", "Dezember"));
+        dpI18n.setWeekdays(List.of("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"));
+        dpI18n.setWeekdaysShort(List.of("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"));
+        return dpI18n;
     }
 }
