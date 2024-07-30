@@ -6,6 +6,7 @@
  */
 
 window.turku = {
+    confirmCloseQuestionEnabled: false,
 
     adjustDateTimeTimePicker : function(element) {
         var picker = element.querySelector('vaadin-date-time-picker-time-picker');
@@ -74,6 +75,27 @@ window.turku = {
         });
 
         console.log('turku.installBeacon() Beacon installed for ' + servletUrl + " and ui " + uiid);
+    },
+
+    installCloseConfirmHandler: function(ev) {
+        if (window.Vaadin.connectionState.connectionState == 'connected') {
+            ev.preventDefault();
+            // Chrome requires returnValue to be set
+            ev.returnValue = 'There are unsaved changes!';
+        }
+    },
+    installCloseConfirm: function(installOrRemove) {
+
+        console.log('turku.installCloseConfirm() installing [' + installOrRemove + "] or removing... ");
+
+        if (installOrRemove) {
+            window.addEventListener('beforeunload', window.turku.installCloseConfirmHandler);
+
+        } else {
+            window.removeEventListener('beforeunload', window.turku.installCloseConfirmHandler);
+
+        }
+
     },
 
     setTurkuCommandColor(forComponent, colorString) {

@@ -137,6 +137,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     }
 
     @Override
+    public void installCloseConfirmQuestion(boolean installOrRemove) {
+        this.getElement().executeJs("turku.installCloseConfirm($0)", installOrRemove);
+    }
+
+    @Override
     protected void onDetach(DetachEvent detachEvent) {
         super.onDetach(detachEvent);
 

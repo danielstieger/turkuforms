@@ -211,6 +211,11 @@ public class TurkuBrowserTab extends SdiLayout implements IToolkit_MainWindow, B
         // TODO: How do we handle the user requested shutdown.
     }
 
+    @Override
+    public void installCloseConfirmQuestion(boolean b) {
+
+    }
+
     protected void quickUserInfo(String msg) {
         Notification notification = new Notification();
         notification.setPosition(Notification.Position.TOP_CENTER);
