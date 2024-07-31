@@ -32,7 +32,9 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle 
         add(appNameH1);
         setAlignSelf(Alignment.CENTER, appNameH1);
 
-        Button button = new Button (HOME_REDIRECT_PREFIX_LABEL + " " + appName, event -> {
+
+        String buttonLabel = HOME_REDIRECT_PREFIX_LABEL + " " + appName + " (" + OK_HOKTEY + ")";
+        Button button = new Button (buttonLabel , event -> {
             VaadinSession.getCurrent().getSession().invalidate();
             UI.getCurrent().getPage().setLocation(locationToForward);
         });
