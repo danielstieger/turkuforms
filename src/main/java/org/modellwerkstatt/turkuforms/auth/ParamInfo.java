@@ -35,14 +35,24 @@ public class ParamInfo {
         StringBuilder sb = new StringBuilder();
 
         if (hasCommandToStart()) {
-            sb.append("?"+ CMD_TO_START + "=" + getCommandToStart());
+            sb.append(CMD_TO_START + "=" + getCommandToStart());
 
             if (params.containsKey(CMD_TO_START_PARAM)) {
                 sb.append("&" + CMD_TO_START_PARAM + "=" + params.get(CMD_TO_START_PARAM).get(0));
             }
         }
 
-        return sb.toString();
+        if (hasUsername()) {
+            if (sb.length() > 0) { sb.append("&"); }
+            sb.append(USERNAME_PARAM + "=" + getUsername());
+        }
+
+
+        if (sb.length() > 0) {
+            return "?" + sb.toString();
+        } else {
+            return "";
+        }
     }
 
     public boolean hasUsername() { return params.containsKey(USERNAME_PARAM); }

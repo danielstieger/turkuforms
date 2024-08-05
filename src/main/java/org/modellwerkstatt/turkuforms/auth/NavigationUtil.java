@@ -36,7 +36,8 @@ public class NavigationUtil {
         }
 
         if (evOrNull != null) {
-            evOrNull.forwardTo("/" + paramInfo.getParamsToForwardIfAny());
+            // this will take over the params also ..
+            evOrNull.forwardTo("/");
 
         } else {
             UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
