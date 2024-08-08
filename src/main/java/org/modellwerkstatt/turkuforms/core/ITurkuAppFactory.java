@@ -26,4 +26,6 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     String getRemoteAddr();
 
+    void setSDIMode(boolean val);
+
 }

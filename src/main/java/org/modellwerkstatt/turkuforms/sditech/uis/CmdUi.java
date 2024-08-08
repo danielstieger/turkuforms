@@ -43,6 +43,13 @@ public class CmdUi extends VerticalLayout {
         }));
 
 
+        add(new Button("Close window ", buttonClickEvent -> {
+
+            this.getElement().executeJs("turku.closeTab()");
+            Notification.show("Close executed ..");
+        }));
+
+
 
     }
 }

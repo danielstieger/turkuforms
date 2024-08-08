@@ -6,7 +6,6 @@
  */
 
 window.turku = {
-    confirmCloseQuestionEnabled: false,
 
     adjustDateTimeTimePicker : function(element) {
         var picker = element.querySelector('vaadin-date-time-picker-time-picker');
@@ -104,6 +103,7 @@ window.turku = {
     },
 
     closeTab: function() {
+        console.log('Turku.closeTab() closing tab now ....');
         window.close();
     },
 

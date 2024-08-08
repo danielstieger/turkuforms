@@ -109,6 +109,7 @@ public class TurkuServlet extends VaadinServlet {
             appContext.getBean(IM3DatabaseDescription.class).setSessionInfo(appNameVersion + " " + guessedServerName);
 
             appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
+
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
 
         } catch (ClassNotFoundException | BeansException e) {
