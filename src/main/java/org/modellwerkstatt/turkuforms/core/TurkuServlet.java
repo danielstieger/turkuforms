@@ -12,8 +12,8 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.IM3DatabaseDescription;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
-import org.modellwerkstatt.turkuforms.sditech.LoginTestView;
-import org.modellwerkstatt.turkuforms.sditech.SdiTestWindow;
+import org.modellwerkstatt.turkuforms.sdidemo.LoginTestView;
+import org.modellwerkstatt.turkuforms.sdidemo.SdiTestWindow;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.springframework.beans.BeansException;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -24,7 +24,7 @@ import javax.servlet.ServletException;
 
 @SuppressWarnings("unchecked")
 public class TurkuServlet extends VaadinServlet {
-    public static final String APP_ROUTE = "/";
+    public static final String APP_ROUTE = "/:path*";
     public static final String LOGIN_ROUTE = "/login";
     public static final String LOGOUT_ROUTE = "/logout";
 
@@ -36,6 +36,7 @@ public class TurkuServlet extends VaadinServlet {
     private ITurkuAppFactory appFactory;
     private AppJmxRegistration jmxRegistration;
     private Class authenticatorClass;
+    private Class turkuAppImplClass;
     private String appNameVersion;
     private String actualServletUrl;
     private boolean disableBrowserContextMenu;
@@ -61,6 +62,8 @@ public class TurkuServlet extends VaadinServlet {
 
     public String getAppNameVersion() { return appNameVersion; }
     public Class getAuthenticatorClass() { return authenticatorClass; }
+    public Class getTurkuAppImplClass() { return turkuAppImplClass; }
+
 
     public boolean isDisableBrowserContextMenu() { return disableBrowserContextMenu; }
 
@@ -111,6 +114,7 @@ public class TurkuServlet extends VaadinServlet {
             appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
 
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
+            turkuAppImplClass = classLoader.loadClass(appFactory.getTurkuAppImplClassFqName());
 
         } catch (ClassNotFoundException | BeansException e) {
             Turku.l("TurkuServlet.servletInitialized() " + e.getMessage() + "\n" + OFXConsoleHelper.stackTrace2String(e));

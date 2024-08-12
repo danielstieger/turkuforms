@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.sdicore;
+package org.modellwerkstatt.turkuforms.sdi;
 
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;

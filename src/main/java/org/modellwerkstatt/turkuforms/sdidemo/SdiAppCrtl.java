@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.sditech;
+package org.modellwerkstatt.turkuforms.sdidemo;
 
 
 import java.util.ArrayList;

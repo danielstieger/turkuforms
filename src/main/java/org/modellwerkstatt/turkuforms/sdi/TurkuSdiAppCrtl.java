@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.sdicore;
+package org.modellwerkstatt.turkuforms.sdi;
 
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.sdicore.ApplicationSDI;

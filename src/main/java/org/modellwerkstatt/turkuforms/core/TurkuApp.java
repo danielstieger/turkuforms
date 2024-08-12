@@ -24,10 +24,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
-import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
-import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
-import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
-import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
+import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
@@ -145,7 +142,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     protected void onDetach(DetachEvent detachEvent) {
         super.onDetach(detachEvent);
 
-
+        Turku.l(OFXConsoleHelper._____organizeCurrentStacktrace_____());
         // TODO: relying on beacon api, remove heartbeat logic?
         boolean closedByHeartBeat = Workarounds.closedByMissingHearbeat();
         Turku.l("TurkuApp.onDetach(): closedByHeartBeat "+ closedByHeartBeat);
@@ -167,8 +164,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             quickUserInfo("API Error! Sorry, reloading this application does not work . . .");
         }
 
-        if (applicationController != null && initialStartupParams.hasCommandToStart()) {
-            applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStart(), initialStartupParams.getFirstParam());
+        if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
+            applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
         }
 
         Turku.l("TurkuApp.beforeEnter() done.");

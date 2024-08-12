@@ -15,27 +15,36 @@ import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unchecked")
 public class NavigationUtil {
     public static final String WAS_ACTIVE_LOGOUT_PARAM = "wasActiveLogout";
     public static final String CMD_TO_START = "command";
     public static final String CMD_TO_START_PARAM = "param";
     public static final String USERNAME_PARAM = "username";
+    public static final String REROUTE_TO = "reroute";
     public static final String OTHER_TABS_OPEN = "/static/othertabsopen.html";
 
 
     public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
-        Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... ");
+        Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... app route present: " + RouteConfiguration.forSessionScope().isRouteRegistered(TurkuApp.class));
+        TurkuServlet theServlet = Workarounds.getCurrentTurkuServlet();
 
-        if (! RouteConfiguration.forSessionScope().getRoute("/:cmdName?").isPresent()) {
+        if (! RouteConfiguration.forSessionScope().isRouteRegistered(theServlet.getTurkuAppImplClass())) {
             // necessary, otherwise turkuApp will get login/logout as cmdName
             RouteConfiguration.forSessionScope().setRoute(TurkuServlet.LOGIN_ROUTE, Workarounds.getCurrentTurkuServlet().getAuthenticatorClass());
             RouteConfiguration.forSessionScope().setRoute(TurkuServlet.LOGOUT_ROUTE, Workarounds.getCurrentTurkuServlet().getAuthenticatorClass());
 
-            RouteConfiguration.forSessionScope().setRoute("/:cmdName?", TurkuApp.class);
+            RouteConfiguration.forApplicationScope().removeRoute("/:path*");
+            RouteConfiguration.forSessionScope().setRoute("/:path*", theServlet.getTurkuAppImplClass());
         }
 
-        if (evOrNull != null) {
+        if (paramInfo.hasReroute()) {
+            UI.getCurrent().getPage().setLocation(theServlet.getActualServletUrl() + paramInfo.getReroute());
+
+        } else if (evOrNull != null) {
             // this will take over the params also ..
             evOrNull.forwardTo("/");
 

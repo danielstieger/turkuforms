@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.sditech;
+package org.modellwerkstatt.turkuforms.sdidemo;
 
 import com.vaadin.flow.server.VaadinSession;
 

@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.sdicore;
+package org.modellwerkstatt.turkuforms.sdi;
 
 import com.vaadin.experimental.Feature;
 import com.vaadin.experimental.FeatureFlags;

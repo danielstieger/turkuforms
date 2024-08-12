@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.sditech;
+package org.modellwerkstatt.turkuforms.sdidemo;
 
 public class Cmd {
     public String cmdName;

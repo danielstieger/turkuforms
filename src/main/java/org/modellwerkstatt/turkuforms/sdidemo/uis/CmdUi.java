@@ -1,13 +1,13 @@
-package org.modellwerkstatt.turkuforms.sditech.uis;
+package org.modellwerkstatt.turkuforms.sdidemo.uis;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.modellwerkstatt.turkuforms.sditech.Cmd;
-import org.modellwerkstatt.turkuforms.sditech.EventCommandContainer;
-import org.modellwerkstatt.turkuforms.sditech.SdiAppCrtl;
+import org.modellwerkstatt.turkuforms.sdidemo.Cmd;
+import org.modellwerkstatt.turkuforms.sdidemo.EventCommandContainer;
+import org.modellwerkstatt.turkuforms.sdidemo.SdiAppCrtl;
 
 public class CmdUi extends VerticalLayout {
     private Cmd cmd;

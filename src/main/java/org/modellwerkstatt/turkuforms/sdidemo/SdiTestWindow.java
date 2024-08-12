@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.sditech;
+package org.modellwerkstatt.turkuforms.sdidemo;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Label;
@@ -7,7 +7,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveObserver;
-import org.modellwerkstatt.turkuforms.sditech.uis.CmdUi;
+import org.modellwerkstatt.turkuforms.sdidemo.uis.CmdUi;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 

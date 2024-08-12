@@ -72,6 +72,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     }
 
     public void shutdownOtherExistingControllers(VaadinSession vaadinSession){
+        Turku.l("TurkuApplicationController.shutdownOtherExistingControllers()");
         WrappedSession session = vaadinSession.getSession();
         String own = appCrtlSessionName();
 

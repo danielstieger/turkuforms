@@ -21,8 +21,7 @@ import java.util.List;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.authmpreis.IPAuthLandingPage";
-    public final static String DEFAULT_AUTHENTICATOR_SDI = "org.modellwerkstatt.turkuforms.authmpreis.LdapAuthLandingPageSDI";
-
+    public final static String DEFAULT_TURKUAPPIMPL = "org.modellwerkstatt.turkuforms.core.TurkuApp";
 
     private VaadinIconTranslator iconTranslator;
 
@@ -36,6 +35,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private boolean autoParDeploymentForwardGracefully = false;
     private String onLogoutMainLandingPath;
     private String authentiactorClassFqName;
+    private String turkuAppImplClassFqName;
 
 
     // Empty, app has to handle stuff, i.e. empty = return full path
@@ -46,10 +46,11 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
         iconTranslator = new MaterialIconsTranslator();
         authentiactorClassFqName = DEFAULT_AUTHENTICATOR;
+        turkuAppImplClassFqName = DEFAULT_TURKUAPPIMPL;
+        turkuAppImplClassFqName = "org.modellwerkstatt.turkuforms.sdi.TurkuBrowserTab";
 
         // should be initialized in servlet
         onLogoutMainLandingPath = null;
-        // setSDIMode(true);
     }
 
     @Override
@@ -82,14 +83,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public void setCompactMode(boolean val) { compactMode = val; }
 
     @Override
-    public void setSDIMode(boolean val) {
-        super.setSDIMode(val);
-        // bullshit, not set to false anyway.
-        authentiactorClassFqName = DEFAULT_AUTHENTICATOR_SDI;
-    }
-
-
-    @Override
     public boolean isSingleAppInstanceMode() { return singleAppInstanceMode; }
     public void setSingleAppInstanceMode(boolean val) { singleAppInstanceMode = val; }
 
@@ -117,6 +110,14 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public void setAuthenticatorClassFqName(String fqName) {
         authentiactorClassFqName = fqName;
     }
+
+    @Override
+    public String getTurkuAppImplClassFqName() {
+        return turkuAppImplClassFqName;
+    }
+
+    public void setTurkuAppImplClassFqName(String fqName) { turkuAppImplClassFqName = fqName; }
+
 
     @Override
     public boolean useBackgroundThread() {

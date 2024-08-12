@@ -16,6 +16,9 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     String getAuthenticatorClassFqName();
 
+    String getTurkuAppImplClassFqName();
+
+
     IMoLdapService getLdapServiceIfPresent();
 
     String translateIconName(String name);
@@ -25,7 +28,4 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     boolean isAutoParDeploymentForwardGracefully();
 
     String getRemoteAddr();
-
-    void setSDIMode(boolean val);
-
 }

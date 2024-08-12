@@ -1,6 +1,6 @@
-package org.modellwerkstatt.turkuforms.sditech;
+package org.modellwerkstatt.turkuforms.sdidemo;
 
-import org.modellwerkstatt.turkuforms.sditech.uis.CmdUi;
+import org.modellwerkstatt.turkuforms.sdidemo.uis.CmdUi;
 
 public interface IToolkit_Window {
 
