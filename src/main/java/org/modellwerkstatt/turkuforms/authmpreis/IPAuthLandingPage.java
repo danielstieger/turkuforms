@@ -74,7 +74,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
                 if (msg == null) {
                     loginDone = true;
-                    Workarounds.setUserEnvForUi(environment);
+                    NavigationUtil.setUserEnvForUi(environment);
                     NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
                 }
 
@@ -114,7 +114,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                         String viaLoginCrtl = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, ldapUserEnv, newPrinci.getUserName(), newPrinci.getPassword());
 
                         if (viaLoginCrtl == null) {
-                            Workarounds.setUserEnvForUi(ldapUserEnv);
+                            NavigationUtil.setUserEnvForUi(ldapUserEnv);
                             NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
                             return null;
 

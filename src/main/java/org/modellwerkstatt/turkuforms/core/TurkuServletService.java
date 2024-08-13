@@ -38,7 +38,7 @@ public class TurkuServletService extends VaadinServletService {
 
         if (theUi != null && !Workarounds.isHeartBeatRequest(request)) {
 
-            TurkuApplicationController crtl = Workarounds.getControllerFormUi(theUi);
+            IAppCrtlAccess crtl = Workarounds.getControllerFormUi(theUi);
             if (crtl != null) {
                 crtl.startRequest(request.hashCode());
             }
@@ -85,7 +85,7 @@ public class TurkuServletService extends VaadinServletService {
 
 
         if (!isVaadinHeartBeat && currentUI != null) {
-            TurkuApplicationController appCrtl = Workarounds.getControllerFormUi(currentUI);
+            IAppCrtlAccess appCrtl = Workarounds.getControllerFormUi(currentUI);
             if (appCrtl != null) { // not login views etc.
                 appCrtl.setuser_connectionInfoAddOn(onWebSocket);
                 long startTime = appCrtl.requestDone();
@@ -116,9 +116,8 @@ public class TurkuServletService extends VaadinServletService {
                 if (uiToClose != null) {
                     Turku.l("TurkuServletService.requestEnd() BEACON calling close on " + uiToClose + " now.");
 
-
                     uiToClose.access(() -> {
-                        TurkuApplicationController crtl = Workarounds.getControllerFormUi(uiToClose);
+                        IAppCrtlAccess crtl = Workarounds.getControllerFormUi(uiToClose);
                         if (crtl != null) { crtl.closeAppCrtlMissingHearbeatOrBeacon(session); }
                         // detach() might not be called imdtly upon ui.close()
                         uiToClose.close();

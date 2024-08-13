@@ -10,9 +10,11 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
+import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.sdi.SdiAppCrtl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -56,7 +58,7 @@ public class Workarounds {
     }
 
     public static boolean sameHkInThisRequest(String hk) {
-        TurkuApplicationController crtl = Workarounds.getControllerFormUi(UI.getCurrent());
+        IAppCrtlAccess crtl = Workarounds.getControllerFormUi(UI.getCurrent());
         return crtl.sameHkInThisRequest(hk);
     }
 
@@ -84,21 +86,23 @@ public class Workarounds {
         return (TurkuServlet) VaadinServlet.getCurrent();
     }
 
-    public static TurkuApplicationController getControllerFormUi(UI ui) {
+    public static IAppCrtlAccess getControllerFormUi(UI ui) {
         Component mainComponent = ui.getChildren().findFirst().orElse(null);
 
         if (mainComponent instanceof TurkuApp) {
             return ((TurkuApp) mainComponent).getApplicationController();
 
         } else {
+            SdiAppCrtl sdiAppCrtl = SdiAppCrtl.getAppCrtl();
+
             // LoginComponents etc. ?
-            return null;
+            return sdiAppCrtl;
         }
     }
 
     /* Only used when working and reporting on http response basis without websockets.
      * Probably to remove when finally only working on websockets ...
-     */
+
     public static TurkuApplicationController getControllerFromRequest(HttpServletRequest request, HttpSession httpSession) {
         VaadinSession vaadinSession = (VaadinSession) httpSession.getAttribute(INTERNAL_VAADIN_SESSION_NAME);
         String[] vuiId = request.getParameterMap().get(INTERNAL_VAADIN_UID_NAME);
@@ -124,17 +128,7 @@ public class Workarounds {
         return null;
     }
 
-    public static UserEnvironmentInformation getAndClearUserEnvFromUi() {
-        UI current = UI.getCurrent();
-        UserEnvironmentInformation env = (UserEnvironmentInformation) ComponentUtil.getData(current,"uiCurrentUserEnv");
-        setUserEnvForUi(null);
-        return env;
-    }
-
-    public static void setUserEnvForUi(UserEnvironmentInformation env) {
-        UI current = UI.getCurrent();
-        ComponentUtil.setData(current,"uiCurrentUserEnv", env);
-    }
-
+    *
+    */
 }
 

@@ -1,7 +1,9 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.SubMenu;
@@ -20,12 +22,15 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.dataux.runtime.sdicore.Params;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
+import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
+import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -35,20 +40,13 @@ import org.modellwerkstatt.turkuforms.views.PromptWindow;
 import java.util.List;
 
 
-/*
- * Zum Zeitpunkt des "annavigierens" ist ja noch unklar, ob das das MainWindow wird, oder
- * ein Tab für eine Applikation ..
- *
- * Was wen userEnv null? Not Logged in ..
- */
-public class TurkuBrowserTab extends SdiLayout implements IToolkit_MainWindow, BeforeEnterObserver {
+public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnterObserver {
 
+    protected IOFXUserEnvironment userEnvironment;
+    private Params params;
+    private SdiAppCrtl appCrtl;
 
-    protected TurkuSdiAppCrtl appCrtl;
-    protected UserEnvironmentInformation userEnvironment;
-
-
-    public TurkuBrowserTab() {
+    public BrowserTab() {
         super();
 
         setWidthFull();
@@ -58,27 +56,37 @@ public class TurkuBrowserTab extends SdiLayout implements IToolkit_MainWindow, B
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        Turku.l("TurkuBrowserTab.beforeEnter() " + event);
-        //  check if we are logged in.
-        turkuFactory = Workarounds.getCurrentTurkuServlet().getUiFactory();
-        userEnvironment = SdiWorkarounds.getUserEnv();
-        Params p = new Params(event.getLocation().getSegments());
+        Turku.l("BrowserTab.beforeEnter() " + event);
 
-        if (userEnvironment == null) {
-            String msg = "API error! Sorry, the application can not be accessed directly via this url (login first?).";
-            TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
-            servlet.logOnPortJTrace(TurkuBrowserTab.class.getName(), servlet.getUiFactory().getRemoteAddr(), msg);
-            quickUserInfo(msg);
+        //  check if we are logged id or redirect here to login ...
+        TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
+        turkuFactory = servlet.getUiFactory();
 
-        } else {
-            appCrtl = SdiWorkarounds.getOrCreateAppCrtl(userEnvironment, this);
-            appCrtl.startCommand(this, p);
 
+        appCrtl = SdiAppCrtl.getAppCrtl();
+
+        if (appCrtl == null) {
+            // user env to pick up after a login ?
+            IOFXUserEnvironment userEnv = NavigationUtil.getAndClearUserEnvFromUi();
+
+            if (userEnv == null) {
+                // nope - not logged in ... this can not happen, routes are not configured correctly?
+                String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
+                servlet.logOnPortJTrace(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), msg);
+                quickUserInfo(msg);
+                return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+            }
+
+            appCrtl = SdiAppCrtl.createAppCrtl(userEnv);
         }
 
+        userEnvironment = appCrtl.getUserEnvironment();
+        params = new Params(event.getLocation().getSegments());
 
+        if (params.hasCmdName()) {
+            appCrtl.startCommand(this, params);
+        }
     }
-
 
     @Override
     public void showDialog(IToolkit_MainWindow.DlgType dlgType, String text, IApplication.DlgRunnable dlgRunnable) {
@@ -111,48 +119,6 @@ public class TurkuBrowserTab extends SdiLayout implements IToolkit_MainWindow, B
     }
 
     @Override
-    public void closeApplicationAndExit() {
-
-    }
-
-    @Override
-    public void parDeploymentForwardNow() {
-
-    }
-
-    @Override
-    public void showTiles(List<TileAction> list) {
-
-    }
-
-    @Override
-    public void ensureHotkeyAvailable(List<String> list) {
-
-    }
-
-
-    @Override
-    public void execEventInBackground(ICommandContainer iCommandContainer, Runnable runnable) {
-        IllegalStateException ise = new IllegalStateException("Foreground / Background processing not supported by Turkuforms");
-        Turku.logWithServlet(TurkuApp.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
-        throw ise;
-    }
-
-    @Override
-    public void execEventInForeground(ICommandContainer iCommandContainer, UxEvent uxEvent) {
-        IllegalStateException ise = new IllegalStateException("Foreground / Background processing not supported by Turkuforms");
-        Turku.logWithServlet(TurkuApp.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
-        throw ise;
-    }
-
-    @Override
-    public boolean inUiThread() {
-        return true;
-    }
-
-
-
-    @Override
     public void addTab(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
         add((Component) iToolkit_commandContainerUi);
     }
@@ -173,47 +139,10 @@ public class TurkuBrowserTab extends SdiLayout implements IToolkit_MainWindow, B
 
     }
 
-    @Override
-    public void addStatusInformation(String s) {
-        Notification.show(s, 3000, Notification.Position.BOTTOM_START);
-    }
 
     @Override
     public void setToastMessage(String s) {
         Notification.show(s, 4000, Notification.Position.TOP_CENTER);
-    }
-
-
-    @Override
-    public void setAppInfo(String s, String s1, String s2) {
-        checkForMainMenu();
-        navbarTitle = s + " " + s1 + " " + s2;
-        navbarTitleDiv.setText(navbarTitle);
-    }
-
-    @Override
-    public void setMenuAndInit(int langIndex, Menu start, Menu extra, Menu help) {
-        checkForMainMenu();
-
-        SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
-        Component vaadinPowerOff = Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_logout"), false);
-        startMenu.addItem(vaadinPowerOff, event -> { exitRequestedFromMenu(); });
-
-        addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
-        SubMenu helpMenu = addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
-        helpMenu.addItem(turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ABOUT), event -> {
-            String text = appCrtl.appUserSystemVersionInfo() + "\n\n" + getTurkuVersionInfo();
-            showDialog(DlgType.INFO_SMALL, text, null);
-        });
-    }
-
-    protected void exitRequestedFromMenu() {
-        // TODO: How do we handle the user requested shutdown.
-    }
-
-    @Override
-    public void installCloseConfirmQuestion(boolean b) {
-
     }
 
     protected void quickUserInfo(String msg) {

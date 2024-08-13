@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.auth;
 
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -52,6 +53,18 @@ public class NavigationUtil {
             UI.getCurrent().navigate("/" + paramInfo.getParamsToForwardIfAny());
 
         }
+    }
+
+    public static UserEnvironmentInformation getAndClearUserEnvFromUi() {
+        VaadinSession current = VaadinSession.getCurrent();
+        UserEnvironmentInformation env = (UserEnvironmentInformation) current.getAttribute("uiCurrentUserEnv");
+        setUserEnvForUi(null);
+        return env;
+    }
+
+    public static void setUserEnvForUi(UserEnvironmentInformation env) {
+        VaadinSession current = VaadinSession.getCurrent();
+        current.setAttribute("uiCurrentUserEnv", env);
     }
 
     public static String loginViaLoginCrtl(TurkuServlet servlet, VaadinSession vaadinSession, UserEnvironmentInformation info, String userName, String password) {
