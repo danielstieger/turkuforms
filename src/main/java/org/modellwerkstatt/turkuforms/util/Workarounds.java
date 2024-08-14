@@ -14,6 +14,7 @@ import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.sdi.BrowserTab;
 import org.modellwerkstatt.turkuforms.sdi.SdiAppCrtl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,12 +93,11 @@ public class Workarounds {
         if (mainComponent instanceof TurkuApp) {
             return ((TurkuApp) mainComponent).getApplicationController();
 
-        } else {
-            SdiAppCrtl sdiAppCrtl = SdiAppCrtl.getAppCrtl();
-
-            // LoginComponents etc. ?
-            return sdiAppCrtl;
+        } else if (mainComponent instanceof BrowserTab) {
+            return ((BrowserTab) mainComponent).getApplicationController();
         }
+
+        return null;
     }
 
     /* Only used when working and reporting on http response basis without websockets.

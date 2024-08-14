@@ -12,8 +12,10 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.HasDynamicTitle;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.UxEvent;
@@ -31,10 +33,12 @@ import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
+import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 import org.modellwerkstatt.turkuforms.views.PromptWindow;
 
 import java.util.List;
@@ -43,8 +47,8 @@ import java.util.List;
 public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnterObserver {
 
     protected IOFXUserEnvironment userEnvironment;
-    private Params params;
-    private SdiAppCrtl appCrtl;
+    protected Params params;
+    protected SdiAppCrtl appCrtl;
 
     public BrowserTab() {
         super();
@@ -62,7 +66,7 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         turkuFactory = servlet.getUiFactory();
 
-
+        navbarTitle = servlet.getAppNameVersion();
         appCrtl = SdiAppCrtl.getAppCrtl();
 
         if (appCrtl == null) {
@@ -80,11 +84,21 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
             appCrtl = SdiAppCrtl.createAppCrtl(userEnv);
         }
 
+
         userEnvironment = appCrtl.getUserEnvironment();
+
         params = new Params(event.getLocation().getSegments());
 
+        String msg = null;
         if (params.hasCmdName()) {
-            appCrtl.startCommand(this, params);
+            msg = appCrtl.startCommand(this, params);
+        }
+
+        if (!params.hasCmdName() || msg != null) {
+            landingPage = new LandingPage(servlet.getAppNameVersion());
+            landingPage.setAvailableCommands(appCrtl.getMenu());
+            if (msg != null) { landingPage.setMessage(msg); }
+            add(landingPage);
         }
     }
 
@@ -120,7 +134,10 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
     @Override
     public void addTab(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
-        add((Component) iToolkit_commandContainerUi);
+        CmdUiTab uiTab = (CmdUiTab) iToolkit_commandContainerUi;
+        navbarTitle = uiTab.getWindowTitle();
+        removeAll();
+        add(uiTab);
     }
 
     @Override
@@ -130,8 +147,17 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
     @Override
     public void ensureTabClosed(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
-        remove((Component) iToolkit_commandContainerUi);
-        this.getElement().executeJs("turku.closeTab()");
+        CmdUiTab uiTab = (CmdUiTab) iToolkit_commandContainerUi;
+        removeAll();
+
+        navbarTitle = Workarounds.getCurrentTurkuServlet().getAppNameVersion();
+        UI.getCurrent().getPage().setTitle(navbarTitle);
+        if (landingPage == null) {
+            landingPage = new LandingPage(navbarTitle);
+            landingPage.setAvailableCommands(appCrtl.getMenu());
+        }
+        add(landingPage);
+        // this.getElement().executeJs("turku.closeTab()");
     }
 
     @Override
@@ -139,31 +165,10 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
     }
 
-
     @Override
     public void setToastMessage(String s) {
         Notification.show(s, 4000, Notification.Position.TOP_CENTER);
     }
 
-    protected void quickUserInfo(String msg) {
-        Notification notification = new Notification();
-        notification.setPosition(Notification.Position.TOP_CENTER);
-        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-        notification.setDuration(20000);
-
-        Text text = new Text(msg);
-
-        Button closeButton = new Button(new Icon("lumo", "cross"));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.getElement().setAttribute("aria-label", "Close");
-        closeButton.addClickListener(event -> {
-            notification.close();
-        });
-
-        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
-
-        notification.add(layout);
-        notification.open();
-    }
+    public IAppCrtlAccess getApplicationController() { return appCrtl; }
 }
