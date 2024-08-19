@@ -21,6 +21,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class TurkuServlet extends VaadinServlet {
@@ -41,6 +45,7 @@ public class TurkuServlet extends VaadinServlet {
     private String actualServletUrl;
     private boolean disableBrowserContextMenu;
     private AbstractApplicationContext appContext;
+    private List<IOFXCmdModule.CmdUrlDefaults> cmdUrlDefaults;
 
 
     public TurkuServletService turkuServletService;
@@ -63,7 +68,7 @@ public class TurkuServlet extends VaadinServlet {
     public String getAppNameVersion() { return appNameVersion; }
     public Class getAuthenticatorClass() { return authenticatorClass; }
     public Class getTurkuAppImplClass() { return turkuAppImplClass; }
-
+    public List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults() { return cmdUrlDefaults; }
 
     public boolean isDisableBrowserContextMenu() { return disableBrowserContextMenu; }
 
@@ -110,11 +115,17 @@ public class TurkuServlet extends VaadinServlet {
             appNameVersion = genApplication.getShortAppName() + " " + genApplication.getApplicationVersion();
 
             appContext.getBean(IM3DatabaseDescription.class).setSessionInfo(appNameVersion + " " + guessedServerName);
-
             appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
 
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
             turkuAppImplClass = classLoader.loadClass(appFactory.getTurkuAppImplClassFqName());
+
+            cmdUrlDefaults = new ArrayList<>();
+            Map<String, IOFXCmdModule> allModules = appContext.getBeansOfType(IOFXCmdModule.class);
+            allModules.values().stream().forEach(cmdModule ->
+                    cmdUrlDefaults.addAll(Arrays.asList(cmdModule.getCmdUrlDefaults()))
+            );
+
 
         } catch (ClassNotFoundException | BeansException e) {
             Turku.l("TurkuServlet.servletInitialized() " + e.getMessage() + "\n" + OFXConsoleHelper.stackTrace2String(e));

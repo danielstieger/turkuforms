@@ -1,34 +1,16 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.HasDynamicTitle;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
-import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
-import org.modellwerkstatt.dataux.runtime.core.UxEvent;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
-import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
-import org.modellwerkstatt.dataux.runtime.sdicore.Params;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
-import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
-import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
+import org.modellwerkstatt.objectflow.runtime.OFXUrlParams;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
@@ -47,7 +29,7 @@ import java.util.List;
 public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnterObserver {
 
     protected IOFXUserEnvironment userEnvironment;
-    protected Params params;
+    protected OFXUrlParams params;
     protected SdiAppCrtl appCrtl;
 
     public BrowserTab() {
@@ -87,7 +69,10 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
         userEnvironment = appCrtl.getUserEnvironment();
 
-        params = new Params(event.getLocation().getSegments());
+        params = new OFXUrlParams(event.getLocation().getSegments());
+
+        // TODO - GET URLS FROM here ...
+        // servlet.getAllCmdUrlDefaults().stream().forEach(cmdUrlDefaults -> System.err.println("WE HAVE " + cmdUrlDefaults.url + " for " + cmdUrlDefaults.cmdFqName));
 
         String msg = null;
         if (params.hasCmdName()) {
