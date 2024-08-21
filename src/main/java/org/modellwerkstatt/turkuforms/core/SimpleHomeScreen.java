@@ -11,7 +11,10 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
+
+import java.util.List;
 
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.HOME_REDIRECT_PREFIX_LABEL;
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
@@ -55,6 +58,11 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
+
+        List<String> segments = event.getLocation().getSegments();
+        if (segments.size() > 0 && !"".equals(segments.get(0))) {
+            paramInfo.setReroute(event.getLocation().getPath());
+        }
 
 
         if (paramInfo.hasUsername()) {

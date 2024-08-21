@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.auth;
 
 import com.vaadin.flow.router.QueryParameters;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +10,11 @@ import static org.modellwerkstatt.turkuforms.auth.NavigationUtil.*;
 
 public class ParamInfo {
     private Map<String, List<String>> params;
+    private String manualRoute;
 
     public ParamInfo(QueryParameters queryParameters) {
         params = queryParameters.getParameters();
+        manualRoute = null;
     }
 
     public boolean wasActiveLogout(){ return params.containsKey(NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM); }
@@ -40,6 +43,13 @@ public class ParamInfo {
             if (params.containsKey(CMD_TO_START_PARAM)) {
                 sb.append("&" + CMD_TO_START_PARAM + "=" + params.get(CMD_TO_START_PARAM).get(0));
             }
+
+        } else if (hasReroute()) {
+            sb.append(REROUTE_TO + "=" + getReroute());
+
+        } else if (manualRoute != null) {
+            sb.append(REROUTE_TO + "=" + manualRoute);
+
         }
 
         if (hasUsername()) {
@@ -60,7 +70,15 @@ public class ParamInfo {
     public boolean hasReroute() {
         return params.containsKey(REROUTE_TO);
     }
+
+    public void setReroute(String route) {
+        manualRoute = route;
+    }
+
     public String getReroute() {
-        return params.get(REROUTE_TO).get(0);
+        String reroute = params.get(REROUTE_TO).get(0);
+
+        if (!reroute.startsWith("/")) { reroute = "/" + reroute; }
+        return reroute;
     }
 }

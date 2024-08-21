@@ -6,6 +6,7 @@ import com.vaadin.flow.server.ServiceException;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinServletService;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
+import org.modellwerkstatt.dataux.runtime.sdicore.CheckerForCmdUrlDefaults;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -126,6 +127,12 @@ public class TurkuServlet extends VaadinServlet {
                     cmdUrlDefaults.addAll(Arrays.asList(cmdModule.getCmdUrlDefaults()))
             );
 
+            CheckerForCmdUrlDefaults checker = new CheckerForCmdUrlDefaults();
+            List<String> doubles = checker.check(cmdUrlDefaults);
+            if (doubles.size() != 0) {
+                throw new RuntimeException("The following urls (+ param counts) are defined more than once in the application: " + String.join(",", doubles));
+            }
+
 
         } catch (ClassNotFoundException | BeansException e) {
             Turku.l("TurkuServlet.servletInitialized() " + e.getMessage() + "\n" + OFXConsoleHelper.stackTrace2String(e));
@@ -224,21 +231,27 @@ public class TurkuServlet extends VaadinServlet {
     public void destroy() {
         super.destroy();
 
-        appFactory.getEventBus().close();
-        jmxRegistration.gcClean();
-
-        String msg = OFXConsoleHelper.closeConnectionPoolExplicitly(appContext);
-        if (msg != null) {
-            super.log(msg);
+        // in case of startup exceptions ..
+        if (appFactory != null) {
+            appFactory.getEventBus().close();
         }
-        appContext.close();
-        appContext = null;
+        if (jmxRegistration != null) {
+            jmxRegistration.gcClean();
+        }
+        if (appContext != null) {
+            String msg = OFXConsoleHelper.closeConnectionPoolExplicitly(appContext);
+            if (msg != null) {
+                super.log(msg);
+            }
+            appContext.close();
+            appContext = null;
+        }
 
 
         DeprecatedServerDateProvider.shutdownAndGcClean();
         MMStaticAccessHelper.shutdownAndGcClean();
         OFXStringFormatter2.GLOBAL_INSTANCE_DEFAULT_LANG = null;
 
-        Turku.l("TurkuServlet.destroy(): servled cleaned up and destroyed.");
+        Turku.l("TurkuServlet.destroy(): servlet cleaned up and destroyed.");
     }
 }

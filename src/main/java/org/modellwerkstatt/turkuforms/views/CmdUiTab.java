@@ -8,6 +8,7 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 public class CmdUiTab extends CmdUi {
     private boolean isModal;
     private String windowTitle;
+    private String adjustedUrl;
     private ITurkuMainTab mainTab;
 
 
@@ -16,6 +17,11 @@ public class CmdUiTab extends CmdUi {
         Peculiar.shrinkSpace(this);
         setClassName("CmdUiTab");
         isModal = modal;
+    }
+
+    @Override
+    public void setAdjustUrl(String url) {
+        adjustedUrl = url;
     }
 
     @Override
@@ -57,5 +63,8 @@ public class CmdUiTab extends CmdUi {
         return isModal;
     }
 
-    public String getWindowTitle() { return windowTitle;}
+    public String getWindowTitle() { return windowTitle; }
+    public String getAdjustedUrl() { return adjustedUrl; }
+
+
 }

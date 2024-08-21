@@ -76,7 +76,7 @@ public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
         WrappedSession session = VaadinSession.getCurrent().getSession();
 
         SdiAppCrtl appCrtl = new SdiAppCrtl(servlet.getUiFactory(), servlet.getAppBehaviour(), servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
-        appCrtl.initializeApplication(servlet.getGuessedServerName(), env, servlet.getUiFactory().getRemoteAddr(), "");
+        appCrtl.initializeApplication(servlet.getAllCmdUrlDefaults(), servlet.getGuessedServerName(), env, servlet.getUiFactory().getRemoteAddr(), "");
 
         session.setAttribute(TURKUSDIAPPCRTL, appCrtl);
         return appCrtl;

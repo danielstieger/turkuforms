@@ -375,7 +375,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
     public TurkuApplicationController getApplicationController() { return applicationController; }
 
-
     protected void quickUserInfo(String msg) {
         Notification notification = new Notification();
         notification.setPosition(Notification.Position.TOP_CENTER);

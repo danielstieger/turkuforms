@@ -107,6 +107,10 @@ window.turku = {
         window.close();
     },
 
+    openNewWindow: function(urlToOpen) {
+        window.open(urlToOpen, '_blank').focus();
+    },
+
     setTurkuCookie: function(value,days) {
         var expires = '';
         if (days) {

@@ -51,7 +51,7 @@ public class LandingPage extends HorizontalLayout {
         // right.setJustifyContentMode(JustifyContentMode.CENTER);
     }
 
-    public void setAvailableCommands(List<AbstractAction> menuItemList) {
+    public void setMainMenu(List<AbstractAction> menuItemList) {
 
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {

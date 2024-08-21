@@ -10,6 +10,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
+import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.OFXUrlParams;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
@@ -31,6 +32,7 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
     protected IOFXUserEnvironment userEnvironment;
     protected OFXUrlParams params;
     protected SdiAppCrtl appCrtl;
+    protected CmdUiTab theTab;
 
     public BrowserTab() {
         super();
@@ -66,22 +68,23 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
             appCrtl = SdiAppCrtl.createAppCrtl(userEnv);
         }
 
-
         userEnvironment = appCrtl.getUserEnvironment();
 
         params = new OFXUrlParams(event.getLocation().getSegments());
 
-        // TODO - GET URLS FROM here ...
-        // servlet.getAllCmdUrlDefaults().stream().forEach(cmdUrlDefaults -> System.err.println("WE HAVE " + cmdUrlDefaults.url + " for " + cmdUrlDefaults.cmdFqName));
-
         String msg = null;
-        if (params.hasCmdName()) {
+        if (appCrtl.wasPickupCmdThenStart(this, params)) {
+            // nothing to do here
+            Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
+
+        } else if (params.hasCmdName()) {
+            Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
             msg = appCrtl.startCommand(this, params);
         }
 
         if (!params.hasCmdName() || msg != null) {
             landingPage = new LandingPage(servlet.getAppNameVersion());
-            landingPage.setAvailableCommands(appCrtl.getMenu());
+            landingPage.setMainMenu(appCrtl.constructAndInitLandingMenu());
             if (msg != null) { landingPage.setMessage(msg); }
             add(landingPage);
         }
@@ -89,7 +92,7 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
     @Override
     public void showDialog(IToolkit_MainWindow.DlgType dlgType, String text, IApplication.DlgRunnable dlgRunnable) {
-        // Turku.l("TurkuApp.showDialog() " + OFXConsoleHelper._____organizeCurrentStacktrace_____());
+        Turku.l("TurkuApp.showDialog() " + text);
 
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
         window.simplePrompt(dlgType, text, dlgRunnable);
@@ -97,6 +100,8 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
     @Override
     public void showProblemsDialog(List<IOFXProblem> list, IApplication.DlgRunnable dlgRunnable) {
+        Turku.l("TurkuApp.showProblemsDialog() " + OFXConsoleHelper.asSimpleString(list));
+
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
         window.simpleProblemDialog(list, dlgRunnable);
     }
@@ -120,9 +125,23 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
     @Override
     public void addTab(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
         CmdUiTab uiTab = (CmdUiTab) iToolkit_commandContainerUi;
-        navbarTitle = uiTab.getWindowTitle();
-        removeAll();
-        add(uiTab);
+
+        if (theTab == null) {
+            navbarTitle = uiTab.getWindowTitle();
+            theTab = uiTab;
+            removeAll();
+            add(uiTab);
+
+        } else {
+            String urlToOpen = uiTab.getAdjustedUrl();
+            appCrtl.setUiForPickup(urlToOpen, uiTab);
+
+            TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
+            urlToOpen  = servlet.getActualServletUrl() + urlToOpen;
+            getElement().executeJs("turku.openNewWindow($0)", urlToOpen);
+        }
+
+        // UI.getCurrent().getPage().getHistory().replaceState(null, uiTab.getAdjustedUrl());
     }
 
     @Override
@@ -133,20 +152,30 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
     @Override
     public void ensureTabClosed(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
         CmdUiTab uiTab = (CmdUiTab) iToolkit_commandContainerUi;
+
+        if (uiTab != theTab) { throw new RuntimeException("Current UiTab " + theTab + " is not the tab to close " + uiTab); }
         removeAll();
 
         navbarTitle = Workarounds.getCurrentTurkuServlet().getAppNameVersion();
         UI.getCurrent().getPage().setTitle(navbarTitle);
         if (landingPage == null) {
             landingPage = new LandingPage(navbarTitle);
-            landingPage.setAvailableCommands(appCrtl.getMenu());
+            landingPage.setMainMenu(appCrtl.constructAndInitLandingMenu());
         }
+
         add(landingPage);
         // this.getElement().executeJs("turku.closeTab()");
     }
 
     @Override
     public void setCurrentTabModal(boolean b) {
+
+    }
+
+    @Override
+    public void openNewWindow(String url) {
+
+
 
     }
 
