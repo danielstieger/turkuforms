@@ -32,13 +32,13 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
     protected IOFXUserEnvironment userEnvironment;
     protected OFXUrlParams params;
     protected SdiAppCrtl appCrtl;
-    protected CmdUiTab theTab;
+
+    protected CmdUiTab currentTab;
+    protected int numTabs = 0;
 
     public BrowserTab() {
         super();
 
-        setWidthFull();
-        setHeightFull();
     }
 
 
@@ -126,45 +126,50 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
     public void addTab(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
         CmdUiTab uiTab = (CmdUiTab) iToolkit_commandContainerUi;
 
-        if (theTab == null) {
-            navbarTitle = uiTab.getWindowTitle();
-            theTab = uiTab;
-            removeAll();
-            add(uiTab);
-
-        } else {
+        if (appCrtl.hasCrtlAwaitingPickup() && uiTab.getAdjustedUrl() != null) {
             String urlToOpen = uiTab.getAdjustedUrl();
             appCrtl.setUiForPickup(urlToOpen, uiTab);
 
             TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
             urlToOpen  = servlet.getActualServletUrl() + urlToOpen;
-            getElement().executeJs("turku.openNewWindow($0)", urlToOpen);
-        }
+            getElement().executeJs("turku.openNewWindow($0, $1)", uiTab.hashCode(), urlToOpen);
 
-        // UI.getCurrent().getPage().getHistory().replaceState(null, uiTab.getAdjustedUrl());
+        } else {
+            navbarTitle = uiTab.getWindowTitle();
+            removeAll();
+            numTabs ++;
+            currentTab = uiTab;
+            add(currentTab);
+        }
     }
 
     @Override
-    public void focusTab(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
-
+    public void focusTab(IToolkit_CommandContainerUi tab) {
+        this.removeAll();
+        currentTab = (CmdUiTab) tab;
+        add(currentTab);
     }
 
     @Override
     public void ensureTabClosed(IToolkit_CommandContainerUi iToolkit_commandContainerUi) {
         CmdUiTab uiTab = (CmdUiTab) iToolkit_commandContainerUi;
 
-        if (uiTab != theTab) { throw new RuntimeException("Current UiTab " + theTab + " is not the tab to close " + uiTab); }
+        numTabs --;
+        currentTab = null;
         removeAll();
 
-        navbarTitle = Workarounds.getCurrentTurkuServlet().getAppNameVersion();
-        UI.getCurrent().getPage().setTitle(navbarTitle);
-        if (landingPage == null) {
-            landingPage = new LandingPage(navbarTitle);
-            landingPage.setMainMenu(appCrtl.constructAndInitLandingMenu());
-        }
+        this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode());
 
-        add(landingPage);
-        // this.getElement().executeJs("turku.closeTab()");
+        /* if (numTabs == 0) {
+            navbarTitle = Workarounds.getCurrentTurkuServlet().getAppNameVersion();
+            UI.getCurrent().getPage().setTitle(navbarTitle);
+            if (landingPage == null) {
+                landingPage = new LandingPage(navbarTitle);
+                landingPage.setMainMenu(appCrtl.constructAndInitLandingMenu());
+            }
+
+            add(landingPage);
+        } */
     }
 
     @Override
@@ -174,8 +179,6 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
     @Override
     public void openNewWindow(String url) {
-
-
 
     }
 

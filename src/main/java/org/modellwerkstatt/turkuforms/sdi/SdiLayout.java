@@ -42,7 +42,8 @@ public class SdiLayout extends VerticalLayout implements HasDynamicTitle {
 
     public SdiLayout() {
         Peculiar.shrinkSpace(this);
-
+        setWidthFull();
+        setHeightFull();
     }
 
     @Override
