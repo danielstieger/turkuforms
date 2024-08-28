@@ -59,7 +59,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         userEnvironment = NavigationUtil.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
-        if (userEnvironment == null) {
+
+        if (userEnvironment == null && !factory.isSingleAppInstanceMode()) {
             // TurkuApp is available for session, but no userEnv? Directly navigated in a new Tab?
             // Try to log in via principal, i.e. make a copy of the userenv ..
 
@@ -86,7 +87,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         }
 
         if (userEnvironment == null) {
-            String msg = "API error! Can not start application, no user environment provied.";
+            String msg = "API error, can not start application, no user environment provided. App running in another browser tab? Use login url?";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
             quickUserInfo(msg);
 
@@ -112,13 +113,28 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
             vaadinSession.getSession().setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
 
-
-            if (turkuFactory.isSingleAppInstanceMode()) {
-                applicationController.shutdownOtherExistingControllers(vaadinSession);
-            }
-
         }
         Turku.l("TurkuApp.constructor() - done");
+    }
+
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+
+        // start a command?
+        if (initialStartupParams == null) {
+            initialStartupParams = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+
+        } else {
+            quickUserInfo("API Error! Sorry, reloading this application does not work . . .");
+        }
+
+        if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
+            applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
+        }
+
+
+        Turku.l("TurkuApp.beforeEnter() done.");
     }
 
     @Override
@@ -150,25 +166,6 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         if (closedByHeartBeat) {
             applicationController.closeAppCrtlMissingHearbeatOrBeacon(VaadinSession.getCurrent());
         }
-    }
-
-
-
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        // start a command?
-        if (initialStartupParams == null) {
-            initialStartupParams = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
-
-        } else {
-            quickUserInfo("API Error! Sorry, reloading this application does not work . . .");
-        }
-
-        if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
-            applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
-        }
-
-        Turku.l("TurkuApp.beforeEnter() done.");
     }
 
     @Override
@@ -307,7 +304,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         tab.setMainTabForColorAdjustments(mainTabImpl);
 
         mainTabImpl.addTab(tab);
-        setOptionalTabTitleInNavbar(mainTabImpl.getTabTitle());
+        setOptionalTabTitleInNavbar(mainTabImpl.getTitleForNavbar());
     }
 
     @Override
@@ -315,7 +312,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         Turku.l("TurkuApp.focusTab()");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.focusTab(tab);
-        setOptionalTabTitleInNavbar(mainTabImpl.getTabTitle());
+        setOptionalTabTitleInNavbar(mainTabImpl.getTitleForNavbar());
     }
 
     @Override

@@ -34,6 +34,12 @@ public class CmdUiTab extends CmdUi {
     }
 
     @Override
+    public void adjustWindowTitle(String s) {
+        windowTitle = s;
+        mainTab.adjustTitle();
+    }
+
+    @Override
     public void setContent(IToolkit_Form formAsComponent) {
         ((HasSize) formAsComponent).setSizeFull();
         super.setContent(formAsComponent);

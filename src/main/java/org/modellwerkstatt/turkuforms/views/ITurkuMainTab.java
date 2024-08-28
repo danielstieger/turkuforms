@@ -6,7 +6,7 @@ public interface ITurkuMainTab {
 
     Component getAsComponent();
 
-    String getTabTitle();
+    String getTitleForNavbar();
 
     void addTabSelectedChangeListener(TabSelectedIndexChanged change);
 
@@ -20,6 +20,8 @@ public interface ITurkuMainTab {
     void setModal(boolean modal);
 
     void adjustTabStyle(CmdUiTab ui, String col);
+
+    void adjustTitle();
 
     void adjustTopBarColorOrNull(String col);
 

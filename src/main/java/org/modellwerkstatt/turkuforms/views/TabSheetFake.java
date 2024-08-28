@@ -24,7 +24,7 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
     }
 
     @Override
-    public String getTabTitle() {
+    public String getTitleForNavbar() {
         return current.getWindowTitle();
     }
 
@@ -74,6 +74,11 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
             current.getElement().executeJs("turku.setTurkuCommandColor($0, $1)", current, col);
         }
         ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(col);
+    }
+
+    @Override
+    public void adjustTitle() {
+        ((TurkuApp) this.getParent().get()).setOptionalTabTitleInNavbar(getTitleForNavbar());
     }
 
     @Override

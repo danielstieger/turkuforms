@@ -12,7 +12,7 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class SimpleMessageCmpt extends HorizontalLayout {
 
-    public SimpleMessageCmpt(String appNameVersion, String buttonText, String msg, OnLogin process) {
+    public SimpleMessageCmpt(String appNameVersion, String buttonText, String msg, Todo process) {
         Span loginIdentityImage = new Span();
         loginIdentityImage.addClassName("DefaultLoginLogo");
 
@@ -45,7 +45,7 @@ public class SimpleMessageCmpt extends HorizontalLayout {
         setSizeFull();
     }
 
-    public interface OnLogin {
+    public interface Todo {
         void process();
     }
 }

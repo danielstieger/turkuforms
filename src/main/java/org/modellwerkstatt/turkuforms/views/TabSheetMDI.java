@@ -28,7 +28,8 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     }
 
     @Override
-    public String getTabTitle() {
+    public String getTitleForNavbar() {
+        // not to adjust in app
         return "";
     }
 
@@ -92,6 +93,12 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     @Override
     public void adjustTopBarColorOrNull(String col) {
         ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(col);
+    }
+
+    @Override
+    public void adjustTitle() {
+        int selected = getSelectedIndex();
+        getSelectedTab().setLabel(tabsInSheet.get(selected).getWindowTitle());
     }
 
     @Override

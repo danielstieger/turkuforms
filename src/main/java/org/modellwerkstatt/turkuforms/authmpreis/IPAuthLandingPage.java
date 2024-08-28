@@ -54,6 +54,31 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
 
 
+
+
+        Turku.l(" --- " + factory.isSingleAppInstanceMode());
+        if (factory.isSingleAppInstanceMode()) {
+            VaadinSession session = VaadinSession.getCurrent();
+
+            Turku.l("IPAuthLandingPage.beforeEnter() are other controllers presen? "+ TurkuApplicationController.hasOtherControllersInSession(session));
+            if (TurkuApplicationController.hasOtherControllersInSession(session)) {
+                setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
+                        factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
+
+
+                    TurkuApplicationController.shutdownOtherControllersInSession(session);
+                    UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
+                }));
+
+                return;
+            }
+        }
+
+
+
+
+
+
         if (TurkuServlet.LOGIN_ROUTE.equals(naviPath)) {
             // this should work, even in case other controllers are present ..
 

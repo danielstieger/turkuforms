@@ -47,7 +47,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         iconTranslator = new MaterialIconsTranslator();
         authentiactorClassFqName = DEFAULT_AUTHENTICATOR;
         turkuAppImplClassFqName = DEFAULT_TURKUAPPIMPL;
-        turkuAppImplClassFqName = "org.modellwerkstatt.turkuforms.sdi.BrowserTab";
+        // turkuAppImplClassFqName = "org.modellwerkstatt.turkuforms.sdi.BrowserTab";
 
         // should be initialized in servlet
         onLogoutMainLandingPath = null;

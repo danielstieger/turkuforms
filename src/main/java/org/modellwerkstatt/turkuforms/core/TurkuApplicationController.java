@@ -88,6 +88,34 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         }
     }
 
+
+    static public boolean hasOtherControllersInSession(VaadinSession vaadinSession) {
+        WrappedSession session = vaadinSession.getSession();
+
+        for (String name: session.getAttributeNames()){
+            if (isTurkuControllerAttribute(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static public void shutdownOtherControllersInSession(VaadinSession vaadinSession) {
+        WrappedSession session = vaadinSession.getSession();
+
+        for (String name: session.getAttributeNames()){
+            if (isTurkuControllerAttribute(name)) {
+
+                TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
+                TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
+
+                mainWin.getUI().get().access(() -> crtl.onExitRequested(true));
+                Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() exited " + name);
+            }
+        }
+    }
+
+
     public void registerOnSession(VaadinSession vaadinSession, String userName, String remoteAddr) {
         WrappedSession session = vaadinSession.getSession();
         session.setAttribute(appCrtlSessionName(), this);

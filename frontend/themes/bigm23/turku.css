@@ -312,16 +312,14 @@ vaadin-button::part(prefix) {
     margin: 0.2em 0em 0.2em 0em;
     font-weight: var(--turku-bold);
     padding: 0em 0.5em;
-    white-space: pre;
-
 }
+
 .TurkuWarningDiv {
     background-color: var(--turku-warning-color) !important;
     margin: 0.2em 0em 0.2em 0em;
     font-weight: var(--turku-bold);
     color: white;
     padding: 0em 0.5em;
-    white-space: pre;
 }
 
 
