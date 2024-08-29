@@ -116,11 +116,13 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     }
 
 
-    public void registerOnSession(VaadinSession vaadinSession, String userName, String remoteAddr) {
+    public void registerOnSessionSetTimeout(VaadinSession vaadinSession, String userName, String remoteAddr) {
         WrappedSession session = vaadinSession.getSession();
         session.setAttribute(appCrtlSessionName(), this);
         session.setAttribute(REMOTE_SESSIONATTRIB, remoteAddr);
         session.setAttribute(USERNAME_SESSIONATTRIB, userName);
+
+        session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
     }
 
     public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean tryInvalidate) {

@@ -10,6 +10,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
@@ -110,8 +111,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
             applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
-            applicationController.registerOnSession(vaadinSession, userEnvironment.getUserName(), remoteAddr);
-            vaadinSession.getSession().setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
+            applicationController.registerOnSessionSetTimeout(vaadinSession, userEnvironment.getUserName(), remoteAddr);
+
 
         }
         Turku.l("TurkuApp.constructor() - done");
@@ -154,19 +155,23 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         this.getElement().executeJs("turku.installCloseConfirm($0)", installOrRemove);
     }
 
+
+    /*
+     * No longer using heart beat mechanism, since missing heartbeats are no longer possible.
+     * We are relying on the beacon api.
+     *
     @Override
     protected void onDetach(DetachEvent detachEvent) {
         super.onDetach(detachEvent);
 
-        Turku.l(OFXConsoleHelper._____organizeCurrentStacktrace_____());
-        // TODO: relying on beacon api, remove heartbeat logic?
         boolean closedByHeartBeat = Workarounds.closedByMissingHearbeat();
         Turku.l("TurkuApp.onDetach(): closedByHeartBeat "+ closedByHeartBeat);
 
-        if (closedByHeartBeat) {
+        if (closedByHeartBeat && applicationController != null) {
+            // might be null in case app was not initialized at all
             applicationController.closeAppCrtlMissingHearbeatOrBeacon(VaadinSession.getCurrent());
         }
-    }
+    } */
 
     @Override
     public void closeApplicationAndExit() {
@@ -263,9 +268,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
     @Override
     public void setMenuAndInit(int langIndex, Menu start, Menu extra, Menu help) {
+        String advancedInfo = applicationController.appUserSystemVersionInfo() + "\n\n" + getTurkuVersionInfo();
 
         if (appInCompactMode) {
             addDrawerMenu(start.getAllItems());
+            Tooltip.forComponent(userInfoLabel).setText(advancedInfo);
 
         } else {
             SubMenu startMenu = addToMainMenu(start, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.START));
@@ -275,8 +282,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             addToMainMenu(extra, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.EXTRA));
             SubMenu helpMenu = addToMainMenu(help, turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.HELP));
             helpMenu.addItem(turkuFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ABOUT), event -> {
-                String text = applicationController.appUserSystemVersionInfo() + "\n\n" + getTurkuVersionInfo();
-                showDialog(DlgType.INFO_SMALL, text, null);
+                showDialog(DlgType.INFO_SMALL, advancedInfo, null);
             });
         }
 

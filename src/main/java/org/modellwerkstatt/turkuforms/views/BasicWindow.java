@@ -42,7 +42,7 @@ import java.util.List;
 abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
 
     private Label sysInfoLabel;
-    private Label userInfoLabel;
+    protected Label userInfoLabel;
     private Div navbarTitleDiv;
     private String navbarTitle = "";
     private String optionalTabTitleInNavbar = "";
@@ -64,6 +64,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
 
         userInfoLabel = new Label("-");
         userInfoLabel.addClassName("TurkuLayoutNavbarText");
+
         sysInfoLabel = new Label("-");
         sysInfoLabel.addClassName("TurkuLayoutNavbarText");
 
