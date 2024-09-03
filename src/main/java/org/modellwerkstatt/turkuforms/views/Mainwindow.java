@@ -18,20 +18,15 @@ import java.util.List;
 @JavaScript("./turku.js")
 abstract public class Mainwindow extends BasicWindow {
 
-    protected FlexLayout tilesFlexLayout;
+    protected TilesLayout tilesLayout;
 
     public Mainwindow() {
 
     }
 
     protected FlexLayout updateTiles(List<TileAction> tileActionList) {
-        if (tilesFlexLayout == null) {
-            tilesFlexLayout = new FlexLayout();
-            tilesFlexLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-            tilesFlexLayout.addClassName("MainwindowTilesGrid");
-            tilesFlexLayout.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-            tilesFlexLayout.setWidthFull();
-            tilesFlexLayout.setAlignContent(FlexLayout.ContentAlignment.SPACE_AROUND);
+        if (tilesLayout == null) {
+            tilesLayout = new TilesLayout();
 
             for(TileAction tile: tileActionList) {
                 CmdAction glue = tile.getAction();
@@ -39,35 +34,7 @@ abstract public class Mainwindow extends BasicWindow {
                     this.setDrawerOpened(false);
                     glue.startCommand();
                 };
-                Button btn;
-
-                if (Defs.hasIcon(glue.image)) {
-                    Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), false);
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
-
-                } else {
-                    btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), execItem);
-
-                }
-
-                glue.attachButton1(new TurkuHasEnabled(glue.hideWhenDisabled, btn, "Tile " + glue.labelText));
-
-                // btn.setDisableOnClick(true);
-                btn.setTooltipText(Workarounds.mlToolTipText(tile.getAction().getToolTip()));
-                btn.setMinHeight("200px");
-                btn.setMinWidth("200px");
-                btn.addClassName("MainwindowTileButton");
-
-                String clr = tile.getColor();
-                if (clr == null) { clr = "var(--lumo-primary-color)"; }
-                btn.getStyle().set("border-bottom", "6px solid " + clr);
-                btn.getStyle().set("color", clr);
-
-
-                tilesFlexLayout.setFlexGrow(0d, btn);
-                tilesFlexLayout.setFlexShrink(0d, btn);
-                tilesFlexLayout.setFlexBasis("30%", btn);
-                tilesFlexLayout.add(btn);
+                tilesLayout.addTile(turkuFactory, tile, execItem);
             }
 
         } else {
@@ -75,13 +42,12 @@ abstract public class Mainwindow extends BasicWindow {
 
           for(TileAction tile: tileActionList) {
               CmdAction glue = tile.getAction();
-              ((Button) tilesFlexLayout.getComponentAt(runningIndex)).setText(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey));
+              tilesLayout.updateTile(runningIndex, turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey));
               runningIndex ++;
           }
 
         }
 
-        return tilesFlexLayout;
+        return tilesLayout;
     }
-
 }

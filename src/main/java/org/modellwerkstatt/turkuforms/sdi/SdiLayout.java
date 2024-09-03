@@ -2,11 +2,14 @@ package org.modellwerkstatt.turkuforms.sdi;
 
 import com.vaadin.experimental.Feature;
 import com.vaadin.experimental.FeatureFlags;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -22,6 +25,7 @@ import com.vaadin.flow.server.Version;
 import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
@@ -30,15 +34,20 @@ import org.modellwerkstatt.turkuforms.sdidemo.Cmd;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.modellwerkstatt.turkuforms.views.TilesLayout;
 
 import java.lang.management.ManagementFactory;
 import java.util.List;
 
+
+@JavaScript("./turku.js")
 public class SdiLayout extends VerticalLayout implements HasDynamicTitle {
-    protected LandingPage landingPage;
 
     protected String navbarTitle = "";
     protected ITurkuAppFactory turkuFactory;
+    protected TilesLayout tilesLayout;
+    protected Div messageDiv;
+
 
     public SdiLayout() {
         Peculiar.shrinkSpace(this);
@@ -87,4 +96,33 @@ public class SdiLayout extends VerticalLayout implements HasDynamicTitle {
         notification.add(layout);
         notification.open();
     }
+
+
+    protected void initLandingPage (List<TileAction> tileActions) {
+
+        if (tilesLayout != null) {
+            Turku.l("SdiLayout.initLandingPage() THIS CAN NOT HAPPEN. TilesLayout was already initialized.");
+        }
+
+        tilesLayout = new TilesLayout();
+
+        for(TileAction tile: tileActions) {
+            ComponentEventListener<ClickEvent<Button>> execItem = event -> {
+                Notification.show("Hello World");
+            };
+
+            CmdAction act = tile.getAction();
+            Button btn = tilesLayout.addButtonOnly(turkuFactory, act.image, act.labelText, act.getToolTip(), tile.getColor(), act.hotKey, execItem);
+            btn.setEnabled(act.reevalEnabled());
+        }
+
+        messageDiv = new Div();
+        messageDiv.addClassName("TurkuErrorDiv");
+
+        add(messageDiv, tilesLayout);
+    }
+
+
+
+
 }
