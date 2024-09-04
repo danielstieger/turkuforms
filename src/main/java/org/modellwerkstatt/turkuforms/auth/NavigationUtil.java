@@ -43,6 +43,11 @@ public class NavigationUtil {
             RouteConfiguration.forSessionScope().setRoute("/:path*", theServlet.getTurkuAppImplClass());
         }
 
+
+        //
+        // In the browser, the navigate() method triggers a location update and the
+        // addition of a new history state entry, but doesn’t issue a full page reload.
+
         if (paramInfo.hasReroute()) {
             UI.getCurrent().getPage().setLocation(theServlet.getActualServletUrl() + paramInfo.getReroute());
 

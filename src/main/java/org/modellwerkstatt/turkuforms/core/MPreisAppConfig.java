@@ -33,6 +33,6 @@ public class MPreisAppConfig implements AppShellConfigurator {
         settings.addFavIcon("icon", "static/favicon.png", "32x32");
         settings.addLink("shortcut icon", "static/favicon.png");
 
-        Turku.l("AppConfig.configurePage()");
+        Turku.l("MPreisAppConfig.configurePage()  UI= " + (settings.getUi().isEmpty() ? "[empty]" : settings.getUi().get().hashCode()));
     }
 }

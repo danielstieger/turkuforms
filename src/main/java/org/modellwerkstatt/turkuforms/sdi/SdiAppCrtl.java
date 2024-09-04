@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
+import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
@@ -11,6 +12,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
+
 
 public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
     final static public String TURKUSDIAPPCRTL = "AppCrtl";

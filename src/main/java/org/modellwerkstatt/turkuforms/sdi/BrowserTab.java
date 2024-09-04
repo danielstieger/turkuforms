@@ -1,10 +1,13 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
+
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.HasDynamicTitle;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
@@ -18,17 +21,18 @@ import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 import org.modellwerkstatt.turkuforms.views.PromptWindow;
-
 import java.util.List;
 
 
-public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnterObserver {
+public class BrowserTab extends StaticLandingPage implements IToolkit_Window, BeforeEnterObserver {
 
     protected IOFXUserEnvironment userEnvironment;
     protected OFXUrlParams params;
@@ -36,16 +40,19 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
     protected CmdUiTab currentTab;
     protected int numTabs = 0;
+    protected BrowserTabType type;
+
 
     public BrowserTab() {
         super();
-
+        Turku.l("Constructor called for " + this.hashCode());
     }
+
 
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        Turku.l("BrowserTab.beforeEnter() " + event);
+        Turku.l("BrowserTab.beforeEnter() on " + this.hashCode() + " on ui " + UI.getCurrent().hashCode());
 
         //  check if we are logged id or redirect here to login ...
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
@@ -62,7 +69,7 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
                 // nope - not logged in ... this can not happen, routes are not configured correctly?
                 String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
                 servlet.logOnPortJTrace(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), msg);
-                quickUserInfo(msg);
+                SdiUtil.quickUserInfo(msg);
                 return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
             }
 
@@ -75,17 +82,20 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
 
         String msg = null;
         if (appCrtl.wasPickupCmdThenStart(this, params)) {
-            // nothing to do here
+
+            type = BrowserTabType.COMMAND_OPENER_TAB;
             Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
 
         } else if (params.hasCmdName()) {
             Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
             msg = appCrtl.startCommandViaUrl(this, params);
+            type = BrowserTabType.COMMAND_TAB;
+
         }
 
         if (!params.hasCmdName() || msg != null) {
-            initLandingPage(appCrtl.constructNewInstanceOfTileActions(this));
-            if (msg != null) { messageDiv.setText(msg); }
+            type = BrowserTabType.LANDING_TAB;
+            installLandingPage(turkuFactory, msg, appCrtl.createLandingPageItems());
 
         }
     }
@@ -164,7 +174,10 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
         currentTab = null;
         removeAll();
 
-        this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode());
+        this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode()).then(jsonValue -> {
+            Turku.l("ensureTabClosed().closeWindow() returns " + jsonValue);
+        });
+        // UI.getCurrent().navigate("/");
     }
 
     @Override
@@ -183,4 +196,11 @@ public class BrowserTab extends SdiLayout implements IToolkit_Window, BeforeEnte
     }
 
     public IAppCrtlAccess getApplicationController() { return appCrtl; }
+
+
+    enum BrowserTabType {
+        LANDING_TAB,
+        COMMAND_TAB,
+        COMMAND_OPENER_TAB
+    }
 }

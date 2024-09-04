@@ -105,12 +105,27 @@ window.turku = {
 
     childWindows: { },
 
+    openerCanAccessWindow: function(crtlHash) {
+        if (window.opener == window) {
+            return false;
+
+        } else
+
+    },
+
     closeWindow: function(crtlHash) {
         console.log('Turku.closeWindow() closing win for ' + crtlHash);
         let theWin = turku.childWindows['turkuwin_' + crtlHash];
         console.log('                    it is ' + theWin);
 
-        theWin.close();
+        if (theWin) {
+            theWin.close();
+            return true;
+
+        } else {
+            return false;
+
+        }
     },
 
     openNewWindow: function(crtlHash, urlToOpen) {
