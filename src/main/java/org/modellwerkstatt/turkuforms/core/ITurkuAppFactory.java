@@ -2,6 +2,9 @@ package org.modellwerkstatt.turkuforms.core;
 
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
+import org.modellwerkstatt.objectflow.runtime.IOFXCmdModule;
+
+import java.util.List;
 
 public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
@@ -19,6 +22,7 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     String getTurkuAppImplClassFqName();
 
 
+
     IMoLdapService getLdapServiceIfPresent();
 
     String translateIconName(String name);
@@ -28,4 +32,10 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     boolean isAutoParDeploymentForwardGracefully();
 
     String getRemoteAddr();
+
+    void initCmdUrlDefaults(List<IOFXCmdModule.CmdUrlDefaults> cmds);
+    List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults();
+
+    boolean cmdHasUrl(String fqName);
+
 }

@@ -5,9 +5,11 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
+import org.modellwerkstatt.dataux.runtime.sdicore.CheckerForCmdUrlDefaults;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
+import org.modellwerkstatt.objectflow.runtime.IOFXCmdModule;
 import org.modellwerkstatt.turkuforms.editors.*;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
@@ -17,7 +19,9 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.authmpreis.IPAuthLandingPage";
@@ -38,6 +42,11 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private String turkuAppImplClassFqName;
 
 
+    private List<IOFXCmdModule.CmdUrlDefaults> allUrlDefaults;
+    private Map<String,IOFXCmdModule.CmdUrlDefaults> defaultUrlForFqCmd;
+    private boolean usingUrlHandling;
+
+
     // Empty, app has to handle stuff, i.e. empty = return full path
     // for uploadLocations
 
@@ -47,7 +56,10 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         iconTranslator = new MaterialIconsTranslator();
         authentiactorClassFqName = DEFAULT_AUTHENTICATOR;
         turkuAppImplClassFqName = DEFAULT_TURKUAPPIMPL;
+        usingUrlHandling = false;
+
         turkuAppImplClassFqName = "org.modellwerkstatt.turkuforms.sdi.BrowserTab";
+        usingUrlHandling = true;
 
         // should be initialized in servlet
         onLogoutMainLandingPath = null;
@@ -239,6 +251,33 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         return fullLabel;
     }
 
+    @Override
+    public void initCmdUrlDefaults(List<IOFXCmdModule.CmdUrlDefaults> allDefaults) {
+        CheckerForCmdUrlDefaults checker = new CheckerForCmdUrlDefaults();
+        List<String> doubles = checker.check(allDefaults);
+        if (doubles.size() != 0) {
+            throw new RuntimeException("The following urls (+ param counts) are defined more than once in the application: " + String.join(",", doubles));
+        }
+
+        allUrlDefaults = allDefaults;
+        defaultUrlForFqCmd = new HashMap<>();
+
+        for (IOFXCmdModule.CmdUrlDefaults it: allUrlDefaults) {
+            defaultUrlForFqCmd.put(it.cmdFqName, it);
+        }
+    }
+
+    @Override
+    public List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults() {
+        return allUrlDefaults;
+    }
+
+    @Override
+    public boolean cmdHasUrl(String fqName) {
+        if (! usingUrlHandling) { return true; };
+
+        return defaultUrlForFqCmd.containsKey(fqName);
+    }
 
     public static DatePicker.DatePickerI18n createGermanI18n() {
         DatePicker.DatePickerI18n dpI18n = new DatePicker.DatePickerI18n();

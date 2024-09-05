@@ -46,8 +46,6 @@ public class TurkuServlet extends VaadinServlet {
     private String actualServletUrl;
     private boolean disableBrowserContextMenu;
     private AbstractApplicationContext appContext;
-    private List<IOFXCmdModule.CmdUrlDefaults> cmdUrlDefaults;
-
 
     public TurkuServletService turkuServletService;
     public ITurkuAppFactory getUiFactory() {
@@ -69,7 +67,6 @@ public class TurkuServlet extends VaadinServlet {
     public String getAppNameVersion() { return appNameVersion; }
     public Class getAuthenticatorClass() { return authenticatorClass; }
     public Class getTurkuAppImplClass() { return turkuAppImplClass; }
-    public List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults() { return cmdUrlDefaults; }
 
     public boolean isDisableBrowserContextMenu() { return disableBrowserContextMenu; }
 
@@ -121,17 +118,13 @@ public class TurkuServlet extends VaadinServlet {
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
             turkuAppImplClass = classLoader.loadClass(appFactory.getTurkuAppImplClassFqName());
 
-            cmdUrlDefaults = new ArrayList<>();
+
+            List<IOFXCmdModule.CmdUrlDefaults> cmdUrlDefaults = new ArrayList<>();
             Map<String, IOFXCmdModule> allModules = appContext.getBeansOfType(IOFXCmdModule.class);
             allModules.values().stream().forEach(cmdModule ->
                     cmdUrlDefaults.addAll(Arrays.asList(cmdModule.getCmdUrlDefaults()))
             );
-
-            CheckerForCmdUrlDefaults checker = new CheckerForCmdUrlDefaults();
-            List<String> doubles = checker.check(cmdUrlDefaults);
-            if (doubles.size() != 0) {
-                throw new RuntimeException("The following urls (+ param counts) are defined more than once in the application: " + String.join(",", doubles));
-            }
+            appFactory.initCmdUrlDefaults(cmdUrlDefaults);
 
 
         } catch (ClassNotFoundException | BeansException e) {

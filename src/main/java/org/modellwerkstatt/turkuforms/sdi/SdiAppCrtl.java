@@ -10,6 +10,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -75,10 +76,11 @@ public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
 
     public static SdiAppCrtl createAppCrtl(IOFXUserEnvironment env) {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
+        ITurkuAppFactory factory = servlet.getUiFactory();
         WrappedSession session = VaadinSession.getCurrent().getSession();
 
-        SdiAppCrtl appCrtl = new SdiAppCrtl(servlet.getUiFactory(), servlet.getAppBehaviour(), servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
-        appCrtl.initializeApplication(servlet.getAllCmdUrlDefaults(), servlet.getGuessedServerName(), env, servlet.getUiFactory().getRemoteAddr(), "");
+        SdiAppCrtl appCrtl = new SdiAppCrtl(factory, servlet.getAppBehaviour(), servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
+        appCrtl.initializeApplication(factory.getAllCmdUrlDefaults(), servlet.getGuessedServerName(), env, servlet.getUiFactory().getRemoteAddr(), "");
 
         session.setAttribute(TURKUSDIAPPCRTL, appCrtl);
         return appCrtl;

@@ -15,6 +15,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.sdidemo.Cmd;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -35,8 +36,12 @@ public class TurkuMenu extends MenuBar {
 
         for (AbstractAction currentItem : menu.getAllItems()) {
             if (currentItem instanceof CmdAction) {
-                MenuItem button = addActionItem(factory, this, (CmdAction) currentItem, true);
-                button.addThemeNames("tertiary", "small");
+                CmdAction action = (CmdAction) currentItem;
+
+                if (action.isGraphEdit || factory.cmdHasUrl(action.commandFqName)){
+                    MenuItem button = addActionItem(factory, this, action, true);
+                    button.addThemeNames("tertiary", "small");
+                }
 
             } else if (currentItem.labelText == null) {
                 // null is separator, ignore that here ...
@@ -60,7 +65,11 @@ public class TurkuMenu extends MenuBar {
 
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
-                addActionItem(turkuFactory, parent, (CmdAction) currentItem, false);
+                CmdAction action = (CmdAction) currentItem;
+                if (action.isGraphEdit || turkuFactory.cmdHasUrl(action.commandFqName)) {
+                    addActionItem(turkuFactory, parent, (CmdAction) currentItem, false);
+
+                }
 
             } else if (currentItem.labelText == null) {
                 // null is separator

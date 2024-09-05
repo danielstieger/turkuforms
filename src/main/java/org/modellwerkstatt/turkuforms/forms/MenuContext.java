@@ -58,7 +58,10 @@ public class MenuContext<T> {
 
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
-                addContextItem(turkuFactory, grid, rootGCM, subGCM, (CmdAction) currentItem);
+                CmdAction action = (CmdAction) currentItem;
+                if (action.isGraphEdit || turkuFactory.cmdHasUrl(action.commandFqName)) {
+                    addContextItem(turkuFactory, grid, rootGCM, subGCM, (CmdAction) currentItem);
+                }
 
             } else {
                 if (currentItem.labelText == null) { // null is separator
@@ -133,6 +136,7 @@ public class MenuContext<T> {
             if (glue.hotKey.equals(DOUBLECLICK_HK)) {
                 if (doubleClickAction != null) {
                     throw new IllegalStateException("There is already a " + DOUBLECLICK_HK + " hotkey registered for this context menu! Registered " + doubleClickAction + " new to add " + glue);
+
                 } else {
                     doubleClickAction = glue;
                 }
