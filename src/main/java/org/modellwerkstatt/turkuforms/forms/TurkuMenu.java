@@ -15,7 +15,6 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.sdidemo.Cmd;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -38,7 +37,7 @@ public class TurkuMenu extends MenuBar {
             if (currentItem instanceof CmdAction) {
                 CmdAction action = (CmdAction) currentItem;
 
-                if (action.isGraphEdit || factory.cmdHasUrl(action.commandFqName)){
+                if (action.isGraphEdit || factory.cmdAccessible(action.commandFqName)){
                     MenuItem button = addActionItem(factory, this, action, true);
                     button.addThemeNames("tertiary", "small");
                 }
@@ -66,7 +65,7 @@ public class TurkuMenu extends MenuBar {
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
                 CmdAction action = (CmdAction) currentItem;
-                if (action.isGraphEdit || turkuFactory.cmdHasUrl(action.commandFqName)) {
+                if (action.isGraphEdit || turkuFactory.cmdAccessible(action.commandFqName)) {
                     addActionItem(turkuFactory, parent, (CmdAction) currentItem, false);
 
                 }

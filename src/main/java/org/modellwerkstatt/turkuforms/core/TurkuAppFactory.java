@@ -273,7 +273,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public boolean cmdHasUrl(String fqName) {
+    public boolean cmdAccessible(String fqName) {
         if (! usingUrlHandling) { return true; };
 
         return defaultUrlForFqCmd.containsKey(fqName);

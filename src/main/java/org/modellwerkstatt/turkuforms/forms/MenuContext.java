@@ -59,7 +59,7 @@ public class MenuContext<T> {
         for (AbstractAction currentItem : menuItemList) {
             if (currentItem instanceof CmdAction) {
                 CmdAction action = (CmdAction) currentItem;
-                if (action.isGraphEdit || turkuFactory.cmdHasUrl(action.commandFqName)) {
+                if (action.isGraphEdit || turkuFactory.cmdAccessible(action.commandFqName)) {
                     addContextItem(turkuFactory, grid, rootGCM, subGCM, (CmdAction) currentItem);
                 }
 

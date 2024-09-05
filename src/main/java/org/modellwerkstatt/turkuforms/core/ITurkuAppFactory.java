@@ -36,6 +36,6 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     void initCmdUrlDefaults(List<IOFXCmdModule.CmdUrlDefaults> cmds);
     List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults();
 
-    boolean cmdHasUrl(String fqName);
+    boolean cmdAccessible(String fqName);
 
 }
