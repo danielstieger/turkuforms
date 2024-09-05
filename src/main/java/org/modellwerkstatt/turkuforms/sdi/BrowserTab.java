@@ -93,7 +93,8 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
 
         }
 
-        if (!params.hasCmdName() || msg != null) {
+        if ((!params.hasCmdName() && type != BrowserTabType.COMMAND_OPENER_TAB) || msg != null) {
+
             type = BrowserTabType.LANDING_TAB;
             installLandingPage(turkuFactory, msg, appCrtl.createLandingPageItems());
 
@@ -174,10 +175,18 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
         currentTab = null;
         removeAll();
 
-        this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode()).then(jsonValue -> {
-            Turku.l("ensureTabClosed().closeWindow() returns " + jsonValue);
+        this.getElement().executeJs("return window.turku.openerCanAccessWindow($0)", uiTab.hashCode()).then(jsonValue -> {
+
+                boolean canClose = jsonValue.asBoolean();
+
+                if (canClose) {
+                    this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode());
+
+                } else {
+                    UI.getCurrent().navigate("/");
+
+                }
         });
-        // UI.getCurrent().navigate("/");
     }
 
     @Override

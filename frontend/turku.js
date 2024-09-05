@@ -106,11 +106,19 @@ window.turku = {
     childWindows: { },
 
     openerCanAccessWindow: function(crtlHash) {
-        if (window.opener == window) {
-            return false;
+        let noOpener = window.opener == window;
 
-        } else
+        if (! noOpener) {
+            let childWindows = window.opener.turku.childWindows;
 
+            console.log('openerCanAccessWindow() childWindows list ' + childWindows);
+            if (childWindows['turkuwin_' + crtlHash]) {
+                return true;
+            }
+
+        }
+
+        return false;
     },
 
     closeWindow: function(crtlHash) {
@@ -120,11 +128,6 @@ window.turku = {
 
         if (theWin) {
             theWin.close();
-            return true;
-
-        } else {
-            return false;
-
         }
     },
 

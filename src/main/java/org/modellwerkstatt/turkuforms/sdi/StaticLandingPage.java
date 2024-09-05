@@ -39,8 +39,7 @@ abstract public class StaticLandingPage extends VerticalLayout implements HasDyn
 
     public void installLandingPage(ITurkuAppFactory factory, String msg, List<LandingPageUrlItem> allItems) {
 
-        // if (tilesLayout != null) { throw new RuntimeException("This can not happen."); }
-
+        // new tiles layout ...
         tilesLayout = new TilesLayout();
 
         for(LandingPageUrlItem item: allItems) {
