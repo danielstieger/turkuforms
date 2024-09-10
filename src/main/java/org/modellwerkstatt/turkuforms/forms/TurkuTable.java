@@ -139,6 +139,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         });
 
         Peculiar.useGridShortcutHk(grid, "A", event -> { selectionModel.selectAll(); });
+        Peculiar.useGridShortcutHk(grid, "END", event -> { grid.scrollToIndex(dataView.getFilteredTotalCount()-1); });
+        Peculiar.useGridShortcutHk(grid, "HOME", event -> { grid.scrollToIndex(0); });
 
         this.add(topPane, grid);
 

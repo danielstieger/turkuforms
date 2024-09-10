@@ -24,6 +24,7 @@ public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
 
 
 
+
     public SdiAppCrtl(IToolkit_UiFactory factory, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appBehavior, registration, pltfrm);
         startRequest(4711);
@@ -83,6 +84,7 @@ public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
         appCrtl.initializeApplication(factory.getAllCmdUrlDefaults(), servlet.getGuessedServerName(), env, servlet.getUiFactory().getRemoteAddr(), "");
 
         session.setAttribute(TURKUSDIAPPCRTL, appCrtl);
+
         return appCrtl;
     }
 

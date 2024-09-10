@@ -70,10 +70,11 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
             button.setText(HOME_REDIRECT_PREFIX_LABEL + " " + paramInfo.getUsername() + " (" + OK_HOKTEY + ")");
         }
 
-        // auto forward ?
-        if (paramInfo.hasReroute()) {
-            event.forwardTo(locationToForward + paramInfo.getParamsToForwardIfAny());
-        }
+        // Auto-Forward is implemented by binding the app to '/<path>' after login, instead of this
+        // simple home screen.
+        // if (paramInfo.hasReroute()) {
+        //    event.forwardTo(locationToForward + paramInfo.getParamsToForwardIfAny());
+        // }
     }
 
     @Override
