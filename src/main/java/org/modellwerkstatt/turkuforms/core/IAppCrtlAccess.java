@@ -19,8 +19,4 @@ public interface IAppCrtlAccess {
     public void logFrmwrkProblem(String commandName, String sessId, String source, Throwable t, String desc);
 
     public void closeAppCrtlMissingHearbeatOrBeacon(VaadinSession session);
-
-    public boolean isAsyncShutdownRequested();
-
-    public void internal_immediatelyShutdown();
 }

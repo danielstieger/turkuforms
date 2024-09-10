@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
-import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
@@ -11,11 +10,21 @@ import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.core.MPreisAppConfig;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
 
-public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
+import static org.modellwerkstatt.turkuforms.auth.UserPrincipal.USERPRINCIPAL_SESSIONATTRIB;
+import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.REMOTE_SESSIONATTRIB;
+import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.USERNAME_SESSIONATTRIB;
+
+
+public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess, HttpSessionBindingListener {
     final static public String TURKUSDIAPPCRTL = "AppCrtl";
 
     private int lastRequestHash = -1;
@@ -55,18 +64,24 @@ public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
     }
 
     @Override
-    public void internal_immediatelyShutdown() {
-        // TODO - not implemented yet ?
-    }
-
-    @Override
     public void closeAppCrtlMissingHearbeatOrBeacon(VaadinSession session) {
         // TODO - also not impelmented yet?
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + "_" + (hashCode() % 1000);
+    public void valueBound(HttpSessionBindingEvent httpSessionBindingEvent) {
+
+    }
+
+    @Override
+    public void valueUnbound(HttpSessionBindingEvent httpSessionBindingEvent) {
+        Turku.l("SdiAppCrtl.valueUnbound(): shutdown in progress (" + inShutdownMode() + ") or shutdown now.");
+
+        // Just this controller, not others of the httpSession
+        if (!inShutdownMode()) {
+            // fallback only ...
+            internal_shutdownSDIAppImmediatelly();
+        }
     }
 
     public static SdiAppCrtl getAppCrtl() {
@@ -75,7 +90,7 @@ public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
         return appCrtl;
     }
 
-    public static SdiAppCrtl createAppCrtl(IOFXUserEnvironment env) {
+    public static SdiAppCrtl createAppCrtlOnSession(IOFXUserEnvironment env) {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         ITurkuAppFactory factory = servlet.getUiFactory();
         WrappedSession session = VaadinSession.getCurrent().getSession();
@@ -84,9 +99,17 @@ public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess {
         appCrtl.initializeApplication(factory.getAllCmdUrlDefaults(), servlet.getGuessedServerName(), env, servlet.getUiFactory().getRemoteAddr(), "");
 
         session.setAttribute(TURKUSDIAPPCRTL, appCrtl);
+        session.setAttribute(REMOTE_SESSIONATTRIB, servlet.getUiFactory().getRemoteAddr());
+        session.setAttribute(USERNAME_SESSIONATTRIB, env.getUserName());
+
+        // get rid of user principal - not used in sdi
+        session.removeAttribute(USERPRINCIPAL_SESSIONATTRIB);
+
+        session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
 
         return appCrtl;
     }
+
 
 }
 

@@ -24,7 +24,7 @@ public class UserPrincipal {
 
     @Override
     public String toString() {
-        return "UserPrincipal";
+        return  userName + " UserPrincipal";
     }
 
 
@@ -37,6 +37,4 @@ public class UserPrincipal {
         WrappedSession session = vaadinSession.getSession();
         session.setAttribute(USERPRINCIPAL_SESSIONATTRIB, principal);
     }
-
-
 }

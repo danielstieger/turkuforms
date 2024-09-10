@@ -71,24 +71,6 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         unregisterFromSessionTryInvalidate(session, true);
     }
 
-    public void shutdownOtherExistingControllers(VaadinSession vaadinSession){
-        Turku.l("TurkuApplicationController.shutdownOtherExistingControllers()");
-        WrappedSession session = vaadinSession.getSession();
-        String own = appCrtlSessionName();
-
-        for (String name: session.getAttributeNames()){
-            if (isTurkuControllerAttribute(name) && !name.equals(own)) {
-
-                TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
-                TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
-
-                mainWin.getUI().get().access(() -> crtl.onExitRequested(true));
-                Turku.l("TurkuApplicationController.shutdownOtherExistingControllers() exited " + name);
-            }
-        }
-    }
-
-
     static public boolean hasOtherControllersInSession(VaadinSession vaadinSession) {
         WrappedSession session = vaadinSession.getSession();
 

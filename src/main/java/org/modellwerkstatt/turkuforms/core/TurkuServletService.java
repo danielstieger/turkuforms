@@ -97,14 +97,6 @@ public class TurkuServletService extends VaadinServletService {
                     String userName = "" + httpSession.getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
                     jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some turku interaction", startTime);
                 }
-
-                if (appCrtl.isAsyncShutdownRequested()) {
-                    // just a first impl.
-                    appCrtl.internal_immediatelyShutdown();
-
-                }
-
-
             }
 
         } else if (isBeacon) {
