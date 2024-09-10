@@ -58,8 +58,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         turkuAppImplClassFqName = DEFAULT_TURKUAPPIMPL;
         usingUrlHandling = false;
 
-        turkuAppImplClassFqName = "org.modellwerkstatt.turkuforms.sdi.BrowserTab";
-        usingUrlHandling = true;
+        // setTurkuAppImplClassFqName("org.modellwerkstatt.turkuforms.sdi.BrowserTab");
 
         // should be initialized in servlet
         onLogoutMainLandingPath = null;
@@ -128,7 +127,10 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         return turkuAppImplClassFqName;
     }
 
-    public void setTurkuAppImplClassFqName(String fqName) { turkuAppImplClassFqName = fqName; }
+    public void setTurkuAppImplClassFqName(String fqName) {
+        turkuAppImplClassFqName = fqName;
+        usingUrlHandling = true;
+    }
 
 
     @Override

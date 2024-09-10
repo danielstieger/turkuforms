@@ -34,7 +34,18 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
     protected  UserPrincipal tryIpOrParamLogin(ParamInfo params, ITurkuAppFactory factory) {
         String name = factory.getRemoteAddr();
-        if (params.hasUsername()) { name = params.getUsername(); }
+
+        if (params.hasUsername()) {
+            name = params.getUsername();
+            if (name.length() == 4 && Character.isDigit(name.charAt(0)) && Character.isDigit(name.charAt(1))
+                    && Character.isDigit(name.charAt(2)) && Character.isDigit(name.charAt(3))) {
+                // okay for mpreis, seems to be fil num
+            } else {
+                name = "xxxxxxxxx";
+            }
+
+
+        }
         return new UserPrincipal(name, "");
     }
 

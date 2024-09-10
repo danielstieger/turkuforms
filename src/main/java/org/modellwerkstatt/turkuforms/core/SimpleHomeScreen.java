@@ -22,13 +22,14 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle, BeforeEnterObserver {
 
     private final Button button;
+    private final String locationToForward;
     protected String appName;
     protected ParamInfo paramInfo;
 
     public SimpleHomeScreen() {
 
         appName = Workarounds.getCurrentTurkuServlet().getAppNameVersion();
-        String locationToForward = Workarounds.getCurrentTurkuServlet().getActualServletUrl() + TurkuServlet.LOGIN_ROUTE;
+        locationToForward = Workarounds.getCurrentTurkuServlet().getActualServletUrl() + TurkuServlet.LOGIN_ROUTE;
 
         Span loginIdentityImage = new Span();
         loginIdentityImage.addClassName("DefaultLoginLogo");
@@ -67,6 +68,11 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
 
         if (paramInfo.hasUsername()) {
             button.setText(HOME_REDIRECT_PREFIX_LABEL + " " + paramInfo.getUsername() + " (" + OK_HOKTEY + ")");
+        }
+
+        // auto forward ?
+        if (paramInfo.hasReroute()) {
+            event.forwardTo(locationToForward + paramInfo.getParamsToForwardIfAny());
         }
     }
 
