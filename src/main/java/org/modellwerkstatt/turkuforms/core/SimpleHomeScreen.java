@@ -8,12 +8,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
+import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
+import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
+import java.security.cert.TrustAnchor;
 import java.util.List;
 
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.HOME_REDIRECT_PREFIX_LABEL;
@@ -22,14 +28,12 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle, BeforeEnterObserver {
 
     private final Button button;
-    private final String locationToForward;
     protected String appName;
     protected ParamInfo paramInfo;
 
     public SimpleHomeScreen() {
 
         appName = Workarounds.getCurrentTurkuServlet().getAppNameVersion();
-        locationToForward = Workarounds.getCurrentTurkuServlet().getActualServletUrl() + TurkuServlet.LOGIN_ROUTE;
 
         Span loginIdentityImage = new Span();
         loginIdentityImage.addClassName("DefaultLoginLogo");
@@ -45,7 +49,7 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
         button = new Button (HOME_REDIRECT_PREFIX_LABEL + " (" + OK_HOKTEY + ")", event -> {
             VaadinSession.getCurrent().getSession().invalidate();
 
-            UI.getCurrent().getPage().setLocation(locationToForward + paramInfo.getParamsToForwardIfAny());
+            NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + paramInfo.getParamsToForwardIfAny());
         });
         Peculiar.useButtonShortcutHk(button, OK_HOKTEY);
         button.addClassName("DefaultLoginContentWidth");
@@ -60,21 +64,35 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
     public void beforeEnter(BeforeEnterEvent event) {
         paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
 
-        List<String> segments = event.getLocation().getSegments();
-        if (segments.size() > 0 && !"".equals(segments.get(0))) {
-            paramInfo.setReroute(event.getLocation().getPath());
-        }
-
-
         if (paramInfo.hasUsername()) {
             button.setText(HOME_REDIRECT_PREFIX_LABEL + " " + paramInfo.getUsername() + " (" + OK_HOKTEY + ")");
         }
 
-        // Auto-Forward is implemented by binding the app to '/<path>' after login, instead of this
-        // simple home screen.
-        // if (paramInfo.hasReroute()) {
-        //    event.forwardTo(locationToForward + paramInfo.getParamsToForwardIfAny());
-        // }
+        LocalTime curDbTime = DeprecatedServerDateProvider.getSqlServerDateTime().toLocalTime();
+        boolean inReebootInterval = curDbTime.isAfter(MPreisAppConfig.REBOOTINTERVAL_STARTTIME) ||
+                                    curDbTime.isBefore(MPreisAppConfig.REBOOTINTERVAL_STOPTIME);
+
+
+        List<String> segments = event.getLocation().getSegments();
+        boolean hasCmdPath = segments.size() > 0 && !"".equals(segments.get(0));
+
+        if (inReebootInterval && hasCmdPath) {
+            // get rid of any /<path>
+            event.forwardTo("/");
+
+        } else if (hasCmdPath && paramInfo.hasReroute()) {
+            // vaadin bug with route prios? not forwarding with even.forwardTo()
+            NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + paramInfo.getParamsToForwardIfAny());
+
+
+        } else if (hasCmdPath) {
+            String otherParams = paramInfo.getParamsToForwardIfAny();
+            otherParams += otherParams.length() == 0 ? "?" : "&";
+            otherParams += NavigationUtil.REROUTE_TO + "=" + event.getLocation().getPath();
+
+            // vaadin bug with route prios? not forwarding with even.forwardTo()
+            NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + otherParams);
+        }
     }
 
     @Override

@@ -15,7 +15,7 @@ import org.modellwerkstatt.turkuforms.util.Turku;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-public class TurkuApplicationController extends ApplicationMDI implements HttpSessionBindingListener, IAppCrtlAccess {
+public class TurkuApplicationController extends ApplicationMDI implements HttpSessionBindingListener, ITurkuAppCrtlAccess {
     public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.TurkuAppCrtl_";
     public final static String USERNAME_SESSIONATTRIB = "userName";
     public final static String REMOTE_SESSIONATTRIB = "remoteAddr";

@@ -1,24 +1,17 @@
 package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServlet;
-import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
-import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
-import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.sdi.BrowserTab;
-import org.modellwerkstatt.turkuforms.sdi.SdiAppCrtl;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /*
@@ -34,10 +27,21 @@ public class Workarounds {
     public final static String INTERNAL_VAADIN_SESSION_NAME = "com.vaadin.flow.server.VaadinSession.loaderservlet";
     public final static String INTERNAL_VAADIN_UID_NAME = "v-uiId";
 
-    public static String mlToolTipText(String tooltip){
+    public static void addMlToolTipIfNec(String tooltip, Component cmpt){
         // \n is acceptable here for now, since we use
         // css property:   white-space: pre;
-        return tooltip;
+
+        if ("".equals(tooltip)) {
+
+        } /*else if (cmpt instanceof Button) {
+            ((Button) cmpt).setTooltipText(tooltip);
+
+
+        } */ else {
+            Tooltip t = Tooltip.forComponent(cmpt);
+            t.setPosition(Tooltip.TooltipPosition.START_TOP);
+            t.setText(tooltip);
+        }
     }
 
     public static String niceGridHeaderLabel(String s){
@@ -59,7 +63,7 @@ public class Workarounds {
     }
 
     public static boolean sameHkInThisRequest(String hk) {
-        IAppCrtlAccess crtl = Workarounds.getControllerFormUi(UI.getCurrent());
+        ITurkuAppCrtlAccess crtl = Workarounds.getControllerFormUi(UI.getCurrent());
         return crtl.sameHkInThisRequest(hk);
     }
 
@@ -87,7 +91,7 @@ public class Workarounds {
         return (TurkuServlet) VaadinServlet.getCurrent();
     }
 
-    public static IAppCrtlAccess getControllerFormUi(UI ui) {
+    public static ITurkuAppCrtlAccess getControllerFormUi(UI ui) {
         Component mainComponent = ui.getChildren().findFirst().orElse(null);
 
         if (mainComponent instanceof TurkuApp) {

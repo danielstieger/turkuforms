@@ -16,6 +16,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -90,7 +91,7 @@ public class TurkuMenu extends MenuBar {
 
     static public <T> MenuItem addActionItem(ITurkuAppFactory turkuFactory, HasMenuItems parent, CmdAction glue, boolean topLevel) {
         ComponentEventListener<ClickEvent<MenuItem>> execItem = event -> {
-            event.getSource().setEnabled(false);
+            // event.getSource().setEnabled(false);
             glue.startCommand();
         };
 
@@ -110,8 +111,8 @@ public class TurkuMenu extends MenuBar {
         }
 
         glue.attachButton1(new TurkuHasEnabled(glue.hideWhenDisabled, created, "Menu " + glue.labelText));
-        Tooltip t = Tooltip.forComponent(created);
-        t.setText(Workarounds.mlToolTipText(glue.getToolTip()));
+
+        Workarounds.addMlToolTipIfNec(glue.getToolTip(), created);
 
         return created;
     }

@@ -61,6 +61,10 @@ public class NavigationUtil {
         }
     }
 
+    public static void absolutNavi(String path) {
+        UI.getCurrent().getPage().setLocation(Workarounds.getCurrentTurkuServlet().getActualServletUrl() + path);
+    }
+
     public static UserEnvironmentInformation getAndClearUserEnvFromUi() {
         VaadinSession current = VaadinSession.getCurrent();
         UserEnvironmentInformation env = (UserEnvironmentInformation) current.getAttribute("uiCurrentUserEnv");

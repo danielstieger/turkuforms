@@ -196,7 +196,9 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         }
 
         glue.attachButton1(new TurkuHasEnabled(glue.hideWhenDisabled, btn, "Drawer " + glue.labelText));
-        btn.setTooltipText(Workarounds.mlToolTipText(glue.getToolTip()));
+
+        Workarounds.addMlToolTipIfNec(glue.getToolTip(), btn);
+
         btn.setWidthFull();
         // btn.setDisableOnClick(true);
         btn.setClassName("MainwindowDrawerCmdButton");

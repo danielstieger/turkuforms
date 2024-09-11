@@ -14,7 +14,7 @@
 }
 
 vaadin-tooltip-overlay::part(content) {
-   white-space: pre;
+   /* white-space: pre; */
 }
 
 @media screen and (max-width: 810px) {

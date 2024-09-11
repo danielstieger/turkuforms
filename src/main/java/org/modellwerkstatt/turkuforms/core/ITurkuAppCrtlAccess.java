@@ -4,7 +4,7 @@ import com.vaadin.flow.server.VaadinSession;
 
 import java.util.Map;
 
-public interface IAppCrtlAccess {
+public interface ITurkuAppCrtlAccess {
 
     public void startRequest(int requestHash);
 

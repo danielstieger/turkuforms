@@ -106,7 +106,7 @@ window.turku = {
     childWindows: { },
 
     openerCanAccessWindow: function(crtlHash) {
-        let noOpener = window.opener == window;
+        let noOpener = window.opener == null || window.opener == window;
 
         if (! noOpener) {
             let childWindows = window.opener.turku.childWindows;

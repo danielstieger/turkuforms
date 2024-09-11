@@ -34,8 +34,7 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
     public void attachedToForm(TurkuDelegatesForm<?> dlgtFrm) { turkuDelegatesForm = dlgtFrm; }
 
     public void setLabelTooltip(String s) {
-        Tooltip tt = Tooltip.forComponent(label);
-        tt.setText(Workarounds.mlToolTipText(s));
+        Workarounds.addMlToolTipIfNec(s, label);
     }
 
     public void setLabel(String s) {

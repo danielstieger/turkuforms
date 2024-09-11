@@ -6,6 +6,8 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.shared.ui.Transport;
 import com.vaadin.flow.theme.Theme;
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 
@@ -21,6 +23,9 @@ public class MPreisAppConfig implements AppShellConfigurator {
     public static final float DELEGATES_LINE_HIGHT_IN_REM = 1.125f; /* --lumo-font-size-m */
     public static final String HOME_REDIRECT_PREFIX_LABEL = "START";
     public static final int SESSION_TIMEOUT_FOR_APP_SEC = 60 * 60 * 5; /* prevent sleep modes kill app */
+    public static final LocalTime REBOOTINTERVAL_STARTTIME = new LocalTime(23, 00);
+    public static final LocalTime REBOOTINTERVAL_STOPTIME = new LocalTime(5, 00);
+
 
 
     @Override

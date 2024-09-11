@@ -8,14 +8,13 @@ import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
-import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.MPreisAppConfig;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
@@ -24,7 +23,7 @@ import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.REM
 import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.USERNAME_SESSIONATTRIB;
 
 
-public class SdiAppCrtl extends ApplicationSDI implements IAppCrtlAccess, HttpSessionBindingListener {
+public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, HttpSessionBindingListener {
     final static public String TURKUSDIAPPCRTL = "AppCrtl";
 
     private int lastRequestHash = -1;

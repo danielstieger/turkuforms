@@ -17,7 +17,7 @@ import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.CONV;
 import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
-import org.modellwerkstatt.turkuforms.core.IAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -188,17 +188,13 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
 
     }
 
-    @Override
-    public void openNewWindow(String url) {
-
-    }
 
     @Override
     public void setToastMessage(String s) {
         Notification.show(s, 4000, Notification.Position.TOP_CENTER);
     }
 
-    public IAppCrtlAccess getApplicationController() { return appCrtl; }
+    public ITurkuAppCrtlAccess getApplicationController() { return appCrtl; }
 
 
     enum BrowserTabType {

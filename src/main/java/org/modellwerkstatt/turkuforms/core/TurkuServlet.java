@@ -156,13 +156,9 @@ public class TurkuServlet extends VaadinServlet {
 
         disableBrowserContextMenu = !"dandev".equals(guessedServerName);
 
+        RouteConfiguration.forApplicationScope().setRoute(APP_ROUTE, SimpleHomeScreen.class);
         RouteConfiguration.forApplicationScope().setRoute(LOGIN_ROUTE, authenticatorClass);
         RouteConfiguration.forApplicationScope().setRoute(LOGOUT_ROUTE, authenticatorClass);
-        RouteConfiguration.forApplicationScope().setRoute(APP_ROUTE, SimpleHomeScreen.class);
-
-        // DEMO V2 SDI tech demo stuff
-        RouteConfiguration.forApplicationScope().setRoute("/v2/login", LoginTestView.class);
-        RouteConfiguration.forApplicationScope().setRoute("/v2/:path*", SdiTestWindow.class);
 
         Turku.l("TurkuServlet.servletInitialized() done successfully for '" + servletPath + "' with " + authenticatorClass.getName());
     }

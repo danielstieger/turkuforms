@@ -52,7 +52,7 @@ public class TilesLayout extends FlexLayout {
         }
 
         // btn.setDisableOnClick(true);
-        btn.setTooltipText(Workarounds.mlToolTipText(tooltip));
+        Workarounds.addMlToolTipIfNec(tooltip, btn);
         btn.setMinHeight("200px");
         btn.setMinWidth("200px");
         btn.addClassName("MainwindowTileButton");
