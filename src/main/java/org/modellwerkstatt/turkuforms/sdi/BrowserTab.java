@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
 
+import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -149,6 +150,8 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
             numTabs ++;
             currentTab = uiTab;
             add(currentTab);
+            getElement().executeJs("turku.installFocusHandler($0)", this);
+
         }
     }
 
@@ -158,6 +161,13 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
         this.removeAll();
         currentTab = (CmdUiTab) tab;
         add(currentTab);
+    }
+
+    @ClientCallable
+    public void browserTabFocusReceived() {
+        if (currentTab != null) {
+            currentTab.delayedRequestFocus();
+        }
     }
 
     @Override

@@ -24,8 +24,6 @@ import org.modellwerkstatt.turkuforms.sdi.BrowserTab;
  */
 
 public class Workarounds {
-    public final static String INTERNAL_VAADIN_SESSION_NAME = "com.vaadin.flow.server.VaadinSession.loaderservlet";
-    public final static String INTERNAL_VAADIN_UID_NAME = "v-uiId";
 
     public static void addMlToolTipIfNec(String tooltip, Component cmpt){
         // \n is acceptable here for now, since we use
@@ -39,7 +37,7 @@ public class Workarounds {
 
         } */ else {
             Tooltip t = Tooltip.forComponent(cmpt);
-            t.setPosition(Tooltip.TooltipPosition.START_TOP);
+            t.setPosition(Tooltip.TooltipPosition.TOP);
             t.setText(tooltip);
         }
     }

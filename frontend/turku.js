@@ -76,6 +76,16 @@ window.turku = {
         console.log('turku.installBeacon() Beacon installed for ' + servletUrl + " and ui " + uiid);
     },
 
+    installFocusHandler: function(view) {
+
+        window.addEventListener("focus", function sendFocus(event) {
+            if (document.hasFocus()) {
+                view.$server.browserTabFocusReceived();
+            }
+        });
+        console.log('truku.installFocusHandler() installed the focus handler.');
+    },
+
     installCloseConfirmHandler: function(ev) {
         if (window.Vaadin.connectionState.connectionState == 'connected') {
             ev.preventDefault();

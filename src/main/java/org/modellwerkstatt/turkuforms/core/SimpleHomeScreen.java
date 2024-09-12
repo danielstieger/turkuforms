@@ -81,7 +81,7 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
             event.forwardTo("/");
 
         } else if (hasCmdPath && paramInfo.hasReroute()) {
-            // vaadin bug with route prios? not forwarding with even.forwardTo()
+
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + paramInfo.getParamsToForwardIfAny());
 
 
@@ -90,7 +90,7 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
             otherParams += otherParams.length() == 0 ? "?" : "&";
             otherParams += NavigationUtil.REROUTE_TO + "=" + event.getLocation().getPath();
 
-            // vaadin bug with route prios? not forwarding with even.forwardTo()
+
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + otherParams);
         }
     }

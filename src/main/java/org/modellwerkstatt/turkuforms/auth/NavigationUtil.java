@@ -62,6 +62,7 @@ public class NavigationUtil {
     }
 
     public static void absolutNavi(String path) {
+        // vaadin bug with route prios? not forwarding with even.forwardTo()
         UI.getCurrent().getPage().setLocation(Workarounds.getCurrentTurkuServlet().getActualServletUrl() + path);
     }
 
