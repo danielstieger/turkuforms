@@ -2,7 +2,6 @@ package org.modellwerkstatt.turkuforms.auth;
 
 import com.vaadin.flow.router.QueryParameters;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.auth;
 
-import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -12,13 +11,9 @@ import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
-import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class NavigationUtil {

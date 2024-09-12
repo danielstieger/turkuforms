@@ -2,7 +2,6 @@ package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;

@@ -6,7 +6,6 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.shared.ui.Transport;
 import com.vaadin.flow.theme.Theme;
-import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.modellwerkstatt.turkuforms.util.Turku;
 

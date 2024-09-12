@@ -9,7 +9,6 @@ import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.grid.contextmenu.GridMenuItem;
 import com.vaadin.flow.component.grid.contextmenu.GridSubMenu;
 import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.shared.Tooltip;
 import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
@@ -58,32 +57,30 @@ public class MenuContext<T> {
                                          List<AbstractAction> menuItemList) {
 
         for (AbstractAction currentItem : menuItemList) {
+
             if (currentItem instanceof CmdAction) {
                 CmdAction action = (CmdAction) currentItem;
                 if (action.isGraphEdit || turkuFactory.cmdAccessible(action.commandFqName)) {
-                    addContextItem(turkuFactory, grid, rootGCM, subGCM, (CmdAction) currentItem);
+                    addContextItem(turkuFactory, grid, rootGCM, subGCM, action);
+                }
+
+            } else if (currentItem.labelText == null) { // null is separator
+                if (rootGCM != null) {
+                    rootGCM.add(new Hr());
+                } else {
+                    subGCM.add(new Hr());
                 }
 
             } else {
-                if (currentItem.labelText == null) { // null is separator
-                    if (rootGCM != null) {
-                        rootGCM.add(new Hr());
-                    } else {
-                        subGCM.add(new Hr());
-                    }
 
+                GridMenuItem<T> createdItem;
+                if (rootGCM != null) {
+                    createdItem = rootGCM.addItem(currentItem.labelText);
                 } else {
-
-                    GridMenuItem<T> createdItem;
-                    if (rootGCM != null) {
-                        createdItem = rootGCM.addItem(currentItem.labelText);
-                    } else {
-                        createdItem = subGCM.addItem(currentItem.labelText);
-                    }
-                    subGCM = createdItem.getSubMenu();
-
-                    createMainMenuStructure(turkuFactory, grid, null, subGCM, ((Menu) currentItem).getAllItems());
+                    createdItem = subGCM.addItem(currentItem.labelText);
                 }
+
+                createMainMenuStructure(turkuFactory, grid, null, createdItem.getSubMenu(), ((Menu) currentItem).getAllItems());
             }
         }
     }
