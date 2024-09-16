@@ -1,9 +1,11 @@
 package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.modellwerkstatt.dataux.runtime.core.FocusController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
@@ -23,22 +25,22 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     private FormHeading heading;
     private FocusController<IToolkit_Form> focusController;
 
-    private boolean needsFullWith = false;
-    private boolean multipleColumns;
     private List<Integer> colConstraints;
     private List<Integer> rowConstraints;
 
     private int childsAdded = 0;
     private FlexComponent containerToAddComponent;
-
+    private boolean multipleColumns = false;
 
     public TurkuGridLayout(ITurkuAppFactory factory) {
         super();
+        Peculiar.shrinkSpace(this);
+
         this.factory = factory;
         containerToAddComponent = this;
-        Peculiar.shrinkSpace(this);
         focusController = new FocusController<>();
         addClassName("TurkuGrid");
+
 
     }
 
@@ -55,13 +57,16 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         for (String c: rowConstraints) { this.rowConstraints.add(getWeight(c)); };
 
         multipleColumns = this.colConstraints.size() > 1;
-        this.setSizeUndefined();
+
+        if (hasStarWeight(this.rowConstraints)) {
+            this.setHeightFull();
+        }
+
         if (hasStarWeight(this.colConstraints)) {
-            needsFullWith = true;
             this.setWidthFull();
         }
-        if (hasStarWeight(this.rowConstraints)) { this.setHeightFull(); }
     }
+
 
     @Override
     public void addChildren(IToolkit_Form child) {
@@ -81,30 +86,42 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         if (currentCol == 0 && multipleColumns) {
             HorizontalLayout hl = new HorizontalLayout();
             Peculiar.shrinkSpace(hl);
-            hl.setSizeUndefined();
 
-            if (needsFullWith) hl.setWidthFull();
-            if (currentRowConstraint > 0) { hl.setHeightFull(); }
+            hl.setSizeUndefined();
+            hl.setWidthFull();
 
             this.add(hl);
             containerToAddComponent = hl;
+
             if (currentRowConstraint == -1) {
                 this.setFlexGrow(0, hl);
+
             } else {
                 this.setFlexGrow(currentRowConstraint, hl);
+
             }
 
         }
 
         int childConstraint = multipleColumns ? currentColConstraint : currentRowConstraint;
-        // TODO: should we also apply sizeFull/sizeUndefined()
-        // add child now
+
         Component childCmpt = (Component) child;
+        HasSize childCmptHasSize = (HasSize) childCmpt;
+
+        childCmptHasSize.setSizeUndefined();
+        if (! multipleColumns) {
+            childCmptHasSize.setWidthFull();
+        }
+
         containerToAddComponent.add(childCmpt);
+
+
         if (childConstraint == -1) {
             containerToAddComponent.setFlexGrow(0, childCmpt);
+
         } else {
             containerToAddComponent.setFlexGrow(childConstraint, childCmpt);
+
         }
 
         childsAdded ++;

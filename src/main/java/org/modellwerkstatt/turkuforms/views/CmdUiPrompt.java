@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.views;
 
+import com.vaadin.flow.component.HasSize;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 
@@ -24,12 +25,24 @@ public class CmdUiPrompt extends CmdUi {
     public void show(String windowTitle, IToolkit_Form form) {
         promptWindow = new PromptWindow(true);
         promptWindow.add(this);
+
         initialShow(form);
+
         if (fullSize) {
             promptWindow.setSizeFull();
             this.setSizeFull();
+            ((HasSize) form).setHeightFull();
+
         }
         promptWindow.open();
+    }
+
+    @Override
+    public void setContent(IToolkit_Form formAsComponent) {
+        super.setContent(formAsComponent);
+        if (fullSize) {
+            ((HasSize) formAsComponent).setHeightFull();
+        }
     }
 
     @Override
