@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.core;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 
 import java.util.Map;
@@ -18,5 +19,5 @@ public interface ITurkuAppCrtlAccess {
 
     public void logFrmwrkProblem(String commandName, String sessId, String source, Throwable t, String desc);
 
-    public void closeAppCrtlMissingHearbeatOrBeacon(VaadinSession session);
+    public void beaconCloseOrMissingHeartbeat(VaadinSession session, UI closingUi);
 }

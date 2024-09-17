@@ -7,11 +7,13 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -67,6 +69,16 @@ public class Turku {
         }
 
         return sb.toString();
+    }
+
+    public static String cookiesToString(VaadinRequest request) {
+        String info = "";
+
+        for (Cookie c: request.getCookies()) {
+            info += c.getName()+ ": " + c.getValue() + " " + c.getMaxAge() + "  ";
+        }
+
+        return info;
     }
 
     public static String requestToString(VaadinRequest request) {

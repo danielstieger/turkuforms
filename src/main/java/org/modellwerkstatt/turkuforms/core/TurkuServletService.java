@@ -80,6 +80,9 @@ public class TurkuServletService extends VaadinServletService {
             String atmosphereSocket = request.getHeader("X-Atmosphere-Transport");
 
             onWebSocket = "" + webSocket + " / " + atmosphereSocket;
+
+            onWebSocket += " / " + Turku.cookiesToString(request);
+
             httpSession.setAttribute("websocket", onWebSocket);
         }
 
@@ -112,7 +115,7 @@ public class TurkuServletService extends VaadinServletService {
 
                     uiToClose.access(() -> {
                         ITurkuAppCrtlAccess crtl = Workarounds.getControllerFormUi(uiToClose);
-                        if (crtl != null) { crtl.closeAppCrtlMissingHearbeatOrBeacon(session); }
+                        if (crtl != null) { crtl.beaconCloseOrMissingHeartbeat(session, uiToClose); }
                         // detach() might not be called imdtly upon ui.close()
                         uiToClose.close();
                     });

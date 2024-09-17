@@ -531,7 +531,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public Object myRequestFocus() {
 
         Optional<DTO> firstSelected = selectionModel.getFirstSelectedItem();
-        Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
+        // Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
 
         // scrolling needed?
         if ((factory.isScrollAdjust() || firstEditableCol >= 0 || editPreview) && firstSelected.isPresent()) {

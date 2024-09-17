@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
@@ -151,8 +152,24 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
             numTabs ++;
             currentTab = uiTab;
             add(currentTab);
+
             getElement().executeJs("turku.installFocusHandler($0)", this);
 
+            String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
+            this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
+
+            if (uiTab.hasRwSessionToCommit()) {
+                this.getElement().executeJs("turku.installCloseConfirm($0)", true);
+            }
+        }
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+
+        if (Workarounds.getCurrentTurkuServlet().isDisableBrowserContextMenu()) {
+            this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
     }
 

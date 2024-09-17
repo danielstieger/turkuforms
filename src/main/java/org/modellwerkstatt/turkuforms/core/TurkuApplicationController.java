@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.core;
 
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
@@ -66,7 +67,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         return name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX);
     }
 
-    public void closeAppCrtlMissingHearbeatOrBeacon(VaadinSession session) {
+    public void beaconCloseOrMissingHeartbeat(VaadinSession session, UI closingUi) {
         Turku.l("TurkuApp.closeAppCrtlMissingHearbeatOrBeacon() shutdown in progress: " + inShutdownMode() + " . . . or shutdown now.");
         // this will result in a valueUnbound()
         unregisterFromSessionTryInvalidate(session, true);

@@ -86,22 +86,26 @@ window.turku = {
         console.log('truku.installFocusHandler() installed the focus handler.');
     },
 
-    installCloseConfirmHandler: function(ev) {
+    closeConfirmHandler: function(ev) {
+        console.log('turku.closeConfirmHandler() called .. ' + window.Vaadin.connectionState.connectionState);
+
         if (window.Vaadin.connectionState.connectionState == 'connected') {
             ev.preventDefault();
             // Chrome requires returnValue to be set
             ev.returnValue = 'There are unsaved changes!';
         }
     },
+
     installCloseConfirm: function(installOrRemove) {
 
-        console.log('turku.installCloseConfirm() installing [' + installOrRemove + "] or removing... ");
+        console.log('turku.installCloseConfirm() installing (' + installOrRemove + ") or removing... ");
 
         if (installOrRemove) {
-            window.addEventListener('beforeunload', window.turku.installCloseConfirmHandler);
+            window.addEventListener('beforeunload', window.turku.closeConfirmHandler);
+            console.log(' ..... just installed ...');
 
         } else {
-            window.removeEventListener('beforeunload', window.turku.installCloseConfirmHandler);
+            window.removeEventListener('beforeunload', window.turku.closeConfirmHandler);
 
         }
 

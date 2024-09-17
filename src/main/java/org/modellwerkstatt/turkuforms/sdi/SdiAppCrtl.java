@@ -1,11 +1,14 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.sdicore.ApplicationSDI;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
@@ -63,8 +66,17 @@ public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, H
     }
 
     @Override
-    public void closeAppCrtlMissingHearbeatOrBeacon(VaadinSession session) {
-        // TODO - also not impelmented yet?
+    public void beaconCloseOrMissingHeartbeat(VaadinSession session, UI closingUi) {
+        Turku.l("SdiAppCrtl.closeAppCrtlMissingHeartbearOrBeacon() received BEACON CLOSE !");
+
+        if (closingUi.getChildren().findFirst().isPresent()) {
+            Component browserTab = closingUi.getChildren().findFirst().get();
+            if (! (browserTab instanceof IToolkit_Window)) {
+                throw new RuntimeException("This can not happen. BrowserTab is " + browserTab);
+            }
+            external_closeBrowserTab((IToolkit_Window) browserTab);
+        }
+
     }
 
     @Override

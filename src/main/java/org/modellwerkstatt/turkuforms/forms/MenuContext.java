@@ -91,7 +91,7 @@ public class MenuContext<T> {
     private void addContextItem(ITurkuAppFactory turkuFactory, Grid<T> grid, GridContextMenu<T> rootGCM, GridSubMenu<T> subGCM, CmdAction glue) {
 
         ComponentEventListener<GridContextMenu.GridContextMenuItemClickEvent<T>> execGCMItem = event -> {
-            event.getSource().setEnabled(false);
+            // event.getSource().setEnabled(false);
             glue.startCommand();
         };
 

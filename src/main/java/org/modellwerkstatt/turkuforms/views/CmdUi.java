@@ -218,6 +218,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         return false;
     }
 
+    public boolean hasRwSessionToCommit() { return cmdContainer.hasRwSessionToCommit(); }
+
     @Override
     public void setCommandContainer(ICommandContainer iCommandContainer) {
         cmdContainer = iCommandContainer;
