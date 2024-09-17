@@ -59,30 +59,22 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         title = servlet.getAppNameVersion();
         ParamInfo paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
         String naviPath = "/" + event.getLocation().getPath();
-        boolean otherCrtlPresent = vaadinSession.getSession().getAttributeNames()
-                .stream().anyMatch(TurkuApplicationController::isTurkuControllerAttribute);
+        boolean otherCrtlPresent = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
 
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
 
 
+        if (factory.isSingleAppInstanceMode() && otherCrtlPresent) {
+            Turku.l("IPAuthLandingPage.beforeEnter() in singleapp instance mode and other controllers present? "+ otherCrtlPresent);
 
+            setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
+                    factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
 
-        Turku.l(" --- " + factory.isSingleAppInstanceMode());
-        if (factory.isSingleAppInstanceMode()) {
-            VaadinSession session = VaadinSession.getCurrent();
+                TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
+                UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
+            }));
 
-            Turku.l("IPAuthLandingPage.beforeEnter() are other controllers presen? "+ TurkuApplicationController.hasOtherControllersInSession(session));
-            if (TurkuApplicationController.hasOtherControllersInSession(session)) {
-                setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
-                        factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
-
-
-                    TurkuApplicationController.shutdownOtherControllersInSession(session);
-                    UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
-                }));
-
-                return;
-            }
+            return;
         }
 
 

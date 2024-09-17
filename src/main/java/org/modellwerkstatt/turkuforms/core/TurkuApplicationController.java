@@ -29,6 +29,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_MainWindow appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
 
+        Turku.l("TurkuApplicationController() initialization of " + this.hashCode());
         // upon init, take this as req.
         startRequest(4711);
     }
@@ -72,6 +73,8 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     }
 
     static public boolean hasOtherControllersInSession(VaadinSession vaadinSession) {
+        if (vaadinSession == null || vaadinSession.getSession() == null) { return false; }
+
         WrappedSession session = vaadinSession.getSession();
 
         for (String name: session.getAttributeNames()){
@@ -91,7 +94,14 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                 TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
                 TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
 
-                mainWin.getUI().get().access(() -> crtl.onExitRequested(true));
+                if (mainWin.getUI().isPresent()) {
+                    mainWin.getUI().get().access(() -> crtl.onExitRequested(true));
+
+                } else {
+                    Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
+                    crtl.onExitRequested(true);
+
+                }
                 Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() exited " + name);
             }
         }
