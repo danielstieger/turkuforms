@@ -87,7 +87,7 @@ window.turku = {
     },
 
     closeConfirmHandler: function(ev) {
-        console.log('turku.closeConfirmHandler() called .. ' + window.Vaadin.connectionState.connectionState);
+        // console.log('turku.closeConfirmHandler() called .. ' + window.Vaadin.connectionState.connectionState);
 
         if (window.Vaadin.connectionState.connectionState == 'connected') {
             ev.preventDefault();
@@ -102,7 +102,6 @@ window.turku = {
 
         if (installOrRemove) {
             window.addEventListener('beforeunload', window.turku.closeConfirmHandler);
-            console.log(' ..... just installed ...');
 
         } else {
             window.removeEventListener('beforeunload', window.turku.closeConfirmHandler);

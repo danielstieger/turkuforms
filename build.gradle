@@ -38,11 +38,6 @@ group 'org.modellwerkstatt'
 // version '0.9'
 
 dependencies {
-    // IBM CARBON for vaadin ...
-    // implementation 'org.vaadin.addons.anezthes:carbon-vaadin:1.0.1'
-    // implementation 'org.vaadin.addons.parttio:parity-theme:1.0.4'
-    // implementation 'org.vaadin.addons.parttio:breeze-theme:1.0.5'
-
     implementation enforcedPlatform("com.vaadin:vaadin-bom:$vaadinVersion")
 
     // Vaadin
@@ -56,25 +51,26 @@ dependencies {
 
 
     // moware dependencies * * * * * * * * * * * * * * * * *
+
     implementation files("${mowarePluginHome}/jars/basis/joda-time-2.12.5.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-core-5.3.27.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-beans-5.3.27.jar")
     implementation files("${mowarePluginHome}/jars/basis/spring-context-5.3.27.jar")
-    // implementation files("${mowarePluginHome}/jars/basis/spring-aop-5.3.27.jar")
-    // implementation files("${mowarePluginHome}/jars/basis/spring-jdbc-5.3.27.jar")
-    // implementation files("${mowarePluginHome}/jars/basis/spring-tx-5.3.27.jar")
-    // implementation files("${mowarePluginHome}/jars/basis/spring-expression-5.3.27.jar")
-    // implementation files("${mowarePluginHome}/jars/basis/mo-javaxbus-1.0.jar")
-
-    // implementation files("${mpsHome}/lib/mps-references.jar")
-    // implementation files("${mpsHome}/lib/mps-collections.jar")
-    // implementation files("${mpsHome}/lib/mps-closures.jar")
-    // implementation files("${mpsHome}/lib/commons-lang-2.4.jar")
-
 
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.manmap.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.objectflow.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.dataux.runtime.jar")
+
+
+    // implementation files("${mowarePluginHome}/jars/security/spring-security-core-5.3.13.RELEASE.jar")
+    // implementation files("${mowarePluginHome}/jars/security/spring-security-config-5.3.13.RELEASE.jar")
+    // implementation files("${mowarePluginHome}/jars/security/spring-security-oauth2-client-5.3.13.RELEASE.jar")
+    // implementation files("${mowarePluginHome}/jars/security/spring-security-web-5.3.13.RELEASE.jar")
+
+    implementation files("${mowarePluginHome}/jars/security/google-api-client-2.0.0.jar")
+    implementation files("${mowarePluginHome}/jars/security/google-oauth-client-1.34.1.jar")
+    implementation files("${mowarePluginHome}/jars/security/google-http-client-1.42.1.jar")
+
 }
 
 // ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"

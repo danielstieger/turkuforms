@@ -228,7 +228,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     public void showGraphDebugger(List<Object> list, String s) {
         String content;
         if (list.size() > 0) {
-            IConvSerdes serdes = CONV.stringSer(list.get(0).getClass(), CONV.CONV_DEFAULT_EN);
+            IConvSerdes serdes = CONV.jsonSerDes(list.get(0).getClass(), CONV.CONV_DEFAULT_EN);
             ((BaseSerdes) serdes).expectArrayAtRoot();
             Object[] asArray = list.toArray();
             content = serdes.ser(asArray);
