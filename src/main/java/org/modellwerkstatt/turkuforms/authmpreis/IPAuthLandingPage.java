@@ -59,10 +59,11 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         title = servlet.getAppNameVersion();
         ParamInfo paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
         String naviPath = "/" + event.getLocation().getPath();
+
+
         boolean otherCrtlPresent = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
 
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
-
 
         if (factory.isSingleAppInstanceMode() && otherCrtlPresent) {
             Turku.l("IPAuthLandingPage.beforeEnter() in singleapp instance mode and other controllers present? "+ otherCrtlPresent);
@@ -141,7 +142,23 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                         UserEnvironmentInformation ldapUserEnv = new UserEnvironmentInformation();
                         String viaLoginCrtl = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, ldapUserEnv, newPrinci.getUserName(), newPrinci.getPassword());
 
-                        if (viaLoginCrtl == null) {
+
+                        boolean multiCrtlsAfterLogin = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
+
+                        Turku.l("IPAuthLandingPage.login with ldap multiCrtlsAfterLogin=" + multiCrtlsAfterLogin);
+
+                        if (factory.isSingleAppInstanceMode() && multiCrtlsAfterLogin) {
+                            Turku.l("IPAuthLandingPage.login with ldap() in singleapp instance mode! and other controllers present? "+ otherCrtlPresent);
+
+                            setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
+                                    factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
+
+                                TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
+                                UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
+                            }));
+                            return null;
+
+                        } else if (viaLoginCrtl == null) {
                             NavigationUtil.setUserEnvForUi(ldapUserEnv);
                             NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
                             return null;

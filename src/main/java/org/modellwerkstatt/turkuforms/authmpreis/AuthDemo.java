@@ -1,20 +1,12 @@
 package org.modellwerkstatt.turkuforms.authmpreis;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
-import com.google.api.client.googleapis.auth.oauth2.GoogleBrowserClientRequestUrl;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.googleapis.testing.auth.oauth2.MockGoogleCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.VaadinSession;
+import org.modellwerkstatt.turkuforms.auth.GoogleOAuth2;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.io.IOException;
@@ -22,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
+    private GoogleOAuth2 auth = new GoogleOAuth2();
 
     public AuthDemo() {
 
@@ -38,7 +31,7 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
         String theState = null;
         String theCode = null;
         String errorMessage = "";
-        String originalCode = "" + session.hashCode();
+        String originalState = "" + session.hashCode();
 
         if (codes != null && states != null) {
             theState = states.get(0);
@@ -47,26 +40,16 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
 
 
 
-        if (theCode != null && originalCode.equals(theState)) {
-            HttpTransport netTransport = new NetHttpTransport();
-            JsonFactory jsonFactory = new GsonFactory();
-            GoogleTokenResponse token;
+        if (theCode != null && originalState.equals(theState)) {
 
             try {
-                token = new GoogleAuthorizationCodeTokenRequest(
-                        netTransport,
-                        jsonFactory,
-                        "938810109726-3lo3a5ebkq8u8lqli5prjq3609bkkn6h.apps.googleusercontent.com",
-                        "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",
-                        theCode,
-                        "http://localhost:8080/simpleone/login").execute();
+                String token = auth.retrievAccessToken(theCode);
 
-                add(new Label(token.toPrettyString()));
-
-
+                add(new Label("" + token));
 
 
             } catch (IOException e) {
+                e.printStackTrace();
                 errorMessage = "IoException - " + e.getMessage() + ". ";
 
             }
@@ -84,11 +67,7 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
 
             add(new SimpleMessageCmpt("Google Authentication", "Go", errorMessage + "Authenticated with google.", () -> {
 
-                String url = new GoogleBrowserClientRequestUrl("938810109726-3lo3a5ebkq8u8lqli5prjq3609bkkn6h.apps.googleusercontent.com",
-                        "http://localhost:8080/simpleone/login", Arrays.asList(
-                        "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"))
-                        .setState(originalCode).setResponseTypes(Arrays.asList("code")).build();
-
+                String url = auth.initialRedirect(originalState);
                 UI.getCurrent().getPage().setLocation(url);
 
             }));
