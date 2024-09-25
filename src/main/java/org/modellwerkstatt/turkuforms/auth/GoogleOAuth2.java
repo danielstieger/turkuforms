@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class GoogleOAuth2 {
@@ -23,7 +24,7 @@ public class GoogleOAuth2 {
     public final static String CLIENT_SECRET="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";
 
 
-    public final static String USERINFO_ENDPOINT="https://www.googleapis.com/oauth2/v3/userinfo?access_token=";
+    public final static String USERINFO_ENDPOINT="https://www.googleapis.com/oauth2/v3/userinfo";
 
     public GoogleOAuth2() {
 
@@ -36,43 +37,82 @@ public class GoogleOAuth2 {
         return result;
     }
 
-    public String retrievAccessToken(String code) throws IOException {
+    public String retrieveUserWithAccessToken(String code)  {
 
-        URL url = new URL(TOKEN_URL);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        String request = "code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET +
+                "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code";
 
-        con.setConnectTimeout(3000);
-        con.setReadTimeout(2000);
-        con.setInstanceFollowRedirects(false);
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        String content = httpConnection(TOKEN_URL, request);
 
-        con.setDoOutput(true);
-        DataOutputStream out = new DataOutputStream(con.getOutputStream());
-        out.writeBytes("code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET +
-                "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code");
-        out.flush();
-        out.close();
-        System.err.println("GoogleOAuth2.request sent()");
+        if (content == null) { return null; }
 
-        int status = con.getResponseCode();
-        System.err.println("GoogleOAuth2.status is " + status);
+        JsonObject object = Json.parse(content);
+        if (!object.hasKey("access_token")) { return null; }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer content = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            content.append(inputLine);
-        }
-        in.close();
-        con.disconnect();
+        String token = object.get("access_token").asString();
 
-        System.err.println("GoogleOAuth2.disconnected(). We read: "+ content);
+        content = httpConnection(USERINFO_ENDPOINT + "?access_token=" + token, null);
+
+        if (content == null) { return null; }
+
+        object = Json.parse(content);
+        if (!object.hasKey("email")) { return null; }
+
+        content = object.get("email").asString();
+
+        return content;
+    }
 
 
-        JsonObject object = Json.parse(content.toString());
-        if (object.hasKey("access_token")) {
-            return object.get("access_token").asString();
+    public static String httpConnection(String targetUrl, String request) {
+        HttpURLConnection con = null;
+
+        try {
+            URL url = new URL(targetUrl);
+            con = (HttpURLConnection) url.openConnection();
+
+            con.setConnectTimeout(3000);
+            con.setReadTimeout(2000);
+            con.setInstanceFollowRedirects(false);
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+
+            if (request != null) {
+                con.setRequestMethod("POST");
+                con.setDoOutput(true);
+
+                DataOutputStream out = new DataOutputStream(con.getOutputStream());
+                out.writeBytes(request);
+                out.flush();
+                out.close();
+
+            } else {
+                con.setRequestMethod("GET");
+            }
+
+            int status = con.getResponseCode();
+
+            if (status >= 200 && status < 300) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer content = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                in.close();
+
+                return content.toString();
+
+            }
+
+        } catch (IOException e) {
+            System.err.println(e.getClass().getSimpleName() + " while connecting to " + targetUrl);
+            e.printStackTrace();
+
+        } finally {
+            if (con != null){
+                con.disconnect();
+            }
         }
 
         return null;

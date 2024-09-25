@@ -35,7 +35,6 @@ public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, H
 
 
 
-
     public SdiAppCrtl(IToolkit_UiFactory factory, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appBehavior, registration, pltfrm);
         startRequest(4711);

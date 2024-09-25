@@ -25,6 +25,7 @@ abstract public class StaticLandingPage extends VerticalLayout implements HasDyn
 
     protected TilesLayout tilesLayout;
     protected Div messageDiv;
+    protected Div titleDiv;
 
 
     public StaticLandingPage() {
@@ -33,7 +34,7 @@ abstract public class StaticLandingPage extends VerticalLayout implements HasDyn
         setHeightFull();
     }
 
-    public void installLandingPage(ITurkuAppFactory factory, String msg, List<LandingPageUrlItem> allItems) {
+    public void installLandingPage(ITurkuAppFactory factory, String title, String msg, List<LandingPageUrlItem> allItems) {
 
         // new tiles layout ...
         tilesLayout = new TilesLayout();
@@ -48,12 +49,17 @@ abstract public class StaticLandingPage extends VerticalLayout implements HasDyn
             btn.setEnabled(item.enabled);
         }
 
+        titleDiv =  new Div();
+        titleDiv.addClassName("LandingPageTopTitle");
+        titleDiv.setText(title);
+
         messageDiv = new Div();
         messageDiv.addClassName("TurkuErrorDiv");
         if (msg != null) {
             messageDiv.setText(msg);
         }
 
+        add(titleDiv);
         add(messageDiv);
         add(tilesLayout);
     }

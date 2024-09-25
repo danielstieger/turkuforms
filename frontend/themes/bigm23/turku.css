@@ -462,25 +462,11 @@ vaadin-radio-button[disabled]:not([checked]) {
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - SDI STUFF - - - - - - - - - - - - - -*/
-.TurkuLayoutNavbarTopSDI {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-     box-sizing: border-box;
+
+.LandingPageTopTitle {
+    padding-left: 3em;
+    padding-top: 1em;
+    font-weight: var(--turku-bold);
 }
 
-
-.LandingPage {
-    padding: var(--turku-lrmain-space);
-}
-
-.LandingPage a {
-  background: var(--lumo-contrast-10pct);
-  padding: 0.2em;
-  margin: 0.3em;
-  width: 25em;
-}
-
-.LandingPage label {
-  font-weight: var(--turku-bold);
-}
 

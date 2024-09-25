@@ -73,8 +73,13 @@ public class Turku {
     public static String cookiesToString(VaadinRequest request) {
         String info = "";
 
-        for (Cookie c: request.getCookies()) {
-            info += c.getName()+ ": " + c.getValue() + " " + c.getMaxAge() + "  ";
+        if (request.getCookies() != null){
+            for (Cookie c: request.getCookies()) {
+                info += c.getName()+ ": " + c.getValue() + " " + c.getMaxAge() + "  ";
+            }
+
+        } else {
+            info = "null";
         }
 
         return info;

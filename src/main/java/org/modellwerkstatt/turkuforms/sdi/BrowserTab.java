@@ -93,7 +93,7 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
         if ((!params.hasCmdName() && type != BrowserTabType.COMMAND_OPENER_TAB) || msg != null) {
 
             type = BrowserTabType.LANDING_TAB;
-            installLandingPage(turkuFactory, msg, appCrtl.createLandingPageItems());
+            installLandingPage(turkuFactory, appCrtl.getAppVersionAndDyn(), msg, appCrtl.createLandingPageItems());
 
         }
     }
