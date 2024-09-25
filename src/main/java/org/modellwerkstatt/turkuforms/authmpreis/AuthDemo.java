@@ -66,8 +66,6 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
                     NavigationUtil.setUserEnvForUi(environment);
                     NavigationUtil.ensureAppRoutPresentAndForward(beforeEnterEvent, paramInfo);
 
-                    // NavigationUtil.absolutNavi("/");
-
                 }
 
             }
