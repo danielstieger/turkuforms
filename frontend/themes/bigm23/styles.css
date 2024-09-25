@@ -12,7 +12,10 @@
 
 
 html {
-    --lumo-font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+/*    --lumo-font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+ */
+
+    --lumo-font-family: Helvetica, Arial, sans-serif;
     --turku-bold: 600;
 
     --lumo-font-size-xxs: 0.75rem;
@@ -24,7 +27,6 @@ html {
     --lumo-font-size-xxl: 1.5rem;
     --lumo-font-size-xxxl: 1.75rem;
 
-    /* default fx8 cyan */
     --turku-cmd-color: rgba(23, 132, 200, 1.0);
     --turku-cmd-color-shade: rgba(23, 132, 200, 0.1);
     --lumo-primary-color: rgba(23, 132, 200, 1.0);
