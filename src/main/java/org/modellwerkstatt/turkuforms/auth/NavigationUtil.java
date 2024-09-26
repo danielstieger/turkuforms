@@ -25,7 +25,7 @@ public class NavigationUtil {
     public static final String OTHER_TABS_OPEN = "/static/othertabsopen.html";
 
 
-    public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo) {
+    public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo, boolean forceAbsolutNavi) {
         Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... app route present: " + RouteConfiguration.forSessionScope().isRouteRegistered(TurkuApp.class));
         TurkuServlet theServlet = Workarounds.getCurrentTurkuServlet();
 
@@ -44,7 +44,10 @@ public class NavigationUtil {
         // addition of a new history state entry, but doesn’t issue a full page reload.
 
         if (paramInfo.hasReroute()) {
-            UI.getCurrent().getPage().setLocation(theServlet.getActualServletUrl() + paramInfo.getReroute());
+            absolutNavi(paramInfo.getReroute());
+
+        } else if (forceAbsolutNavi) {
+            absolutNavi("/");
 
         } else if (evOrNull != null) {
             // this will take over the params also ..

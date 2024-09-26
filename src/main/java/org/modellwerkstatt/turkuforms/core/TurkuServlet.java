@@ -12,6 +12,7 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.IM3DatabaseDescription;
 import org.modellwerkstatt.manmap.runtime.MMStaticAccessHelper;
 import org.modellwerkstatt.objectflow.runtime.*;
+import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.springframework.beans.BeansException;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -122,6 +123,12 @@ public class TurkuServlet extends VaadinServlet {
                     cmdUrlDefaults.addAll(Arrays.asList(cmdModule.getCmdUrlDefaults()))
             );
             appFactory.initCmdUrlDefaults(cmdUrlDefaults);
+
+            List<ExtAuthProvider> extAuthProviders = new ArrayList<>();
+            Map<String, ExtAuthProvider> allProviders = appContext.getBeansOfType(ExtAuthProvider.class);
+            allProviders.values().forEach(provider -> extAuthProviders.add(provider) );
+            appFactory.initExtAuthProviders(extAuthProviders);
+
 
 
         } catch (ClassNotFoundException | BeansException e) {

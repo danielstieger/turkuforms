@@ -3,35 +3,42 @@ package org.modellwerkstatt.turkuforms.auth;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
-import elemental.json.JsonString;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Map;
 
-public class GoogleOAuth2 {
-    public final static String SERVICE_URL="https://accounts.google.com/o/oauth2/auth";
-    public final static String CLIENT_ID="938810109726-3lo3a5ebkq8u8lqli5prjq3609bkkn6h.apps.googleusercontent.com";
-    public final static String REDIRECT_URI="http://localhost:8080/simpleone/login";
-    public final static String SCOPE="https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile";
-
-    public final static String TOKEN_URL="https://oauth2.googleapis.com/token";
-    public final static String CLIENT_SECRET="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";
+public class GoogleOAuth2 implements ExtAuthProvider {
+    public String AUTHINIT_ENDPOINT ="https://accounts.google.com/o/oauth2/auth";
+    public String TOKEN_ENDPOINT ="https://oauth2.googleapis.com/token";
+    public String USERINFO_ENDPOINT="https://www.googleapis.com/oauth2/v3/userinfo";
+    public String SCOPE="https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile";
 
 
-    public final static String USERINFO_ENDPOINT="https://www.googleapis.com/oauth2/v3/userinfo";
+    private String CLIENT_ID="not set";
+    private String REDIRECT_URI="not set";
+    private String CLIENT_SECRET="not set";
 
-    public GoogleOAuth2() {
 
+
+
+    public GoogleOAuth2(String client_id, String client_secret, String redirect_to)  {
+        CLIENT_ID = client_id;
+        CLIENT_SECRET = client_secret;
+        REDIRECT_URI =redirect_to;
+    }
+
+    @Override
+    public String getAuthProviderName() {
+        return "Google";
     }
 
     public String initialRedirect(String state) {
-        String result = SERVICE_URL + "?" + "client_id=" + CLIENT_ID + "&redirect_uri=" +
+        String result = AUTHINIT_ENDPOINT + "?" + "client_id=" + CLIENT_ID + "&redirect_uri=" +
                 REDIRECT_URI + "&response_type=code&scope=" + SCOPE + "&state=" + state;
 
         return result;
@@ -42,7 +49,7 @@ public class GoogleOAuth2 {
         String request = "code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET +
                 "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code";
 
-        String content = httpConnection(TOKEN_URL, request);
+        String content = httpConnection(TOKEN_ENDPOINT, null, request);
 
         if (content == null) { return null; }
 
@@ -51,7 +58,7 @@ public class GoogleOAuth2 {
 
         String token = object.get("access_token").asString();
 
-        content = httpConnection(USERINFO_ENDPOINT + "?access_token=" + token, null);
+        content = httpConnection(USERINFO_ENDPOINT + "?access_token=" + token, null,null);
 
         if (content == null) { return null; }
 
@@ -64,7 +71,7 @@ public class GoogleOAuth2 {
     }
 
 
-    public static String httpConnection(String targetUrl, String request) {
+    public static String httpConnection(String targetUrl, Map<String, String> headers, String postRequest) {
         HttpURLConnection con = null;
 
         try {
@@ -76,13 +83,18 @@ public class GoogleOAuth2 {
             con.setInstanceFollowRedirects(false);
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
+            if (headers != null){
+                for(String key: headers.keySet()) {
+                    con.setRequestProperty(key, headers.get(key));
+                }
+            }
 
-            if (request != null) {
+            if (postRequest != null) {
                 con.setRequestMethod("POST");
                 con.setDoOutput(true);
 
                 DataOutputStream out = new DataOutputStream(con.getOutputStream());
-                out.writeBytes(request);
+                out.writeBytes(postRequest);
                 out.flush();
                 out.close();
 
@@ -95,7 +107,7 @@ public class GoogleOAuth2 {
             if (status >= 200 && status < 300) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String inputLine;
-                StringBuffer content = new StringBuffer();
+                StringBuilder content = new StringBuilder();
                 while ((inputLine = in.readLine()) != null) {
                     content.append(inputLine);
                 }
@@ -104,6 +116,8 @@ public class GoogleOAuth2 {
                 return content.toString();
 
             }
+
+            System.err.println("Oauth2.httpConnect - received status code " + status + " for request " + url + " + " + postRequest);
 
         } catch (IOException e) {
             System.err.println(e.getClass().getSimpleName() + " while connecting to " + targetUrl);

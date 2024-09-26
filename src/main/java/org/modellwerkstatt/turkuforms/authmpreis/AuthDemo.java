@@ -7,10 +7,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
-import org.modellwerkstatt.turkuforms.auth.GoogleOAuth2;
-import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
-import org.modellwerkstatt.turkuforms.auth.ParamInfo;
-import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.auth.*;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -19,11 +16,14 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
-    private GoogleOAuth2 auth = new GoogleOAuth2();
+public class AuthDemo extends SimpleMessageCmpt implements BeforeEnterObserver {
+    private List<ExtAuthProvider> providers;
 
     public AuthDemo() {
+        super();
         setSizeFull();
+
+
     }
 
     @Override
@@ -33,6 +33,8 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
         Turku.l("AuthDemo.beforeEnter()  on session " + VaadinSession.getCurrent().hashCode());
         VaadinSession session = VaadinSession.getCurrent();
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
+        providers = servlet.getUiFactory().getAllExtAuthProviders();
+
         ParamInfo paramInfo = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
 
         List<String> codes = beforeEnterEvent.getLocation().getQueryParameters().getParameters().get("code");
@@ -41,19 +43,30 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
         String theCode = null;
         String errorMessage = "";
         String originalState = "" + session.hashCode();
+        ExtAuthProvider providerToUse = null;
+
 
         if (codes != null && states != null) {
             theState = states.get(0);
             theCode = codes.get(0);
+
+            String[] splitted = theState.split("_");
+            if (splitted.length == 2) {
+                providerToUse = providers.stream().filter(extAuthProvider -> extAuthProvider.getAuthProviderName().equals(splitted[0])).findFirst().orElse(null);
+                theState = splitted[1];
+
+            } else {
+                theState = null;
+
+            }
+
         }
 
-
-
-        if (theCode != null && originalState.equals(theState)) {
-            String email = auth.retrieveUserWithAccessToken(theCode);
+        if (theCode != null && originalState.equals(theState) && providerToUse != null) {
+            String email = providerToUse.retrieveUserWithAccessToken(theCode);
 
             if (email == null){
-                errorMessage = "Problems while retrieving email from your google accound. We can not log you on.";
+                errorMessage = "Problems while retrieving email from your account. We can not log you on.";
 
             } else {
 
@@ -64,7 +77,7 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
 
                 if (msg == null) {
                     NavigationUtil.setUserEnvForUi(environment);
-                    NavigationUtil.ensureAppRoutPresentAndForward(beforeEnterEvent, paramInfo);
+                    NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo, true);
 
                 }
 
@@ -80,13 +93,16 @@ public class AuthDemo extends HorizontalLayout implements BeforeEnterObserver {
 
 
         if (theCode == null || !"".equals(errorMessage)) {
+            setAppNameMsg(servlet.getAppNameVersion(), errorMessage);
 
-            add(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Google Authentication", errorMessage, () -> {
+            providers.forEach(extAuthProvider ->
+                    addButton(extAuthProvider.getAuthProviderName(), () -> {
 
-                String url = auth.initialRedirect(originalState);
-                UI.getCurrent().getPage().setLocation(url);
+                                String url = extAuthProvider.initialRedirect(extAuthProvider.getAuthProviderName() + "_" + originalState);
+                                UI.getCurrent().getPage().setLocation(url);
 
-            }));
+                            }
+                    ));
         }
     }
 

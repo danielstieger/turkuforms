@@ -10,6 +10,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.IOFXCmdModule;
+import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 import org.modellwerkstatt.turkuforms.editors.*;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
@@ -45,6 +46,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private List<IOFXCmdModule.CmdUrlDefaults> allUrlDefaults;
     private Map<String,IOFXCmdModule.CmdUrlDefaults> defaultUrlForFqCmd;
     private boolean usingUrlHandling;
+
+    private List<ExtAuthProvider> allAuthProviders;
 
 
     // Empty, app has to handle stuff, i.e. empty = return full path
@@ -280,6 +283,16 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         if (! usingUrlHandling) { return true; };
 
         return defaultUrlForFqCmd.containsKey(fqName);
+    }
+
+    @Override
+    public void initExtAuthProviders(List<ExtAuthProvider> providers) {
+        allAuthProviders = providers;
+    }
+
+    @Override
+    public List<ExtAuthProvider> getAllExtAuthProviders() {
+        return allAuthProviders;
     }
 
     public static DatePicker.DatePickerI18n createGermanI18n() {

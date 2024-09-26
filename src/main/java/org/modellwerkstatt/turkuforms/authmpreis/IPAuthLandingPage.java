@@ -104,7 +104,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                 if (msg == null) {
                     loginDone = true;
                     NavigationUtil.setUserEnvForUi(environment);
-                    NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo);
+                    NavigationUtil.ensureAppRoutPresentAndForward(event, paramInfo, false);
                 }
 
             }
@@ -160,7 +160,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
                         } else if (viaLoginCrtl == null) {
                             NavigationUtil.setUserEnvForUi(ldapUserEnv);
-                            NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo);
+                            NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo, false);
                             return null;
 
                         } else {

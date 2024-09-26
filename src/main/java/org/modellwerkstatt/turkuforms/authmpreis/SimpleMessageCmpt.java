@@ -12,37 +12,57 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class SimpleMessageCmpt extends HorizontalLayout {
 
-    public SimpleMessageCmpt(String appNameVersion, String buttonText, String msg, Todo process) {
+    private H1 appName;
+    private Div messageDiv;
+    private VerticalLayout innerLayout;
+
+    public SimpleMessageCmpt() {
         Span loginIdentityImage = new Span();
         loginIdentityImage.addClassName("DefaultLoginLogo");
 
-        H1 appName = new H1();
-        appName.setText(appNameVersion);
+        appName = new H1();
 
-        Div messageDiv = new Div();
+        messageDiv = new Div();
         messageDiv.addClassName("TurkuErrorDiv");
         messageDiv.addClassName("DefaultLoginContentWidth");
-        messageDiv.setText(msg);
 
-        VerticalLayout innerLayout = new VerticalLayout();
+        innerLayout = new VerticalLayout();
         innerLayout.add(loginIdentityImage, appName, messageDiv);
         innerLayout.setAlignSelf(Alignment.CENTER, loginIdentityImage);
         innerLayout.setAlignSelf(Alignment.CENTER, appName);
         innerLayout.setAlignSelf(Alignment.CENTER, messageDiv);
 
-        if (buttonText != null) {
-            Button loginButton = new Button(buttonText, event -> {
-                process.process();
-            });
-            Peculiar.useButtonShortcutHk(loginButton, OK_HOKTEY);
-            loginButton.addClassName("DefaultLoginContentWidth");
-            innerLayout.add(loginButton);
-            innerLayout.setAlignSelf(Alignment.CENTER,loginButton);
-        }
-
         add(innerLayout);
         setAlignSelf(Alignment.CENTER, innerLayout);
         setSizeFull();
+    }
+
+
+    public SimpleMessageCmpt(String appNameVersion, String buttonText, String msg, Todo process) {
+        this();
+
+        setAppNameMsg(appNameVersion, msg);
+
+        if (buttonText != null) {
+            addButton(buttonText, process);
+        }
+
+    }
+
+    public void setAppNameMsg(String appNameVersion, String msg){
+        appName.setText(appNameVersion);
+        messageDiv.setText(msg);
+    }
+
+    public void addButton(String label, Todo proc){
+        Button loginButton = new Button(label, event -> {
+            proc.process();
+        });
+
+        Peculiar.useButtonShortcutHk(loginButton, OK_HOKTEY);
+        loginButton.addClassName("DefaultLoginContentWidth");
+        innerLayout.add(loginButton);
+        innerLayout.setAlignSelf(Alignment.CENTER,loginButton);
     }
 
     public interface Todo {
