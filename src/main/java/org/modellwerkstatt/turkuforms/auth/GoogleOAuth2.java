@@ -118,6 +118,7 @@ public class GoogleOAuth2 implements ExtAuthProvider {
             }
 
             System.err.println("Oauth2.httpConnect - received status code " + status + " for request " + url + " + " + postRequest);
+            System.err.println(con.getResponseMessage());
 
         } catch (IOException e) {
             System.err.println(e.getClass().getSimpleName() + " while connecting to " + targetUrl);

@@ -13,8 +13,8 @@ public class LinkedinOAuth2 implements ExtAuthProvider{
     public String AUTHINIT_ENDPOINT ="https://www.linkedin.com/oauth/v2/authorization";
     public String TOKEN_ENDPOINT ="https://www.linkedin.com/oauth/v2/accessToken";
 
-    public String USERINFO_ENDPOINT="https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(true,EMAIL,handle~,emailAddress))";
-    public String SCOPE="profile email";
+    public String USERINFO_ENDPOINT="https://api.linkedin.com/v2/userinfo";
+    public String SCOPE="profile email openid";
 
 
     private String CLIENT_ID="not set";
@@ -48,22 +48,20 @@ public class LinkedinOAuth2 implements ExtAuthProvider{
 
         if (content == null) { return null; }
 
-        Turku.l("LinkedIn.retrieveEmail() retrieving access token: " + content);
         JsonObject object = Json.parse(content);
         if (!object.hasKey("access_token")) { return null; }
         String token = object.get("access_token").asString();
 
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + token);
+
         content = httpConnection(USERINFO_ENDPOINT, headerMap, null);
 
         if (content == null) { return null; }
-        Turku.l("LinkedIn.retrieveEmail() retrieving mail: " + content);
 
         object = Json.parse(content);
-        System.err.println("LINKED IN " + object.toString());
-        if (!object.hasKey("email")) { return null; }
 
+        if (!object.hasKey("email")) { return null; }
         content = object.get("email").asString();
 
         return content;
