@@ -30,8 +30,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
-import org.modellwerkstatt.objectflow.serdes.CONV;
-import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
+import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
@@ -196,15 +195,13 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         Turku.l("parDeploymentForwardNow() invalidated is " + invalidated);
 
-        String redirectTo = Workarounds.getCurrentTurkuServlet().getActualServletUrl() + TurkuServlet.LOGIN_ROUTE;
-
         if (! invalidated) {
-            UI.getCurrent().getPage().setLocation(redirectTo + NavigationUtil.OTHER_TABS_OPEN);
+            NavigationUtil.absolutNavi(NavigationUtil.OTHER_TABS_OPEN);
             UI.getCurrent().close();
 
-
         } else {
-            UI.getCurrent().getPage().setLocation(redirectTo);
+            String userNameParam = initialStartupParams.hasUsername() ? initialStartupParams.getOnlyUsernameParam() : "";
+            NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + userNameParam);
             UI.getCurrent().close();
 
         }
@@ -228,10 +225,18 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     public void showGraphDebugger(List<Object> list, String s) {
         String content;
         if (list.size() > 0) {
-            IConvSerdes serdes = CONV.jsonSerDes(list.get(0).getClass(), CONV.CONV_DEFAULT_EN);
+            IConvFormatOptions myoptions = new ConvStdFormatters(new ConvFormatOptions("hh:mm:ss dd.MM.yy",
+                    "dd.MM.yy",
+                    "#0.00",
+                    "en",
+                    new IConvFormatOptions.Mode[]{IConvFormatOptions.Mode.ALL_PROPERTIES_NECESSARY, IConvFormatOptions.Mode.PRETTY}
+            ));
+
+            IConvSerdes serdes = CONV.jsonSerDes(list.get(0).getClass(), myoptions);
             ((BaseSerdes) serdes).expectArrayAtRoot();
             Object[] asArray = list.toArray();
             content = serdes.ser(asArray);
+
         } else {
             content = "The current graph does not contain any object. Bound list size is 0.";
         }

@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.views;
 
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -78,6 +79,7 @@ public class PromptWindow extends Dialog {
 
         if (cancelButton != null) { this.getFooter().add(cancelButton); }
         this.getFooter().add(okButton);
+
         this.open();
     }
 
@@ -99,6 +101,14 @@ public class PromptWindow extends Dialog {
             infoDiv.addClassName("PromptWindowLarge");
             this.setWidthFull();
             center = new Scroller(infoDiv);
+
+            Button copyCsv = new Button("Copy", event -> {
+                UI.getCurrent().getPage().executeJs("turku.copyToClipboard($0, $1)", this, text);
+            });
+            copyCsv.getStyle().set("margin-right", "auto");
+            copyCsv.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            copyCsv.addThemeVariants(ButtonVariant.LUMO_SMALL);
+            this.getFooter().add(copyCsv);
 
         } else if (msgType == IToolkit_MainWindow.DlgType.ERROR_SMALL) {
             headingText = uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ERROR);

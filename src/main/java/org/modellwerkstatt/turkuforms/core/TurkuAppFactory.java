@@ -12,10 +12,7 @@ import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.IOFXCmdModule;
 import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 import org.modellwerkstatt.turkuforms.editors.*;
-import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
-import org.modellwerkstatt.turkuforms.forms.TurkuGridLayout;
-import org.modellwerkstatt.turkuforms.forms.TurkuTabForm;
-import org.modellwerkstatt.turkuforms.forms.TurkuTable;
+import org.modellwerkstatt.turkuforms.forms.*;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
@@ -61,8 +58,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         turkuAppImplClassFqName = DEFAULT_TURKUAPPIMPL;
         usingUrlHandling = false;
 
-        setTurkuAppImplClassFqName("org.modellwerkstatt.turkuforms.sdi.BrowserTab");
-        authentiactorClassFqName = "org.modellwerkstatt.turkuforms.authmpreis.AuthDemo";
+        // setTurkuAppImplClassFqName("org.modellwerkstatt.turkuforms.sdi.BrowserTab");
+        // authentiactorClassFqName = "org.modellwerkstatt.turkuforms.authmpreis.AuthDemo";
 
         // should be initialized in servlet
         onLogoutMainLandingPath = null;
@@ -148,8 +145,13 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public IToolkit_FormContainer<?> createToolkitFormContainer() {
-        return new TurkuGridLayout(this);
+    public IToolkit_FormContainer<?> createToolkitFormContainer(boolean flex) {
+        if (flex) {
+            return new SliderLayout<>(this);
+        } else {
+            return new TurkuGridLayout<>(this);
+
+        }
     }
 
     @Override

@@ -67,16 +67,15 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
         boolean inReebootInterval = curDbTime.isAfter(MPreisAppConfig.REBOOTINTERVAL_STARTTIME) ||
                                     curDbTime.isBefore(MPreisAppConfig.REBOOTINTERVAL_STOPTIME);
 
-
         List<String> segments = event.getLocation().getSegments();
         boolean hasCmdPath = segments.size() > 0 && !"".equals(segments.get(0));
 
         if (inReebootInterval && hasCmdPath) {
             // get rid of any /<path>
-            event.forwardTo("/");
+            String userParam = paramInfo.hasUsername() ? paramInfo.getOnlyUsernameParam() : "";
+            event.forwardTo("/" + userParam);
 
         } else if (hasCmdPath && paramInfo.hasReroute()) {
-
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + paramInfo.getParamsToForwardIfAny());
 
 

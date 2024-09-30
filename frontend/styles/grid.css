@@ -66,3 +66,7 @@ background-repeat: repeat-x;
   border-top: 0;
   min-height: calc(var(--lumo-size-xs) - var(--_lumo-grid-border-width));
 }
+
+[part~="resize-handle"]::before {
+    width: 15px !important;
+}

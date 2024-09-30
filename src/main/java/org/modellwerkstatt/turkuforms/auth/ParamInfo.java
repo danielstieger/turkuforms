@@ -62,6 +62,11 @@ public class ParamInfo {
     public boolean hasUsername() { return params.containsKey(USERNAME_PARAM); }
     public String getUsername() { return params.get(USERNAME_PARAM).get(0); }
 
+    public String getOnlyUsernameParam() {
+        String params = "&" + USERNAME_PARAM + "=" + getUsername();
+        return params;
+    }
+
     public boolean hasReroute() {
         return params.containsKey(REROUTE_TO);
     }

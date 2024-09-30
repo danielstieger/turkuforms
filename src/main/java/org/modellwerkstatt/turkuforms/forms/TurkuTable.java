@@ -550,8 +550,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             return null;
 
         } else if (firstSelected.isPresent()) {
-                grid.focus();
-            }
+            grid.focus();
+
+        }
         // take over focus anyway
         return grid;
     }

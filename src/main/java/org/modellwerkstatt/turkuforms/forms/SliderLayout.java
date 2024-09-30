@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
+import com.vaadin.flow.component.splitlayout.SplitLayoutVariant;
 import org.modellwerkstatt.dataux.runtime.core.FocusController;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
@@ -18,7 +19,7 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_FormContainer<DTO> {
+public class SliderLayout<DTO> extends VerticalLayout implements IToolkit_FormContainer<DTO> {
     private ITurkuAppFactory factory;
     private LeftRight topContainer;
     private TurkuMenu menu;
@@ -28,18 +29,18 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     private List<Integer> colConstraints;
     private List<Integer> rowConstraints;
 
-    private int childsAdded = 0;
-    private FlexComponent containerToAddComponent;
-    private boolean multipleColumns = false;
+    private int childsAdded;
 
-    public TurkuGridLayout(ITurkuAppFactory factory) {
+
+    public SliderLayout(ITurkuAppFactory factory) {
         super();
         Peculiar.shrinkSpace(this);
 
         this.factory = factory;
-        containerToAddComponent = this;
         focusController = new FocusController<>();
-        addClassName("TurkuGrid");
+        childsAdded = 0;
+
+        addClassName("TurkuSliderGrid");
     }
 
     @Override
@@ -50,17 +51,19 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     @Override
     public void setLayoutConstraints(List<String> colConstraints, List<String> rowConstraints) {
         this.colConstraints = new ArrayList<>();
-        for (String c: colConstraints) { this.colConstraints.add(getWeight(c)); };
+        for (String c: colConstraints) { this.colConstraints.add(TurkuGridLayout.getWeight(c)); };
         this.rowConstraints = new ArrayList<>();
-        for (String c: rowConstraints) { this.rowConstraints.add(getWeight(c)); };
+        for (String c: rowConstraints) { this.rowConstraints.add(TurkuGridLayout.getWeight(c)); };
 
-        multipleColumns = this.colConstraints.size() > 1;
+        if (this.colConstraints.size() != 1) {
+            throw new RuntimeException("This can not happen. Turku SliderLayout() does only allow for one column layouts.");
+        }
 
-        if (hasStarWeight(this.rowConstraints)) {
+        if (TurkuGridLayout.hasStarWeight(this.rowConstraints)) {
             this.setHeightFull();
         }
 
-        if (hasStarWeight(this.colConstraints)) {
+        if (TurkuGridLayout.hasStarWeight(this.colConstraints)) {
             this.setWidthFull();
         }
     }
@@ -70,56 +73,31 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     public void addChildren(IToolkit_Form child) {
         focusController.addChild(child);
 
-        int currentRow = childsAdded / colConstraints.size();
-        int currentCol = childsAdded - (currentRow * colConstraints.size());
 
-        if (currentCol >= colConstraints.size() || currentRow >= rowConstraints.size()) {
-            throw new RuntimeException("This can not happen! Col/Row constraints can t be correct; col: " + currentCol + " / " +
-                    colConstraints.size() + ", row: " + currentRow + " / " + rowConstraints.size()); }
+        if (childsAdded + 1 == rowConstraints.size()) {
+            // we are done.
+            List<IToolkit_Form> allChilds = focusController.getChildren();
 
-        int currentColConstraint = colConstraints.get(currentCol);
-        int currentRowConstraint = rowConstraints.get(currentRow);
 
-        // Start with a new HorizontalLayout ?
-        if (currentCol == 0 && multipleColumns) {
-            HorizontalLayout hl = new HorizontalLayout();
-            Peculiar.shrinkSpace(hl);
+            Component last = (Component) allChilds.get(allChilds.size() - 1);
+            for (int i = allChilds.size() - 2; i >= 0; i--) {
+                Component first = (Component) allChilds.get(i);
 
-            hl.setSizeUndefined();
-            hl.setWidthFull();
+                SplitLayout current = new SplitLayout(first, last, SplitLayout.Orientation.VERTICAL);
+                current.setSizeFull();
+                current.addThemeVariants(SplitLayoutVariant.LUMO_MINIMAL);
 
-            this.add(hl);
-            containerToAddComponent = hl;
-
-            if (currentRowConstraint == -1) {
-                this.setFlexGrow(0, hl);
-
-            } else {
-                this.setFlexGrow(currentRowConstraint, hl);
-
+                int sumWeight = sumWeight(rowConstraints, i);
+                int pos = 100 * rowConstraints.get(i) / sumWeight;
+                current.setSplitterPosition(pos);
+                last = current;
             }
 
-        }
-
-        int childConstraint = multipleColumns ? currentColConstraint : currentRowConstraint;
-
-        Component childCmpt = (Component) child;
-        HasSize childCmptHasSize = (HasSize) childCmpt;
-
-        childCmptHasSize.setSizeUndefined();
-        if (! multipleColumns) {
-            childCmptHasSize.setWidthFull();
-        }
-
-        containerToAddComponent.add(childCmpt);
+            add(last);
 
 
-        if (childConstraint == -1) {
-            containerToAddComponent.setFlexGrow(0, childCmpt);
-
-        } else {
-            containerToAddComponent.setFlexGrow(childConstraint, childCmpt);
-
+        } else if (childsAdded + 1 > rowConstraints.size()) {
+            throw new RuntimeException("This can not happen. Can not add " + (childsAdded+1) + " with " + rowConstraints.size());
         }
 
         childsAdded ++;
@@ -150,6 +128,17 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
         heading.inRootPos();
     }
 
+    static public int sumWeight(List<Integer> lst, int start) {
+        int sum = 0;
+        for (int i = start; i < lst.size(); i++) {
+            if (lst.get(i) <= 0) {
+                throw new RuntimeException("Can not handle " + lst.get(i) + " weight in Turku SliderLayout.");
+            }
+            sum += lst.get(i);
+        }
+        return sum;
+    }
+
     @Override
     public Object myRequestFocus() {
         return focusController.myRequestFocus();
@@ -173,24 +162,6 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     @Override
     public void gcClear() {
         factory = null;
-    }
-
-    public static boolean hasStarWeight(List<Integer> weights) {
-        for (Integer st: weights) {
-            if (st > 0) { return true; }
-        }
-
-        return false;
-    }
-
-    public static int getWeight(String st) {
-        if (st.equals("-1")) { return -1; }
-        else if (st.equals("1*")) { return 1; }
-        else if (st.equals("2*")) { return 2; }
-        else if (st.equals("3*")) { return 3; }
-        else if (st.equals("4*")) { return 4; }
-        else if (st.equals("5*")) { return 5; }
-        else { throw new RuntimeException("This can not happen: got a weight of '" + st + "'!"); }
     }
 
     private void installTopContainer() {
