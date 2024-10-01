@@ -218,6 +218,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
 
             } else {
                 Label section = new Label(currentItem.labelText);
+                section.addClassName("DrawerMenuHeading");
                 drawerCommandsLayout.addComponentAtIndex(componentIndex++, section);
 
                 for (AbstractAction inFolder : ((Menu) currentItem).getAllItems()) {

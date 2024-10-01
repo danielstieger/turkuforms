@@ -39,6 +39,7 @@ abstract public class EditorBasis<T extends Component & HasValidation & HasEnabl
 
     public void setEnabled(boolean b) {
         // since setEnabled is called oftentimes, unclear if that does impair vaadin performance
+
         if (cachedEnabledState != b) {
             cachedEnabledState = b;
             if (updateConclusionButton!= null) { updateConclusionButton.setEnabled(b); }

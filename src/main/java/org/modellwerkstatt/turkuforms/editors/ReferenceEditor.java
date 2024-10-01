@@ -5,6 +5,7 @@ import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ReferenceEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 import org.vaadin.addons.autoselectcombobox.AutoSelectComboBox;
 
 import java.util.ArrayList;
@@ -45,20 +46,16 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     public void setText(String s) {
         boolean valueNull = (s == null);
 
-        // Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given("+s+")");
+        Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
 
-            // scope not set at all, okay in case of read only
-            if (!valueNull && items == null && !cachedEnabledState) {
+            if (!valueNull && items == null) {
+                // scope not set at all, problems are monitored via ReferenceDelegate
+
                 List<String> scope = new ArrayList<>();
                 scope.add(s);
                 this.setItems(scope);
 
-            } else if (!valueNull && items == null) {
-                throw new RuntimeException("Editor for " + delegate.getPropertyName() + " has no scope set and is not in read-only.");
-
-            } else if (!valueNull && !items.contains(s)) {
-                throw new RuntimeException("Editor for " + delegate.getPropertyName() + " scope does not contain " + s + ". Scope set is " + String.join("; ", items));
             }
 
             if (valueNull) {

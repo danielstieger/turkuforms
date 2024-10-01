@@ -127,7 +127,7 @@ vaadin-drawer-toggle {
     margin: 0px;
 }
 
-vaadin-vertical-layout[slot $= "drawer"] label {
+.DrawerMenuHeading {
     margin: 2em 2em 0.1em 2em;
     font-size: var(--lumo-font-size-m);
 }
@@ -412,12 +412,13 @@ vaadin-form-layout[children$="1"] .FormItemWideOption vaadin-text-area[disabled]
 
 vaadin-text-field[disabled],
 vaadin-text-area[disabled],
-vaadin-combo-box[disabled],
 vaadin-select[disabled],
 vaadin-date-time-picker-date-picker[disabled],
 vaadin-date-time-picker-time-picker[disabled],
 vaadin-date-picker[disabled],
-vaadin-radio-group[disabled]
+vaadin-radio-group[disabled],
+vaadin-combo-box[disabled],
+vcf-auto-select-combo-box[disabled]
 {
 	padding-top: 0px;
 	padding-bottom: 0px;
@@ -425,23 +426,25 @@ vaadin-radio-group[disabled]
 
 vaadin-text-field[disabled]::part(input-field),
 vaadin-text-area[disabled]::part(input-field),
-vaadin-combo-box[disabled]::part(input-field),
 vaadin-select[disabled]::part(input-field),
 vaadin-date-time-picker-date-picker[disabled]::part(input-field),
 vaadin-date-time-picker-time-picker[disabled]::part(input-field),
-vaadin-date-picker[disabled]::part(input-field)
+vaadin-date-picker[disabled]::part(input-field),
+vaadin-combo-box[disabled]::part(input-field),
+vcf-auto-select-combo-box[disabled]::part(input-field)
 {
 	background-color: var(--turku-shade-disabled);
 }
 
 vaadin-text-field > input[disabled],
 vaadin-text-area > textarea[disabled],
-vaadin-combo-box > input[disabled],
 vaadin-select > vaadin-select-value-button[disabled],
 vaadin-date-time-picker-date-picker > input[disabled],
 vaadin-date-time-picker-time-picker > input[disabled],
 vaadin-date-picker > input[disabled],
-vaadin-radio-button > label[disabled]
+vaadin-radio-button > label[disabled],
+vaadin-combo-box > input[disabled],
+vcf-auto-select-combo-box > input[disabled]
 {
 
   color: var(--lumo-secondary-text-color);

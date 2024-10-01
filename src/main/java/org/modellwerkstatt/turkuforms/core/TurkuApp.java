@@ -102,7 +102,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         } else {
 
-            init(servlet.getUiFactory(),  userEnvironment.isProlongedUserSession() || factory.isCompactMode(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
+            init(servlet.getUiFactory(),  userEnvironment.isCompactMode() || factory.isCompactMode(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
 
             if (appInCompactMode) {
                 mainTabImpl = new TabSheetFake(drawerToggle);
