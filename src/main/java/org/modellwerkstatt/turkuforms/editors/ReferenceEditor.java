@@ -20,7 +20,7 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
         inputField.setSizeFull();
         inputField.setAutoOpen(true);
         inputField.setAllowCustomValue(false);
-        inputField.getStyle().set("--vaadin-combo-box-overlay-width", "450px");
+        // inputField.getStyle().set("--vaadin-combo-box-overlay-width", "450px");
         inputField.setRequired(true);
         inputField.setRequiredIndicatorVisible(false);
         inputField.addThemeVariants(ComboBoxVariant.LUMO_SMALL);
@@ -46,7 +46,7 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     public void setText(String s) {
         boolean valueNull = (s == null);
 
-        Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
+        // Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
 
             if (!valueNull && items == null) {

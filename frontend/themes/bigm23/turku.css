@@ -206,7 +206,7 @@ vaadin-tab[aria-selected~='true']{
 
 
 vaadin-button::part(prefix) {
-    margin-bottom: -4px;
+    /* margin-bottom: -4px; */
 }
 .MainwindowTileButton::part(prefix) {
     margin-top: 3px;

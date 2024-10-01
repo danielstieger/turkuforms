@@ -13,6 +13,8 @@
 
 html {
 /*    --lumo-font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+
+      adjust vaadin-button::part(prefix)
  */
 
     --lumo-font-family: Helvetica, Arial, sans-serif;
