@@ -12,6 +12,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -20,6 +21,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.TurkuAppCrtl_";
     public final static String USERNAME_SESSIONATTRIB = "userName";
     public final static String REMOTE_SESSIONATTRIB = "remoteAddr";
+    public final static String TURKU_PORTJ = "org.modellwerkstatt.turkuforms";
 
 
 
@@ -67,9 +69,11 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         return name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX);
     }
 
-    public void beaconCloseOrMissingHeartbeat(VaadinSession session, UI closingUi) {
-        Turku.l("TurkuApp.closeAppCrtlMissingHearbeatOrBeacon() shutdown in progress: " + inShutdownMode() + " . . . or shutdown now.");
+    public void beaconClose(VaadinSession session, UI closingUi) {
+        Turku.l("TurkuApp.beaconClose() shutdown in progress: " + inShutdownMode() + " . . . or shutdown now.");
         // this will result in a valueUnbound()
+        logMowareTracing("","", TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
+
         unregisterFromSessionTryInvalidate(session, true);
     }
 
@@ -96,10 +100,14 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                 TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
 
                 if (mainWin.getUI().isPresent()) {
-                    mainWin.getUI().get().access(() -> crtl.onExitRequested(true));
+                    mainWin.getUI().get().access(() -> {
+                            crtl.logMowareTracing("","", TURKU_PORTJ, "shutdown other controllers, shutting down this one.","" + vaadinSession.hashCode());
+                            crtl.onExitRequested(true);
+                });
 
                 } else {
                     Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
+                    crtl.logMowareTracing("","", TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS()","" + vaadinSession.hashCode());
                     crtl.onExitRequested(true);
 
                 }
@@ -152,6 +160,8 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         Turku.l("TurkuApplicationController.valueUnbound(): shutdown in progress (" + this.inShutdownMode() + ") or shutdown now.");
 
         // Just this controller, not others of the httpSession
+        logMowareTracing("","", TURKU_PORTJ, "Unregistring from session, shutdown in progress ","" + this.inShutdownMode());
+
         if (!this.inShutdownMode()) {
             // failback only ...
             this.internal_immediatelyShutdown();

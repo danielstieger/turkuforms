@@ -65,8 +65,8 @@ public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, H
     }
 
     @Override
-    public void beaconCloseOrMissingHeartbeat(VaadinSession session, UI closingUi) {
-        Turku.l("SdiAppCrtl.closeAppCrtlMissingHeartbearOrBeacon() received BEACON CLOSE !");
+    public void beaconClose(VaadinSession session, UI closingUi) {
+        Turku.l("SdiAppCrtl.beaconClose() received BEACON CLOSE !");
 
         if (closingUi.getChildren().findFirst().isPresent()) {
             Component browserTab = closingUi.getChildren().findFirst().get();
@@ -103,7 +103,10 @@ public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, H
     public static SdiAppCrtl createAppCrtlOnSession(IOFXUserEnvironment env) {
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         ITurkuAppFactory factory = servlet.getUiFactory();
-        WrappedSession session = VaadinSession.getCurrent().getSession();
+        VaadinSession vaadinSession = VaadinSession.getCurrent();
+        WrappedSession session = vaadinSession.getSession();
+
+        env.adjustDeviceId("" + vaadinSession.hashCode());
 
         SdiAppCrtl appCrtl = new SdiAppCrtl(factory, servlet.getAppBehaviour(), servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
         appCrtl.initializeApplication(factory.getAllCmdUrlDefaults(), servlet.getGuessedServerName(), env, servlet.getUiFactory().getRemoteAddr(), "");
@@ -116,7 +119,6 @@ public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, H
         session.removeAttribute(USERPRINCIPAL_SESSIONATTRIB);
 
         session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
-
         return appCrtl;
     }
 

@@ -115,7 +115,7 @@ public class TurkuServletService extends VaadinServletService {
 
                     uiToClose.access(() -> {
                         ITurkuAppCrtlAccess crtl = Workarounds.getControllerFormUi(uiToClose);
-                        if (crtl != null) { crtl.beaconCloseOrMissingHeartbeat(session, uiToClose); }
+                        if (crtl != null) { crtl.beaconClose(session, uiToClose); }
                         // detach() might not be called imdtly upon ui.close()
                         uiToClose.close();
                     });

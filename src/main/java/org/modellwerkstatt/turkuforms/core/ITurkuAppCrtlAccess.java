@@ -19,5 +19,5 @@ public interface ITurkuAppCrtlAccess {
 
     public void logFrmwrkProblem(String commandName, String sessId, String source, Throwable t, String desc);
 
-    public void beaconCloseOrMissingHeartbeat(VaadinSession session, UI closingUi);
+    public void beaconClose(VaadinSession session, UI closingUi);
 }

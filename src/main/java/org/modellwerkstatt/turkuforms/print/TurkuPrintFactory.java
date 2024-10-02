@@ -29,9 +29,7 @@ public class TurkuPrintFactory implements IOFXPrintFactory {
     }
 
     public IPrintingServiceImpl createConfiguredUserPrintService(Object tecHandle, IOFXUserEnvironment userEnvironment) {
-        Component appInstance = ((Component) tecHandle);
         TurkuUserPrintService printService = new TurkuUserPrintService(
-                appInstance,
                 this.httpServedPath,
                 userEnvironment,
                 this.templateClassLoaderFqName,

@@ -39,6 +39,8 @@ import org.modellwerkstatt.turkuforms.views.*;
 
 import java.util.List;
 
+import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.TURKU_PORTJ;
+
 
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
@@ -110,6 +112,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
                 mainTabImpl = new TabSheetMDI();
             }
 
+            userEnvironment.adjustDeviceId("" + vaadinSession.hashCode());
             applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
             applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
@@ -180,6 +183,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         // This is basically the logout? Unclear if we want to set the principal null
         Turku.l("TurkuApp.closeApplicationAndExit()");
 
+        applicationController.logMowareTracing("","", TURKU_PORTJ, "User initiated a closeAppAndExit()","");
         applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
 
         String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;

@@ -16,8 +16,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.objectflow.runtime.OFXUrlParams;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
-import org.modellwerkstatt.objectflow.serdes.CONV;
-import org.modellwerkstatt.objectflow.serdes.IConvSerdes;
+import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
@@ -118,7 +117,14 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
     public void showGraphDebugger(List<Object> list, String s) {
         String content;
         if (list.size() > 0) {
-            IConvSerdes serdes = CONV.stringSer(list.get(0).getClass(), CONV.CONV_DEFAULT_EN);
+            IConvFormatOptions myoptions = new ConvStdFormatters(new ConvFormatOptions("hh:mm:ss dd.MM.yy",
+                    "dd.MM.yy",
+                    "#0.00",
+                    "en",
+                    new IConvFormatOptions.Mode[]{IConvFormatOptions.Mode.ALL_PROPERTIES_NECESSARY, IConvFormatOptions.Mode.PRETTY}
+            ));
+
+            IConvSerdes serdes = CONV.jsonSerDes(list.get(0).getClass(), myoptions);
             ((BaseSerdes) serdes).expectArrayAtRoot();
             Object[] asArray = list.toArray();
             content = serdes.ser(asArray);
