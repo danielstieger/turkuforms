@@ -143,7 +143,8 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         if (!others && tryInvalidate) {
             Turku.l("TurkuApplicationController.unregisterFromSessionTryInvalidate() invalidating session");
             UserPrincipal.setUserPrincipal(vaadinSession, null);
-            VaadinSession.getCurrent().getSession().invalidate();
+            session.setAttribute(USERNAME_SESSIONATTRIB, session.getAttribute(USERNAME_SESSIONATTRIB) + " unregistered");
+            session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_INVALIDATE_SEC);
             return true;
         }
 

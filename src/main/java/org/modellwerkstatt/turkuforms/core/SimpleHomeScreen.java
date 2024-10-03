@@ -19,6 +19,7 @@ import java.util.List;
 
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.HOME_REDIRECT_PREFIX_LABEL;
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
+import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.USERNAME_SESSIONATTRIB;
 
 public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle, BeforeEnterObserver {
 
@@ -42,8 +43,7 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
 
 
         button = new Button (HOME_REDIRECT_PREFIX_LABEL + " (" + OK_HOKTEY + ")", event -> {
-            VaadinSession.getCurrent().getSession().invalidate();
-
+            // VaadinSession.getCurrent().getSession().invalidate();
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + paramInfo.getParamsToForwardIfAny());
         });
         Peculiar.useButtonShortcutHk(button, OK_HOKTEY);
@@ -53,10 +53,13 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
 
         setJustifyContentMode(JustifyContentMode.CENTER);
         setSizeFull();
+
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        VaadinSession.getCurrent().getSession().setAttribute(USERNAME_SESSIONATTRIB," SimpleHomeScreen");
+
         paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
 
         if (paramInfo.hasUsername()) {
