@@ -64,38 +64,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         userEnvironment = NavigationUtil.getAndClearUserEnvFromUi();
         Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
-
-        if (userEnvironment == null && !factory.isSingleAppInstanceMode()) {
-            // TurkuApp is available for session, but no userEnv? Directly navigated in a new Tab?
-            // Try to log in via principal, i.e. make a copy of the userenv ..
-
-            UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
-            if (userPrincipal == null) {
-
-                String msg = "API error! The application was accessible via url, but no user principal information found in current session.";
-                servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
-                quickUserInfo(msg);
-
-            } else {
-                UserEnvironmentInformation environment = new UserEnvironmentInformation();
-                String loginMsg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
-                if (loginMsg == null) {
-                    // we are logged in ... okay
-                    userEnvironment = environment;
-
-                } else {
-                    String msg = "API error! Tried to log in directly in the app with user principal from session, but '" + loginMsg + "'";
-                    servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
-                    quickUserInfo(msg);
-                }
-            }
-        }
-
         if (userEnvironment == null) {
-            String msg = "API error, can not start application, no user environment provided. App running in another browser tab? Use login url?";
+            String msg = "UserEnvironment to pick up was null, redirecting to /login";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
-            quickUserInfo(msg);
-
+            NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE);
 
         } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardGracefully() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardImmediate()) {
             String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";
@@ -131,16 +103,19 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         if (initialStartupParams == null) {
             initialStartupParams = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
 
+            if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
+                applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
+            }
+
         } else {
-            quickUserInfo("API Error! Sorry, reloading this application does not work . . .");
+            // controller closed by beacon - typically
+            UI.getCurrent().removeAll();
+            applicationController.internal_immediatelyShutdown();
+            quickUserInfo("Reloading this web page does not work. The application was destroyed.");
         }
 
-        if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
-            applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
-        }
 
-
-        Turku.l("TurkuApp.beforeEnter() done.");
+        Turku.l("TurkuApp.beforeEnter() done for " + hashCode() + " crtl is " + applicationController);
     }
 
     @Override

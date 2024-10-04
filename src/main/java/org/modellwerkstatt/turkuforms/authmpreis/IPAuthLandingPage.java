@@ -72,7 +72,8 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
 
                 TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
-                UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
+                // enqueue
+                UI.getCurrent().access(() -> UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE));
             }));
 
             return;
@@ -154,7 +155,8 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
 
                                 TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
-                                UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
+                                // enqueue
+                                UI.getCurrent().access(() -> UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE));
                             }));
                             return null;
 

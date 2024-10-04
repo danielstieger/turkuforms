@@ -107,7 +107,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
 
                 } else {
                     Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
-                    crtl.logMowareTracing("","", TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS()","" + vaadinSession.hashCode());
+                    crtl.logMowareTracing("","", TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS.","" + vaadinSession.hashCode());
                     crtl.onExitRequested(true);
 
                 }
