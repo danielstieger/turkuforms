@@ -33,9 +33,15 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
         // selection change not possible
     }
 
+    private void disableCurrentVis() {
+        if (current != null) {
+            ((Component) current).setVisible(false);
+        }
+    }
     @Override
     public void addTab(CmdUiTab tab) {
-        this.removeAll();
+        disableCurrentVis();
+
         current = tab;
         drawerToggle.setEnabled(false);
         numTabs++;
@@ -45,16 +51,17 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
 
     @Override
     public void focusTab(CmdUiTab tab) {
-        this.removeAll();
+        disableCurrentVis();
+
         current = tab;
-        this.add(current);
+        ((Component) current).setVisible(true);
     }
 
     @Override
     public void closeTab(CmdUiTab tab) {
         current = null;
         numTabs--;
-        this.removeAll();
+        this.remove(tab);
 
         if (! hasOpenTabs()) {
             drawerToggle.setEnabled(true);
