@@ -25,6 +25,10 @@ public class NavigationUtil {
     public static final String OTHER_TABS_OPEN = "/static/othertabsopen.html";
 
 
+    public static void setSessionUsername(String name){
+
+    }
+
     public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo, boolean forceAbsolutNavi) {
         Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... app route present: " + RouteConfiguration.forSessionScope().isRouteRegistered(TurkuApp.class));
         TurkuServlet theServlet = Workarounds.getCurrentTurkuServlet();

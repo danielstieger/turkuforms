@@ -51,6 +51,9 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+
+        NavigationUtil.setSessionUsername("AuthLandingPage");
+
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
         ITurkuAppFactory factory = servlet.getUiFactory();
