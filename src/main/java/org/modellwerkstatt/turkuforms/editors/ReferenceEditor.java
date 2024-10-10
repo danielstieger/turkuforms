@@ -13,6 +13,7 @@ import java.util.List;
 
 public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<String>> implements IToolkit_ReferenceEditor {
     protected List<String> items = null;
+    protected boolean extendedWidthSet = false;
 
     public ReferenceEditor() {
         super(new AutoSelectComboBox<>());

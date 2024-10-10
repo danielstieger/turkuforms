@@ -5,6 +5,7 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -72,7 +73,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardGracefully() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardImmediate()) {
             String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
+            setContent(new Label(msg));
+
             quickUserInfo(msg);
+            Turku.l("TurkuApp.constructor() par deploy forward pls. " + msg);
 
         } else {
 
@@ -92,6 +96,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
 
         }
+
         Turku.l("TurkuApp.constructor() - done");
     }
 
@@ -107,13 +112,12 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
                 applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
             }
 
-        } else {
+        } else if (applicationController != null) {
             // controller closed by beacon - typically
             UI.getCurrent().removeAll();
             applicationController.internal_immediatelyShutdown();
             quickUserInfo("Reloading this web page does not work. The application was destroyed.");
         }
-
 
         Turku.l("TurkuApp.beforeEnter() done for " + hashCode() + " crtl is " + applicationController);
     }
@@ -366,25 +370,29 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     public TurkuApplicationController getApplicationController() { return applicationController; }
 
     protected void quickUserInfo(String msg) {
-        Notification notification = new Notification();
-        notification.setPosition(Notification.Position.TOP_CENTER);
-        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-        notification.setDuration(20000);
+        UI.getCurrent().access(() -> {
 
-        Text text = new Text(msg);
+            Notification notification = new Notification();
+            notification.setPosition(Notification.Position.TOP_CENTER);
+            notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+            notification.setDuration(20000);
 
-        Button closeButton = new Button(new Icon("lumo", "cross"));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.getElement().setAttribute("aria-label", "Close");
-        closeButton.addClickListener(event -> {
-            notification.close();
+            Text text = new Text(msg);
+
+            Button closeButton = new Button(new Icon("lumo", "cross"));
+            closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+            closeButton.getElement().setAttribute("aria-label", "Close");
+            closeButton.addClickListener(event -> {
+                notification.close();
+            });
+
+            HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+            layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+            notification.add(layout);
+            notification.open();
+
         });
-
-        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
-
-        notification.add(layout);
-        notification.open();
     }
 
 }
