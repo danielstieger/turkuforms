@@ -74,7 +74,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         // this will result in a valueUnbound()
         logMowareTracing("","", TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
 
-        unregisterFromSessionTryInvalidate(session, true);
+        unregisterFromSessionTryInvalidate(session, false);
     }
 
     static public boolean hasOtherControllersInSession(VaadinSession vaadinSession) {
@@ -126,7 +126,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
     }
 
-    public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean tryInvalidate) {
+    public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean immediate) {
         WrappedSession session = vaadinSession.getSession();
         session.removeAttribute(appCrtlSessionName());
 
@@ -140,11 +140,16 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
             }
         }
 
-        if (!others && tryInvalidate) {
+        if (!others) {
             Turku.l("TurkuApplicationController.unregisterFromSessionTryInvalidate() invalidating session");
             UserPrincipal.setUserPrincipal(vaadinSession, null);
             session.setAttribute(USERNAME_SESSIONATTRIB, session.getAttribute(USERNAME_SESSIONATTRIB) + " unregistered");
             session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_INVALIDATE_SEC);
+
+            if (immediate) {
+                session.invalidate();
+            }
+
             return true;
         }
 

@@ -159,7 +159,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         Turku.l("TurkuApp.closeApplicationAndExit()");
 
         applicationController.logMowareTracing("","", TURKU_PORTJ, "User initiated a closeAppAndExit()","");
-        applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
+        applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), false);
 
         String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;
 
