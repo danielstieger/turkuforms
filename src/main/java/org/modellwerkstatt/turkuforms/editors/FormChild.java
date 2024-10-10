@@ -15,12 +15,15 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
     protected IDataUxDelegate<?> delegate;
     protected TurkuDelegatesForm<?> turkuDelegatesForm;
     protected boolean wideOption;
+    protected boolean provideHintOption;
+
 
     public FormChild(T theField) {
         inputField = theField;
         rightPart = inputField;
         label = new Label();
         wideOption = false;
+        provideHintOption = false;
     }
 
     public void enableKeyReleaseEvents() {
@@ -52,6 +55,9 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
     public void setOption(Option... options) {
         if (IToolkit_TextEditor.has(Option.WIDE, options)) {
             wideOption = true;
+        }
+        if (IToolkit_TextEditor.has(Option.PROVIDE_HINT, options)) {
+            provideHintOption = true;
         }
     }
 

@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.combobox.ComboBoxVariant;
 import com.vaadin.flow.dom.Element;
+import org.modellwerkstatt.dataux.runtime.delegates.ReferenceDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ReferenceEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
@@ -42,12 +43,26 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     public void setIssuesUpdateConclusion() {
         super.setIssuesUpdateConclusion();
         inputField.addValueChangeListener(event -> { execUpdateConclusion(event.getValue());});
+
+        if (provideHintOption) {
+            inputField.setAllowCustomValue(true);
+            inputField.addCustomValueSetListener(event -> {
+                if (delegate != null) {
+                    String text = event.getDetail();
+                    ((ReferenceDelegate) delegate).setHintForScope(text);
+                    execUpdateConclusion(text);
+                    setText(text);
+                    inputField.setOpened(true);
+                }
+
+            });
+        }
     }
 
     public void setText(String s) {
         boolean valueNull = (s == null);
 
-        // Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
+        Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
 
             if (!valueNull && items == null) {
@@ -56,7 +71,6 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
                 List<String> scope = new ArrayList<>();
                 scope.add(s);
                 this.setItems(scope);
-
             }
 
             if (valueNull) {
