@@ -62,6 +62,12 @@ window.turku = {
         });
     },
 
+    delayedOpenReferenceEditor: function(refEdit) {
+        setTimeout(() => {
+          refEdit.open();
+        }, 500);
+    },
+
     installBeacon: function(servletUrl, uiid) {
         // bei Minimierung?
         // statt visibilitychange on document

@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.editors;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.ComboBoxVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.dataux.runtime.delegates.ReferenceDelegate;
@@ -33,7 +34,8 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
         });
 
         Peculiar.focusMoveEnterHk(false, inputField, event -> {
-            turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
+            turkuDelegatesForm.focusOnNextDlgt(delegate, true);
+        });
         Peculiar.focusMoveEnterHk(true, inputField, event -> {
             turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
     }
@@ -42,17 +44,28 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     @Override
     public void setIssuesUpdateConclusion() {
         super.setIssuesUpdateConclusion();
-        inputField.addValueChangeListener(event -> { execUpdateConclusion(event.getValue());});
+        inputField.addValueChangeListener(event -> {
+            // Turku.l("ReferenceEditor.valueChangeListener called with " + event.getValue() + " / fromClient " + event.isFromClient());
+            if (event.isFromClient() || !provideHintOption) {
+                execUpdateConclusion(event.getValue());
+            }
+        });
 
         if (provideHintOption) {
             inputField.setAllowCustomValue(true);
             inputField.addCustomValueSetListener(event -> {
+                // Turku.l("ReferenceEditor.addCustomValueSetListener with " + event.getDetail());
+
                 if (delegate != null) {
                     String text = event.getDetail();
                     ((ReferenceDelegate) delegate).setHintForScope(text);
                     execUpdateConclusion(text);
-                    setText(text);
+
+                    // this causes problems, leading to a second conclusion.. :(
+                    inputField.setValue(text);
+
                     inputField.setOpened(true);
+                    inputField.getElement().executeJs("turku.delayedOpenReferenceEditor($0);", inputField);
                 }
 
             });
@@ -62,7 +75,7 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     public void setText(String s) {
         boolean valueNull = (s == null);
 
-        Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
+        // Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
 
             if (!valueNull && items == null) {
