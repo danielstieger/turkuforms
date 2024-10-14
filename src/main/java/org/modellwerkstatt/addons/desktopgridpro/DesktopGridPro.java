@@ -180,8 +180,10 @@ public class DesktopGridPro<T> extends GridPro<T> {
             DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
 
             try {
-                asMultiSelect().select(((Stream<T>) dataCommunicatorFetchFromProvider.invoke(dataCommunicator, Math.min(fromIndex, toIndex), Math.max(fromIndex,
-                        toIndex) - Math.min(fromIndex, toIndex) + 1)).collect(Collectors.toList()));
+                int min = Math.min(fromIndex, toIndex);
+                int max = Math.max(fromIndex, toIndex);
+
+                asMultiSelect().select(((Stream<T>) dataCommunicatorFetchFromProvider.invoke(dataCommunicator, min, max - min + 1)).limit( max - min + 1).collect(Collectors.toList()));
 
             } catch (InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
@@ -207,10 +209,17 @@ public class DesktopGridPro<T> extends GridPro<T> {
             DataCommunicator<T> dataCommunicator = super.getDataCommunicator();
 
             try {
-                Set<T> newSelectedItems = ((Stream<T>) dataCommunicatorFetchFromProvider.invoke(dataCommunicator, from, to - from + 1)).collect(Collectors.toSet());
+                // System.err.println("selectRangeOnly() from " + from + " to-from+1 " + (to - from + 1));
+                // https://github.com/vaadin-component-factory/selection-grid-flow/pull/41/commits/149232fdb13b0a0657b0cecc203e731105e57c90
+
+                Set<T> newSelectedItems = ((Stream<T>) dataCommunicatorFetchFromProvider.invoke(dataCommunicator, from, to - from + 1)).limit((to - from + 1)).collect(Collectors.toSet());
                 HashSet<T> oldSelectedItems = new HashSet<>(getSelectedItems());
+
+                // System.err.println("selectRangeOnly() old " + oldSelectedItems.size() + " to new " + newSelectedItems.size());
+
                 oldSelectedItems.removeAll(newSelectedItems);
                 asMultiSelect().updateSelection(newSelectedItems, oldSelectedItems);
+                // System.err.println("selectRangeOnly() selected in total " + newSelectedItems.size());
 
             } catch (InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
