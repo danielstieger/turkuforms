@@ -85,6 +85,8 @@ public class PromptWindow extends Dialog {
 
 
     public void simplePrompt(IToolkit_MainWindow.DlgType msgType, String text, IApplication.DlgRunnable dlgRunnable) {
+        this.setMinWidth("40%");
+
         Div infoDiv = new Div();
         infoDiv.addClassName("PromptWindowInfoDiv");
         infoDiv.setText(text);
@@ -97,6 +99,7 @@ public class PromptWindow extends Dialog {
 
         if (msgType == IToolkit_MainWindow.DlgType.INFO_SMALL) {
             // default
+
         } else if (msgType == IToolkit_MainWindow.DlgType.INFO_LARGE) {
             infoDiv.addClassName("PromptWindowLarge");
             this.setWidthFull();
@@ -132,6 +135,7 @@ public class PromptWindow extends Dialog {
 
 
     public void simpleProblemDialog(List<IOFXProblem> list, IApplication.DlgRunnable dlgRunnable) {
+        this.setMinWidth("40%");
         Div infoDiv = new Div();
         infoDiv.addClassName("PromptWindowInfoDiv");
 
@@ -146,7 +150,7 @@ public class PromptWindow extends Dialog {
             infoDiv.add(textDiv);
         }
 
-        rawPrompt(uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.ERROR),
+        rawPrompt(uiFactory.getSystemLabel(langIndex, MoWareTranslations.Key.INFORMATION),
                  infoDiv,
                  uiFactory.getSystemLabel(langIndex,MoWareTranslations.Key.OK_BUTTON),
                 null,

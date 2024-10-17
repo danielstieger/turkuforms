@@ -192,6 +192,7 @@ vaadin-tab[aria-selected~='true']{
 .PromptWindowInfoDiv {
     padding: 4em;
     white-space: pre;
+    display: inline-block;
 }
 
 .PromptWindowQuestion {

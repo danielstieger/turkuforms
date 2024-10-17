@@ -65,7 +65,7 @@ window.turku = {
     delayedOpenReferenceEditor: function(refEdit) {
         setTimeout(() => {
           refEdit.open();
-        }, 500);
+        }, 200);
     },
 
     installBeacon: function(servletUrl, uiid) {
