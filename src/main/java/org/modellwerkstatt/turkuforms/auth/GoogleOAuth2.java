@@ -4,12 +4,11 @@ package org.modellwerkstatt.turkuforms.auth;
 import elemental.json.Json;
 import elemental.json.JsonObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 import java.util.Map;
 
 public class GoogleOAuth2 implements ExtAuthProvider {
@@ -78,14 +77,19 @@ public class GoogleOAuth2 implements ExtAuthProvider {
             URL url = new URL(targetUrl);
             con = (HttpURLConnection) url.openConnection();
 
-            con.setConnectTimeout(3000);
-            con.setReadTimeout(2000);
+            con.setConnectTimeout(10000);
+            con.setReadTimeout(10000);
             con.setInstanceFollowRedirects(false);
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("Accept", "application/json");
 
             if (headers != null){
                 for(String key: headers.keySet()) {
+                    String encoded = new String(Base64.getEncoder().encode(headers.get(key).getBytes()));
+                    System.err.println("ORIG: " + headers.get(key));
+                    System.err.println("ENCD: " + encoded);
                     con.setRequestProperty(key, headers.get(key));
+
                 }
             }
 
@@ -104,21 +108,23 @@ public class GoogleOAuth2 implements ExtAuthProvider {
 
             int status = con.getResponseCode();
 
+            InputStream stream;
             if (status >= 200 && status < 300) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuilder content = new StringBuilder();
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                }
-                in.close();
-
-                return content.toString();
-
+                stream = con.getInputStream();
+            } else {
+                System.err.println("GoogleOAuth2.httpConnect() httpcode " + status + " - " + con.getResponseMessage());
+                stream = con.getErrorStream();
             }
 
-            System.err.println("Oauth2.httpConnect - received status code " + status + " for request " + url + " + " + postRequest);
-            System.err.println(con.getResponseMessage());
+            BufferedReader in = new BufferedReader(new InputStreamReader(stream));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+
+            return content.toString();
 
         } catch (IOException e) {
             System.err.println(e.getClass().getSimpleName() + " while connecting to " + targetUrl);
