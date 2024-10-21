@@ -125,11 +125,15 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 Set<DTO> allSelected = event.getAllSelectedItems();
                 Turku.l("TukruTable.selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
 
-                Selection sel = new Selection(dtoClass);
+                Selection sel;
                 // sel.setIssuer(TurkuTable.this.hashCode());
 
                 if (allSelected.size() > 0) {
-                    sel.setObjects(new ArrayList(allSelected));
+                    sel = new Selection(dtoClass, new ArrayList(allSelected));
+
+                } else {
+                    sel = new Selection(dtoClass);
+
                 }
                 genFormController.pushSelection(sel);
                 adjustTableInformation("", true);
