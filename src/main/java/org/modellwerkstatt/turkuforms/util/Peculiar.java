@@ -62,6 +62,15 @@ public class Peculiar {
         reg.setEventPropagationAllowed(false);
     }
 
+    public static void useDummyEnterHk(Component cmpt) {
+        ShortcutRegistration reg;
+        reg = Shortcuts.addShortcutListener(cmpt, () -> {}, HkTranslate.trans("ENTER"));
+
+        reg.listenOn(cmpt);
+        reg.setBrowserDefaultAllowed(false);
+        reg.setEventPropagationAllowed(false);
+    }
+
     public static ShortcutRegistration useGlobalShortcutHk(Component layout, String hk, ShortcutEventListener listener) {
         // Turku.l("Peculiar.useGlobalShortcutHk() registering HK for " + hk);
         ShortcutRegistration reg;

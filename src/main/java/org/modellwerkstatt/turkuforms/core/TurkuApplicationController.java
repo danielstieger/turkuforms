@@ -2,8 +2,10 @@ package org.modellwerkstatt.turkuforms.core;
 
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.UIDetachedException;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
+import org.joda.time.DateTime;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
@@ -99,16 +101,23 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                 TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
                 TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
 
-                if (mainWin.getUI().isPresent()) {
-                    mainWin.getUI().get().access(() -> {
-                            crtl.logMowareTracing("","", TURKU_PORTJ, "shutdown other controllers, shutting down this one.","" + vaadinSession.hashCode());
+                try {
+                    if (mainWin.getUI().isPresent()) {
+                        mainWin.getUI().get().access(() -> {
+                            crtl.logMowareTracing("", "", TURKU_PORTJ, "shutdown other controllers, shutting down this one.", "" + vaadinSession.hashCode());
                             crtl.onExitRequested(true);
-                });
+                        });
 
-                } else {
-                    Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
-                    crtl.logMowareTracing("","", TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS.","" + vaadinSession.hashCode());
-                    crtl.onExitRequested(true);
+                    } else {
+                        Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
+                        crtl.logMowareTracing("", "", TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS.", "" + vaadinSession.hashCode());
+                        crtl.onExitRequested(true);
+
+                    }
+
+                } catch (UIDetachedException ex) {
+                    System.err.println("TurkuApplicationController: We have a UIDetachedException for " + crtl + " at " + new DateTime());
+                    ex.printStackTrace();
 
                 }
                 Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() exited " + name);

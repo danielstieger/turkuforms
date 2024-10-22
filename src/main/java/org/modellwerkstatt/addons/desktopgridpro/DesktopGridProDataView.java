@@ -11,7 +11,6 @@ import java.util.Set;
 public class DesktopGridProDataView<DTO> {
     private List<DTO> originalList;
     private List<DTO> filteredList;
-    private List<DTO> removedList;
 
     private GridListDataView<DTO> currentDataView;
     private String filterForWhat = "";
@@ -74,12 +73,10 @@ public class DesktopGridProDataView<DTO> {
     private boolean applyFilterAndRefreshGrid(Collection<DTO> selection) {
         if (extTextInDtoColsure == null || isNoFilter()) {
             filteredList = originalList;
-            removedList = new ArrayList<>();
             return true;
 
         } else {
             filteredList = new ArrayList<>();
-            removedList = new ArrayList<>();
 
             int selectionsFound = 0;
 
@@ -87,12 +84,18 @@ public class DesktopGridProDataView<DTO> {
                 if (extTextInDtoColsure.textInItem(item, filterForWhat)){
                     filteredList.add(item);
                     if (selection.contains(item)) { selectionsFound++; }
-                } else {
-                    removedList.add(item);
                 }
             }
             return selection.size() == selectionsFound;
         }
+    }
+
+    public String debugInfo() {
+        String s = "";
+
+        s += "DesktopGridProDataView OL " + originalList.size() + ", FL " + filteredList.size() + " '" + filterForWhat + "'";
+
+        return s;
     }
 
     public int getFilteredTotalCount() {
@@ -141,7 +144,6 @@ public class DesktopGridProDataView<DTO> {
             filteredList.clear();
         }
 
-        removedList.clear();
         originalList = null;
     }
 }

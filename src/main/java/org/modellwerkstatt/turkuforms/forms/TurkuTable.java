@@ -89,6 +89,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         searchField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
         searchField.setValueChangeMode(ValueChangeMode.LAZY);
         searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
+        Peculiar.useDummyEnterHk(searchField);
 
         infoCsvButton = new Button("*/*");
         infoCsvButton.setTooltipText(factory.getSystemLabel(-1, MoWareTranslations.Key.COPY_CSV_FROM_TABLE));
@@ -234,15 +235,22 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             grid.getColumns().forEach(it -> { it.setSortable(false); });
 
             grid.getElement().addEventListener("cell-edit-started", e -> {
-                grid.disableGlobalEsc();
+                try {
+                    grid.disableGlobalEsc();
 
-                int idx = grid.getRowToSelectWhileEdit(e.getEventData());
-                if (idx > 0) {
-                    selectionHandlerEnabled = false;
-                    grid.deselectAll();
-                    selectionHandlerEnabled = true;
-                    grid.select(dataView.getItem(idx - 1));
+                    int idx = grid.getRowToSelectWhileEdit(e.getEventData());
+                    if (idx > 0) {
+                        selectionHandlerEnabled = false;
+                        grid.deselectAll();
+                        selectionHandlerEnabled = true;
+                        grid.select(dataView.getItem(idx - 1));
+                    }
+
+                } catch (IndexOutOfBoundsException ex) {
+                    System.err.println("TurkuTable: We have an ioobe at " + dtoClass.getSimpleName() + " " + generallyEditable + "/" + firstEditableCol + "\n" + dataView.debugInfo());
+                    ex.printStackTrace();
                 }
+
             });
 
 

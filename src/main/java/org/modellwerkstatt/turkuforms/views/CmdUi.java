@@ -109,12 +109,18 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
             Button button;
             if (Defs.hasIcon(oci.iconName)) {
                 button = new Button(oci.buttonTitle, Workarounds.createIconWithCollection(factory.translateIconName(oci.iconName), false), event -> {
-                    cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
+                    if (cmdContainer != null) {
+                        cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
+                    }
 
                 });
+
             } else {
                 button = new Button(oci.buttonTitle, event -> {
-                    cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
+                    // cmdContainer can be null ??? dbl click?
+                    if (cmdContainer != null) {
+                        cmdContainer.receiveAndProcess(new ConclusionEvent(oci.conclusionHashCode, oci.buttonTitle));
+                    }
 
                 });
             }
