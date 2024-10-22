@@ -43,7 +43,7 @@ public class GoogleOAuth2 implements ExtAuthProvider {
         return result;
     }
 
-    public String retrieveUserWithAccessToken(String code)  {
+    public String retrieveUserWithAccessToken(String code) throws IOException {
 
         String request = "code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET +
                 "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code";
@@ -70,7 +70,7 @@ public class GoogleOAuth2 implements ExtAuthProvider {
     }
 
 
-    public static String httpConnection(String targetUrl, Map<String, String> headers, String postRequest) {
+    public static String httpConnection(String targetUrl, Map<String, String> headers, String postRequest) throws IOException {
         HttpURLConnection con = null;
 
         try {
@@ -85,11 +85,8 @@ public class GoogleOAuth2 implements ExtAuthProvider {
 
             if (headers != null){
                 for(String key: headers.keySet()) {
-                    String encoded = new String(Base64.getEncoder().encode(headers.get(key).getBytes()));
-                    System.err.println("ORIG: " + headers.get(key));
-                    System.err.println("ENCD: " + encoded);
+                    // String encoded = new String(Base64.getEncoder().encode(headers.get(key).getBytes()));
                     con.setRequestProperty(key, headers.get(key));
-
                 }
             }
 
@@ -107,28 +104,31 @@ public class GoogleOAuth2 implements ExtAuthProvider {
             }
 
             int status = con.getResponseCode();
+            String errorStatus = null;
+            StringBuilder content = new StringBuilder();
 
             InputStream stream;
             if (status >= 200 && status < 300) {
                 stream = con.getInputStream();
+
             } else {
-                System.err.println("GoogleOAuth2.httpConnect() httpcode " + status + " - " + con.getResponseMessage());
+                errorStatus = "Http Status " + status + " - " + con.getResponseMessage();
                 stream = con.getErrorStream();
             }
 
             BufferedReader in = new BufferedReader(new InputStreamReader(stream));
             String inputLine;
-            StringBuilder content = new StringBuilder();
+
             while ((inputLine = in.readLine()) != null) {
                 content.append(inputLine);
             }
             in.close();
 
-            return content.toString();
+            if (errorStatus != null){
+                throw new IOException(errorStatus + "\n" + content.toString());
+            }
 
-        } catch (IOException e) {
-            System.err.println(e.getClass().getSimpleName() + " while connecting to " + targetUrl);
-            e.printStackTrace();
+            return content.toString();
 
         } finally {
             if (con != null){
@@ -136,7 +136,6 @@ public class GoogleOAuth2 implements ExtAuthProvider {
             }
         }
 
-        return null;
     }
 
 }

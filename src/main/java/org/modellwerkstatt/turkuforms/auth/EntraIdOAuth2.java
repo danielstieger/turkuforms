@@ -47,7 +47,7 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
         return result;
     }
 
-    public String retrieveUserWithAccessToken(String code)  {
+    public String retrieveUserWithAccessToken(String code) throws IOException {
 
         String request = "code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET +
                 "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code";
@@ -78,9 +78,9 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
         if (content == null) { return null; }
 
         object = Json.parse(content);
-        if (!object.hasKey("email")) { return null; }
+        if (!object.hasKey("mail")) { return null; }
 
-        content = object.get("email").asString();
+        content = object.get("mail").asString();
 
         return content;
     }

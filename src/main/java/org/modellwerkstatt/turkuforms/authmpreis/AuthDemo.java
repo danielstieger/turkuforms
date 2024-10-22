@@ -63,27 +63,31 @@ public class AuthDemo extends SimpleMessageCmpt implements BeforeEnterObserver {
         }
 
         if (theCode != null && originalState.equals(theState) && providerToUse != null) {
-            String email = providerToUse.retrieveUserWithAccessToken(theCode);
+            String email = null;
+            try {
+                email = providerToUse.retrieveUserWithAccessToken(theCode);
 
-            if (email == null){
-                errorMessage = "Problems while retrieving email from your account. We can not log you on.";
+                if (email == null){
+                    errorMessage = "Problems while retrieving email from your account. We can not log you on.";
 
-            } else {
+                } else {
 
-                UserPrincipal userPrincipal = new UserPrincipal(email, "");
-                UserPrincipal.setUserPrincipal(session, userPrincipal);
-                UserEnvironmentInformation environment = new UserEnvironmentInformation();
-                String msg = NavigationUtil.loginViaLoginCrtl(servlet, session, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
+                    UserPrincipal userPrincipal = new UserPrincipal(email, "");
+                    UserPrincipal.setUserPrincipal(session, userPrincipal);
+                    UserEnvironmentInformation environment = new UserEnvironmentInformation();
+                    String msg = NavigationUtil.loginViaLoginCrtl(servlet, session, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
 
-                if (msg == null) {
-                    NavigationUtil.setUserEnvForUi(environment);
-                    NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo, true);
+                    if (msg == null) {
+                        NavigationUtil.setUserEnvForUi(environment);
+                        NavigationUtil.ensureAppRoutPresentAndForward(null, paramInfo, true);
+
+                    }
 
                 }
 
+            } catch (IOException ex) {
+                errorMessage = ex.getMessage();
             }
-
-
 
         } else if (theCode != null) {
             // code does not fit ..

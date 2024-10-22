@@ -4,6 +4,7 @@ import elemental.json.Json;
 import elemental.json.JsonObject;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static org.modellwerkstatt.turkuforms.auth.GoogleOAuth2.httpConnection;
@@ -39,7 +40,7 @@ public class LinkedinOAuth2 implements ExtAuthProvider{
         return result;
     }
 
-    public String retrieveUserWithAccessToken(String code)  {
+    public String retrieveUserWithAccessToken(String code) throws IOException {
 
         String request = "code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET +
                 "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code";

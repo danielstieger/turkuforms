@@ -12,9 +12,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.shared.Tooltip;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -38,7 +36,9 @@ import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.TURKU_PORTJ;
 
@@ -105,8 +105,18 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         // start a command?
         if (initialStartupParams == null) {
-            initialStartupParams = new ParamInfo(beforeEnterEvent.getLocation().getQueryParameters());
+            Turku.l("TurkuApp.beforeEnter() path=" + beforeEnterEvent.getLocation().getPath() + " and queryString " + beforeEnterEvent.getLocation().getQueryParameters().getQueryString());
+            QueryParameters query = beforeEnterEvent.getLocation().getQueryParameters();
+            if (query.getParameters().size() == 0) {
+                // check :path variable
+                String queryInPath = beforeEnterEvent.getRouteParameters().get("path").orElse("");
+                if (queryInPath.startsWith("?")) {
+                    query = QueryParameters.fromString(queryInPath.substring(1));
+                }
+            }
 
+
+            initialStartupParams = new ParamInfo(query);
             if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
                 UI.getCurrent().access(() -> {
                     applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
