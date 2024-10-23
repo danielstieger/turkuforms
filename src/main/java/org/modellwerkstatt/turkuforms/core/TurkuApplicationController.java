@@ -102,7 +102,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                 TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
 
                 try {
-                    if (mainWin.getUI().isPresent()) {
+                    if (mainWin.getUI().isPresent() && mainWin.getUI().get().isAttached()) {
                         mainWin.getUI().get().access(() -> {
                             crtl.logMowareTracing("", "", TURKU_PORTJ, "shutdown other controllers, shutting down this one.", "" + vaadinSession.hashCode());
                             crtl.onExitRequested(true);
@@ -115,9 +115,9 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
 
                     }
 
-                } catch (UIDetachedException ex) {
-                    System.err.println("TurkuApplicationController: We have a UIDetachedException for " + crtl + " at " + new DateTime());
-                    ex.printStackTrace();
+                } catch (Throwable t) {
+                    System.err.println("TurkuApplicationController " + new DateTime()+ " Problem with " + crtl);
+                    t.printStackTrace();
 
                 }
                 Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() exited " + name);

@@ -104,6 +104,13 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
         // vaadin getValue() returns null for "nothing selected"
         cachedValue = inputField.getValue();
         // Turku.l("ReferenceEditor.getText() cachedValue " + cachedValue);
+
+        if (provideHintOption && cachedValue != null && !items.stream().anyMatch(s -> cachedValue.equals(s))) {
+            // some entry or within scope
+            // Turku.l("ReferenceEditor.getText() not in scope - set to null");
+            cachedValue = null;
+        }
+
         return cachedValue;
     }
 
