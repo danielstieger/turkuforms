@@ -235,10 +235,16 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             grid.getColumns().forEach(it -> { it.setSortable(false); });
 
             grid.getElement().addEventListener("cell-edit-started", e -> {
+                String eventData = "-";
+                int idx = -1;
                 try {
                     grid.disableGlobalEsc();
 
-                    int idx = grid.getRowToSelectWhileEdit(e.getEventData());
+                    eventData = e.getEventData().toString();
+                    idx = grid.getRowToSelectWhileEdit(e.getEventData());
+
+                    Turku.l("TurkuTable.eventListener(cell-edit-started) idx " +  idx + " from " + eventData);
+
                     if (idx > 0) {
                         selectionHandlerEnabled = false;
                         grid.deselectAll();
@@ -247,7 +253,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     }
 
                 } catch (IndexOutOfBoundsException ex) {
-                    System.err.println("TurkuTable: We have an ioobe at " + dtoClass.getSimpleName() + " " + generallyEditable + "/" + firstEditableCol + "\n" + dataView.debugInfo());
+                    System.err.println("TurkuTable: We have an ioobe at " + dtoClass.getSimpleName() + " " + generallyEditable + "/" + firstEditableCol + "\n" + dataView.debugInfo() + " with idx " + idx + " from " + eventData);
                     ex.printStackTrace();
                 }
 
