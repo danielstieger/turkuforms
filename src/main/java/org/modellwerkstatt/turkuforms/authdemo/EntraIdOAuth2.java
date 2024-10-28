@@ -20,14 +20,16 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
     private String CLIENT_ID="not set";
     private String REDIRECT_URI="not set";
     private String CLIENT_SECRET="not set";
+    private String USERNAME_FIELD_TO_USE="not set";
 
 
 
 
-    public EntraIdOAuth2(String client_id, String client_secret, String redirect_to)  {
+    public EntraIdOAuth2(String client_id, String client_secret, String redirect_to, String username_field)  {
         CLIENT_ID = client_id;
         CLIENT_SECRET = client_secret;
         REDIRECT_URI =redirect_to;
+        USERNAME_FIELD_TO_USE = username_field;
     }
 
     @Override
@@ -49,33 +51,20 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
 
         String content = httpConnection(TOKEN_ENDPOINT, null, request);
 
-        if (content == null) { return null; }
-
         JsonObject object = Json.parse(content);
-        System.err.println("(1) Received " + object.toString());
 
-        if (!object.hasKey("access_token")) { return null; }
+        if (!object.hasKey("access_token")) { throw new RuntimeException("Did not receive a valid token: " + content); }
 
         String token = object.get("access_token").asString();
 
-        System.err.println("GOT ACCESS_TOKEN, trying to retrieve mail.");
-        System.err.println(token);
-
-
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + token);
-
-
         content = httpConnection(USERINFO_ENDPOINT, headerMap,null);
 
-        System.err.println("(2) ENTRAIDOAUTH2: received " + content);
-
-        if (content == null) { return null; }
-
         object = Json.parse(content);
-        if (!object.hasKey("mail")) { return null; }
+        if (!object.hasKey(USERNAME_FIELD_TO_USE)) { throw new RuntimeException("The field " + USERNAME_FIELD_TO_USE + " was not found in oauth2 servers return." + content); }
 
-        content = object.get("mail").asString();
+        content = object.get(USERNAME_FIELD_TO_USE).asString();
 
         return content;
     }

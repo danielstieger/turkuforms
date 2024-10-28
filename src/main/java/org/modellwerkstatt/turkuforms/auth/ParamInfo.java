@@ -77,4 +77,9 @@ public class ParamInfo {
         if (!reroute.startsWith("/")) { reroute = "/" + reroute; }
         return reroute;
     }
+
+    @Override
+    public String toString() {
+        return "ParamInfo " + hashCode() + " = " + getParamsToForwardIfAny();
+    }
 }

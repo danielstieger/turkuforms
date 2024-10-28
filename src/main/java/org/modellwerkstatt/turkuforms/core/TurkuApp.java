@@ -67,12 +67,12 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         if (userEnvironment == null) {
             String msg = "UserEnvironment to pick up was null, redirecting to /login";
-            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
+            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg, null);
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE);
 
         } else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardGracefully() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardImmediate()) {
             String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";
-            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg);
+            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg, null);
 
             quickUserInfo(msg);
             Turku.l("TurkuApp.constructor() par deploy forward pls. " + msg);
@@ -120,6 +120,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
                 UI.getCurrent().access(() -> {
                     applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
+
                 });
             }
 

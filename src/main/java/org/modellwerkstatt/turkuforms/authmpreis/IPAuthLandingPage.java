@@ -32,7 +32,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
     }
 
 
-    protected  UserPrincipal tryIpOrParamLogin(ParamInfo params, ITurkuAppFactory factory) {
+    public static UserPrincipal filUserAsParamHelper(ParamInfo params, ITurkuAppFactory factory) {
         String name = factory.getRemoteAddr();
 
         if (params.hasUsername()) {
@@ -49,10 +49,14 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         return new UserPrincipal(name, "");
     }
 
+    protected  UserPrincipal tryIpOrParamLogin(ParamInfo params, ITurkuAppFactory factory) {
+        return filUserAsParamHelper(params, factory);
+    }
+
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
 
-        NavigationUtil.setSessionUsername("AuthLandingPage");
+        NavigationUtil.setSessionUsername("IPAuthLandingPage");
 
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
