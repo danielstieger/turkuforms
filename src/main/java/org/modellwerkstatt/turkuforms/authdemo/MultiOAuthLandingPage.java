@@ -1,25 +1,23 @@
-package org.modellwerkstatt.turkuforms.authmpreis;
+package org.modellwerkstatt.turkuforms.authdemo;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.auth.*;
+import org.modellwerkstatt.turkuforms.authmpreis.SimpleMessageCmpt;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
-public class AuthDemo extends SimpleMessageCmpt implements BeforeEnterObserver {
+public class MultiOAuthLandingPage extends SimpleMessageCmpt implements BeforeEnterObserver {
     private List<ExtAuthProvider> providers;
 
-    public AuthDemo() {
+    public MultiOAuthLandingPage() {
         super();
         setSizeFull();
 

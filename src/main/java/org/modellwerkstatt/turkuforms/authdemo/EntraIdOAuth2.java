@@ -1,19 +1,14 @@
-package org.modellwerkstatt.turkuforms.auth;
+package org.modellwerkstatt.turkuforms.authdemo;
 
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
+import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 
-import static org.modellwerkstatt.turkuforms.auth.GoogleOAuth2.httpConnection;
+import static org.modellwerkstatt.turkuforms.authdemo.GoogleOAuth2.httpConnection;
 
 public class EntraIdOAuth2 implements ExtAuthProvider {
     public String AUTHINIT_ENDPOINT ="https://login.microsoftonline.com/e68f2ef1-5ffd-426f-b5d2-cec606c8a21a/oauth2/v2.0/authorize";

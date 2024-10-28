@@ -95,6 +95,8 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     static public void shutdownOtherControllersInSession(VaadinSession vaadinSession) {
         WrappedSession session = vaadinSession.getSession();
 
+        long crtlSPresent = session.getAttributeNames().stream().filter(TurkuApplicationController::isTurkuControllerAttribute).count();
+
         for (String name: session.getAttributeNames()){
             if (isTurkuControllerAttribute(name)) {
 
@@ -116,7 +118,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                     }
 
                 } catch (Throwable t) {
-                    System.err.println("TurkuApplicationController " + new DateTime()+ " Problem with " + crtl);
+                    System.err.println("TurkuApplicationController " + new DateTime() + " (crtlcnt " + crtlSPresent +") Problem with " + crtl);
                     t.printStackTrace();
 
                 }

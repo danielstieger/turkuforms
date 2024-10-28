@@ -1,8 +1,9 @@
-package org.modellwerkstatt.turkuforms.auth;
+package org.modellwerkstatt.turkuforms.authdemo;
 
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
+import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;

@@ -1,15 +1,15 @@
-package org.modellwerkstatt.turkuforms.auth;
+package org.modellwerkstatt.turkuforms.authdemo;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
-import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.modellwerkstatt.turkuforms.auth.GoogleOAuth2.httpConnection;
+import static org.modellwerkstatt.turkuforms.authdemo.GoogleOAuth2.httpConnection;
 
-public class LinkedinOAuth2 implements ExtAuthProvider{
+public class LinkedinOAuth2 implements ExtAuthProvider {
 
     public String AUTHINIT_ENDPOINT ="https://www.linkedin.com/oauth/v2/authorization";
     public String TOKEN_ENDPOINT ="https://www.linkedin.com/oauth/v2/accessToken";

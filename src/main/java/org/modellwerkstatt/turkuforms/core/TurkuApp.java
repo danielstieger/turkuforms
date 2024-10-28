@@ -54,7 +54,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
 
     public TurkuApp() {
-        Turku.l("TurkuApp.constructor() - start");
+        // Turku.l("TurkuApp.constructor() - start");
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
 
@@ -63,7 +63,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         String remoteAddr = factory.getRemoteAddr();
 
         userEnvironment = NavigationUtil.getAndClearUserEnvFromUi();
-        Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
+        // Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
         if (userEnvironment == null) {
             String msg = "UserEnvironment to pick up was null, redirecting to /login";
@@ -105,7 +105,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         // start a command?
         if (initialStartupParams == null) {
-            Turku.l("TurkuApp.beforeEnter() path=" + beforeEnterEvent.getLocation().getPath() + " and queryString " + beforeEnterEvent.getLocation().getQueryParameters().getQueryString());
+            // Turku.l("TurkuApp.beforeEnter() path=" + beforeEnterEvent.getLocation().getPath() + " and queryString " + beforeEnterEvent.getLocation().getQueryParameters().getQueryString());
             QueryParameters query = beforeEnterEvent.getLocation().getQueryParameters();
             if (query.getParameters().size() == 0) {
                 // check :path variable
@@ -130,7 +130,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             quickUserInfo("Reloading this web page does not work. The application was destroyed.");
         }
 
-        Turku.l("TurkuApp.beforeEnter() done for " + hashCode() + " crtl is " + applicationController);
+        Turku.l("TurkuApp.beforeEnter() done for " + applicationController);
     }
 
     @Override
