@@ -121,6 +121,10 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                     System.err.println("TurkuApplicationController " + new DateTime() + " (crtlcnt " + crtlSPresent +") Problem with " + crtl);
                     t.printStackTrace();
 
+                    if (!crtl.inShutdownMode()) {
+                        crtl.onExitRequested(true);
+                    }
+
                 }
                 Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() exited " + name);
             }
