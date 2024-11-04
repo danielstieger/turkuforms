@@ -68,11 +68,13 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         String naviPath = "/" + event.getLocation().getPath();
 
 
+        boolean loginRequested = TurkuServlet.LOGIN_ROUTE.equals(naviPath);
         boolean otherCrtlPresent = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
 
-        Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
+        Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout() + " paramInfo=" + paramInfo.getParamsToForwardIfAny());
 
-        if (factory.isSingleAppInstanceMode() && otherCrtlPresent) {
+
+        if (loginRequested && factory.isSingleAppInstanceMode() && otherCrtlPresent) {
             Turku.l("IPAuthLandingPage.beforeEnter() in singleapp instance mode and other controllers present? "+ otherCrtlPresent);
 
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
@@ -80,7 +82,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
                 TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
                 // enqueue
-                UI.getCurrent().access(() -> UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE));
+                UI.getCurrent().access(() -> NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + "/" + paramInfo.getParamsToForwardIfAny()));
             }));
 
             return;
@@ -88,10 +90,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
 
 
-
-
-
-        if (TurkuServlet.LOGIN_ROUTE.equals(naviPath)) {
+        if (loginRequested) {
             // this should work, even in case other controllers are present ..
 
             UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
@@ -163,7 +162,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
                                 TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
                                 // enqueue
-                                UI.getCurrent().access(() -> UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE));
+                                UI.getCurrent().access(() -> NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + "/" + paramInfo.getParamsToForwardIfAny()));
                             }));
                             return null;
 

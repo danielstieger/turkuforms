@@ -64,19 +64,20 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
 
 
 
-
+        boolean loginRequested = TurkuServlet.LOGIN_ROUTE.equals(naviPath);
         boolean otherCrtlPresent = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
         Turku.l("OAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
 
-        if (factory.isSingleAppInstanceMode() && otherCrtlPresent) {
+        if (loginRequested && factory.isSingleAppInstanceMode() && otherCrtlPresent) {
             Turku.l("IPAuthLandingPage.beforeEnter() in singleapp instance mode and other controllers present? "+ otherCrtlPresent);
 
+            ParamInfo finalParamInfo1 = paramInfo;
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
 
                 TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
                 // enqueue
-                UI.getCurrent().access(() -> UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE));
+                UI.getCurrent().access(() -> NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + "/" + finalParamInfo1.getParamsToForwardIfAny()));
             }));
 
             return;
@@ -93,7 +94,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
         String originalState = "" + vaadinSession.hashCode();
 
 
-        if (TurkuServlet.LOGIN_ROUTE.equals(naviPath) && theState == null) {
+        if (loginRequested && theState == null) {
             // this should work, even in case other controllers are present ..
 
             UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
@@ -132,7 +133,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
                 return;
             }
 
-        } else if (TurkuServlet.LOGIN_ROUTE.equals(naviPath) && theState != null) {
+        } else if (loginRequested && theState != null) {
             String errorMsg = "";
             Exception exToReportOnPortJ = null;
 

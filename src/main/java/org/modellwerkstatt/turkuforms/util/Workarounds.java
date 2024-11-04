@@ -75,15 +75,6 @@ public class Workarounds {
         return "heartbeat".equals(rParam);
     }
 
-    /* - - - - - - - - - - - - access to local environment and session - - - - - - - - - - - - */
-    public static boolean closedByMissingHearbeat() {
-        // @PreserveOnRefresh also issues attach and detach events when swapping UI instances.
-        // Thus we can not simply call internal_shutdown on detach. Maybe the TurkuApp is reattached
-        // in the same request.
-        String stacktrace = OFXConsoleHelper._____organizeCurrentStacktrace_____();
-        return stacktrace.contains("VaadinService.cleanupSession");
-    }
-
     public static TurkuServlet getCurrentTurkuServlet() {
         return (TurkuServlet) VaadinServlet.getCurrent();
     }

@@ -99,7 +99,6 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
 
         for (String name: session.getAttributeNames()){
             if (isTurkuControllerAttribute(name)) {
-
                 TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
                 TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
 
@@ -126,7 +125,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                     }
 
                 }
-                Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() exited " + name);
+                Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() closed down " + name);
             }
         }
     }
@@ -156,7 +155,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         }
 
         if (!others) {
-            Turku.l("TurkuApplicationController.unregisterFromSessionTryInvalidate() invalidating session");
+            Turku.l("TurkuApplicationController.unregisterFromSessionTryInvalidate() setting invalidate timeout (or invalidate immediatelly = "+ immediate+ ")");
             UserPrincipal.setUserPrincipal(vaadinSession, null);
             session.setAttribute(USERNAME_SESSIONATTRIB, session.getAttribute(USERNAME_SESSIONATTRIB) + " unregistered");
             session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_INVALIDATE_SEC);

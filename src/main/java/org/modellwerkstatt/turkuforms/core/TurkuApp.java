@@ -151,36 +151,19 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         this.getElement().executeJs("turku.installCloseConfirm($0)", installOrRemove);
     }
 
-
-    /*
-     * No longer using heart beat mechanism, since missing heartbeats are no longer possible.
-     * We are relying on the beacon api.
-     *
-    @Override
-    protected void onDetach(DetachEvent detachEvent) {
-        super.onDetach(detachEvent);
-
-        boolean closedByHeartBeat = Workarounds.closedByMissingHearbeat();
-        Turku.l("TurkuApp.onDetach(): closedByHeartBeat "+ closedByHeartBeat);
-
-        if (closedByHeartBeat && applicationController != null) {
-            // might be null in case app was not initialized at all
-            applicationController.closeAppCrtlMissingHearbeatOrBeacon(VaadinSession.getCurrent());
-        }
-    } */
-
     @Override
     public void closeApplicationAndExit() {
         // This is basically the logout? Unclear if we want to set the principal null
-        Turku.l("TurkuApp.closeApplicationAndExit()");
+        Turku.l("TurkuApp.closeApplicationAndExit() " + applicationController + " attached=" + isAttached());
 
         applicationController.logMowareTracing("","", TURKU_PORTJ, "User initiated a closeAppAndExit()","");
         applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), false);
 
-        String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;
-
-        UI.getCurrent().getPage().setLocation(redirectTo);
-        UI.getCurrent().close();
+        if (isAttached()) {
+            String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;
+            UI.getCurrent().getPage().setLocation(redirectTo);
+            UI.getCurrent().close();
+        }
     }
     
     @Override
