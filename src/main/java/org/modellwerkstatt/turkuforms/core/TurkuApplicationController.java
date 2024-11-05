@@ -110,11 +110,14 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
                         });
 
                     } else {
+                        // This leads to mem leaks in V23
                         Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
+
                         crtl.logMowareTracing("", "", TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS.", "" + vaadinSession.hashCode());
                         crtl.onExitRequested(true);
 
                     }
+
 
                 } catch (Throwable t) {
                     System.err.println("TurkuApplicationController " + new DateTime() + " (crtlcnt " + crtlSPresent +") Problem with " + crtl);

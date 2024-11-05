@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -96,7 +97,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         }
 
-        Turku.l("TurkuApp.constructor() - done");
+        Turku.l("TurkuApp.constructor() - done, heartbeat @ " + VaadinService.getCurrent().getDeploymentConfiguration().getHeartbeatInterval());
     }
 
 
@@ -161,8 +162,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         if (isAttached()) {
             String redirectTo = Workarounds.getCurrentTurkuServlet().getUiFactory().getOnLogoutMainLandingPath() + "?" + NavigationUtil.WAS_ACTIVE_LOGOUT_PARAM;
-            UI.getCurrent().getPage().setLocation(redirectTo);
-            UI.getCurrent().close();
+            getUI().get().getPage().setLocation(redirectTo);
+            getUI().get().close();
         }
     }
     
