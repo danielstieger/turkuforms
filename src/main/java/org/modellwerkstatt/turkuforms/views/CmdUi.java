@@ -31,6 +31,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     protected IToolkit_Form currentFormToFocus;
     protected String color;
     protected HotKeyPreventer recorder;
+    protected TopNotification notification = null;
 
     public CmdUi(ITurkuAppFactory fact) {
         super();
@@ -72,9 +73,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void setContent(IToolkit_Form formAsComponent) {
         // changing pane content
+        this.replace((Component) currentFormToFocus, (Component) formAsComponent);
         currentFormToFocus = formAsComponent;
-        Component existing = this.getComponentAt(0);
-        this.replace(existing, (Component) currentFormToFocus);
     }
 
 
@@ -187,22 +187,18 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
 
     @Override
     public void setNotification(String s) {
-        Div div = new Div(new Text(s));
-        div.addClassName("TabLockingMessage");
+        if (notification == null) {
+            notification = new TopNotification();
+            notification.setText(s);
+            notification.addCloseListener(buttonClickEvent -> {
+                this.remove(notification);
+                notification = null;
+            });
+            this.addComponentAtIndex(0, notification);
 
-        Button closeButton = new Button(Workarounds.createIconWithCollection("close", false));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.getElement().setAttribute("aria-label", "Close");
-        closeButton.addClassName("TabLockingButton");
-
-        HorizontalLayout lyt = new HorizontalLayout();
-        Peculiar.shrinkSpace(lyt);
-        lyt.add(div, closeButton);
-
-        closeButton.addClickListener(event -> {
-            this.remove(lyt);
-        });
-        this.addComponentAtIndex(0, lyt);
+        } else {
+            notification.setText(s);
+        }
     }
 
     @Override
