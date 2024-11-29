@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.print;
 
-import com.vaadin.flow.component.Component;
 import org.modellwerkstatt.objectflow.runtime.IOFXPrintFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.IPrintingServiceImpl;

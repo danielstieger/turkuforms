@@ -64,8 +64,9 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         onLogoutMainLandingPath = null;
     }
 
-    @Override
+
     public String getRemoteAddr() {
+        // can not use the getRemoteAddr() from IRemoteIp, since we are on websockets.
         WrappedSession session = VaadinSession.getCurrent().getSession();
         String address = (String) session.getAttribute("x-forwarded-for");
 

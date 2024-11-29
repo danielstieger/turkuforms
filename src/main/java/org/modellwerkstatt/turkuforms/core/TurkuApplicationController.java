@@ -2,7 +2,6 @@ package org.modellwerkstatt.turkuforms.core;
 
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.UIDetachedException;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.joda.time.DateTime;
@@ -14,7 +13,6 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
-import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;

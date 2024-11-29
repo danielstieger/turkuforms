@@ -3,11 +3,8 @@ package org.modellwerkstatt.turkuforms.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ShortcutEvent;
 import com.vaadin.flow.component.ShortcutEventListener;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
@@ -212,6 +209,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
         factory = null;
         cmdContainer = null;
         currentFormToFocus = null;
+        notification = null;
+
         conclusionButtons.clear();
     }
 

@@ -5,11 +5,9 @@ import elemental.json.Json;
 import elemental.json.JsonObject;
 import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Base64;
 import java.util.Map;
 
 public class GoogleOAuth2 implements ExtAuthProvider {

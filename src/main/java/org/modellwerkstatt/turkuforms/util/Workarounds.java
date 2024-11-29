@@ -6,7 +6,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServlet;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;

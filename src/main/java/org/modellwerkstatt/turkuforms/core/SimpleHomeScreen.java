@@ -7,7 +7,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.server.VaadinSession;
 import org.joda.time.LocalTime;
 import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.HOME_REDIRECT_PREFIX_LABEL;
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
-import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.USERNAME_SESSIONATTRIB;
 
 public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle, BeforeEnterObserver {
 

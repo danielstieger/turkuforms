@@ -1,13 +1,11 @@
 package org.modellwerkstatt.turkuforms.editors;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.ComboBoxVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.dataux.runtime.delegates.ReferenceDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ReferenceEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.vaadin.addons.autoselectcombobox.AutoSelectComboBox;
 
 import java.util.ArrayList;
