@@ -8,8 +8,32 @@
 
 
 
-.NavBarSmallLogo {
-    background-image: url("./img/mpreis_small_logo.png");
+.NavBarSmallLogo1 {
+    background-image: url("./img/mpreis_small_logo1.png");
+    width: 59px;
+    height: 21px;
+}
+
+.NavBarSmallLogo2 {
+    background-image: url("./img/mpreis_small_logo2.png");
+    width: 59px;
+    height: 21px;
+}
+
+.NavBarSmallLogo3 {
+    background-image: url("./img/mpreis_small_logo3.png");
+    width: 59px;
+    height: 21px;
+}
+
+.NavBarSmallLogo4 {
+    background-image: url("./img/mpreis_small_logo4.png");
+    width: 59px;
+    height: 21px;
+}
+
+.NavBarSmallLogo5 {
+    background-image: url("./img/mpreis_small_logo5.png");
     width: 59px;
     height: 21px;
 }

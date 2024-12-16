@@ -69,20 +69,9 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg, null);
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE);
 
-        } /* else if (servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardGracefully() || servlet.getJmxRegistration().getAppTelemetrics().isParDeploymentForwardImmediate()) {
-            String msg = "API error! Sorry, the application is marked as an old version. You should have been redirected to the newer one... ";
-            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg, null);
+        } else {
 
-            quickUserInfo(msg);
-            Turku.l("TurkuApp.constructor() par deploy forward pls. " + msg);
-
-            Todo: Check this when starting the first command! No additional check here, might be on the old 3min session ....
-
-        } */
-
-        else {
-
-            init(servlet.getUiFactory(),  userEnvironment.isCompactMode() || factory.isCompactMode(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion());
+            init(servlet.getUiFactory(),  userEnvironment.isCompactMode() || factory.isCompactMode(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion(), userEnvironment.getBrandingId());
 
             if (appInCompactMode) {
                 mainTabImpl = new TabSheetFake(drawerToggle);

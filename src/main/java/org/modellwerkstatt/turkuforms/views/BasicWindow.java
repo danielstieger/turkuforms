@@ -58,7 +58,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     public BasicWindow() {
     }
 
-    protected void init(ITurkuAppFactory factory, boolean compact, String appNavbarTitle) {
+    protected void init(ITurkuAppFactory factory, boolean compact, String appNavbarTitle, int brandLogoId) {
         turkuFactory = factory;
         appInCompactMode = compact;
 
@@ -72,7 +72,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         addToNavbar(topLrLayout);
 
         Span logo = new Span();
-        logo.addClassName("NavBarSmallLogo");
+        logo.addClassName("NavBarSmallLogo" + brandLogoId);
         navbarTitleDiv = new Div();
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
         navbarTitleDiv.addClassName("TurkuLayoutNavbarText");
