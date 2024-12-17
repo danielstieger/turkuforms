@@ -226,10 +226,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     }
 
     @Override
-    public void setAppInfo(String appName, String version, String dynTitle) {
+    public void setAppInfo(String appName, String version, String dynTitle, int brandingId) {
         super.setSysInfo(appName+ " " + version);
         super.setNavbarTitleDiv(appName + " " + dynTitle);
         super.setUserInfo(userEnvironment.getUserName());
+        super.adjustBranding(brandingId);
     }
 
     @Override

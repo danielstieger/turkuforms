@@ -54,6 +54,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     protected VerticalLayout drawerCommandsLayout;
     protected MenuBar mainmenuBar;
     protected boolean appInCompactMode;
+    private Span logo;
 
     public BasicWindow() {
     }
@@ -71,8 +72,9 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         topLrLayout = new LeftRight("TurkuLayoutNavbarTop");
         addToNavbar(topLrLayout);
 
-        Span logo = new Span();
-        logo.addClassName("NavBarSmallLogo" + brandLogoId);
+        logo = new Span();
+        adjustBranding(brandLogoId);
+
         navbarTitleDiv = new Div();
         navbarTitleDiv.addClassName("TurkuLayoutNavbarTitle");
         navbarTitleDiv.addClassName("TurkuLayoutNavbarText");
@@ -158,6 +160,10 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         return sysInfoLabel != null ? sysInfoLabel.getText() : "";
     }
 
+    protected void adjustBranding(int id) {
+        Turku.l("Adjusting Branding to " + id);
+        logo.setClassName("NavBarSmallLogo" + id);
+    }
     protected void setUserInfo(String info) {
         userInfoLabel.setText(info);
     }
