@@ -1,5 +1,8 @@
 package org.modellwerkstatt.turkuforms.editors;
 
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.ShortcutRegistration;
+import com.vaadin.flow.component.Shortcuts;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.datetimepicker.DateTimePickerVariant;
@@ -7,6 +10,8 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -28,6 +33,7 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
         inputField.setAutoOpen(true);
         inputField.setMax(LocalDateTime.of(2049, 1, 1, 1, 0));
         inputField.setMin(LocalDateTime.of(1951, 1, 1, 1, 0));
+        // prevents dropdown combo for time
         inputField.setStep(Duration.ofMinutes(1));
         inputField.setDatePickerI18n(extI18n);
 
@@ -42,6 +48,24 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
         Peculiar.focusMoveEnterHk(true, inputField, event -> {
             turkuDelegatesForm.focusOnNextDlgt(delegate, false);
         });
+
+
+        DatePicker datePicker = (DatePicker) inputField.getChildren().filter(component -> component instanceof DatePicker).findFirst().orElse(null);
+        if (datePicker != null) {
+            // esc closes cmdtab
+            ShortcutRegistration reg = Shortcuts.addShortcutListener(inputField, shortcutEvent -> {
+                if (datePicker.isOpened()) {
+                    datePicker.setOpened(false);
+                } else {
+                    Workarounds.tryToSendToUnderlyingCmdUi(inputField, shortcutEvent);
+                }
+
+            }, Key.ESCAPE);
+            reg.listenOn(inputField);
+            reg.setEventPropagationAllowed(false);
+            reg.setBrowserDefaultAllowed(false);
+        }
+
 
         // check DatePickerEditor ...
         inputField.addValidationStatusChangeListener(event -> {

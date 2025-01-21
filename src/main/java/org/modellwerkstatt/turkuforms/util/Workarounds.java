@@ -1,6 +1,7 @@
 package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ShortcutEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.shared.Tooltip;
@@ -10,6 +11,9 @@ import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.sdi.BrowserTab;
+import org.modellwerkstatt.turkuforms.views.CmdUi;
+
+import java.util.Optional;
 
 
 /*
@@ -68,6 +72,18 @@ public class Workarounds {
     }
 
 
+    public static void tryToSendToUnderlyingCmdUi(Component cur, ShortcutEvent ev) {
+        Optional<Component> prnt = cur.getParent();
+
+        while (prnt.isPresent()) {
+            if (prnt.get() instanceof CmdUi) {
+                ((CmdUi) prnt.get()).onShortcut(ev);
+                break;
+            }else {
+                prnt = prnt.get().getParent();
+            }
+        }
+    }
 
     public static boolean isHeartBeatRequest(VaadinRequest request) {
         String rParam = request.getParameter("v-r");

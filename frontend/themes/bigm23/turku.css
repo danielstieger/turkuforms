@@ -398,7 +398,7 @@ vaadin-form-item::part(label) {
 }
 
 .ImageViewerImage {
-    border: 1px solid var(--lumo-body-text-color);
+    box-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-s);
     margin: var(--turku-hierarchy-spacing);
 }
 

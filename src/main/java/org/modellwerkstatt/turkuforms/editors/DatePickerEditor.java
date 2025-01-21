@@ -1,11 +1,19 @@
 package org.modellwerkstatt.turkuforms.editors;
 
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.ShortcutRegistration;
+import com.vaadin.flow.component.Shortcuts;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datepicker.DatePickerVariant;
+import com.vaadin.flow.component.notification.Notification;
+import net.bytebuddy.asm.Advice;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DateOrTimeEditor;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
+import org.springframework.scripting.bsh.BshScriptUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,17 +36,45 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
         inputField.setMax(LocalDate.of(2049, 1, 1));
         inputField.setMin(LocalDate.of(1951, 1, 1));
 
-
         inputField.setI18n(extI18n);
 
-        Peculiar.focusMoveEnterHk(false, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
-        Peculiar.focusMoveEnterHk(true, inputField, event -> { turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
+        // esc closes cmdtab
+        ShortcutRegistration reg = Shortcuts.addShortcutListener(inputField, shortcutEvent -> {
+            if (inputField.isOpened()) {
+                inputField.setOpened(false);
+            } else {
+                Workarounds.tryToSendToUnderlyingCmdUi(inputField, shortcutEvent);
+            }
+
+        }, Key.ESCAPE);
+        reg.listenOn(inputField);
+        reg.setEventPropagationAllowed(false);
+        reg.setBrowserDefaultAllowed(false);
+
+
+        Peculiar.focusMoveEnterHk(false, inputField, event -> {
+            turkuDelegatesForm.focusOnNextDlgt(delegate, true);});
+        Peculiar.focusMoveEnterHk(true, inputField, event -> {
+            turkuDelegatesForm.focusOnNextDlgt(delegate, false);});
 
         // other invalid attribute listeners are not working.
         // https://github.com/vaadin/platform/issues/3066
         inputField.addValidationStatusChangeListener(event -> {
-            // Turku.l("DatePickerEditor.addValidationStatusChangeListener() NEW Status: " + event.getNewStatus() );
+            // also on no value, this event triggers with a true
             isInvalid = !event.getNewStatus();
+        });
+
+
+        inputField.addValueChangeListener(event -> {
+            if (issueUpdateEnabled) {
+                LocalDate ld = event.getValue();
+                // also forward null, this will result in red error messages.
+                if (execUpdateConclusion(ld == null ? null : ldToString(event.getValue()))) {
+                    // ..
+                } else {
+                    turkuDelegatesForm.focusOnNextDlgt(delegate, true);
+                }
+            }
         });
     }
 
@@ -64,14 +100,18 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
         }
     }
 
+    private String ldToString(LocalDate ld) {
+        LocalDate adjusted = ld.withYear(MoWareFormattersFactory.twoToFourDigitYear(ld.getYear()));
+        return cachedFormatter.get(cachedFormatKey).format(adjusted);
+    }
+
     public String getText() {
         LocalDate ld = inputField.getValue();
 
         // Turku.l("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
 
         if (ld != null) {
-            LocalDate adjusted = ld.withYear(MoWareFormattersFactory.twoToFourDigitYear(ld.getYear()));
-            cachedValue = cachedFormatter.get(cachedFormatKey).format(ld);
+            cachedValue = ldToString(ld) ;
 
         } else if (isInvalid) {
             cachedValue = "_";

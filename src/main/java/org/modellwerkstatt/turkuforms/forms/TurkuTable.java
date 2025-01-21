@@ -112,6 +112,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         // grid.addThemeName("no-border");
         grid.addThemeName("row-stripes");
         grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
+        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND );
+
 
         Peculiar.useGridShortcutHk(grid, "C", event -> {
             UI.getCurrent().getPage().executeJs("turku.copyToClipboard($0, $1)", this, this.generateCsv());
