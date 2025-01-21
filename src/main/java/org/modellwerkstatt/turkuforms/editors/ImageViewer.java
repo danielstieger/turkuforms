@@ -12,6 +12,7 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
 
     public ImageViewer(String rls) {
         super(new Image());
+        super.inputField.addClassName("ImageViewerImage");
         retrieveLocationStore = rls;
         inputField.setWidth("100%");
 

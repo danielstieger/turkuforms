@@ -397,6 +397,11 @@ vaadin-form-item::part(label) {
     display: none;
 }
 
+.ImageViewerImage {
+    border: 1px solid var(--lumo-body-text-color);
+    margin: var(--turku-hierarchy-spacing);
+}
+
 vaadin-combo-box-item {
     padding: 0;
     min-height: 0;
