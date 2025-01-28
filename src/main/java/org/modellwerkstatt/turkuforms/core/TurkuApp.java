@@ -66,7 +66,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         if (userEnvironment == null) {
             String msg = "UserEnvironment to pick up was null, redirecting to /login";
-            servlet.logOnPortJTrace(TurkuApp.class.getName(), remoteAddr, msg, null);
+            servlet.logOnPortJError(TurkuApp.class.getName(), remoteAddr, msg, null);
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE);
 
         } else {

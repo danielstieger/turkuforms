@@ -8,13 +8,17 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
+import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.authdemo.CredentialReporter;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
@@ -62,6 +66,15 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
         }
 
 
+        // check expiration if necessary
+        LocalDate expDate = provider.getNullOrCredentialExpirationDate();
+        if (expDate != null){
+            DateTime now = DeprecatedServerDateProvider.getSqlServerDateTime();
+            if (CredentialReporter.checkExpirationDateOnceInWindow(now, expDate)) {
+                servlet.logOnPortJError(OAuthLandingPage.class.getName(),factory.getRemoteAddr(), "Credentials for " + provider + " will expire at " + expDate + "!", null);
+            }
+
+        }
 
 
         boolean loginRequested = TurkuServlet.LOGIN_ROUTE.equals(naviPath);
@@ -184,7 +197,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
             }
 
             Turku.l("OAuthLandingPage - " + errorMsg);
-            servlet.logOnPortJTrace(OAuthLandingPage.class.getName(), factory.getRemoteAddr(), errorMsg, exToReportOnPortJ);
+            servlet.logOnPortJError(OAuthLandingPage.class.getName(), factory.getRemoteAddr(), errorMsg, exToReportOnPortJ);
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), HOME_REDIRECT_PREFIX_LABEL, errorMsg, () -> {
                 UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
             }));

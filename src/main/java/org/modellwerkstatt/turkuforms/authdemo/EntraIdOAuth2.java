@@ -3,6 +3,9 @@ package org.modellwerkstatt.turkuforms.authdemo;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
 import java.io.IOException;
@@ -21,6 +24,7 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
     private String CLIENT_SECRET="not set";
     private String USERNAME_FIELD_TO_USE="not set";
     public String USERINFO_ENDPOINT="https://graph.microsoft.com/v1.0/me";
+    private LocalDate expirationDate;
 
 
 
@@ -36,6 +40,27 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
         USERNAME_FIELD_TO_USE = username_field;
     }
 
+    public void setExpirationDate(String val) {
+        try {
+            // FORMAT is yyyy-MM-dd
+            expirationDate = new LocalDate(val);
+
+        } catch (Exception ex) {
+            expirationDate = null;
+            ex.printStackTrace();
+
+        }
+    }
+
+    public String getExpirationDate() {
+        return "" + expirationDate;
+    }
+
+    @Override
+    public LocalDate getNullOrCredentialExpirationDate() {
+        return expirationDate;
+    }
+
     @Override
     public String getAuthProviderName() {
         return "EntraID";
@@ -49,6 +74,7 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
     }
 
     public String retrieveUserWithAccessToken(String code) throws IOException {
+
 
         String request = "code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET +
                 "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code";
@@ -68,7 +94,7 @@ public class EntraIdOAuth2 implements ExtAuthProvider {
         object = Json.parse(content);
         if (!object.hasKey(USERNAME_FIELD_TO_USE)) { throw new RuntimeException("The field " + USERNAME_FIELD_TO_USE + " was not found in oauth2 servers return." + content); }
 
-        System.err.println("EntraIdOAuth2 " + object.toString());
+        // System.err.println("EntraIdOAuth2 " + object.toString());
         content = object.get(USERNAME_FIELD_TO_USE).asString();
 
         return content;

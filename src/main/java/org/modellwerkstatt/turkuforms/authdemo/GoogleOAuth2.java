@@ -3,6 +3,7 @@ package org.modellwerkstatt.turkuforms.authdemo;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
+import org.joda.time.LocalDate;
 import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
 import java.io.*;
@@ -33,6 +34,11 @@ public class GoogleOAuth2 implements ExtAuthProvider {
     @Override
     public String getAuthProviderName() {
         return "Google";
+    }
+
+    @Override
+    public LocalDate getNullOrCredentialExpirationDate() {
+        return null;
     }
 
     public String initialRedirect(String state) {

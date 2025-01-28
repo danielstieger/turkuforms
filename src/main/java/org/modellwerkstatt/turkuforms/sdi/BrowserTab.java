@@ -64,7 +64,7 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
             if (userEnv == null) {
                 // nope - not logged in ... this can not happen, routes are not configured correctly?
                 String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
-                servlet.logOnPortJTrace(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), msg, null);
+                servlet.logOnPortJError(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), msg, null);
                 SdiUtil.quickUserInfo(msg);
                 return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
             }

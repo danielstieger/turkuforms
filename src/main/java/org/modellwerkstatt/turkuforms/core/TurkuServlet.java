@@ -213,9 +213,9 @@ public class TurkuServlet extends VaadinServlet {
 
 
 
-    public void logOnPortJTrace(String source, String ipAddr, String msg, Exception ex) {
+    public void logOnPortJError(String source, String ipAddr, String msg, Exception ex) {
         CoreReporterInfo info = new CoreReporterInfo(IOFXCoreReporter.Type.APP_TRACE, appBehaviorFqName, genApplication.getApplicationVersion(),
-                source, "", "", IOFXCoreReporter.LogPriority.TRACE, 0, "", "", "",
+                source, "", "", IOFXCoreReporter.LogPriority.ERROR, 0, "", "", "",
                 ipAddr, MoVersion.MOWARE_PLUGIN_VERSION, IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, guessedServerName, msg);
 
         if (ex != null) {

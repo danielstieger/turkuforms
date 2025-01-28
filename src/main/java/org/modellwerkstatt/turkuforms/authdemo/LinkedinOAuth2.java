@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.authdemo;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
+import org.joda.time.LocalDate;
 import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
 import java.io.IOException;
@@ -74,5 +75,8 @@ public class LinkedinOAuth2 implements ExtAuthProvider {
         return "LinkedIn";
     }
 
-
+    @Override
+    public LocalDate getNullOrCredentialExpirationDate() {
+        return null;
+    }
 }
