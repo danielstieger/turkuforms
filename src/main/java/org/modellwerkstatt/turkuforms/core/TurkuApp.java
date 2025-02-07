@@ -17,6 +17,7 @@ import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
+import org.joda.time.DateTime;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
@@ -65,7 +66,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         // Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
 
         if (userEnvironment == null) {
-            String msg = "UserEnvironment to pick up was null, redirecting to /login";
+            String msg = "UserEnvironment to pick up was null, redirecting to /login, " + vaadinSession.hashCode() + " /  " + System.currentTimeMillis() + " / " + applicationController + " / " + this.hashCode();
             servlet.logOnPortJError(TurkuApp.class.getName(), remoteAddr, msg, null);
             NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE);
 
@@ -79,7 +80,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
                 mainTabImpl = new TabSheetMDI();
             }
 
-            userEnvironment.adjustDeviceId("" + vaadinSession.hashCode());
+            userEnvironment.adjustDeviceId("" + vaadinSession.hashCode() + " / " + this.hashCode());
             applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
             applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
@@ -119,6 +120,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         } else if (applicationController != null) {
             // controller closed by beacon - typically
             UI.getCurrent().removeAll();
+            applicationController.logMowareTracing("","", IOFXCoreReporter.RT,"Reloading this web page does not work. The application was destroyed.", "");
             applicationController.internal_immediatelyShutdown();
             quickUserInfo("Reloading this web page does not work. The application was destroyed.");
         }
