@@ -37,7 +37,7 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     void initExtAuthProviders(List<ExtAuthProvider> providers);
     List<ExtAuthProvider> getAllExtAuthProviders();
 
-    void initCmdUrlDefaults(List<IOFXCmdModule.CmdUrlDefaults> cmds);
+    void initCmdUrlDefaults();
     List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults();
 
     boolean cmdAccessible(String fqName);

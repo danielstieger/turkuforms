@@ -40,7 +40,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private String turkuAppImplClassFqName;
 
 
-    private List<IOFXCmdModule.CmdUrlDefaults> allUrlDefaults;
     private Map<String,IOFXCmdModule.CmdUrlDefaults> defaultUrlForFqCmd;
     private boolean usingUrlHandling;
 
@@ -258,24 +257,13 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public void initCmdUrlDefaults(List<IOFXCmdModule.CmdUrlDefaults> allDefaults) {
-        CheckerForCmdUrlDefaults checker = new CheckerForCmdUrlDefaults();
-        List<String> doubles = checker.check(allDefaults);
-        if (doubles.size() != 0) {
-            throw new RuntimeException("The following urls (+ param counts) are defined more than once in the application: " + String.join(",", doubles));
-        }
+    public void initCmdUrlDefaults() {
+        super.initCmdUrlDefaults();
 
-        allUrlDefaults = allDefaults;
         defaultUrlForFqCmd = new HashMap<>();
-
         for (IOFXCmdModule.CmdUrlDefaults it: allUrlDefaults) {
             defaultUrlForFqCmd.put(it.cmdFqName, it);
         }
-    }
-
-    @Override
-    public List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults() {
-        return allUrlDefaults;
     }
 
     @Override

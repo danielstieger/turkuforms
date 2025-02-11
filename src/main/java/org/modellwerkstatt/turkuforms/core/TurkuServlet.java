@@ -116,13 +116,7 @@ public class TurkuServlet extends VaadinServlet {
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
             turkuAppImplClass = classLoader.loadClass(appFactory.getTurkuAppImplClassFqName());
 
-
-            List<IOFXCmdModule.CmdUrlDefaults> cmdUrlDefaults = new ArrayList<>();
-            Map<String, IOFXCmdModule> allModules = appContext.getBeansOfType(IOFXCmdModule.class);
-            allModules.values().stream().forEach(cmdModule ->
-                    cmdUrlDefaults.addAll(Arrays.asList(cmdModule.getCmdUrlDefaults()))
-            );
-            appFactory.initCmdUrlDefaults(cmdUrlDefaults);
+            appFactory.initCmdUrlDefaults();
 
             List<ExtAuthProvider> extAuthProviders = new ArrayList<>();
             Map<String, ExtAuthProvider> allProviders = appContext.getBeansOfType(ExtAuthProvider.class);
