@@ -11,10 +11,7 @@ import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
-import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
-import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
-import org.modellwerkstatt.objectflow.runtime.OFXConsoleHelper;
-import org.modellwerkstatt.objectflow.runtime.OFXUrlParams;
+import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
@@ -64,7 +61,7 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
             if (userEnv == null) {
                 // nope - not logged in ... this can not happen, routes are not configured correctly?
                 String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
-                servlet.logOnPortJError(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), msg, null);
+                servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.LogPriority.ERROR, msg, null);
                 SdiUtil.quickUserInfo(msg);
                 return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
             }
