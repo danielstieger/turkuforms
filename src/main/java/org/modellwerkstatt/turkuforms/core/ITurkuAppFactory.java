@@ -14,23 +14,16 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     boolean isCompactMode();
 
-    boolean isCheckDeployedVersion();
-
     boolean isSingleAppInstanceMode();
 
     String getAuthenticatorClassFqName();
 
     String getTurkuAppImplClassFqName();
 
-
-
     IMoLdapService getLdapServiceIfPresent();
 
     String translateIconName(String name);
     String translateButtonLabel(String label, String hk);
-
-    void setAutoParDeploymentForwardGracefully(boolean val);
-    boolean isAutoParDeploymentForwardGracefully();
 
     String getRemoteAddr();
 

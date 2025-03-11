@@ -83,7 +83,8 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
             userEnvironment.adjustDeviceId("" + vaadinSession.hashCode() + " / " + this.hashCode());
             applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
-            applicationController.initializeApplication(servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
+            // url overwrite not supported with turku
+            applicationController.initializeApplication(null, servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
             applicationController.registerOnSessionSetTimeout(vaadinSession, userEnvironment.getUserName(), remoteAddr);
 
@@ -113,7 +114,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             initialStartupParams = new ParamInfo(query);
             if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
                 UI.getCurrent().access(() -> {
-                    applicationController.startCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
+                    applicationController.legacyStartCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
 
                 });
             }
