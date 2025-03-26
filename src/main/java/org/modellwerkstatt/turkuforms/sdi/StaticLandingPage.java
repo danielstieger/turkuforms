@@ -9,6 +9,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import org.modellwerkstatt.dataux.runtime.sdicore.LandingPageUrlItem;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
+import org.modellwerkstatt.objectflow.runtime.OFXUrlParams;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -34,15 +36,20 @@ abstract public class StaticLandingPage extends VerticalLayout implements HasDyn
         setHeightFull();
     }
 
-    public void installLandingPage(ITurkuAppFactory factory, String title, String msg, List<LandingPageUrlItem> allItems) {
+    public void installLandingPage(ITurkuAppFactory factory, SdiAppCrtl crlt, String title, String msg, List<LandingPageUrlItem> allItems) {
+
+        removeAll();
 
         // new tiles layout ...
         tilesLayout = new TilesLayout();
 
         for(LandingPageUrlItem item: allItems) {
             ComponentEventListener<ClickEvent<Button>> execItem = event -> {
-                Turku.l("Tile.navigate to " + item.url);
-                UI.getCurrent().navigate(item.url);
+                Turku.l("Tile opening new url " + item.url);
+
+                OFXUrlParams params = new OFXUrlParams();
+                params.parse(item.url);
+                crlt.startCommandViaUrlPickUp((IToolkit_Window) this, params);
             };
 
             Button btn = tilesLayout.addButtonOnly(factory, item.icon, item.label, item.tooltip, item.color, item.hotkey, execItem);
@@ -63,6 +70,12 @@ abstract public class StaticLandingPage extends VerticalLayout implements HasDyn
         add(messageDiv);
         add(tilesLayout);
     }
+
+    public boolean isLandingPage() {
+        return this.tilesLayout != null;
+    }
+
+
 
     @Override
     public String getPageTitle() {

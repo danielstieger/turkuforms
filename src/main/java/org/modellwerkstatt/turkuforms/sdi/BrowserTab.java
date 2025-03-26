@@ -7,6 +7,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.PreserveOnRefresh;
+import org.modellwerkstatt.dataux.runtime.core.BasisCmdStart;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
@@ -25,7 +27,7 @@ import org.modellwerkstatt.turkuforms.views.PromptWindow;
 
 import java.util.List;
 
-
+@PreserveOnRefresh
 public class BrowserTab extends StaticLandingPage implements IToolkit_Window, BeforeEnterObserver {
 
     protected IOFXUserEnvironment userEnvironment;
@@ -40,7 +42,6 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
     public BrowserTab() {
         super();
     }
-
 
 
     @Override
@@ -87,9 +88,8 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
         }
 
         if ((!params.hasCmdName() && type != BrowserTabType.COMMAND_OPENER_TAB) || msg != null) {
-
             type = BrowserTabType.LANDING_TAB;
-            installLandingPage(turkuFactory, appCrtl.getAppVersionAndDyn(), msg, appCrtl.createLandingPageItems());
+            installLandingPage(turkuFactory, appCrtl,  appCrtl.getAppVersionAndDyn(), msg, appCrtl.createLandingPageItems());
 
         }
     }
@@ -174,6 +174,10 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
         if (Workarounds.getCurrentTurkuServlet().isDisableBrowserContextMenu()) {
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
+
+        if (!isLandingPage()) {
+            this.getElement().executeJs("turku.setNotLandingPage()");
+        }
     }
 
     @Override
@@ -208,7 +212,7 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
                     this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode());
 
                 } else {
-                    UI.getCurrent().navigate("/");
+                    // UI.getCurrent().navigate("/");
 
                 }
         });

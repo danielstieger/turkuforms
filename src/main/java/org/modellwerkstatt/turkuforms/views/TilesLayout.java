@@ -15,7 +15,6 @@ import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 public class TilesLayout extends FlexLayout {
 
-
     public TilesLayout() {
         this("MainwindowTilesGrid");
     }

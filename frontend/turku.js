@@ -158,6 +158,14 @@ window.turku = {
         console.log("Turku.openNewWindow() stored the new window " + turku.childWindows['turkuwin_' + crtlHash] + " as " + crtlHash);
     },
 
+    setNotLandingPage: function() {
+        var link = document.querySelector("link[rel~='icon']");
+        if (link) {
+            var current = link.href.substring(0, link.href.lastIndexOf('/'));
+            link.href = current + '/faviconpassive.png';
+        }
+    },
+
     setTurkuCookie: function(value,days) {
         let expires = '';
         if (days) {
