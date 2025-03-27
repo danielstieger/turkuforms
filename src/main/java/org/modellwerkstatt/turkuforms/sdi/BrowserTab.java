@@ -4,9 +4,12 @@ package org.modellwerkstatt.turkuforms.sdi;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import org.modellwerkstatt.dataux.runtime.core.BasisCmdStart;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
@@ -18,8 +21,10 @@ import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
@@ -27,20 +32,26 @@ import org.modellwerkstatt.turkuforms.views.PromptWindow;
 
 import java.util.List;
 
-@PreserveOnRefresh
-public class BrowserTab extends StaticLandingPage implements IToolkit_Window, BeforeEnterObserver {
 
+@PreserveOnRefresh
+public class BrowserTab extends BrowserTabBase implements IToolkit_Window, BeforeEnterObserver, HasDynamicTitle {
+
+    protected ITurkuAppFactory turkuFactory;
     protected IOFXUserEnvironment userEnvironment;
     protected OFXUrlParams params;
     protected SdiAppCrtl appCrtl;
 
+    protected String navbarTitle;
     protected CmdUiTab currentTab;
     protected int numTabs = 0;
-    protected BrowserTabType type;
 
+    protected BrowserTabType type;
+    protected StaticLandingPage landingPage;
 
     public BrowserTab() {
-        super();
+        Peculiar.shrinkSpace(this);
+        setHeightFull();
+        setWidthFull();
     }
 
 
@@ -89,8 +100,10 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
 
         if ((!params.hasCmdName() && type != BrowserTabType.COMMAND_OPENER_TAB) || msg != null) {
             type = BrowserTabType.LANDING_TAB;
-            installLandingPage(turkuFactory, appCrtl,  appCrtl.getAppVersionAndDyn(), msg, appCrtl.createLandingPageItems());
 
+            removeAll();
+            landingPage = new StaticLandingPage();
+            add(landingPage.installTilePage(turkuFactory, this, appCrtl, appCrtl.getAppVersionAndDyn(), msg, appCrtl.updateLandingPageTileUrlItems()));
         }
     }
 
@@ -175,7 +188,7 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
 
-        if (!isLandingPage()) {
+        if (landingPage == null) {
             this.getElement().executeJs("turku.setNotLandingPage()");
         }
     }
@@ -231,6 +244,10 @@ public class BrowserTab extends StaticLandingPage implements IToolkit_Window, Be
 
     public ITurkuAppCrtlAccess getApplicationController() { return appCrtl; }
 
+    @Override
+    public String getPageTitle() {
+        return navbarTitle;
+    }
 
     enum BrowserTabType {
         LANDING_TAB,
