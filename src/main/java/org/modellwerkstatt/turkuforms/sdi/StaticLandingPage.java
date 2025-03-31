@@ -1,9 +1,6 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -26,6 +23,7 @@ import org.modellwerkstatt.turkuforms.forms.LeftRight;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.TilesLayout;
 
+import java.security.SecurityPermission;
 import java.util.List;
 
 
@@ -41,21 +39,22 @@ public class StaticLandingPage {
 
     }
 
-    public VerticalLayout installTilePage(ITurkuAppFactory factory, IToolkit_Window current, SdiAppCrtl crlt, String title, String msg, List<LandingPageUrlItem> allItems) {
+    public Component installTilePage(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt, String msg) {
         VerticalLayout mainContentLayout = new VerticalLayout();
-        mainContentLayout.setSizeFull();
-        mainContentLayout.setFlexGrow(2d);
+        mainContentLayout.setSizeUndefined();
+        mainContentLayout.setHeightFull();
 
         // new tiles layout ...
         TilesLayout tilesLayout = new TilesLayout();
 
+        List<LandingPageUrlItem> allItems = crlt.updateLandingPageTileUrlItems();
         for(LandingPageUrlItem item: allItems) {
             ComponentEventListener<ClickEvent<Button>> execItem = event -> {
                 Turku.l("Tile opening new url " + item.url);
 
                 OFXUrlParams params = new OFXUrlParams();
                 params.parse(item.url);
-                crlt.startCommandViaUrlPickUp(current, params);
+                crlt.startCommandViaUrlPickUp(landingWindow, params);
             };
 
             Button btn = tilesLayout.addButtonOnly(factory, item.icon, item.label, item.tooltip, item.color, item.hotkey, execItem);
@@ -64,7 +63,7 @@ public class StaticLandingPage {
 
         titleDiv =  new Div();
         titleDiv.addClassName("LandingPageTopTitle");
-        titleDiv.setText(title);
+        titleDiv.setText(crlt.getAppVersionAndDyn());
 
         Div messageDiv = new Div();
         messageDiv.addClassName("TurkuErrorDiv");
@@ -79,68 +78,58 @@ public class StaticLandingPage {
     }
 
 
+    protected void addDrawerMenu(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt, VerticalLayout layout, List<LandingPageUrlItem> menuItemList){
 
-    protected Button createDrawerButton(ITurkuAppFactory turkuFactory, CmdAction glue) {
-        ComponentEventListener<ClickEvent<Button>> execItem = event -> {
-            glue.startCommand();
-        };
-        Button btn;
+        for (LandingPageUrlItem item : menuItemList) {
+            if (item.isSubMenu()) {
+                Label section = new Label(item.label);
+                section.addClassName("DrawerMenuHeading");
+                layout.add(section);
 
-        if (Defs.hasIcon(glue.image)) {
-            Component icn = Workarounds.createIconWithCollection(turkuFactory.translateIconName(glue.image), false);
-            btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), icn, execItem);
+                addDrawerMenu(factory, landingWindow, crlt, layout, item.getSubItems());
 
-        } else {
-            btn = new Button(turkuFactory.translateButtonLabel(glue.labelText, glue.hotKey), execItem);
-
-        }
-
-        glue.attachButton1(new TurkuHasEnabled(glue.hideWhenDisabled, btn, "Drawer " + glue.labelText));
-
-        Workarounds.addMlToolTipIfNec(glue.getToolTip(), btn);
-
-        btn.setWidthFull();
-        // btn.setDisableOnClick(true);
-        btn.setClassName("MainwindowDrawerCmdButton");
-        return btn;
-    }
-
-    protected void addDrawerMenu(List<AbstractAction> menuItemList){
-
-
-    }
-
-    public VerticalLayout installDrawerCommands(ITurkuAppFactory factory, List<AbstractAction> menuItemList) {
-        VerticalLayout drawerCommandsLayout = new VerticalLayout();
-        drawerCommandsLayout.setSizeFull();
-        drawerCommandsLayout.setFlexGrow(1d);
-
-
-        int componentIndex = 0;
-        for (AbstractAction currentItem : menuItemList) {
-            if (currentItem instanceof CmdAction) {
-                Button btn = createDrawerButton(factory, (CmdAction) currentItem);
-                drawerCommandsLayout.addComponentAtIndex(componentIndex++, btn);
-
-            } else if (currentItem.labelText == null) {
-                // null is separator; not used yet ...
+            } else if (item.isSeperator()) {
+                // not used yet
 
             } else {
-                Label section = new Label(currentItem.labelText);
-                section.addClassName("DrawerMenuHeading");
-                drawerCommandsLayout.addComponentAtIndex(componentIndex++, section);
+                ComponentEventListener<ClickEvent<Button>> execItem = event -> {
+                    OFXUrlParams params = new OFXUrlParams();
+                    params.parse(item.url);
+                    crlt.startCommandViaUrlPickUp(landingWindow, params);
+                };
 
-                for (AbstractAction inFolder : ((Menu) currentItem).getAllItems()) {
-                    if (inFolder instanceof CmdAction) {
-                        Button btn = createDrawerButton(factory, (CmdAction) inFolder);
-                        drawerCommandsLayout.addComponentAtIndex(componentIndex++, btn);
+                Button btn;
+                if (Defs.hasIcon(item.icon)) {
+                    Component icn = Workarounds.createIconWithCollection(factory.translateIconName(item.icon), false);
+                    btn = new Button(factory.translateButtonLabel(item.label, item.hotkey), icn, execItem);
 
-                    }
+                } else {
+                    btn = new Button(factory.translateButtonLabel(item.label, item.hotkey), execItem);
+
                 }
-
+                Workarounds.addMlToolTipIfNec(item.tooltip, btn);
+                btn.setWidthFull();
+                // btn.setDisableOnClick(true);
+                btn.setClassName("MainwindowDrawerCmdButton");
+                btn.setEnabled(item.enabled);
+                layout.add(btn);
             }
         }
+    }
 
+    public Component installDrawerCommands(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt) {
+        VerticalLayout drawerCommandsLayout = new VerticalLayout();
+        drawerCommandsLayout.setSizeUndefined();
+        drawerCommandsLayout.setHeightFull();
+
+        Span logo = new Span();
+        logo.addClassName("NavBarSmallLogo" + crlt.getUserEnvironment().getBrandingId());
+        Label userInfoLabel = new Label(crlt.getAppVersionAndDyn());
+        userInfoLabel.addClassName("TurkuLayoutNavbarText");
+        drawerCommandsLayout.add(new HorizontalLayout(logo, userInfoLabel));
+
+        List<LandingPageUrlItem> menuItemList = crlt.updateLandingPageMenuUrlItems();
+        addDrawerMenu(factory, landingWindow, crlt, drawerCommandsLayout, menuItemList);
         return drawerCommandsLayout;
     }
 }

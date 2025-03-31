@@ -3,10 +3,12 @@ package org.modellwerkstatt.turkuforms.sdi;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
@@ -103,7 +105,10 @@ public class BrowserTab extends BrowserTabBase implements IToolkit_Window, Befor
 
             removeAll();
             landingPage = new StaticLandingPage();
-            add(landingPage.installTilePage(turkuFactory, this, appCrtl, appCrtl.getAppVersionAndDyn(), msg, appCrtl.updateLandingPageTileUrlItems()));
+            add(landingPage.installDrawerCommands(turkuFactory, this, appCrtl));
+            setFlexGrow(1.0, getComponentAt(0));
+            add(landingPage.installTilePage(turkuFactory, this, appCrtl, msg));
+            setFlexGrow(8.0, getComponentAt(1));
         }
     }
 
