@@ -4,12 +4,13 @@ import com.vaadin.flow.component.HasSize;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 public class CmdUiTab extends CmdUi {
     private boolean isModal;
     private String windowTitle;
     private String adjustedUrl;
-    private ITurkuMainTab mainTab;
+    private ITurkuMainAdjust mainTab;
 
 
     public CmdUiTab(ITurkuAppFactory fact, boolean modal) {
@@ -45,7 +46,7 @@ public class CmdUiTab extends CmdUi {
         super.setContent(formAsComponent);
     }
 
-    public void setMainTabForColorAdjustments(ITurkuMainTab main) {
+    public void setMainTabForAdjustments(ITurkuMainAdjust main) {
         mainTab = main;
     }
 

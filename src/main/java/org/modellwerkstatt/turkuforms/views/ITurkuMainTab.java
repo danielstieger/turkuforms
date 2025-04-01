@@ -2,7 +2,7 @@ package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
 
-public interface ITurkuMainTab {
+public interface ITurkuMainTab extends ITurkuMainAdjust {
 
     Component getAsComponent();
 
@@ -19,11 +19,7 @@ public interface ITurkuMainTab {
 
     void setModal(boolean modal);
 
-    void adjustTabStyle(CmdUiTab ui, String col);
 
-    void adjustTitle();
-
-    void adjustTopBarColorOrNull(String col);
 
     interface TabSelectedIndexChanged {
         void selectedIndexChanged(int i);

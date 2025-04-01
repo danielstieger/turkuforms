@@ -17,7 +17,6 @@ import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
-import org.joda.time.DateTime;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
@@ -290,7 +289,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         if (this.getContent() != mainTabImpl.getAsComponent()) {
             this.setContent(mainTabImpl.getAsComponent());
         }
-        tab.setMainTabForColorAdjustments(mainTabImpl);
+        tab.setMainTabForAdjustments(mainTabImpl);
 
         mainTabImpl.addTab(tab);
         setOptionalTabTitleInNavbar(mainTabImpl.getTitleForNavbar());

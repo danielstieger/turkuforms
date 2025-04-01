@@ -3,6 +3,7 @@ package org.modellwerkstatt.turkuforms.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ShortcutEvent;
 import com.vaadin.flow.component.ShortcutEventListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -79,7 +80,11 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     public void setColor(String col) {
         // in form of #AABBCC or transparent
         color = col;
-        getElement().executeJs("turku.setTurkuCommandColor($0, $1)", this.getElement(), color);
+        getElement().executeJs("turku.setTurkuCommandColor($0, $1)", getElement(), color);
+    }
+
+    public String getColor() {
+        return color;
     }
 
     @Override

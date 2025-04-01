@@ -30,13 +30,14 @@ import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
+import org.modellwerkstatt.turkuforms.views.ITurkuMainAdjust;
 import org.modellwerkstatt.turkuforms.views.PromptWindow;
 
 import java.util.List;
 
 
 @PreserveOnRefresh
-public class BrowserTab extends BrowserTabBase implements IToolkit_Window, BeforeEnterObserver, HasDynamicTitle {
+public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToolkit_Window, BeforeEnterObserver, HasDynamicTitle {
 
     protected ITurkuAppFactory turkuFactory;
     protected IOFXUserEnvironment userEnvironment;
@@ -95,8 +96,8 @@ public class BrowserTab extends BrowserTabBase implements IToolkit_Window, Befor
 
         } else if (params.hasCmdName()) {
             Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
-            msg = appCrtl.startCommandViaUrl(this, params);
             type = BrowserTabType.COMMAND_TAB;
+            msg = appCrtl.startCommandViaUrl(false,this, params);
 
         }
 
@@ -153,9 +154,10 @@ public class BrowserTab extends BrowserTabBase implements IToolkit_Window, Befor
 
     @Override
     public void addTab(IToolkit_CommandContainerUi ui) {
-        Turku.l("BrowserTab.addTab() " + ui);
 
         CmdUiTab uiTab = (CmdUiTab) ui;
+        Turku.l("BrowserTab.addTab() " + type + " with " + ui + " col " + uiTab.getColor() + " / " + uiTab.getWindowTitle());
+
 
         if (appCrtl.hasCrtlAwaitingPickup() && uiTab.getAdjustedUrl() != null) {
             String urlToOpen = uiTab.getAdjustedUrl();
@@ -172,17 +174,36 @@ public class BrowserTab extends BrowserTabBase implements IToolkit_Window, Befor
             removeAll();
             numTabs ++;
             currentTab = uiTab;
+            currentTab.setMainTabForAdjustments(this);
             add(currentTab);
 
             getElement().executeJs("turku.installFocusHandler($0)", this);
 
             String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
-            this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
+            getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
 
             if (uiTab.hasRwSessionToCommit()) {
-                this.getElement().executeJs("turku.installCloseConfirm($0)", true);
+                getElement().executeJs("turku.installCloseConfirm($0)", true);
             }
+            adjustTopBarColorOrNull(currentTab.getColor());
         }
+    }
+
+    @Override
+    public void adjustTopBarColorOrNull(String col) {
+        if (col != null) {
+            getElement().getStyle().set("border-top", "6px solid " + col);
+        }
+    }
+
+    @Override
+    public void adjustTabStyle(CmdUiTab ui, String col) {
+        adjustTopBarColorOrNull(col);
+    }
+
+    @Override
+    public void adjustTitle() {
+        navbarTitle = currentTab.getWindowTitle();
     }
 
     @Override
@@ -200,9 +221,11 @@ public class BrowserTab extends BrowserTabBase implements IToolkit_Window, Befor
 
     @Override
     public void focusTab(IToolkit_CommandContainerUi tab) {
+        CmdUiTab cmdUiTab = (CmdUiTab) tab;
         Turku.l("BrowserTab.focusTab() " + tab);
+
         this.removeAll();
-        currentTab = (CmdUiTab) tab;
+        currentTab = cmdUiTab;
         add(currentTab);
     }
 
@@ -237,8 +260,15 @@ public class BrowserTab extends BrowserTabBase implements IToolkit_Window, Befor
     }
 
     @Override
-    public void setCurrentTabModal(boolean b) {
+    public void setCurrentTabModal(boolean lock) {
+        // the naming of the method is strange here, it s not "current"r
+        setEnabled(!lock);
 
+        if (lock) {
+            addClassName("ModalLockedUi");
+        } else {
+            removeClassName("ModalLockedUi");
+        }
     }
 
 

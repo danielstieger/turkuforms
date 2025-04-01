@@ -182,6 +182,9 @@ vaadin-tab[aria-selected~='true']{
     background-color: var(--lumo-primary-color-selected);
 }
 
+.ModalLockedUi{
+    opacity: 0.5;
+}
 
 /* PromptWindow / CmdUi * * * * * * * * * * */
 .PromptWindow::part(overlay) {

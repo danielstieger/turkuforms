@@ -35,6 +35,7 @@ public class CmdUiPrompt extends CmdUi {
             ((HasSize) form).setHeightFull();
 
         }
+
         promptWindow.open();
     }
 

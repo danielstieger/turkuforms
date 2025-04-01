@@ -54,7 +54,7 @@ public class StaticLandingPage {
 
                 OFXUrlParams params = new OFXUrlParams();
                 params.parse(item.url);
-                crlt.startCommandViaUrlPickUp(landingWindow, params);
+                crlt.startCommandViaUrl(true, landingWindow, params);
             };
 
             Button btn = tilesLayout.addButtonOnly(factory, item.icon, item.label, item.tooltip, item.color, item.hotkey, execItem);
@@ -95,7 +95,7 @@ public class StaticLandingPage {
                 ComponentEventListener<ClickEvent<Button>> execItem = event -> {
                     OFXUrlParams params = new OFXUrlParams();
                     params.parse(item.url);
-                    crlt.startCommandViaUrlPickUp(landingWindow, params);
+                    crlt.startCommandViaUrl(true, landingWindow, params);
                 };
 
                 Button btn;
