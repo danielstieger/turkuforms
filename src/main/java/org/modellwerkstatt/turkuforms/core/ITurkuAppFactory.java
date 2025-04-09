@@ -18,8 +18,6 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     String getAuthenticatorClassFqName();
 
-    String getTurkuAppImplClassFqName();
-
     IMoLdapService getLdapServiceIfPresent();
 
     String translateIconName(String name);
@@ -30,7 +28,7 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     void initExtAuthProviders(List<ExtAuthProvider> providers);
     List<ExtAuthProvider> getAllExtAuthProviders();
 
-    void initCmdUrlDefaults();
+    void initCmdUrlDefaults(boolean usngUrlHndlng);
     List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults();
 
     boolean cmdAccessible(String fqName);

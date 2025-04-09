@@ -124,14 +124,20 @@ task ZZ_mowareIntegrate(type: Copy) {
     into "${mowareHome}/turkuforms/jars"
 }
 
-
-
 task zz_buildSimpleOne() {
     dependsOn(ZZ_mowareIntegrate)
     dependsOn("bmoware.mowareUpdatePluginForTukru")
     dependsOn(mowareBuildSimpleOne)
     dependsOn(redeployOnly)
 }
+
+task zz_buildSimpleOne_SDI() {
+    dependsOn(ZZ_mowareIntegrate)
+    dependsOn("bmoware.mowareUpdatePluginForTukru")
+    dependsOn(mowareBuildSimpleOneSDI)
+    dependsOn(redeployOnly)
+}
+
 
 task zz_buildForMoWarePlugin() {
     dependsOn(ZZ_mowareIntegrate)

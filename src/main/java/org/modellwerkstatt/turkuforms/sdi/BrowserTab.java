@@ -1,10 +1,7 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
 
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.ClientCallable;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -117,8 +114,13 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
           Turku.l("BrowserTab.beforeEnter() This one is an old container. appCrtl " + appCrtl);
 
         }
+    }
 
 
+    @Override
+    protected void onDetach(DetachEvent detachEvent) {
+        Turku.l("BrowserTab.onDetach() received on detach");
+        appCrtl.external_closeBrowserTab(this);
     }
 
     @Override

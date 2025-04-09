@@ -23,7 +23,6 @@ import java.util.Map;
 
 public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     public final static String DEFAULT_AUTHENTICATOR = "org.modellwerkstatt.turkuforms.authmpreis.IPAuthLandingPage";
-    public final static String DEFAULT_TURKUAPPIMPL = "org.modellwerkstatt.turkuforms.core.TurkuApp";
 
     private VaadinIconTranslator iconTranslator;
 
@@ -33,11 +32,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private boolean compactMode = false;
     private boolean singleAppInstanceMode = false;
 
-    private boolean deployedVersionCheck = true;
     private String onLogoutMainLandingPath;
     private String authentiactorClassFqName;
-    private String turkuAppImplClassFqName;
-
 
     private Map<String,IOFXCmdModule.CmdUrlDefaults> defaultUrlForFqCmd;
     private boolean usingUrlHandling;
@@ -53,7 +49,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
         iconTranslator = new MaterialIconsTranslator();
         authentiactorClassFqName = DEFAULT_AUTHENTICATOR;
-        turkuAppImplClassFqName = DEFAULT_TURKUAPPIMPL;
         usingUrlHandling = false;
 
         // should be initialized in servlet
@@ -101,16 +96,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     public void setAuthenticatorClassFqName(String fqName) {
         authentiactorClassFqName = fqName;
-    }
-
-    @Override
-    public String getTurkuAppImplClassFqName() {
-        return turkuAppImplClassFqName;
-    }
-
-    public void setTurkuAppImplClassFqName(String fqName) {
-        turkuAppImplClassFqName = fqName;
-        usingUrlHandling = true;
     }
 
 
@@ -239,8 +224,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         return fullLabel;
     }
 
-    @Override
-    public void initCmdUrlDefaults() {
+    public void initCmdUrlDefaults(boolean urlHdlng) {
+        usingUrlHandling = urlHdlng;
         super.initCmdUrlDefaults();
 
         defaultUrlForFqCmd = new HashMap<>();

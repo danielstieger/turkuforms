@@ -86,6 +86,7 @@ public class TurkuServlet extends VaadinServlet {
         //  - main app behavior class will be given via servlet confg
         appBehaviorFqName = getInitParameter("applicationFqName");
         String xmlConfigFile = getInitParameter("xmlConfigFile");
+        String appImplClassFq = getInitParameter("turkuAppImplClassFq");
 
         guessedServerName = System.getProperty("server.instancename");
 
@@ -114,9 +115,9 @@ public class TurkuServlet extends VaadinServlet {
             appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
 
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
-            turkuAppImplClass = classLoader.loadClass(appFactory.getTurkuAppImplClassFqName());
+            turkuAppImplClass = classLoader.loadClass(appImplClassFq);
 
-            appFactory.initCmdUrlDefaults();
+            appFactory.initCmdUrlDefaults(!appImplClassFq.equals(TurkuApp.class.getName()));
 
             List<ExtAuthProvider> extAuthProviders = new ArrayList<>();
             Map<String, ExtAuthProvider> allProviders = appContext.getBeansOfType(ExtAuthProvider.class);
