@@ -58,7 +58,6 @@ public class TurkuServletService extends VaadinServletService {
 
     @Override
     public void requestEnd(VaadinRequest request, VaadinResponse response, VaadinSession session) {
-
         boolean isVaadinHeartBeat = Workarounds.isHeartBeatRequest(request);
         boolean isBeacon = request.getPathInfo().equals("/beacon");
 

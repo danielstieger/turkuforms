@@ -13,6 +13,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.server.VaadinService;
 import org.modellwerkstatt.dataux.runtime.core.BasisCmdStart;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
@@ -64,53 +65,60 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
 
         //  check if we are logged id or redirect here to login ...
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
-        turkuFactory = servlet.getUiFactory();
+        boolean isOld = servlet.getJmxRegistration().markedAsOld();
 
-        navbarTitle = servlet.getAppNameVersion();
-        appCrtl = SdiAppCrtl.getAppCrtl();
+        if (!isOld) {
+            turkuFactory = servlet.getUiFactory();
 
-        if (appCrtl == null) {
-            // user env to pick up after a login ?
-            IOFXUserEnvironment userEnv = NavigationUtil.getAndClearUserEnvFromUi();
+            navbarTitle = servlet.getAppNameVersion();
+            appCrtl = SdiAppCrtl.getAppCrtl();
 
-            if (userEnv == null) {
-                // nope - not logged in ... this can not happen, routes are not configured correctly?
-                String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
-                servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.LogPriority.ERROR, msg, null);
-                SdiUtil.quickUserInfo(msg);
-                return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+            if (appCrtl == null) {
+                // user env to pick up after a login ?
+                IOFXUserEnvironment userEnv = NavigationUtil.getAndClearUserEnvFromUi();
+
+                if (userEnv == null) {
+                    // nope - not logged in ... this can not happen, routes are not configured correctly?
+                    String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
+                    servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.LogPriority.ERROR, msg, null);
+                    SdiUtil.quickUserInfo(msg);
+                    return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+                }
+
+                appCrtl = SdiAppCrtl.createAppCrtlOnSession(userEnv);
             }
 
-            appCrtl = SdiAppCrtl.createAppCrtlOnSession(userEnv);
+            userEnvironment = appCrtl.getUserEnvironment();
+
+            params = new OFXUrlParams(event.getLocation().getSegments());
+
+            String msg = null;
+            if (appCrtl.wasPickupCmdThenStart(this, params)) {
+
+                type = BrowserTabType.COMMAND_OPENER_TAB;
+                Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
+
+            } else if (params.hasCmdName()) {
+                Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
+                type = BrowserTabType.COMMAND_TAB;
+                msg = appCrtl.startCommandViaUrl(false,this, params);
+
+            }
+
+            if ((!params.hasCmdName() && type != BrowserTabType.COMMAND_OPENER_TAB) || msg != null) {
+                type = BrowserTabType.LANDING_TAB;
+
+                removeAll();
+                landingPage = new StaticLandingPage();
+                landingPage.installInto(turkuFactory, this, appCrtl, msg);
+            }
+
+        } else {
+          Turku.l("BrowserTab.beforeEnter() This one is an old container. appCrtl " + appCrtl);
+
         }
 
-        userEnvironment = appCrtl.getUserEnvironment();
 
-        params = new OFXUrlParams(event.getLocation().getSegments());
-
-        String msg = null;
-        if (appCrtl.wasPickupCmdThenStart(this, params)) {
-
-            type = BrowserTabType.COMMAND_OPENER_TAB;
-            Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
-
-        } else if (params.hasCmdName()) {
-            Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
-            type = BrowserTabType.COMMAND_TAB;
-            msg = appCrtl.startCommandViaUrl(false,this, params);
-
-        }
-
-        if ((!params.hasCmdName() && type != BrowserTabType.COMMAND_OPENER_TAB) || msg != null) {
-            type = BrowserTabType.LANDING_TAB;
-
-            removeAll();
-            landingPage = new StaticLandingPage();
-            add(landingPage.installDrawerCommands(turkuFactory, this, appCrtl));
-            setFlexGrow(1.0, getComponentAt(0));
-            add(landingPage.installTilePage(turkuFactory, this, appCrtl, msg));
-            setFlexGrow(8.0, getComponentAt(1));
-        }
     }
 
     @Override
@@ -214,7 +222,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
 
-        if (landingPage == null) {
+        if (landingPage == null && (currentTab != null && !currentTab.isModalTabWindow())) {
             this.getElement().executeJs("turku.setNotLandingPage()");
         }
     }
@@ -245,6 +253,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
         currentTab = null;
         removeAll();
 
+        this.getElement().executeJs("turku.installCloseConfirm($0)", false);
         this.getElement().executeJs("return window.turku.openerCanAccessWindow($0)", uiTab.hashCode()).then(jsonValue -> {
 
                 boolean canClose = jsonValue.asBoolean();

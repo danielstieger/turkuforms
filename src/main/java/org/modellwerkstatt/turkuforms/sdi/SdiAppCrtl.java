@@ -94,6 +94,14 @@ public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, H
         }
     }
 
+    @Override
+    public void parDeployForward() {
+        Turku.l("SdiAppCrtl.parDeployForward() invalidating session");
+        WrappedSession session = VaadinSession.getCurrent().getSession();
+        session.setAttribute(TURKUSDIAPPCRTL, null);
+        session.invalidate();
+    }
+
     public static SdiAppCrtl getAppCrtl() {
         WrappedSession session = VaadinSession.getCurrent().getSession();
         SdiAppCrtl appCrtl = (SdiAppCrtl) session.getAttribute(TURKUSDIAPPCRTL);
@@ -101,6 +109,8 @@ public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, H
     }
 
     public static SdiAppCrtl createAppCrtlOnSession(IOFXUserEnvironment env) {
+        Turku.l("SdiAppCrtl.createAppCrtlOnSession() creating app crtl.");
+
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         ITurkuAppFactory factory = servlet.getUiFactory();
         VaadinSession vaadinSession = VaadinSession.getCurrent();

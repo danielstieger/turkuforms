@@ -16,6 +16,7 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.sdicore.LandingPageUrlItem;
+import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
 import org.modellwerkstatt.objectflow.runtime.OFXUrlParams;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
@@ -29,17 +30,22 @@ import java.util.List;
 
 public class StaticLandingPage {
 
-
-
-
-    protected Div titleDiv;
-
+    private Div messageDiv;
 
     public StaticLandingPage() {
 
     }
 
-    public Component installTilePage(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt, String msg) {
+    public void installInto(ITurkuAppFactory turkuFactory, HorizontalLayout main, SdiAppCrtl appCrtl, String msg) {
+        IToolkit_Window landingWindow = (IToolkit_Window) main;
+
+        main.add(installDrawerCommands(turkuFactory, landingWindow, appCrtl));
+        main.setFlexGrow(1.0, main.getComponentAt(0));
+        main.add(installTilePage(turkuFactory, landingWindow, appCrtl, msg));
+        main.setFlexGrow(8.0, main.getComponentAt(1));
+    }
+
+    private Component installTilePage(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crtl, String msg) {
         VerticalLayout mainContentLayout = new VerticalLayout();
         mainContentLayout.setSizeUndefined();
         mainContentLayout.setHeightFull();
@@ -47,27 +53,28 @@ public class StaticLandingPage {
         // new tiles layout ...
         TilesLayout tilesLayout = new TilesLayout();
 
-        List<LandingPageUrlItem> allItems = crlt.updateLandingPageTileUrlItems();
+        List<LandingPageUrlItem> allItems = crtl.updateLandingPageTileUrlItems();
         for(LandingPageUrlItem item: allItems) {
             ComponentEventListener<ClickEvent<Button>> execItem = event -> {
                 Turku.l("Tile opening new url " + item.url);
 
-                OFXUrlParams params = new OFXUrlParams();
-                params.parse(item.url);
-                crlt.startCommandViaUrl(true, landingWindow, params);
+                messageDiv.setVisible(false);
+                String ret = crtl.startLandingPageCmdViaHash(landingWindow, item.actionHashcode);
+                if (ret != null) {
+                    messageDiv.setVisible(true);
+                    messageDiv.setText(ret);
+                }
             };
 
             Button btn = tilesLayout.addButtonOnly(factory, item.icon, item.label, item.tooltip, item.color, item.hotkey, execItem);
             btn.setEnabled(item.enabled);
         }
 
-        titleDiv =  new Div();
-        titleDiv.addClassName("LandingPageTopTitle");
-        titleDiv.setText(crlt.getAppVersionAndDyn());
-
-        Div messageDiv = new Div();
-        messageDiv.addClassName("TurkuErrorDiv");
+        messageDiv = new Div();
+        messageDiv.addClassName("TurkuBrowserTabErrorMsg");
+        messageDiv.setVisible(false);
         if (msg != null) {
+            messageDiv.setVisible(true);
             messageDiv.setText(msg);
         }
 
@@ -78,7 +85,7 @@ public class StaticLandingPage {
     }
 
 
-    protected void addDrawerMenu(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt, VerticalLayout layout, List<LandingPageUrlItem> menuItemList){
+    private void addDrawerMenu(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt, VerticalLayout layout, List<LandingPageUrlItem> menuItemList){
 
         for (LandingPageUrlItem item : menuItemList) {
             if (item.isSubMenu()) {
@@ -93,9 +100,13 @@ public class StaticLandingPage {
 
             } else {
                 ComponentEventListener<ClickEvent<Button>> execItem = event -> {
-                    OFXUrlParams params = new OFXUrlParams();
-                    params.parse(item.url);
-                    crlt.startCommandViaUrl(true, landingWindow, params);
+
+                    messageDiv.setVisible(false);
+                    String ret = crlt.startLandingPageCmdViaHash(landingWindow, item.actionHashcode);
+                    if (ret != null) {
+                        messageDiv.setVisible(true);
+                        messageDiv.setText(ret);
+                    }
                 };
 
                 Button btn;
@@ -117,19 +128,27 @@ public class StaticLandingPage {
         }
     }
 
-    public Component installDrawerCommands(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt) {
+    private Component installDrawerCommands(ITurkuAppFactory factory, IToolkit_Window landingWindow, SdiAppCrtl crlt) {
         VerticalLayout drawerCommandsLayout = new VerticalLayout();
         drawerCommandsLayout.setSizeUndefined();
         drawerCommandsLayout.setHeightFull();
 
+
+        LeftRight topLrLayout = new LeftRight("TurkuLayoutNavbarDrawer");
         Span logo = new Span();
         logo.addClassName("NavBarSmallLogo" + crlt.getUserEnvironment().getBrandingId());
         Label userInfoLabel = new Label(crlt.getAppVersionAndDyn());
         userInfoLabel.addClassName("TurkuLayoutNavbarText");
-        drawerCommandsLayout.add(new HorizontalLayout(logo, userInfoLabel));
+        topLrLayout.add(logo);
+        topLrLayout.spacer();
+        topLrLayout.add(userInfoLabel);
+        drawerCommandsLayout.add(topLrLayout);
 
         List<LandingPageUrlItem> menuItemList = crlt.updateLandingPageMenuUrlItems();
         addDrawerMenu(factory, landingWindow, crlt, drawerCommandsLayout, menuItemList);
         return drawerCommandsLayout;
     }
+
+
+
 }
