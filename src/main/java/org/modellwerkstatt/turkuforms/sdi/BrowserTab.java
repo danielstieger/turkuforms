@@ -46,7 +46,6 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
     protected CmdUiTab currentTab;
     protected int numTabs = 0;
 
-    protected BrowserTabType type;
     protected StaticLandingPage landingPage;
 
     public BrowserTab() {
@@ -86,29 +85,31 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
             }
 
             userEnvironment = appCrtl.getUserEnvironment();
-
             params = new OFXUrlParams(event.getLocation().getSegments());
 
-            String msg = null;
-            if (appCrtl.wasPickupCmdThenStart(this, params)) {
 
-                type = BrowserTabType.COMMAND_OPENER_TAB;
+            if (appCrtl.wasPickupCmdThenStart(this, params)) {
                 Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
+
+            /* } else if (appCrtl.hasToRunStartupCmdFirst()) {
+                // beendet ?
+                // landingpage gleich
+                // cmd starten gleich?
+
+                // cmd starten nach Ende StartCmd?
+                // landingpage nach Ende  */
 
             } else if (params.hasCmdName()) {
                 Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
-                type = BrowserTabType.COMMAND_TAB;
-                msg = appCrtl.startCommandViaUrl(false,this, params);
+                String msg = appCrtl.startCommandViaUrl(false,this, params);
+                if (msg != null) {
+                    showLandingPageWithMessage(msg);
+                }
 
+            } else {
+                showLandingPageWithMessage(null);
             }
 
-            if ((!params.hasCmdName() && type != BrowserTabType.COMMAND_OPENER_TAB) || msg != null) {
-                type = BrowserTabType.LANDING_TAB;
-
-                removeAll();
-                landingPage = new StaticLandingPage();
-                landingPage.installInto(turkuFactory, this, appCrtl, msg);
-            }
 
         } else {
           Turku.l("BrowserTab.beforeEnter() This one is an old container. appCrtl " + appCrtl);
@@ -116,6 +117,11 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
         }
     }
 
+    private void showLandingPageWithMessage(String msg) {
+        removeAll();
+        landingPage = new StaticLandingPage();
+        landingPage.installInto(turkuFactory, this, appCrtl, msg);
+    }
 
     @Override
     protected void onDetach(DetachEvent detachEvent) {
@@ -166,7 +172,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
     public void addTab(IToolkit_CommandContainerUi ui) {
 
         CmdUiTab uiTab = (CmdUiTab) ui;
-        Turku.l("BrowserTab.addTab() " + type + " with " + ui + " col " + uiTab.getColor() + " / " + uiTab.getWindowTitle());
+        Turku.l("BrowserTab.addTab() with " + ui + " col " + uiTab.getColor() + " / " + uiTab.getWindowTitle());
 
 
         if (appCrtl.hasCrtlAwaitingPickup() && uiTab.getAdjustedUrl() != null) {
@@ -293,11 +299,5 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
     @Override
     public String getPageTitle() {
         return navbarTitle;
-    }
-
-    enum BrowserTabType {
-        LANDING_TAB,
-        COMMAND_TAB,
-        COMMAND_OPENER_TAB
     }
 }
