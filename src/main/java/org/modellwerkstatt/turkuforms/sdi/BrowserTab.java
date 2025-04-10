@@ -47,6 +47,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
     protected int numTabs = 0;
 
     protected StaticLandingPage landingPage;
+    protected String urlToGoAfterClose;
 
     public BrowserTab() {
         Peculiar.shrinkSpace(this);
@@ -91,13 +92,30 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
             if (appCrtl.wasPickupCmdThenStart(this, params)) {
                 Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
 
-            /* } else if (appCrtl.hasToRunStartupCmdFirst()) {
-                // beendet ?
-                // landingpage gleich
-                // cmd starten gleich?
+            } else if (appCrtl.hasToRunStartupCmdAsModalFirst(params, this)) {
+                if (!appCrtl.isStartupCmdRunning()) {
+                    // already terminated.
+                    Turku.l("BrowserTab.beforeEnter() startup cmd already terminated params is '" + params.asUrl() + "'");
 
-                // cmd starten nach Ende StartCmd?
-                // landingpage nach Ende  */
+                    if (params.hasCmdName()) {
+                        String msg = appCrtl.startCommandViaUrl(false,this, params);
+                        if (msg != null) {
+                            showLandingPageWithMessage(msg);
+                        }
+                    } else {
+                        showLandingPageWithMessage(null);
+                    }
+
+                } else {
+                    if (params.hasCmdName()) {
+                        urlToGoAfterClose = params.asUrl();
+                    } else {
+                        urlToGoAfterClose = "/";
+                    }
+
+                    Turku.l("BrowserTab.beforeEnter() startup still running. UrlToGo is " + urlToGoAfterClose);
+
+                }
 
             } else if (params.hasCmdName()) {
                 Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
@@ -266,11 +284,16 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
 
                 boolean canClose = jsonValue.asBoolean();
 
-                if (canClose) {
+                if (urlToGoAfterClose == null && canClose) {
                     this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode());
 
-                } else {
-                    // UI.getCurrent().navigate("/");
+                } else if (urlToGoAfterClose != null) {
+                    UI.getCurrent().access(() -> {
+                        UI.getCurrent().navigate(urlToGoAfterClose);
+                        Turku.l("BrowserTab.ensureTabClose() navigated to " + urlToGoAfterClose);
+
+                    });
+
 
                 }
         });
