@@ -1,30 +1,23 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
-import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.HasDynamicTitle;
-import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.sdicore.LandingPageUrlItem;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Window;
-import org.modellwerkstatt.objectflow.runtime.OFXUrlParams;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
-import org.modellwerkstatt.turkuforms.util.*;
+import org.modellwerkstatt.turkuforms.util.Defs;
+import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.turkuforms.util.Workarounds;
 import org.modellwerkstatt.turkuforms.views.TilesLayout;
 
-import java.security.SecurityPermission;
 import java.util.List;
 
 

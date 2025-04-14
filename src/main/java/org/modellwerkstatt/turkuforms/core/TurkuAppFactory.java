@@ -5,7 +5,6 @@ import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
-import org.modellwerkstatt.dataux.runtime.sdicore.CheckerForCmdUrlDefaults;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;

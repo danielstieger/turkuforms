@@ -1,17 +1,15 @@
 package org.modellwerkstatt.turkuforms.sdi;
 
 
-import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.dependency.JavaScript;
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ClientCallable;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
-import com.vaadin.flow.server.VaadinService;
-import org.modellwerkstatt.dataux.runtime.core.BasisCmdStart;
 import org.modellwerkstatt.dataux.runtime.core.IApplication;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
@@ -131,6 +129,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
 
         } else {
           Turku.l("BrowserTab.beforeEnter() This one is an old container. appCrtl " + appCrtl);
+
 
         }
     }
@@ -280,23 +279,25 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
         removeAll();
 
         this.getElement().executeJs("turku.installCloseConfirm($0)", false);
-        this.getElement().executeJs("return window.turku.openerCanAccessWindow($0)", uiTab.hashCode()).then(jsonValue -> {
+
+        if (urlToGoAfterClose == null) {
+            // close window if possible
+            this.getElement().executeJs("return window.turku.openerCanAccessWindow($0)", uiTab.hashCode()).then(jsonValue -> {
 
                 boolean canClose = jsonValue.asBoolean();
 
-                if (urlToGoAfterClose == null && canClose) {
+                if (canClose) {
                     this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode());
 
-                } else if (urlToGoAfterClose != null) {
-                    UI.getCurrent().access(() -> {
-                        UI.getCurrent().navigate(urlToGoAfterClose);
-                        Turku.l("BrowserTab.ensureTabClose() navigated to " + urlToGoAfterClose);
-
-                    });
-
-
                 }
-        });
+            });
+        } else {
+
+            uiTab.containerRunLater("Open Link " + urlToGoAfterClose, () -> {
+                UI.getCurrent().navigate(urlToGoAfterClose);
+                urlToGoAfterClose = null;
+            });
+        }
     }
 
     @Override

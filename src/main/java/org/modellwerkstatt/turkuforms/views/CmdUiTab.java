@@ -4,7 +4,6 @@ import com.vaadin.flow.component.HasSize;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 public class CmdUiTab extends CmdUi {
     private boolean isModal;

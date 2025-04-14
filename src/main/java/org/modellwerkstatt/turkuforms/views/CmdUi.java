@@ -3,13 +3,13 @@ package org.modellwerkstatt.turkuforms.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ShortcutEvent;
 import com.vaadin.flow.component.ShortcutEventListener;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.ConclusionEvent;
 import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
 import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
+import org.modellwerkstatt.dataux.runtime.core.RunLater;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.OFXConclusionInformation;
@@ -211,6 +211,7 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void close() {
         // needs no implementation for tabs
+
         factory = null;
         cmdContainer = null;
         currentFormToFocus = null;
@@ -229,5 +230,9 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
     @Override
     public void setCommandContainer(ICommandContainer iCommandContainer) {
         cmdContainer = iCommandContainer;
+    }
+
+    public void containerRunLater(String toDo, Runnable r) {
+        cmdContainer.receiveAndProcess(new RunLater(toDo, r));
     }
 }

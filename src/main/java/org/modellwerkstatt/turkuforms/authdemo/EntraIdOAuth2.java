@@ -3,9 +3,7 @@ package org.modellwerkstatt.turkuforms.authdemo;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
 import java.io.IOException;
