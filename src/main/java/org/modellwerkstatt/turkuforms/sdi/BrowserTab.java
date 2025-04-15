@@ -60,76 +60,68 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
 
         //  check if we are logged id or redirect here to login ...
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
-        boolean isOld = servlet.getJmxRegistration().markedAsOld();
 
-        if (!isOld) {
-            turkuFactory = servlet.getUiFactory();
+        turkuFactory = servlet.getUiFactory();
 
-            navbarTitle = servlet.getAppNameVersion();
-            appCrtl = SdiAppCrtl.getAppCrtl();
+        navbarTitle = servlet.getAppNameVersion();
+        appCrtl = SdiAppCrtl.getAppCrtl();
 
-            if (appCrtl == null) {
-                // user env to pick up after a login ?
-                IOFXUserEnvironment userEnv = NavigationUtil.getAndClearUserEnvFromUi();
+        if (appCrtl == null) {
+            // user env to pick up after a login ?
+            IOFXUserEnvironment userEnv = NavigationUtil.getAndClearUserEnvFromUi();
 
-                if (userEnv == null) {
-                    // nope - not logged in ... this can not happen, routes are not configured correctly?
-                    String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
-                    servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.LogPriority.ERROR, msg, null);
-                    SdiUtil.quickUserInfo(msg);
-                    return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-                }
-
-                appCrtl = SdiAppCrtl.createAppCrtlOnSession(userEnv);
+            if (userEnv == null) {
+                // nope - not logged in ... this can not happen, routes are not configured correctly?
+                String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
+                servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.LogPriority.ERROR, msg, null);
+                SdiUtil.quickUserInfo(msg);
+                return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
             }
 
-            userEnvironment = appCrtl.getUserEnvironment();
-            params = new OFXUrlParams(event.getLocation().getSegments());
+            appCrtl = SdiAppCrtl.createAppCrtlOnSession(userEnv);
+        }
+
+        userEnvironment = appCrtl.getUserEnvironment();
+        params = new OFXUrlParams(event.getLocation().getSegments());
 
 
-            if (appCrtl.wasPickupCmdThenStart(this, params)) {
-                Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
+        if (appCrtl.wasPickupCmdThenStart(this, params)) {
+            Turku.l("BrowserTab.beforeEnter() did a pickup for the appCrtl");
 
-            } else if (appCrtl.hasToRunStartupCmdAsModalFirst(params, this)) {
-                if (!appCrtl.isStartupCmdRunning()) {
-                    // already terminated.
-                    Turku.l("BrowserTab.beforeEnter() startup cmd already terminated params is '" + params.asUrl() + "'");
+        } else if (appCrtl.hasToRunStartupCmdAsModalFirst(params, this)) {
+            if (!appCrtl.isStartupCmdRunning()) {
+                // already terminated.
+                Turku.l("BrowserTab.beforeEnter() startup cmd already terminated params is '" + params.asUrl() + "'");
 
-                    if (params.hasCmdName()) {
-                        String msg = appCrtl.startCommandViaUrl(false,this, params);
-                        if (msg != null) {
-                            showLandingPageWithMessage(msg);
-                        }
-                    } else {
-                        showLandingPageWithMessage(null);
+                if (params.hasCmdName()) {
+                    String msg = appCrtl.startCommandViaUrl(false,this, params);
+                    if (msg != null) {
+                        showLandingPageWithMessage(msg);
                     }
-
                 } else {
-                    if (params.hasCmdName()) {
-                        urlToGoAfterClose = params.asUrl();
-                    } else {
-                        urlToGoAfterClose = "/";
-                    }
-
-                    Turku.l("BrowserTab.beforeEnter() startup still running. UrlToGo is " + urlToGoAfterClose);
-
-                }
-
-            } else if (params.hasCmdName()) {
-                Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
-                String msg = appCrtl.startCommandViaUrl(false,this, params);
-                if (msg != null) {
-                    showLandingPageWithMessage(msg);
+                    showLandingPageWithMessage(null);
                 }
 
             } else {
-                showLandingPageWithMessage(null);
+                if (params.hasCmdName()) {
+                    urlToGoAfterClose = params.asUrl();
+                } else {
+                    urlToGoAfterClose = "/";
+                }
+
+                Turku.l("BrowserTab.beforeEnter() startup still running. UrlToGo is " + urlToGoAfterClose);
+
             }
 
+        } else if (params.hasCmdName()) {
+            Turku.l("BrowserTab.beforeEnter() starting command '" + params.getCmdName() + "'");
+            String msg = appCrtl.startCommandViaUrl(false,this, params);
+            if (msg != null) {
+                showLandingPageWithMessage(msg);
+            }
 
         } else {
-          Turku.l("BrowserTab.beforeEnter() This one is an old container. appCrtl " + appCrtl);
-
+            showLandingPageWithMessage(null);
 
         }
     }
@@ -247,7 +239,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
             this.getElement().executeJs("turku.disableBrowserContextMenu()");
         }
 
-        if (landingPage == null && (currentTab != null && !currentTab.isModalTabWindow())) {
+        if (!"/".equals(urlToGoAfterClose) && landingPage == null && (currentTab != null && !currentTab.isModalTabWindow())) {
             this.getElement().executeJs("turku.setNotLandingPage()");
         }
     }
