@@ -160,10 +160,22 @@ window.turku = {
 
     setNotLandingPage: function() {
         var link = document.querySelector("link[rel~='icon']");
-        if (link) {
-            var current = link.href.substring(0, link.href.lastIndexOf('/'));
-            link.href = current + '/faviconpassive.png';
+        var current = link.href.substring(0, link.href.lastIndexOf('/'));
+        var newUrl = current + '/faviconpassive.png';
+
+        var links=document.getElementsByTagName('link');
+        var head=document.getElementsByTagName('head')[0];
+        for(var i=0; i<links.length; i++) {
+            if(links[i].getAttribute('rel')==='icon') {
+                head.removeChild(links[i])
+            }
         }
+
+        var link=document.createElement('link');
+        link.type='image/x-icon';
+        link.rel='icon';
+        link.href=newUrl;
+        document.getElementsByTagName('head')[0].appendChild(link);
     },
 
     setTurkuCookie: function(value,days) {
