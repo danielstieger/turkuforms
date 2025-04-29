@@ -49,7 +49,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
 
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("1px", 1),
-                new FormLayout.ResponsiveStep("790px", totalWidth));
+                new FormLayout.ResponsiveStep("420px", totalWidth));
 
         // Turku.l("TurkuDelegatesForm.setColLayoutConstraints() with weights: " + colWeights + " total " + totalWidth);
     }
