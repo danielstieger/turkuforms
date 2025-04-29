@@ -179,8 +179,10 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public IToolkit_DateOrTimeEditor createDateAndTimeEditor(boolean withPicker) {
-        if (withPicker) {
+    public IToolkit_DateOrTimeEditor createDateAndTimeEditor(boolean withPicker, boolean timeOnly) {
+        if (timeOnly) {
+            return new TimePickerEditor();
+        } else if (withPicker) {
             return new DateTimePickerEditor(createGermanI18n());
         } else {
             return new TextEditor(TextEditor.ConfigOption.FOR_DATETIME);

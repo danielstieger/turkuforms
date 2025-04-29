@@ -432,6 +432,10 @@ vaadin-form-layout[children$="1"] .FormItemWideOption vaadin-text-area[disabled]
     border: 1px solid var(--lumo-contrast-20pct);
 }
 
+vaadin-time-picker {
+  width: 20%;
+}
+
 vaadin-text-field[disabled],
 vaadin-text-area[disabled],
 vaadin-select[disabled],
@@ -440,7 +444,8 @@ vaadin-date-time-picker-time-picker[disabled],
 vaadin-date-picker[disabled],
 vaadin-radio-group[disabled],
 vaadin-combo-box[disabled],
-vcf-auto-select-combo-box[disabled]
+vcf-auto-select-combo-box[disabled],
+vaadin-time-picker[disabled]
 {
 	padding-top: 0px;
 	padding-bottom: 0px;
@@ -453,9 +458,11 @@ vaadin-date-time-picker-date-picker[disabled]::part(input-field),
 vaadin-date-time-picker-time-picker[disabled]::part(input-field),
 vaadin-date-picker[disabled]::part(input-field),
 vaadin-combo-box[disabled]::part(input-field),
-vcf-auto-select-combo-box[disabled]::part(input-field)
+vcf-auto-select-combo-box[disabled]::part(input-field),
+vaadin-time-picker[disabled]::part(input-field)
 {
 	background-color: var(--turku-shade-disabled);
+	font-size: var(--lumo-font-size-m) !important;
 }
 
 vaadin-text-field > input[disabled],
@@ -466,7 +473,8 @@ vaadin-date-time-picker-time-picker > input[disabled],
 vaadin-date-picker > input[disabled],
 vaadin-radio-button > label[disabled],
 vaadin-combo-box > input[disabled],
-vcf-auto-select-combo-box > input[disabled]
+vcf-auto-select-combo-box > input[disabled],
+vaadin-time-picker  > input[disabled]
 {
 
   color: var(--lumo-secondary-text-color);
