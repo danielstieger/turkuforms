@@ -18,6 +18,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.naming.ServiceUnavailableException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -82,29 +83,30 @@ public class TurkuServlet extends VaadinServlet {
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
 
-        String servletPath = this.getServletContext().getContextPath();
-        actualServletUrl = servletPath;
-
-        //  - main app behavior class will be given via servlet confg
-        appBehaviorFqName = getInitParameter("applicationFqName");
-        String xmlConfigFile = getInitParameter("xmlConfigFile");
-        String appImplClassFq = getInitParameter("turkuAppImplClassFq");
-
-        guessedServerName = System.getProperty("server.instancename");
-
-        String realPath = this.getServletContext().getRealPath("/");
-        int startOfVersion = realPath.indexOf("##");
-        if (startOfVersion > 0 && realPath.length() > startOfVersion + 2) {
-            deployedAsVersion = realPath.substring(startOfVersion + 2);
-            deployedAsVersion = deployedAsVersion.substring(0, deployedAsVersion.length()-1);
-        }
-
-        jmxRegistration = new AppJmxRegistration(appBehaviorFqName, deployedAsVersion, realPath, servletPath);
-        turkuServletService.setJmxRegistration(jmxRegistration);
-
-        deployedAsVersion = deployedAsVersion.replace("_", ".");
-
         try {
+
+            String servletPath = this.getServletContext().getContextPath();
+            actualServletUrl = servletPath;
+
+            //  - main app behavior class will be given via servlet confg
+            appBehaviorFqName = getInitParameter("applicationFqName");
+            String xmlConfigFile = getInitParameter("xmlConfigFile");
+            String appImplClassFq = getInitParameter("turkuAppImplClassFq");
+
+            guessedServerName = System.getProperty("server.instancename");
+
+            String realPath = this.getServletContext().getRealPath("/");
+            int startOfVersion = realPath.indexOf("##");
+            if (startOfVersion > 0 && realPath.length() > startOfVersion + 2) {
+                deployedAsVersion = realPath.substring(startOfVersion + 2);
+                deployedAsVersion = deployedAsVersion.substring(0, deployedAsVersion.length() - 1);
+            }
+
+            jmxRegistration = new AppJmxRegistration(appBehaviorFqName, deployedAsVersion, realPath, servletPath);
+            turkuServletService.setJmxRegistration(jmxRegistration);
+
+            deployedAsVersion = deployedAsVersion.replace("_", ".");
+
             //  - okay, wire up everything
             appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
 
@@ -123,45 +125,43 @@ public class TurkuServlet extends VaadinServlet {
 
             List<ExtAuthProvider> extAuthProviders = new ArrayList<>();
             Map<String, ExtAuthProvider> allProviders = appContext.getBeansOfType(ExtAuthProvider.class);
-            allProviders.values().forEach(provider -> extAuthProviders.add(provider) );
+            allProviders.values().forEach(provider -> extAuthProviders.add(provider));
             appFactory.initExtAuthProviders(extAuthProviders);
 
+            if (appFactory.isCheckDeployedVersion() && !genApplication.getApplicationVersion().equals(deployedAsVersion)) {
+                logOnPortJ(TurkuServlet.class.getName(), "", IOFXCoreReporter.Type.APP_PROBLEM, IOFXCoreReporter.LogPriority.ERROR, "Application deployed as '" + deployedAsVersion + "' does not match app version '" + genApplication.getApplicationVersion() + "'", null);
+            }
 
+            // as well as home screen
+            String mainLandingPagePath = getInitParameter("mainLandingPagePath");
+            if (mainLandingPagePath == null) {
+                mainLandingPagePath = servletPath + LOGOUT_ROUTE;
 
-        } catch (ClassNotFoundException | BeansException e) {
-            Turku.l("TurkuServlet.servletInitialized() " + e.getMessage() + "\n" + OFXConsoleHelper.stackTrace2String(e));
-            throw new RuntimeException(e);
+            } else if (mainLandingPagePath.charAt(0) != '/') {
+                mainLandingPagePath = "/" + mainLandingPagePath;
+            }
+            appFactory.setOnLogoutMainLandingPath(mainLandingPagePath);
 
+            appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + appNameVersion);
+            jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName(), deployedAsVersion, appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
+
+            if (appFactory.isAutoParDeploymentForwardGracefully()) {
+                jmxRegistration.enableAutoForwardGracefully();
+            }
+
+            disableBrowserContextMenu = !"dandev".equals(guessedServerName);
+
+            RouteConfiguration.forApplicationScope().setRoute(APP_ROUTE, SimpleHomeScreen.class);
+            RouteConfiguration.forApplicationScope().setRoute(LOGIN_ROUTE, authenticatorClass);
+            RouteConfiguration.forApplicationScope().setRoute(LOGOUT_ROUTE, authenticatorClass);
+
+            Turku.l("TurkuServlet.servletInitialized() done successfully for '" + servletPath + "' with " + authenticatorClass.getName());
+
+        } catch (Exception e) {
+            this.log("Exception in servlet init, setting service as unavailable.", e);
+            throw new UnavailableException("Servlet unavailable due to " + e.getClass().getSimpleName() + " " + e.getMessage());
         }
 
-        if (appFactory.isCheckDeployedVersion() && !genApplication.getApplicationVersion().equals(deployedAsVersion)) {
-            logOnPortJ(TurkuServlet.class.getName(), "", IOFXCoreReporter.LogPriority.ERROR, "Application deployed as '"+ deployedAsVersion + "' does not match app version '" + genApplication.getApplicationVersion() +"'", null);
-        }
-
-        // as well as home screen
-        String mainLandingPagePath = getInitParameter("mainLandingPagePath");
-        if (mainLandingPagePath == null) {
-            mainLandingPagePath = servletPath + LOGOUT_ROUTE;
-
-        } else if (mainLandingPagePath.charAt(0) != '/') {
-            mainLandingPagePath = "/" + mainLandingPagePath;
-        }
-        appFactory.setOnLogoutMainLandingPath(mainLandingPagePath);
-
-        appFactory.getEventBus().setSysInfo("" + IOFXCoreReporter.MoWarePlatform.MOWARE_VAADIN + " " + guessedServerName + ": " + appNameVersion);
-        jmxRegistration.registerAppTelemetrics(appFactory, appBehaviorFqName, genApplication.getShortAppName(), deployedAsVersion, appFactory.getSystemLabel(-1, MoWareTranslations.Key.MOWARE_VERSION) + " / " + Turku.INTERNAL_VERSION, guessedServerName);
-
-        if (appFactory.isAutoParDeploymentForwardGracefully()) {
-            jmxRegistration.enableAutoForwardGracefully();
-        }
-
-        disableBrowserContextMenu = !"dandev".equals(guessedServerName);
-
-        RouteConfiguration.forApplicationScope().setRoute(APP_ROUTE, SimpleHomeScreen.class);
-        RouteConfiguration.forApplicationScope().setRoute(LOGIN_ROUTE, authenticatorClass);
-        RouteConfiguration.forApplicationScope().setRoute(LOGOUT_ROUTE, authenticatorClass);
-
-        Turku.l("TurkuServlet.servletInitialized() done successfully for '" + servletPath + "' with " + authenticatorClass.getName());
     }
 
 
@@ -210,8 +210,8 @@ public class TurkuServlet extends VaadinServlet {
 
 
 
-    public void logOnPortJ(String source, String ipAddr, IOFXCoreReporter.LogPriority prio, String msg, Exception ex) {
-        CoreReporterInfo info = new CoreReporterInfo(IOFXCoreReporter.Type.APP_TRACE, appBehaviorFqName, genApplication.getApplicationVersion(),
+    public void logOnPortJ(String source, String ipAddr, IOFXCoreReporter.Type type, IOFXCoreReporter.LogPriority prio, String msg, Exception ex) {
+        CoreReporterInfo info = new CoreReporterInfo(type, appBehaviorFqName, genApplication.getApplicationVersion(),
                 source, "", "", prio, 0, "", "", "",
                 ipAddr, MoVersion.MOWARE_PLUGIN_VERSION, IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, guessedServerName, msg);
 

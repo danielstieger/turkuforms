@@ -73,7 +73,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
             if (userEnv == null) {
                 // nope - not logged in ... this can not happen, routes are not configured correctly?
                 String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
-                servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.LogPriority.ERROR, msg, null);
+                servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.ERROR, msg, null);
                 SdiUtil.quickUserInfo(msg);
                 return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
             }

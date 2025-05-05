@@ -72,7 +72,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
         if (expDate != null){
             DateTime now = DeprecatedServerDateProvider.getSqlServerDateTime();
             if (CredentialReporter.checkExpirationDateOnceInWindow(now, expDate)) {
-                servlet.logOnPortJ(OAuthLandingPage.class.getName(),factory.getRemoteAddr(), IOFXCoreReporter.LogPriority.ERROR, "Credentials for " + provider + " will expire at " + expDate + "!", null);
+                servlet.logOnPortJ(OAuthLandingPage.class.getName(),factory.getRemoteAddr(), IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.ERROR, "Credentials for " + provider + " will expire at " + expDate + "!", null);
             }
 
         }
@@ -198,7 +198,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
             }
 
             Turku.l("OAuthLandingPage - " + errorMsg);
-            servlet.logOnPortJ(OAuthLandingPage.class.getName(), factory.getRemoteAddr(),IOFXCoreReporter.LogPriority.ERROR, errorMsg, exToReportOnPortJ);
+            servlet.logOnPortJ(OAuthLandingPage.class.getName(), factory.getRemoteAddr(),IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.ERROR, errorMsg, exToReportOnPortJ);
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), HOME_REDIRECT_PREFIX_LABEL, errorMsg, () -> {
                 UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);
             }));
