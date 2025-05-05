@@ -135,7 +135,7 @@ public class TurkuServlet extends VaadinServlet {
         }
 
         if (appFactory.isCheckDeployedVersion() && !genApplication.getApplicationVersion().equals(deployedAsVersion)) {
-            throw new RuntimeException("Application deployed as '"+ deployedAsVersion + "' does not match app version '" + genApplication.getApplicationVersion() +"'.");
+            logOnPortJ(TurkuServlet.class.getName(), "", IOFXCoreReporter.LogPriority.ERROR, "Application deployed as '"+ deployedAsVersion + "' does not match app version '" + genApplication.getApplicationVersion() +"'", null);
         }
 
         // as well as home screen
