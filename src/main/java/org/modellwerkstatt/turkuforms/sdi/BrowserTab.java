@@ -281,8 +281,11 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
                 if (canClose) {
                     this.getElement().executeJs("window.opener.turku.closeWindow($0)", uiTab.hashCode());
 
+                } else {
+                    this.getElement().executeJs("if (window.turkuTampWindowClose) { window.turkuTampWindowClose(); }");
                 }
             });
+
         } else {
 
             uiTab.containerRunLater("Open Link " + urlToGoAfterClose, () -> {

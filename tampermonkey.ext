@@ -1,0 +1,24 @@
+// ==UserScript==
+// @name         Dan Turku Tampermonkey extension
+// @namespace    https://www.modellwerkstatt.org/
+// @version      2025-05-06
+// @description  focus and close win featuers
+// @author       Dan Stieger
+// @match        *://*/*
+// @grant        window.close
+// @grant        window.focus
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    unsafeWindow.turkuTampWindowClose = function() {
+        window.close();
+    };
+
+    unsafeWindow.turkuTampWindowFocus = function() {
+        window.focus();
+    };
+
+    console.log('The turku.tampermonkey was installed');
+})();
