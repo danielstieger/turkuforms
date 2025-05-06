@@ -204,12 +204,4 @@ window.turku = {
     eraseTurkuCookie: function() {
         document.cookie = 'TurkuIdent=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     },
-
-    tampWindowClose: function() {
-        console.log("turku.tampermonkey extension not installed.");
-    },
-
-    tampWindowFocus: function() {
-        console.log("turku.tampermonkey extension not installed.");
-    },
 }
