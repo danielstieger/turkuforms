@@ -76,7 +76,6 @@ public class TurkuMenu extends MenuBar {
             } else {
                 MenuItem created = parent.addItem(currentItem.labelText);
                 SubMenu createdSub = created.getSubMenu();
-
                 addMainMenuStructure(turkuFactory, createdSub, ((Menu) currentItem).getAllItems());
 
             }

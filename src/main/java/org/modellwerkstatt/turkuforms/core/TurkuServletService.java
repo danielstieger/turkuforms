@@ -63,9 +63,9 @@ public class TurkuServletService extends VaadinServletService {
 
         UI currentUI = isVaadinHeartBeat || isBeacon ? null : UI.getCurrent();
 
+//        Turku.l("TurkuServletService.requestEnd() " + isVaadinHeartBeat + " / " + currentUI);
 
         super.requestEnd(request, response, session);
-
         String onWebSocket = "";
         if (session != null && session.getSession() != null) {
             WrappedSession httpSession = session.getSession();
