@@ -1,6 +1,6 @@
 package org.modellwerkstatt.turkuforms.core;
 
-import org.modellwerkstatt.dataux.runtime.auth.ExtAuthProvider;
+import org.modellwerkstatt.dataux.runtime.auth.IExtAuthProvider;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.IOFXCmdModule;
@@ -25,8 +25,8 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     String getRemoteAddr();
 
-    void initExtAuthProviders(List<ExtAuthProvider> providers);
-    List<ExtAuthProvider> getAllExtAuthProviders();
+    void initExtAuthProviders();
+    List<IExtAuthProvider> getAllExtAuthProviders();
 
     void initCmdUrlDefaults(boolean usngUrlHndlng);
     List<IOFXCmdModule.CmdUrlDefaults> getAllCmdUrlDefaults();

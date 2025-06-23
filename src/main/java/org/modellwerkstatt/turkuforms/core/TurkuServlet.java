@@ -5,7 +5,6 @@ import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.ServiceException;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinServletService;
-import org.modellwerkstatt.dataux.runtime.auth.ExtAuthProvider;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
@@ -20,9 +19,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class TurkuServlet extends VaadinServlet {
@@ -121,10 +117,7 @@ public class TurkuServlet extends VaadinServlet {
 
             appFactory.initCmdUrlDefaults(!appImplClassFq.equals(TurkuApp.class.getName()));
 
-            List<ExtAuthProvider> extAuthProviders = new ArrayList<>();
-            Map<String, ExtAuthProvider> allProviders = appContext.getBeansOfType(ExtAuthProvider.class);
-            allProviders.values().forEach(provider -> extAuthProviders.add(provider));
-            appFactory.initExtAuthProviders(extAuthProviders);
+            appFactory.initExtAuthProviders();
 
             if (appFactory.isCheckDeployedVersion() && !genApplication.getApplicationVersion().equals(deployedAsVersion)) {
                 logOnPortJ(TurkuServlet.class.getName(), "", IOFXCoreReporter.Type.APP_PROBLEM, IOFXCoreReporter.LogPriority.ERROR, "Application deployed as '" + deployedAsVersion + "' does not match app version '" + genApplication.getApplicationVersion() + "'", null);

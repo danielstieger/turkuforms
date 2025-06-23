@@ -4,7 +4,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
-import org.modellwerkstatt.dataux.runtime.auth.ExtAuthProvider;
 import org.modellwerkstatt.dataux.runtime.core.BaseUiFactory;
 import org.modellwerkstatt.dataux.runtime.toolkit.*;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -36,9 +35,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     private Map<String,IOFXCmdModule.CmdUrlDefaults> defaultUrlForFqCmd;
     private boolean usingUrlHandling;
-
-    private List<ExtAuthProvider> allAuthProviders;
-
 
     // Empty, app has to handle stuff, i.e. empty = return full path
     // for uploadLocations
@@ -240,16 +236,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         if (! usingUrlHandling) { return true; };
 
         return defaultUrlForFqCmd.containsKey(fqName);
-    }
-
-    @Override
-    public void initExtAuthProviders(List<ExtAuthProvider> providers) {
-        allAuthProviders = providers;
-    }
-
-    @Override
-    public List<ExtAuthProvider> getAllExtAuthProviders() {
-        return allAuthProviders;
     }
 
     public static DatePicker.DatePickerI18n createGermanI18n() {

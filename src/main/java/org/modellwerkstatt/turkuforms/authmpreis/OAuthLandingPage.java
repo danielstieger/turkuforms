@@ -11,7 +11,7 @@ import com.vaadin.flow.server.WrappedSession;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.modellwerkstatt.dataux.runtime.auth.CredentialReporter;
-import org.modellwerkstatt.dataux.runtime.auth.ExtAuthProvider;
+import org.modellwerkstatt.dataux.runtime.auth.IExtAuthProvider;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
@@ -36,7 +36,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
     public static String LOGIN_NOT_POSSIBLE = "Login not possible - ";
     public static String SESSION_PARAMS_ATTR = "OAuthLandingTempParams";
     private String title;
-    private ExtAuthProvider provider;
+    private IExtAuthProvider provider;
 
     public OAuthLandingPage() {
         // default, not content in landing page
@@ -59,7 +59,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
         ParamInfo paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
         String naviPath = "/" + event.getLocation().getPath();
 
-        List<ExtAuthProvider> allProviders = servlet.getUiFactory().getAllExtAuthProviders();
+        List<IExtAuthProvider> allProviders = servlet.getUiFactory().getAllExtAuthProviders();
         if (allProviders.size() != 1) {
             throw new RuntimeException("OAuthLandingPage() supports just one provider, but we have " + allProviders.size() + " here.");
         } else {

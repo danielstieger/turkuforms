@@ -4,7 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.dataux.runtime.auth.ExtAuthProvider;
+import org.modellwerkstatt.dataux.runtime.auth.IExtAuthProvider;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class MultiOAuthLandingPage extends SimpleMessageCmpt implements BeforeEnterObserver {
-    private List<ExtAuthProvider> providers;
+    private List<IExtAuthProvider> providers;
 
     public MultiOAuthLandingPage() {
         super();
@@ -44,7 +44,7 @@ public class MultiOAuthLandingPage extends SimpleMessageCmpt implements BeforeEn
         String theCode = null;
         String errorMessage = "";
         String originalState = "" + session.hashCode();
-        ExtAuthProvider providerToUse = null;
+        IExtAuthProvider providerToUse = null;
 
 
         if (codes != null && states != null) {
