@@ -1,9 +1,9 @@
 package org.modellwerkstatt.turkuforms.core;
 
+import org.modellwerkstatt.dataux.runtime.auth.ExtAuthProvider;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.IOFXCmdModule;
-import org.modellwerkstatt.turkuforms.auth.ExtAuthProvider;
 
 import java.util.List;
 
