@@ -122,6 +122,11 @@ public class DesktopGridProDataView<DTO> {
         return filteredList;
     }
 
+    public List<DTO> getOriginalList() {
+        return originalList;
+    }
+
+
 
     public static interface TextInDto<DTO> {
         public boolean textInItem(DTO item, String text);

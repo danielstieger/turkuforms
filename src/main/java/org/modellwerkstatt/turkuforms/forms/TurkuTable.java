@@ -24,6 +24,7 @@ import org.modellwerkstatt.dataux.runtime.delegates.TableCellBigDecimalConverter
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecifications.Table;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -59,7 +60,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private DesktopGridProDataView<DTO> dataView;
 
     private IGenSelControlled genFormController;
-    private List<TurkuTableCol> colInfo = new ArrayList<>();
+    private List<TableColumn> colInfo = new ArrayList<>();
     private List<Grid.Column<DTO>> gridColumns;
     private int firstEditableCol = -1;
     private boolean editPreview = false;
@@ -173,7 +174,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
             for (int i=0; i < gridColumns.size(); i++) {
                 if (gridColumns.get(i).isVisible()) {
-                    TurkuTableCol col = colInfo.get(i);
+                    TableColumn col = colInfo.get(i);
 
                     String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
                     if (viewed.toLowerCase().replace(".", "").contains(text)) {
@@ -188,7 +189,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.addClickListener(event -> {
             if (event.getClickCount() == 2) {
                 for(int i=0; i < colInfo.size(); i++) {
-                    TurkuTableCol col = colInfo.get(i);
+                    TableColumn col = colInfo.get(i);
                     if (col.widthInPercent == 0) {
 
                         Grid.Column<DTO> column = gridColumns.get(i);
@@ -213,7 +214,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         int remainingWidth = 99;
         for (int i = 0; i < colInfo.size(); i++) {
             boolean lastCol = (i == colInfo.size() - 1);
-            TurkuTableCol col = colInfo.get(i);
+            TableColumn col = colInfo.get(i);
 
             int width = col.widthInPercent;
 
@@ -343,7 +344,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public void addColumn(String property, String label, ITableCellStringConverter<?> converter, int width, boolean editable, boolean folded, boolean important) {
 
         if (folded) { width = 0; }
-        colInfo.add(new TurkuTableCol(colInfo.size(), property, label, converter, width));
+        colInfo.add(new TableColumn(colInfo.size(), property, label, converter, width, !folded));
 
         Grid.Column<DTO> col;
         if (editable) {
@@ -649,32 +650,13 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
 
     public String generateCsv() {
-        StringBuilder csv = new StringBuilder();
 
         List<DTO> objectsToExport = dataView.getSelectionInSync(selectionModel.getSelectedItems());
 
         for (int i=0; i < gridColumns.size(); i++) {
-            if (gridColumns.get(i).isVisible()) {
-                TurkuTableCol col = colInfo.get(i);
-                csv.append(col.headerName + "\t");
-            }
-        }
-        csv.append("\n");
-
-
-        for (Object item : objectsToExport) {
-            for (int i=0; i < gridColumns.size(); i++) {
-                if (gridColumns.get(i).isVisible()) {
-                    TurkuTableCol col = colInfo.get(i);
-
-                    String viewed = col.mowareConverter.convert(MoJSON.get(item, col.propertyName));
-                    csv.append(viewed + "\t");
-                }
-            }
-            csv.append("\n");
+            colInfo.get(i).visible = gridColumns.get(i).isVisible();
         }
 
-
-        return csv.toString();
+        return genFormController.convertAsCsv(dataView.getOriginalList(), objectsToExport, colInfo);
     }
 }
