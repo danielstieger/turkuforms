@@ -400,6 +400,17 @@ vaadin-grid-pro-edit-text-field[theme~='grid-pro-editor'] {
 
 
 /* TurkuDelegatesForm * * * * * * * * * * * * * * * */
+/* vaadin-form-item {
+    border: 1px solid green;
+}
+
+vaadin-horizontal-layout {
+    border: 1px solid blue;
+}
+
+vaadin-vertical-layout {
+    border: 1px solid gray;
+}*/
 
 vaadin-form-item::part(label) {
     width: 10.5em;

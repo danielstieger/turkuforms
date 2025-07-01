@@ -1,20 +1,27 @@
 package org.modellwerkstatt.turkuforms.editors;
 
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ImageEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Defs;
 
-public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEditor {
+public class ImageViewer extends FormChild<Div> implements IToolkit_ImageEditor {
     protected String cachedValue;
+    protected Image image;
     protected String retrieveLocationStore;
 
 
     public ImageViewer(String rls) {
-        super(new Image());
-        super.inputField.addClassName("ImageViewerImage");
+        super(new Div());
+        image = new Image();
+        image.addClassName("ImageViewerImage");
+        image.setWidth("100%");
+
+        super.inputField.add(image);
+        super.inputField.setWidth("100%");
+
         retrieveLocationStore = rls;
-        inputField.setWidth("100%");
 
         // another idea would be to retrieve the available
         // space in grid, then scale img
@@ -28,8 +35,8 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
 
         if (!SaveObjectComperator.equals(s, cachedValue)) {
             cachedValue = s;
-            inputField.setSrc(s);
-            inputField.setText("-");
+            image.setSrc(s);
+            image.setText("-");
         }
     }
 
@@ -52,9 +59,20 @@ public class ImageViewer extends FormChild<Image> implements IToolkit_ImageEdito
         String[] xySplit = promptText.split(",");
         String xVal = xySplit[0].trim();
         String yVal = xySplit[1].trim();
+        int ADD_SPACE = 10;
 
-        if (! "0".equals(xVal)) { inputField.setMaxWidth(xVal + "px"); };
-        if (! "0".equals(yVal)) { inputField.setMaxHeight(yVal + "px"); inputField.setWidth(""); };
+        if (! "0".equals(xVal)) {
+            image.setMaxWidth(xVal + "px");
+            int parentX = Integer.valueOf(xVal) + ADD_SPACE;
+            super.inputField.setWidth(parentX + "px");
+        }
+
+        if (! "0".equals(yVal)) {
+            image.setMaxHeight(yVal + "px");
+            image.setWidth("");
+            int parentY = Integer.valueOf(yVal) + ADD_SPACE;
+            super.inputField.setHeight(parentY + "px"); };
+
     }
 
     @Override

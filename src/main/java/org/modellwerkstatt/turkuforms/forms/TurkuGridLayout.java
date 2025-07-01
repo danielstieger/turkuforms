@@ -65,6 +65,10 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     }
 
 
+    private void flexBasis(Component cmpt) {
+        cmpt.getElement().getStyle().set("flex-basis", "0");
+    }
+
     @Override
     public void addChildren(IToolkit_Form child) {
         focusController.addChild(child);
@@ -92,10 +96,11 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
             if (currentRowConstraint == -1) {
                 this.setFlexGrow(0, hl);
+                flexBasis(hl);
 
             } else {
                 this.setFlexGrow(currentRowConstraint, hl);
-
+                flexBasis(hl);
             }
 
         }
@@ -115,10 +120,11 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
 
         if (childConstraint == -1) {
             containerToAddComponent.setFlexGrow(0, childCmpt);
+            flexBasis(childCmpt);
 
         } else {
             containerToAddComponent.setFlexGrow(childConstraint, childCmpt);
-
+            flexBasis(childCmpt);
         }
 
         childsAdded ++;
