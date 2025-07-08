@@ -84,11 +84,11 @@ public class NavigationUtil {
         IGenAppUiModule appUiModule = servlet.getAppBehaviour();
         ITurkuAppFactory factory = servlet.getUiFactory();
 
-        LoginController crtl = new LoginController(IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), factory.getRemoteAddr());
+        LoginController crtl = new LoginController(factory, IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU, servlet.getGuessedServerName(), factory.getRemoteAddr());
 
         info.setDevice("", "", "");
 
-        String msg = crtl.checkLoginPrepareUserEnv(userName, password, info, appUiModule, factory);
+        String msg = crtl.checkLoginPrepareUserEnv(userName, password, info, appUiModule);
         return msg;
     }
 
