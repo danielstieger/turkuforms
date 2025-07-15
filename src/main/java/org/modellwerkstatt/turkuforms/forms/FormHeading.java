@@ -1,7 +1,10 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
+import org.modellwerkstatt.objectflow.runtime.IOFXSession;
 import org.modellwerkstatt.objectflow.runtime.Workarounds2;
 
 import java.util.List;
@@ -56,11 +59,31 @@ public class FormHeading extends Div {
         }
 
         for (IOFXProblem prblm: problemList) {
-            Div info = new Div();
-            info.setText(prblm.getSimpleUserText());
-            info.addClassName(prblm.isWarningOnly() ? "TurkuWarningDiv" : "TurkuErrorDiv");
+            IOFXSession.IUxEventActionable bsr = prblm.getResolveActionOrNull();
 
-            this.add(info);
+            if (bsr == null) {
+                Div info = new Div();
+                info.setText(prblm.getSimpleUserText());
+                info.addClassName(prblm.isWarningOnly() ? "TurkuWarningDiv" : "TurkuErrorDiv");
+                this.add(info);
+
+            } else {
+                LeftRight lr = new LeftRight();
+
+                Button btn = new Button(bsr.getLabelText(), buttonClickEvent -> bsr.performAction());
+                btn.addClassName("TurkuResolveButton");
+                btn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                btn.addThemeVariants(ButtonVariant.LUMO_SMALL);
+
+                Div info = new Div();
+                info.setText(prblm.getSimpleUserText());
+                info.addClassName(prblm.isWarningOnly() ? "TurkuWarningDiv" : "TurkuErrorDiv");
+
+                lr.add(info);
+                lr.spacer();
+                lr.add(btn);
+                this.add(lr);
+            }
         }
 
 

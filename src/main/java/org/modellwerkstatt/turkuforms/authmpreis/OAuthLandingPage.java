@@ -53,7 +53,6 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
         ITurkuAppFactory factory = servlet.getUiFactory();
-        IMoLdapService ldapService = factory.getLdapServiceIfPresent();
 
         title = servlet.getAppNameVersion();
         ParamInfo paramInfo = new ParamInfo(event.getLocation().getQueryParameters());

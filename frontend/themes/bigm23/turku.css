@@ -237,6 +237,8 @@ vaadin-button::part(prefix) {
 }
 
 
+
+
 /* TurkuGridLayout (+ gen. form) * * * * * * * * * * * * * * * * */
 .TurkuGrid{
     /* grid has no margin, no padding
@@ -328,6 +330,12 @@ vaadin-button::part(prefix) {
     font-weight: var(--turku-bold);
     color: white;
     padding: 0em 0.5em;
+}
+
+.TurkuResolveButton {
+    background-color: var(--turku-cmd-color);
+    padding-left: 1em !important;
+    padding-right: 1em !important;
 }
 
 .TurkuBrowserTabErrorMsg {
