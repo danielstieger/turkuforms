@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
+import org.modellwerkstatt.dataux.runtime.delegates.ImageDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ImageEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
 import org.modellwerkstatt.turkuforms.util.Defs;
@@ -9,7 +10,7 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 public class ImageViewer extends FormChild<Div> implements IToolkit_ImageEditor {
     protected String cachedValue;
     protected Image image;
-    protected String retrieveLocationStore;
+    protected String locationRetriew;
 
 
     public ImageViewer(String rls) {
@@ -21,7 +22,7 @@ public class ImageViewer extends FormChild<Div> implements IToolkit_ImageEditor 
         super.inputField.add(image);
         super.inputField.setWidth("100%");
 
-        retrieveLocationStore = rls;
+        locationRetriew = rls;
 
         // another idea would be to retrieve the available
         // space in grid, then scale img
@@ -29,9 +30,7 @@ public class ImageViewer extends FormChild<Div> implements IToolkit_ImageEditor 
 
     public void setText(String s) {
 
-        if (Defs.hasText(retrieveLocationStore)) {
-            s = retrieveLocationStore + s;
-        }
+        s = ImageDelegate.adjustPath(locationRetriew, s);
 
         if (!SaveObjectComperator.equals(s, cachedValue)) {
             cachedValue = s;
