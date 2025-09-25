@@ -1,11 +1,13 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
+import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +38,11 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     @Override
     public void addTabSelectedChangeListener(TabSelectedIndexChanged change){
         this.addSelectedChangeListener(event ->{
-
             Tab current = event.getSelectedTab();
             if (current != null) {
                 int index = this.getIndexOf(current);
+                // String url = tabsInSheet.get(index).getAdjustedUrl();
+                // UI.getCurrent().getPage().getHistory().replaceState(null, url);
                 change.selectedIndexChanged(index);
             }
         });
@@ -48,6 +51,7 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     @Override
     public void addTab(CmdUiTab tab) {
         tabsInSheet.add(tab);
+        Turku.l("TabSheetMDI.addTab()");
 
         Tab imp = this.add(tab.getWindowTitle(), tab);
         this.setSelectedTab(imp);
@@ -55,9 +59,9 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
 
     @Override
     public void focusTab(CmdUiTab tab) {
+        Turku.l("TabSheetMDI.focusTab()");
         int index = tabsInSheet.indexOf(tab);
         this.setSelectedIndex(index);
-
     }
 
     @Override
