@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.core;
+package org.modellwerkstatt.turkuforms.core2;
 
 
 import com.vaadin.flow.component.UI;
@@ -12,13 +12,15 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.MPreisAppConfig;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 import java.util.List;
 
-public class TurkuApplicationController extends ApplicationMDI implements HttpSessionBindingListener, ITurkuAppCrtlAccess {
+public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingListener, ITurkuAppCrtlAccess {
     public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.TurkuAppCrtl_";
     public final static String USERNAME_SESSIONATTRIB = "userName";
     public final static String REMOTE_SESSIONATTRIB = "remoteAddr";
@@ -30,7 +32,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     private long lastRequestStarted;
     private String lastHkProcessedInThisRequest;
 
-    public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_MainWindow appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
+    public TurkuAppCrtl2(IToolkit_UiFactory factory, IToolkit_MainWindow appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
 
         Turku.l("TurkuApplicationController() initialization of " + this.hashCode());
@@ -78,7 +80,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         unregisterFromSessionTryInvalidate(session, false);
     }
 
-    static public List<TurkuApplicationController> getOtherControllersInSession(VaadinSession session, TurkuApplicationController self) {
+    static public List<org.modellwerkstatt.turkuforms.core.TurkuApplicationController> getOtherControllersInSession(VaadinSession session, org.modellwerkstatt.turkuforms.core.TurkuApplicationController self) {
         return null;
     }
 
@@ -98,12 +100,12 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     static public void shutdownOtherControllersInSession(VaadinSession vaadinSession) {
         WrappedSession session = vaadinSession.getSession();
 
-        long crtlSPresent = session.getAttributeNames().stream().filter(TurkuApplicationController::isTurkuControllerAttribute).count();
+        long crtlSPresent = session.getAttributeNames().stream().filter(org.modellwerkstatt.turkuforms.core.TurkuApplicationController::isTurkuControllerAttribute).count();
 
         for (String name: session.getAttributeNames()){
             if (isTurkuControllerAttribute(name)) {
-                TurkuApplicationController crtl = (TurkuApplicationController) session.getAttribute(name);
-                TurkuApp mainWin = (TurkuApp) crtl.getMainWindowImpl();
+                org.modellwerkstatt.turkuforms.core.TurkuApplicationController crtl = (org.modellwerkstatt.turkuforms.core.TurkuApplicationController) session.getAttribute(name);
+                TurkuMainWindow mainWin = (TurkuMainWindow) crtl.getMainWindowImpl();
 
                 try {
                     if (mainWin.getUI().isPresent() && mainWin.getUI().get().isAttached()) {
@@ -194,3 +196,4 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         }
     }
 }
+

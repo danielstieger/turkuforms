@@ -20,7 +20,6 @@ import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 import org.modellwerkstatt.turkuforms.util.Turku;
@@ -73,7 +72,7 @@ public class BrowserTab extends BrowserTabBase implements ITurkuMainAdjust, IToo
             if (userEnv == null) {
                 // nope - not logged in ... this can not happen, routes are not configured correctly?
                 String msg = "API error! The application was accessible via url, but user is not LOGGED IN!";
-                servlet.logOnPortJ(TurkuApp.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.ERROR, msg, null);
+                servlet.logOnPortJ(BrowserTab.class.getName(), turkuFactory.getRemoteAddr(), IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.ERROR, msg, null);
                 SdiUtil.quickUserInfo(msg);
                 return; // -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
             }

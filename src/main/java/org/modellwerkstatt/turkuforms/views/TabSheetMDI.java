@@ -7,6 +7,7 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
+import org.modellwerkstatt.turkuforms.core2.TurkuMainWindow;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
@@ -41,8 +42,8 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
             Tab current = event.getSelectedTab();
             if (current != null) {
                 int index = this.getIndexOf(current);
-                // String url = tabsInSheet.get(index).getAdjustedUrl();
-                // UI.getCurrent().getPage().getHistory().replaceState(null, url);
+                String url = tabsInSheet.get(index).getAdjustedUrl();
+                UI.getCurrent().getPage().getHistory().replaceState(null, url);
                 change.selectedIndexChanged(index);
             }
         });
@@ -96,7 +97,12 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
 
     @Override
     public void adjustTopBarColorOrNull(String col) {
-        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(col);
+        Object mainWindow = this.getParent().get();
+        if (mainWindow instanceof Turku) {
+            ((TurkuApp) mainWindow).adjustTopBarColorOrNull(col);
+        } else {
+            ((TurkuMainWindow) mainWindow).adjustTopBarColorOrNull(col);
+        }
     }
 
     @Override

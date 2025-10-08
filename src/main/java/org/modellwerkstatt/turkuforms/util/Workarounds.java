@@ -10,6 +10,7 @@ import com.vaadin.flow.server.VaadinServlet;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
+import org.modellwerkstatt.turkuforms.core2.TurkuMainWindow;
 import org.modellwerkstatt.turkuforms.sdi.BrowserTab;
 import org.modellwerkstatt.turkuforms.views.CmdUi;
 
@@ -99,6 +100,9 @@ public class Workarounds {
 
         if (mainComponent instanceof TurkuApp) {
             return ((TurkuApp) mainComponent).getApplicationController();
+
+        } else if (mainComponent instanceof TurkuMainWindow) {
+            return ((TurkuMainWindow) mainComponent).getApplicationController();
 
         } else if (mainComponent instanceof BrowserTab) {
             return ((BrowserTab) mainComponent).getApplicationController();

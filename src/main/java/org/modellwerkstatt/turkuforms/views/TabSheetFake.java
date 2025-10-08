@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
+import org.modellwerkstatt.turkuforms.core2.TurkuMainWindow;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
@@ -80,12 +81,25 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
         if (current != null) {
             current.getElement().executeJs("turku.setTurkuCommandColor($0, $1)", current, col);
         }
-        ((TurkuApp) this.getParent().get()).adjustTopBarColorOrNull(col);
+
+        Object mainWindow = this.getParent().get();
+        if (mainWindow instanceof TurkuApp) {
+            ((TurkuApp) mainWindow).adjustTopBarColorOrNull(col);
+        } else {
+            ((TurkuMainWindow) mainWindow).adjustTopBarColorOrNull(col);
+        }
+
     }
 
     @Override
     public void adjustTitle() {
-        ((TurkuApp) this.getParent().get()).setOptionalTabTitleInNavbar(getTitleForNavbar());
+        Object mainWindow = this.getParent().get();
+
+        if (mainWindow instanceof TurkuApp) {
+            ((TurkuApp) mainWindow).setOptionalTabTitleInNavbar(getTitleForNavbar());
+        } else {
+            ((TurkuMainWindow) mainWindow).setOptionalTabTitleInNavbar(getTitleForNavbar());
+        }
     }
 
     @Override

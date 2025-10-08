@@ -1,4 +1,4 @@
-package org.modellwerkstatt.turkuforms.core;
+package org.modellwerkstatt.turkuforms.core2;
 
 
 import com.vaadin.flow.component.*;
@@ -34,6 +34,8 @@ import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
 
@@ -44,15 +46,15 @@ import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.TUR
 
 @PreserveOnRefresh
 @SuppressWarnings("unchecked")
-public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, ShortcutEventListener, BeforeEnterObserver {
-    private TurkuApplicationController applicationController;
+public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, ShortcutEventListener, BeforeEnterObserver {
+    private TurkuAppCrtl2 applicationController;
     private IOFXUserEnvironment userEnvironment;
     private ITurkuMainTab mainTabImpl;
     private ParamInfo initialStartupParams;
 
 
 
-    public TurkuApp() {
+    public TurkuMainWindow() {
         // Turku.l("TurkuApp.constructor() - start");
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
@@ -66,7 +68,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         if (userEnvironment == null) {
             String msg = "UserEnvironment to pick up was null, redirecting to /login, " + vaadinSession.hashCode() + " /  " + System.currentTimeMillis() + " / " + applicationController + " / " + this.hashCode();
-            servlet.logOnPortJ(TurkuApp.class.getName(), remoteAddr, IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.WARN,  msg, null);
+            servlet.logOnPortJ(TurkuMainWindow.class.getName(), remoteAddr, IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.WARN,  msg, null);
             // Test Dan, Spring 25
             // NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE);
 
@@ -81,7 +83,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             }
 
             userEnvironment.adjustDeviceId("" + vaadinSession.hashCode() + " / " + this.hashCode());
-            applicationController = new TurkuApplicationController(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
+            applicationController = new TurkuAppCrtl2(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
             // url overwrite not supported with turku
             applicationController.initializeApplication(null, servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
@@ -160,7 +162,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             getUI().get().close();
         }
     }
-    
+
     @Override
     public void parDeploymentForwardNow() {
         boolean invalidated = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
@@ -179,7 +181,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         }
     }
-    
+
     @Override
     public void showDialog(DlgType dlgType, String text, IApplication.DlgRunnable dlgRunnable) {
         // Turku.l("TurkuApp.showDialog() " + OFXConsoleHelper._____organizeCurrentStacktrace_____());
@@ -231,7 +233,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     @Override
     public void setAppInfo(String appName, String version, String dynTitle, int brandingId) {
         super.setSysInfo(appName+ " " + version);
-        super.setNavbarTitleDiv(appName + " " + dynTitle);
+        super.setNavbarTitleDiv("MI " + appName + " " + dynTitle);
         super.setUserInfo(userEnvironment.getUserName());
         super.adjustBranding(brandingId);
     }
@@ -339,14 +341,14 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     @Override
     public void execEventInBackground(ICommandContainer iCommandContainer, Runnable runnable) {
         IllegalStateException ise = new IllegalStateException("Foreground / Background processing not supported by Turkuforms");
-        Turku.logWithServlet(TurkuApp.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
+        Turku.logWithServlet(TurkuMainWindow.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
         throw ise;
     }
 
     @Override
     public void execEventInForeground(ICommandContainer iCommandContainer, UxEvent uxEvent) {
         IllegalStateException ise = new IllegalStateException("Foreground / Background processing not supported by Turkuforms");
-        Turku.logWithServlet(TurkuApp.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
+        Turku.logWithServlet(TurkuMainWindow.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
         throw ise;
     }
 
@@ -360,7 +362,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         applicationController.onExitRequested(false);
     }
 
-    public TurkuApplicationController getApplicationController() { return applicationController; }
+    public TurkuAppCrtl2 getApplicationController() { return applicationController; }
 
     protected void quickUserInfo(String msg) {
         UI.getCurrent().access(() -> {

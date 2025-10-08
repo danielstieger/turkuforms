@@ -10,7 +10,6 @@ import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -30,7 +29,7 @@ public class NavigationUtil {
     }
 
     public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo, boolean forceAbsolutNavi) {
-        Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... app route present: " + RouteConfiguration.forSessionScope().isRouteRegistered(TurkuApp.class));
+        Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... ");
         TurkuServlet theServlet = Workarounds.getCurrentTurkuServlet();
 
         if (! RouteConfiguration.forSessionScope().isRouteRegistered(theServlet.getTurkuAppImplClass())) {

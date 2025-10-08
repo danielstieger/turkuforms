@@ -5,7 +5,6 @@ import com.vaadin.flow.component.html.Image;
 import org.modellwerkstatt.dataux.runtime.delegates.ImageDelegate;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_ImageEditor;
 import org.modellwerkstatt.objectflow.runtime.SaveObjectComperator;
-import org.modellwerkstatt.turkuforms.util.Defs;
 
 public class ImageViewer extends FormChild<Div> implements IToolkit_ImageEditor {
     protected String cachedValue;

@@ -14,7 +14,6 @@ import org.modellwerkstatt.dataux.runtime.auth.CredentialReporter;
 import org.modellwerkstatt.dataux.runtime.auth.IExtAuthProvider;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
-import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
