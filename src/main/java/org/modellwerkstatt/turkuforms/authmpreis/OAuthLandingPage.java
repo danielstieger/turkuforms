@@ -33,7 +33,6 @@ import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
 
 public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObserver, HasDynamicTitle {
     public static String LOGIN_NOT_POSSIBLE = "Login not possible - ";
-    public static String SESSION_PARAMS_ATTR = "OAuthLandingTempParams";
     private String title;
     private IExtAuthProvider provider;
 
@@ -107,7 +106,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
         if (loginRequested && theState == null) {
             // this should work, even in case other controllers are present ..
 
-            UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
+            UserPrincipal userPrincipal = SessionUtil.getUserPrincipal(vaadinSession);
             String userNameDefault = paramInfo.hasUsername() ? paramInfo.getUsername() : "";
 
             if (userPrincipal == null) {
@@ -115,7 +114,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
             }
 
             // try auto login
-            UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+            SessionUtil.setUserPrincipal(vaadinSession, userPrincipal);
             UserEnvironmentInformation environment = new UserEnvironmentInformation();
             String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
 
@@ -136,7 +135,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
 
             } else {
                 // temporary save params
-                vaadinSession.getSession().setAttribute(SESSION_PARAMS_ATTR, paramInfo);
+                SessionUtil.setParamInfo(vaadinSession, paramInfo);
 
                 String url = provider.initialRedirect(originalState);
                 UI.getCurrent().getPage().setLocation(url);
@@ -158,18 +157,15 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
 
                     if (credential != null) {
                         UserPrincipal userPrincipal = new UserPrincipal(credential, "");
-                        UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+                        SessionUtil.setUserPrincipal(vaadinSession, userPrincipal);
                         UserEnvironmentInformation environment = new UserEnvironmentInformation();
                         String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
 
                         if (msg == null) {
                             NavigationUtil.setUserEnvForUi(environment);
 
-                            WrappedSession ws = vaadinSession.getSession();
-                            if (ws.getAttribute(SESSION_PARAMS_ATTR) != null) {
-                                paramInfo = (ParamInfo) ws.getAttribute(SESSION_PARAMS_ATTR);
-                                ws.setAttribute(SESSION_PARAMS_ATTR, null);
-                            }
+                            ParamInfo fromSession = SessionUtil.getAndClearParamInfo(vaadinSession);
+                            if (fromSession != null) { paramInfo = fromSession; }
 
                             ParamInfo finalParamInfo = paramInfo;
                             UI.getCurrent().access(() -> NavigationUtil.ensureAppRoutPresentAndForward(null, finalParamInfo, false));

@@ -91,7 +91,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         if (loginRequested) {
             // this should work, even in case other controllers are present ..
 
-            UserPrincipal userPrincipal = UserPrincipal.getUserPrincipal(vaadinSession);
+            UserPrincipal userPrincipal = SessionUtil.getUserPrincipal(vaadinSession);
             String userNameDefault = paramInfo.hasUsername() ? paramInfo.getUsername() : "";
 
             if (userPrincipal == null) {
@@ -102,7 +102,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             boolean loginDone = false;
             if (userPrincipal != null) {
                 // try auto login
-                UserPrincipal.setUserPrincipal(vaadinSession, userPrincipal);
+                SessionUtil.setUserPrincipal(vaadinSession, userPrincipal);
                 UserEnvironmentInformation environment = new UserEnvironmentInformation();
                 String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
 
@@ -142,7 +142,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
                     } else {
                         UserPrincipal newPrinci = new UserPrincipal(username, password);
-                        UserPrincipal.setUserPrincipal(vaadinSession, newPrinci);
+                        SessionUtil.setUserPrincipal(vaadinSession, newPrinci);
 
                         UserEnvironmentInformation ldapUserEnv = new UserEnvironmentInformation();
                         String viaLoginCrtl = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, ldapUserEnv, newPrinci.getUserName(), newPrinci.getPassword());

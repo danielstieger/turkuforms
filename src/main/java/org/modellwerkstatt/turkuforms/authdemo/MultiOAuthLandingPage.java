@@ -10,6 +10,7 @@ import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.authmpreis.SimpleMessageCmpt;
+import org.modellwerkstatt.turkuforms.core.SessionUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -74,7 +75,7 @@ public class MultiOAuthLandingPage extends SimpleMessageCmpt implements BeforeEn
                 } else {
 
                     UserPrincipal userPrincipal = new UserPrincipal(email, "");
-                    UserPrincipal.setUserPrincipal(session, userPrincipal);
+                    SessionUtil.setUserPrincipal(session, userPrincipal);
                     UserEnvironmentInformation environment = new UserEnvironmentInformation();
                     String msg = NavigationUtil.loginViaLoginCrtl(servlet, session, environment, userPrincipal.getUserName(), userPrincipal.getPassword());
 

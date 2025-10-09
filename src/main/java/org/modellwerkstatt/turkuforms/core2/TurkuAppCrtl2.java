@@ -10,7 +10,6 @@ import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
-import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.MPreisAppConfig;
@@ -98,7 +97,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
 
         if (!others) {
             Turku.l("TurkuApplicationController.unregisterFromSessionTryInvalidate() setting invalidate timeout (or invalidate immediatelly = "+ immediate+ ")");
-            UserPrincipal.setUserPrincipal(vaadinSession, null);
+            setUserPrincipal(vaadinSession, null);
             session.setAttribute(USERNAME_SESSIONATTRIB, session.getAttribute(USERNAME_SESSIONATTRIB) + " unregistered");
             session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_INVALIDATE_SEC);
 
