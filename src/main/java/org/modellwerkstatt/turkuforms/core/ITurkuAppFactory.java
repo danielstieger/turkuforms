@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
+    String TURKU_PORTJ = "org.modellwerkstatt.turkuforms";
+
     void setOnLogoutMainLandingPath(String homePath);
     String getOnLogoutMainLandingPath();
 

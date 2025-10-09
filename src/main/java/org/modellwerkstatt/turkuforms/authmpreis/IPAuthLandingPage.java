@@ -14,7 +14,7 @@ import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.core.SessionUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -56,8 +56,6 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
 
-        NavigationUtil.setSessionUsername("IPAuthLandingPage");
-
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
         ITurkuAppFactory factory = servlet.getUiFactory();
@@ -69,7 +67,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
 
         boolean loginRequested = TurkuServlet.LOGIN_ROUTE.equals(naviPath);
-        boolean otherCrtlPresent = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
+        boolean otherCrtlPresent = SessionUtil.hasOtherControllersInSession(vaadinSession);
 
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout() + " paramInfo=" + paramInfo.getParamsToForwardIfAny());
 
@@ -80,7 +78,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
 
-                TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
+                SessionUtil.shutdownOtherControllersInSession(vaadinSession);
                 // enqueue
                 UI.getCurrent().access(() -> NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + "/" + paramInfo.getParamsToForwardIfAny()));
             }));
@@ -150,7 +148,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                         String viaLoginCrtl = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, ldapUserEnv, newPrinci.getUserName(), newPrinci.getPassword());
 
 
-                        boolean multiCrtlsAfterLogin = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
+                        boolean multiCrtlsAfterLogin = SessionUtil.hasOtherControllersInSession(vaadinSession);
 
                         Turku.l("IPAuthLandingPage.login with ldap multiCrtlsAfterLogin=" + multiCrtlsAfterLogin);
 
@@ -160,7 +158,7 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
                             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
                                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
 
-                                TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
+                                SessionUtil.shutdownOtherControllersInSession(vaadinSession);
                                 // enqueue
                                 UI.getCurrent().access(() -> NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + "/" + paramInfo.getParamsToForwardIfAny()));
                             }));

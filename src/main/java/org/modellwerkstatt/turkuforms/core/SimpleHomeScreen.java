@@ -56,7 +56,6 @@ public class SimpleHomeScreen extends VerticalLayout implements HasDynamicTitle,
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        NavigationUtil.setSessionUsername("SimpleHomeScreen");
 
         paramInfo = new ParamInfo(event.getLocation().getQueryParameters());
 

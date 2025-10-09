@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.auth;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
@@ -23,10 +22,6 @@ public class NavigationUtil {
     public static final String REROUTE_TO = "reroute";
     public static final String OTHER_TABS_OPEN = "/static/othertabsopen.html";
 
-
-    public static void setSessionUsername(String name){
-
-    }
 
     public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo, boolean forceAbsolutNavi) {
         Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... ");
@@ -89,19 +84,5 @@ public class NavigationUtil {
 
         String msg = crtl.checkLoginPrepareUserEnv(userName, password, info, appUiModule);
         return msg;
-    }
-
-
-
-    /* cookie handling not used right now, Dan Winter 24 */
-    public static final int TWO_WEEKS = 14;
-    public static final int ONE_WEEK = 7;
-    public static final int TWENTYFOUR_HOURS_MILLIS = 86400;
-    public static void setStartupInfoInBrowser(String value) {
-        UI.getCurrent().getPage().executeJs("window.turku.setTurkuCookie", value, TWO_WEEKS);
-    }
-
-    public static void getStartupInfoInBrowser(SerializableConsumer myConsumer) {
-        UI.getCurrent().getPage().executeJs("window.turku.getTurkuCookie").then(myConsumer);
     }
 }

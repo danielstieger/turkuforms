@@ -41,7 +41,7 @@ import org.modellwerkstatt.turkuforms.views.*;
 
 import java.util.List;
 
-import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.TURKU_PORTJ;
+import static org.modellwerkstatt.turkuforms.core.ITurkuAppFactory.TURKU_PORTJ;
 
 
 @PreserveOnRefresh

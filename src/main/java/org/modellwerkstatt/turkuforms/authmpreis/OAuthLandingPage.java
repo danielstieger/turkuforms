@@ -20,7 +20,7 @@ import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.core.TurkuApplicationController;
+import org.modellwerkstatt.turkuforms.core.SessionUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -47,8 +47,6 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        NavigationUtil.setSessionUsername("OAuthLandingPage");
-
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
         ITurkuAppFactory factory = servlet.getUiFactory();
@@ -77,7 +75,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
 
 
         boolean loginRequested = TurkuServlet.LOGIN_ROUTE.equals(naviPath);
-        boolean otherCrtlPresent = TurkuApplicationController.hasOtherControllersInSession(vaadinSession);
+        boolean otherCrtlPresent = SessionUtil.hasOtherControllersInSession(vaadinSession);
         Turku.l("OAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
 
         if (loginRequested && factory.isSingleAppInstanceMode() && otherCrtlPresent) {
@@ -87,7 +85,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
 
-                TurkuApplicationController.shutdownOtherControllersInSession(vaadinSession);
+                SessionUtil.shutdownOtherControllersInSession(vaadinSession);
                 // enqueue
                 UI.getCurrent().access(() -> NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE + "/" + finalParamInfo1.getParamsToForwardIfAny()));
             }));

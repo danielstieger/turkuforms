@@ -22,8 +22,8 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
 import static org.modellwerkstatt.turkuforms.auth.UserPrincipal.USERPRINCIPAL_SESSIONATTRIB;
-import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.REMOTE_SESSIONATTRIB;
-import static org.modellwerkstatt.turkuforms.core.TurkuApplicationController.USERNAME_SESSIONATTRIB;
+import static org.modellwerkstatt.turkuforms.core.SessionUtil.REMOTE_SESSIONATTRIB;
+import static org.modellwerkstatt.turkuforms.core.SessionUtil.USERNAME_SESSIONATTRIB;
 
 
 public class SdiAppCrtl extends ApplicationSDI implements ITurkuAppCrtlAccess, HttpSessionBindingListener {

@@ -4,7 +4,6 @@ package org.modellwerkstatt.turkuforms.core2;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
-import org.joda.time.DateTime;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
@@ -13,6 +12,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
+import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.MPreisAppConfig;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
@@ -20,14 +20,9 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 import java.util.List;
 
+import static org.modellwerkstatt.turkuforms.core.SessionUtil.*;
+
 public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingListener, ITurkuAppCrtlAccess {
-    public final static String APPCRTL_SESSIONATTRIB_PREFIX = "org.modelwerkstatt.TurkuAppCrtl_";
-    public final static String USERNAME_SESSIONATTRIB = "userName";
-    public final static String REMOTE_SESSIONATTRIB = "remoteAddr";
-    public final static String TURKU_PORTJ = "org.modellwerkstatt.turkuforms";
-
-
-
     private int lastRequestHash = -1;
     private long lastRequestStarted;
     private String lastHkProcessedInThisRequest;
@@ -64,18 +59,11 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
 
     }
 
-    private String appCrtlSessionName() {
-        return APPCRTL_SESSIONATTRIB_PREFIX + this.hashCode();
-    }
-
-    public static boolean isTurkuControllerAttribute(String name) {
-        return name.startsWith(APPCRTL_SESSIONATTRIB_PREFIX);
-    }
 
     public void beaconClose(VaadinSession session, UI closingUi) {
         Turku.l("TurkuApp.beaconClose() shutdown in progress: " + inShutdownMode() + " . . . or shutdown now.");
         // this will result in a valueUnbound()
-        logMowareTracing("","", TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
+        logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
 
         unregisterFromSessionTryInvalidate(session, false);
     }
@@ -84,64 +72,10 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
         return null;
     }
 
-    static public boolean hasOtherControllersInSession(VaadinSession vaadinSession) {
-        if (vaadinSession == null || vaadinSession.getSession() == null) { return false; }
-
-        WrappedSession session = vaadinSession.getSession();
-
-        for (String name: session.getAttributeNames()){
-            if (isTurkuControllerAttribute(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    static public void shutdownOtherControllersInSession(VaadinSession vaadinSession) {
-        WrappedSession session = vaadinSession.getSession();
-
-        long crtlSPresent = session.getAttributeNames().stream().filter(org.modellwerkstatt.turkuforms.core.TurkuApplicationController::isTurkuControllerAttribute).count();
-
-        for (String name: session.getAttributeNames()){
-            if (isTurkuControllerAttribute(name)) {
-                org.modellwerkstatt.turkuforms.core.TurkuApplicationController crtl = (org.modellwerkstatt.turkuforms.core.TurkuApplicationController) session.getAttribute(name);
-                TurkuMainWindow mainWin = (TurkuMainWindow) crtl.getMainWindowImpl();
-
-                try {
-                    if (mainWin.getUI().isPresent() && mainWin.getUI().get().isAttached()) {
-                        mainWin.getUI().get().access(() -> {
-                            crtl.logMowareTracing("", "", TURKU_PORTJ, "shutdown other controllers, shutting down this one.", "" + vaadinSession.hashCode());
-                            crtl.onExitRequested(true);
-                        });
-
-                    } else {
-                        // This leads to mem leaks in V23
-                        Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
-
-                        crtl.logMowareTracing("", "", TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS.", "" + vaadinSession.hashCode());
-                        crtl.onExitRequested(true);
-
-                    }
-
-
-                } catch (Throwable t) {
-                    System.err.println("TurkuApplicationController " + new DateTime() + " (crtlcnt " + crtlSPresent +") Problem with " + crtl);
-                    t.printStackTrace();
-
-                    if (!crtl.inShutdownMode()) {
-                        crtl.onExitRequested(true);
-                    }
-
-                }
-                Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() closed down " + name);
-            }
-        }
-    }
-
 
     public void registerOnSessionSetTimeout(VaadinSession vaadinSession, String userName, String remoteAddr) {
         WrappedSession session = vaadinSession.getSession();
-        session.setAttribute(appCrtlSessionName(), this);
+        session.setAttribute(appCrtlSessionName(this), this);
         session.setAttribute(REMOTE_SESSIONATTRIB, remoteAddr);
         session.setAttribute(USERNAME_SESSIONATTRIB, userName);
 
@@ -150,7 +84,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
 
     public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean immediate) {
         WrappedSession session = vaadinSession.getSession();
-        session.removeAttribute(appCrtlSessionName());
+        session.removeAttribute(appCrtlSessionName(this));
 
         boolean others = false;
 
@@ -188,7 +122,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
         Turku.l("TurkuApplicationController.valueUnbound(): shutdown in progress (" + this.inShutdownMode() + ") or shutdown now.");
 
         // Just this controller, not others of the httpSession
-        logMowareTracing("","", TURKU_PORTJ, "Unregistring from session, shutdown in progress ","" + this.inShutdownMode());
+        logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "Unregistring from session, shutdown in progress ","" + this.inShutdownMode());
 
         if (!this.inShutdownMode()) {
             // failback only ...
