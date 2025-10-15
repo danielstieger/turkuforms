@@ -118,7 +118,11 @@ public class Turku {
     }
 
     public static void logWithServlet(String source, String msg, Throwable t) {
-        VaadinServlet.getCurrent().log(source + ": " + msg, t);
+        if (t != null) {
+            VaadinServlet.getCurrent().log(source + ": " + msg, t);
+        } else {
+            VaadinServlet.getCurrent().log(source + ": " + msg);
+        }
     }
 
     public static void l(String text) {

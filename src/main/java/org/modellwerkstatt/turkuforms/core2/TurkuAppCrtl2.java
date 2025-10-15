@@ -59,7 +59,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
 
     }
 
-    public List<TurkuAppCrtl2> allAppCrtlInSession(VaadinSession vaadinSession, boolean includingThis) {
+    public List<TurkuAppCrtl2> allAppCrtlsInSession(VaadinSession vaadinSession, boolean includingThis) {
         List<TurkuAppCrtl2> crtls = new ArrayList<>();
 
         WrappedSession session = vaadinSession.getSession();
@@ -78,10 +78,10 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
     }
 
     public void beaconClose(VaadinSession session, UI closingUi) {
-        Turku.l("TACrtl2.beaconClose() shutdown in progress: " + inShutdownMode() + " . . . NOT CLOSING.");
+        Turku.l("TACrtl2.beaconClose() shutdown in progress: " + inShutdownMode() + " . . . ");
 
-        // logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
-        // unregisterFromSessionTryInvalidate(session, false);
+        logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
+        unregisterFromSessionTryInvalidate(session, false);
     }
 
 
@@ -94,27 +94,20 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
         session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_FOR_APP_SEC);
     }
 
-    public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean immediate) {
+    public boolean unregisterFromSessionTryInvalidate(VaadinSession vaadinSession, boolean immediatelyParDeploy) {
         WrappedSession session = vaadinSession.getSession();
         session.removeAttribute(appCrtlSessionName(this));
 
-        boolean others = false;
 
-        // other appcrtls present?
-        for (String name: session.getAttributeNames()){
-            if (isTurkuControllerAttribute(name)) {
-                others = true;
-                break;
-            }
-        }
+        List<TurkuAppCrtl2> others = allAppCrtlsInSession(vaadinSession, false);
 
-        if (!others) {
-            Turku.l("TACrtl2.unregisterFromSessionTryInvalidate() setting invalidate timeout (or invalidate immediatelly = "+ immediate+ ")");
-            setUserPrincipal(vaadinSession, null);
+        if (others.size() == 0) {
+            Turku.l("TACrtl2.unregisterFromSessionTryInvalidate() setting invalidate timeout (or invalidate immediatelly = "+ immediatelyParDeploy+ ")");
             session.setAttribute(USERNAME_SESSIONATTRIB, session.getAttribute(USERNAME_SESSIONATTRIB) + " unregistered");
-            session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_INVALIDATE_SEC);
+            // TODO: why not generally invalidate immediatelly?
+            session.setMaxInactiveInterval(MPreisAppConfig.NEW_SESSION_TIMEOUT_INVALIDATE_SEC_SHORT);
 
-            if (immediate) {
+            if (immediatelyParDeploy) {
                 session.invalidate();
             }
 

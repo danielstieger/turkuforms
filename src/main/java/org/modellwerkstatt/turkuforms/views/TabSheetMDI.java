@@ -7,7 +7,7 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
-import org.modellwerkstatt.turkuforms.core2.TurkuMainWindow;
+import org.modellwerkstatt.turkuforms.core2.TurkuMainWin2;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
         if (isOldTurkuApp(mainWindow)) {
             ((TurkuApp) mainWindow).adjustTopBarColorOrNull(col);
         } else {
-            ((TurkuMainWindow) mainWindow).adjustTopBarColorOrNull(col);
+            ((TurkuMainWin2) mainWindow).adjustTopBarColorOrNull(col);
         }
     }
 

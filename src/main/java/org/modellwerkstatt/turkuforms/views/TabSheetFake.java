@@ -5,9 +5,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
-import org.modellwerkstatt.turkuforms.core2.TurkuMainWindow;
+import org.modellwerkstatt.turkuforms.core2.TurkuMainWin2;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import static org.modellwerkstatt.turkuforms.views.TabSheetMDI.isOldTurkuApp;
 
@@ -102,7 +101,7 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
         if (isOldTurkuApp(mainWindow)) {
             ((TurkuApp) mainWindow).adjustTopBarColorOrNull(col);
         } else {
-            ((TurkuMainWindow) mainWindow).adjustTopBarColorOrNull(col);
+            ((TurkuMainWin2) mainWindow).adjustTopBarColorOrNull(col);
         }
 
     }
@@ -114,7 +113,7 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
         if (isOldTurkuApp(mainWindow)) {
             ((TurkuApp) mainWindow).setOptionalTabTitleInNavbar(getTitleForNavbar());
         } else {
-            ((TurkuMainWindow) mainWindow).setOptionalTabTitleInNavbar(getTitleForNavbar());
+            ((TurkuMainWin2) mainWindow).setOptionalTabTitleInNavbar(getTitleForNavbar());
         }
     }
 

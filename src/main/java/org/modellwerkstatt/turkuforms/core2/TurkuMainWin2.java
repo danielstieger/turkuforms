@@ -5,6 +5,7 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -30,11 +31,14 @@ import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
+import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
+import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
+import org.modellwerkstatt.turkuforms.core.SessionUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.util.*;
 import org.modellwerkstatt.turkuforms.views.*;
@@ -43,10 +47,13 @@ import java.util.List;
 
 import static org.modellwerkstatt.turkuforms.core.ITurkuAppFactory.TURKU_PORTJ;
 
-
-@PreserveOnRefresh
+/*
+ * No Preserve on refresh, since I was not able to get any mechanism working to check
+ * if the pagehide -> beacon stems from a reload...
+ *
+ */
 @SuppressWarnings("unchecked")
-public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, ShortcutEventListener, BeforeEnterObserver {
+public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, ShortcutEventListener, BeforeEnterObserver {
     private TurkuAppCrtl2 applicationController;
     private IOFXUserEnvironment userEnvironment;
     private ITurkuMainTab mainTabImpl;
@@ -54,8 +61,14 @@ public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, 
 
 
 
-    public TurkuMainWindow() {
-        // Turku.l("T2App.constructor() - start");
+    public TurkuMainWin2() {
+        Turku.l("T2App.constructor() - done, heartbeat @ " + VaadinService.getCurrent().getDeploymentConfiguration().getHeartbeatInterval());
+
+    }
+
+
+    private void startupAppCrtl(){
+
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
 
@@ -64,16 +77,23 @@ public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, 
         String remoteAddr = factory.getRemoteAddr();
 
         userEnvironment = NavigationUtil.getAndClearUserEnvFromUi();
-        Turku.l("T2App.constructor() - userEnvironment is " + userEnvironment);
+        Turku.l("T2App.startupAppCrtl() - starting application " + userEnvironment);
 
         if (userEnvironment == null) {
-            String msg = "UserEnvironment to pick up was null, redirecting to /login, " + vaadinSession.hashCode() + " /  " + System.currentTimeMillis() + " / " + applicationController + " / " + this.hashCode();
-            servlet.logOnPortJ(TurkuMainWindow.class.getName(), remoteAddr, IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.WARN,  msg, null);
-            // Test Dan, Spring 25
-            // NavigationUtil.absolutNavi(TurkuServlet.LOGIN_ROUTE);
+            UserPrincipal userPrincipal = SessionUtil.getUserPrincipal(vaadinSession);
+            UserEnvironmentInformation tempEnv = new UserEnvironmentInformation();
+            String msg = NavigationUtil.loginViaLoginCrtl(servlet, vaadinSession, tempEnv, userPrincipal.getUserName(), userPrincipal.getPassword());
 
-        } else {
+            if (msg == null) {
+                userEnvironment = tempEnv;
 
+            } else {
+                quickUserInfo(msg);
+
+            }
+        }
+
+        if (userEnvironment != null) {
             init(servlet.getUiFactory(),  userEnvironment.isCompactMode() || factory.isCompactMode(), appUiModule.getShortAppName() + appUiModule.getApplicationVersion(), userEnvironment.getBrandingId());
 
             if (appInCompactMode) {
@@ -88,47 +108,23 @@ public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, 
             applicationController.initializeApplication(null, servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
             applicationController.registerOnSessionSetTimeout(vaadinSession, userEnvironment.getUserName(), remoteAddr);
-
-
         }
 
-        Turku.l("T2App.constructor() - done, heartbeat @ " + VaadinService.getCurrent().getDeploymentConfiguration().getHeartbeatInterval());
     }
-
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        String requestedUrl =  beforeEnterEvent.getLocation().getPath();
 
-        // start a command?
-        if (initialStartupParams == null) {
-            // Turku.l("T2App.beforeEnter() path=" + beforeEnterEvent.getLocation().getPath() + " and queryString " + beforeEnterEvent.getLocation().getQueryParameters().getQueryString());
-            QueryParameters query = beforeEnterEvent.getLocation().getQueryParameters();
-            if (query.getParameters().size() == 0) {
-                // check :path variable
-                String queryInPath = beforeEnterEvent.getRouteParameters().get("path").orElse("");
-                if (queryInPath.startsWith("?")) {
-                    query = QueryParameters.fromString(queryInPath.substring(1));
-                }
-            }
+        if (applicationController == null) {
+            startupAppCrtl();
 
+        } else {
+            Turku.logWithServlet(TurkuMainWin2.class.getName(), "This can not happen. We got a BeforeEnter without a appCrtl (it is null).", null);
 
-            initialStartupParams = new ParamInfo(query);
-            if (applicationController != null && initialStartupParams.hasCommandToStartLegacy()) {
-                UI.getCurrent().access(() -> {
-                    applicationController.legacyStartCommandByUriAndParam(initialStartupParams.getCommandToStartLegacy(), initialStartupParams.getFirstParamLegacy());
+        }
 
-                });
-            }
-
-        } /* else if (applicationController != null) {
-            // controller closed by beacon - typically
-            UI.getCurrent().removeAll();
-            applicationController.logMowareTracing("","", IOFXCoreReporter.RT,"Reloading this web page does not work. The application was destroyed.", "");
-            applicationController.internal_immediatelyShutdown();
-            quickUserInfo("Reloading this web page does not work. The application was destroyed.");
-        } */
-
-        Turku.l("T2App.beforeEnter() done for " + applicationController);
+        Turku.l("T2App.beforeEnter() done with " + applicationController);
     }
 
     @Override
@@ -343,14 +339,14 @@ public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, 
     @Override
     public void execEventInBackground(ICommandContainer iCommandContainer, Runnable runnable) {
         IllegalStateException ise = new IllegalStateException("Foreground / Background processing not supported by Turkuforms");
-        Turku.logWithServlet(TurkuMainWindow.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
+        Turku.logWithServlet(TurkuMainWin2.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
         throw ise;
     }
 
     @Override
     public void execEventInForeground(ICommandContainer iCommandContainer, UxEvent uxEvent) {
         IllegalStateException ise = new IllegalStateException("Foreground / Background processing not supported by Turkuforms");
-        Turku.logWithServlet(TurkuMainWindow.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
+        Turku.logWithServlet(TurkuMainWin2.class.getName(), "Foreground / Background processing not supported by Turkuforms", ise);
         throw ise;
     }
 
@@ -374,7 +370,17 @@ public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, 
             notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
             notification.setDuration(20000);
 
-            Text text = new Text(msg);
+
+            Div content = new Div();
+            Div text = new Div();
+            text.setText(Workarounds.getCurrentTurkuServlet().getAppNameVersion());
+            text.addClassName("QuickInfoHeader");
+            content.add(text);
+
+            text = new Div();
+            text.setText(msg);
+            text.addClassName("QuickInfoMsg");
+            content.add(text);
 
             Button closeButton = new Button(new Icon("lumo", "cross"));
             closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
@@ -383,7 +389,7 @@ public class TurkuMainWindow extends Mainwindow implements IToolkit_MainWindow, 
                 notification.close();
             });
 
-            HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+            HorizontalLayout layout = new HorizontalLayout(content, closeButton);
             layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
             notification.add(layout);

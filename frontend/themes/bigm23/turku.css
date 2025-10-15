@@ -190,6 +190,19 @@ vaadin-tab[aria-selected~='true']{
     opacity: 0.5;
 }
 
+/* Quick info divs */
+.QuickInfoHeader {
+    font-weight: var(--turku-bold);
+    font-size: 1.3em;
+    padding: 1em;
+}
+
+
+.QuickInfoMsg {
+    font-weight: var(--turku-bold);
+    margin: 1em;
+}
+
 /* PromptWindow / CmdUi * * * * * * * * * * */
 .PromptWindow::part(overlay) {
     position: absolute !important;

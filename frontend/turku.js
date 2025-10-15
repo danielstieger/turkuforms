@@ -74,7 +74,7 @@ window.turku = {
 
         window.addEventListener("pagehide", function sendRequest(event) {
 
-          console.log('turku.installBeacon() Issuing request NOW, persisted ' + event.persisted);
+          console.log('turku.installBeacon() Issuing request NOW');
           navigator.sendBeacon(  servletUrl + "/beacon", uiid);
 
         });

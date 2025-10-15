@@ -22,6 +22,7 @@ public class MPreisAppConfig implements AppShellConfigurator {
     public static final String HOME_REDIRECT_PREFIX_LABEL = "START";
     public static final int SESSION_TIMEOUT_FOR_APP_SEC = 60 * 60 * 5; /* prevent sleep modes kill app */
     public static final int SESSION_TIMEOUT_INVALIDATE_SEC = 60 * 2;   /* instead of invalidating manually */
+    public static final int NEW_SESSION_TIMEOUT_INVALIDATE_SEC_SHORT = 10;   /* instead of invalidating manually */
 
     public static final LocalTime REBOOTINTERVAL_STARTTIME = new LocalTime(23, 00);
     public static final LocalTime REBOOTINTERVAL_STOPTIME = new LocalTime(5, 00);

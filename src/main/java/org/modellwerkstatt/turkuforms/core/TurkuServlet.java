@@ -148,6 +148,9 @@ public class TurkuServlet extends VaadinServlet {
 
             Turku.l("TurkuServlet.servletInitialized() done successfully for '" + servletPath + "' with " + authenticatorClass.getName());
 
+
+
+
         } catch (Exception e) {
             this.log("Exception in servlet init, setting service as unavailable.", e);
             throw new UnavailableException("Servlet unavailable due to " + e.getClass().getSimpleName() + " " + e.getMessage());
