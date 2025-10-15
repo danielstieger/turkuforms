@@ -42,8 +42,14 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
             Tab current = event.getSelectedTab();
             if (current != null) {
                 int index = this.getIndexOf(current);
-                String url = tabsInSheet.get(index).getAdjustedUrl();
-                UI.getCurrent().getPage().getHistory().replaceState(null, url);
+
+                if (!isOldTurkuApp(this.getParent().get())) {
+                    String url = tabsInSheet.get(index).getAdjustedUrl();
+                    UI.getCurrent().getPage().getHistory().replaceState(null, url);
+                }
+
+                Turku.l("TabSheetMDI parent is " + this.getParent());
+
                 change.selectedIndexChanged(index);
             }
         });
@@ -98,7 +104,8 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     @Override
     public void adjustTopBarColorOrNull(String col) {
         Object mainWindow = this.getParent().get();
-        if (mainWindow instanceof Turku) {
+
+        if (isOldTurkuApp(mainWindow)) {
             ((TurkuApp) mainWindow).adjustTopBarColorOrNull(col);
         } else {
             ((TurkuMainWindow) mainWindow).adjustTopBarColorOrNull(col);
@@ -118,4 +125,9 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
 
         tab.executeJs("turku.setTurkuCommandColor($0, $1)", tab, col);
     }
+
+    static protected boolean isOldTurkuApp(Object e) {
+        return e instanceof TurkuApp;
+    }
+
 }

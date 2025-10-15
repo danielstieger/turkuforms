@@ -1,17 +1,20 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core2.TurkuMainWindow;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
+import org.modellwerkstatt.turkuforms.util.Turku;
+
+import static org.modellwerkstatt.turkuforms.views.TabSheetMDI.isOldTurkuApp;
 
 public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
     private CmdUiTab current;
     private DrawerToggle drawerToggle;
     private int numTabs;
-
 
     public TabSheetFake(DrawerToggle dt) {
         Peculiar.shrinkSpace(this);
@@ -48,6 +51,10 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
         numTabs++;
         this.add(tab);
 
+        if (!isOldTurkuApp(this.getParent().get())) {
+            String url = tab.getAdjustedUrl();
+            UI.getCurrent().getPage().getHistory().replaceState(null, url);
+        }
     }
 
     @Override
@@ -56,6 +63,11 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
 
         current = tab;
         ((Component) current).setVisible(true);
+
+        if (!isOldTurkuApp(this.getParent().get())) {
+            String url = tab.getAdjustedUrl();
+            UI.getCurrent().getPage().getHistory().replaceState(null, url);
+        }
     }
 
     @Override
@@ -67,6 +79,10 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
         if (! hasOpenTabs()) {
             drawerToggle.setEnabled(true);
             adjustTopBarColorOrNull(null);
+        }
+
+        if (!isOldTurkuApp(this.getParent().get())) {
+            UI.getCurrent().getPage().getHistory().replaceState(null, "");
         }
     }
 
@@ -83,7 +99,7 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
         }
 
         Object mainWindow = this.getParent().get();
-        if (mainWindow instanceof TurkuApp) {
+        if (isOldTurkuApp(mainWindow)) {
             ((TurkuApp) mainWindow).adjustTopBarColorOrNull(col);
         } else {
             ((TurkuMainWindow) mainWindow).adjustTopBarColorOrNull(col);
@@ -95,7 +111,7 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
     public void adjustTitle() {
         Object mainWindow = this.getParent().get();
 
-        if (mainWindow instanceof TurkuApp) {
+        if (isOldTurkuApp(mainWindow)) {
             ((TurkuApp) mainWindow).setOptionalTabTitleInNavbar(getTitleForNavbar());
         } else {
             ((TurkuMainWindow) mainWindow).setOptionalTabTitleInNavbar(getTitleForNavbar());

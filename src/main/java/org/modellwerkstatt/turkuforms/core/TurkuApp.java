@@ -75,8 +75,10 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
             if (appInCompactMode) {
                 mainTabImpl = new TabSheetFake(drawerToggle);
+
             } else {
                 mainTabImpl = new TabSheetMDI();
+
             }
 
             userEnvironment.adjustDeviceId("" + vaadinSession.hashCode() + " / " + this.hashCode());

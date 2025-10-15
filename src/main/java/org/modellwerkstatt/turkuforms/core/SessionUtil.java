@@ -7,6 +7,8 @@ import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.util.Turku;
 
+import java.util.List;
+
 public class SessionUtil {
     public final static String APPCRTL_SESSIONATTRIB_PREFIX = "appCrtl_";
     public final static String USERNAME_SESSIONATTRIB = "userName";
@@ -18,6 +20,7 @@ public class SessionUtil {
     public SessionUtil() {
 
     }
+
 
     static public boolean hasOtherControllersInSession(VaadinSession vaadinSession) {
         if (vaadinSession == null || vaadinSession.getSession() == null) { return false; }
