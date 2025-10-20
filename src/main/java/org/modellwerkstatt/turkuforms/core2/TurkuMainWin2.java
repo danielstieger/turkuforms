@@ -18,20 +18,14 @@ import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.dataux.runtime.core.IApplication;
-import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
-import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
-import org.modellwerkstatt.dataux.runtime.core.UxEvent;
+import org.modellwerkstatt.dataux.runtime.core.*;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
-import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
-import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
-import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
-import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
+import org.modellwerkstatt.objectflow.runtime.*;
 import org.modellwerkstatt.objectflow.sdservices.BaseSerdes;
 import org.modellwerkstatt.objectflow.serdes.*;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
@@ -67,7 +61,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
     }
 
 
-    private void startupAppCrtl(){
+    private void startupAppCrtl(OFXUrlParams urlParams){
 
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
@@ -105,7 +99,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
             userEnvironment.adjustDeviceId("" + vaadinSession.hashCode() + " / " + this.hashCode());
             applicationController = new TurkuAppCrtl2(factory, this, appUiModule, servlet.getJmxRegistration(), IOFXCoreReporter.MoWarePlatform.MOWARE_TURKU);
             // url overwrite not supported with turku
-            applicationController.initializeApplication(null, servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
+            applicationController.initializeApplication(urlParams, servlet.getGuessedServerName(), userEnvironment, remoteAddr, "");
 
             applicationController.registerOnSessionSetTimeout(vaadinSession, userEnvironment.getUserName(), remoteAddr);
         }
@@ -115,14 +109,40 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         String requestedUrl =  beforeEnterEvent.getLocation().getPath();
+        OFXUrlParams params = new OFXUrlParams();
+        params.parse(requestedUrl);
+
 
         if (applicationController == null) {
-            startupAppCrtl();
+            startupAppCrtl(params);
 
         } else {
             Turku.logWithServlet(TurkuMainWin2.class.getName(), "This can not happen. We got a BeforeEnter without a appCrtl (it is null).", null);
 
         }
+
+        if (params.hasCmdName()) {
+            applicationController.execAfterStartupOrNow(() -> {
+
+                IOFXCmdModule.CmdUrlDefaults def = applicationController.getUrlDefaultFor(turkuFactory.getAllCmdUrlDefaults(), params);
+                if (def != null) {
+                    BasisCmdStart start = applicationController.cmdStartForUrlDefault(def, params, applicationController.getMainWindowEvalSession());
+
+                    if (start == null) {
+                        quickUserInfo(String.format(turkuFactory.getSystemLabel(userEnvironment.getLangIndex(), MoWareTranslations.Key.CMD_NOT_ENABLED), def.url));
+
+                    } else {
+                        applicationController.receiveAndProcess(start);
+                    }
+
+                } else {
+                    quickUserInfo(turkuFactory.getSystemLabel(userEnvironment.getLangIndex(), MoWareTranslations.Key.CMD_NOT_AVAILABLE2));
+                }
+
+            });
+        }
+
+        Turku.l("The params are  "+ params.getCmdName() + " / " + params.numParams() + " cmd running " + applicationController.isCommandRunning());
 
         Turku.l("T2App.beforeEnter() done with " + applicationController);
     }
@@ -277,10 +297,12 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     @Override
     public void showTiles(List<TileAction> tilesList) {
-        Turku.l("T2App.showTiles()");
+        Turku.l("T2App.showTiles() x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ");
+
         if (mainTabImpl.hasOpenTabs()) {
             throw new RuntimeException("We do have open tabs but requested to show tiles?");
         }
+
         setContent(updateTiles(tilesList));
     }
 
