@@ -277,11 +277,12 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     }
 
     @Override
-    public void showTiles(List<TileAction> tilesList) {
+    public void showTiles(List<TileAction> tilesList, boolean resetUrl) {
         Turku.l("TurkuApp.showTiles()");
         if (mainTabImpl.hasOpenTabs()) {
             throw new RuntimeException("We do have open tabs but requested to show tiles?");
         }
+
         setContent(updateTiles(tilesList));
     }
 

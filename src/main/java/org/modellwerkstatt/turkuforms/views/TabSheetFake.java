@@ -80,9 +80,6 @@ public class TabSheetFake extends VerticalLayout implements ITurkuMainTab {
             adjustTopBarColorOrNull(null);
         }
 
-        if (!isOldTurkuApp(this.getParent().get())) {
-            UI.getCurrent().getPage().getHistory().replaceState(null, "");
-        }
     }
 
     @Override

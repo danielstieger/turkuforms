@@ -296,11 +296,15 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
     }
 
     @Override
-    public void showTiles(List<TileAction> tilesList) {
-        Turku.l("T2App.showTiles() x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ");
+    public void showTiles(List<TileAction> tilesList, boolean resetUrl) {
+        Turku.l("T2App.showTiles() resetURL=" + resetUrl + " x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ");
 
         if (mainTabImpl.hasOpenTabs()) {
             throw new RuntimeException("We do have open tabs but requested to show tiles?");
+        }
+
+        if (resetUrl) {
+            UI.getCurrent().getPage().getHistory().replaceState(null, "");
         }
 
         setContent(updateTiles(tilesList));
