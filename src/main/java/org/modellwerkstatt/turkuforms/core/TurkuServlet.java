@@ -168,42 +168,6 @@ public class TurkuServlet extends VaadinServlet {
     }
 
 
-    /*  Not used when working with WEBSOCKETS. Remove if
-     *  finally WEBSOCKETS are the primary means of communication
-     *
-     *  TODO: remove this if finally decided
-     *
-    @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        boolean isVaadinHeartBeat = request.getContentLength() == 0;
-
-        long startOfRequest = 0;
-        TurkuApplicationController crtl = null;
-        HttpSession httpSession = request.getSession(false);
-
-        if (!isVaadinHeartBeat && httpSession != null) {
-            crtl = Workarounds.getControllerFromRequest(request, httpSession);
-            if (crtl != null) {
-                startOfRequest = System.currentTimeMillis();
-                crtl.startRequest();
-            }
-        }
-
-        super.service(request, response);
-
-
-        if (crtl != null && request.isRequestedSessionIdValid()) {
-            // not invalidated by service()
-            crtl.requestDone();
-
-            String remoteAddr = "" + httpSession.getAttribute(TurkuApplicationController.REMOTE_SESSIONATTRIB);
-            String userName = "" + httpSession.getAttribute(TurkuApplicationController.USERNAME_SESSIONATTRIB);
-            jmxRegistration.getAppTelemetrics().servedRequest(remoteAddr, userName, "some vaadin interaction", startOfRequest);
-        }
-    } */
-
-
-
     public void logOnPortJ(String source, String ipAddr, IOFXCoreReporter.Type type, IOFXCoreReporter.LogPriority prio, String msg, Exception ex) {
         CoreReporterInfo info = new CoreReporterInfo(type, appBehaviorFqName, genApplication.getApplicationVersion(),
                 source, "", "", prio, 0, "", "", "",

@@ -183,12 +183,12 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     @Override
     public void parDeploymentForwardNow() {
-        boolean invalidated = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
+        boolean wasLastCrtl = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
         // leads to valueUnbound() in turn closing app crtl
 
-        Turku.l("parDeploymentForwardNow() invalidated is " + invalidated);
+        Turku.l("parDeploymentForwardNow() invalidated is " + wasLastCrtl);
 
-        if (! invalidated) {
+        if (! wasLastCrtl) {
             NavigationUtil.absolutNavi(NavigationUtil.OTHER_TABS_OPEN);
             UI.getCurrent().close();
 
