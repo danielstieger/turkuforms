@@ -17,10 +17,7 @@ import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
-import org.modellwerkstatt.dataux.runtime.core.IApplication;
-import org.modellwerkstatt.dataux.runtime.core.ICommandContainer;
-import org.modellwerkstatt.dataux.runtime.core.KeyEvent;
-import org.modellwerkstatt.dataux.runtime.core.UxEvent;
+import org.modellwerkstatt.dataux.runtime.core.*;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
 import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
@@ -360,6 +357,11 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     @Override
     protected void exitRequestedFromMenu() {
         applicationController.onExitRequested(false);
+    }
+
+    @Override
+    public void distributeTermEventOnOtherInstance(GlobalCmdTermEvent globalCmdTermEvent) {
+        // NOOP
     }
 
     public TurkuApplicationController getApplicationController() { return applicationController; }

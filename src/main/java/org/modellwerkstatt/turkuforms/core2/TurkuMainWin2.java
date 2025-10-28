@@ -388,6 +388,11 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     public TurkuAppCrtl2 getApplicationController() { return applicationController; }
 
+    @Override
+    public void distributeTermEventOnOtherInstance(GlobalCmdTermEvent globalCmdTermEvent) {
+        applicationController.distributeTermEventOnOtherCrtls(globalCmdTermEvent);
+    }
+
     protected void quickUserInfo(String msg) {
         UI.getCurrent().access(() -> {
 
