@@ -234,9 +234,10 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     @Override
     public boolean cmdAccessible(String fqName) {
-        if (! usingUrlHandling) { return true; };
-
-        return defaultUrlForFqCmd.containsKey(fqName);
+        return true;
+        // this is for the sdi, which is replaced with the MI, winter 25
+        // if (! usingUrlHandling) { return true; };
+        // return defaultUrlForFqCmd.containsKey(fqName);
     }
 
     public static DatePicker.DatePickerI18n createGermanI18n() {
