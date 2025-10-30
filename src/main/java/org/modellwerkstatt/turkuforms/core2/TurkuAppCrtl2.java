@@ -119,15 +119,18 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
     }
 
     public void distributeTermEventOnOtherCrtls(GlobalCmdTermEvent evnt) {
+        VaadinSession vaadinSession = VaadinSession.getCurrent();
 
-        allAppCrtlsInSession(VaadinSession.getCurrent(), false).forEach(crtl -> {
+        // case: servlet shutdown
+        if (vaadinSession != null) {
+            allAppCrtlsInSession(vaadinSession, false).forEach(crtl -> {
 
-            ((TurkuMainWin2) crtl.getMainWindowImpl()).getUI().get().access(() -> {
-                // in case windows are next to each other - live update
-                crtl.reciveForeignTermEvent(evnt);
+                ((TurkuMainWin2) crtl.getMainWindowImpl()).getUI().get().access(() -> {
+                    // in case windows are next to each other - live update
+                    crtl.reciveForeignTermEvent(evnt);
+                });
             });
-        });
-
+        }
     }
 
     @Override
