@@ -124,11 +124,16 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
         // case: servlet shutdown
         if (vaadinSession != null) {
             allAppCrtlsInSession(vaadinSession, false).forEach(crtl -> {
+                try {
+                    ((TurkuMainWin2) crtl.getMainWindowImpl()).getUI().get().access(() -> {
+                        // in case windows are next to each other - live update
+                        crtl.reciveForeignTermEvent(evnt);
+                    });
 
-                ((TurkuMainWin2) crtl.getMainWindowImpl()).getUI().get().access(() -> {
-                    // in case windows are next to each other - live update
-                    crtl.reciveForeignTermEvent(evnt);
-                });
+                } catch (Exception ex) {
+                    logFrmwrkProblem("","", ITurkuAppFactory.TURKU_PORTJ, ex, "Got some issues while trying to update " + crtl);
+                }
+
             });
         }
     }
