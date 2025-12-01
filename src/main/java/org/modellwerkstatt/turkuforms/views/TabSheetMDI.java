@@ -46,6 +46,10 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
                 // on detach, the listener might get fired
                 if (!isOldTurkuApp(this.getParent().get()) && UI.getCurrent() != null) {
                     String url = tabsInSheet.get(index).getAdjustedUrl();
+                    if (url == null) {
+                        url = "/";
+                    }
+
                     UI.getCurrent().getPage().getHistory().replaceState(null, url);
                 }
 
