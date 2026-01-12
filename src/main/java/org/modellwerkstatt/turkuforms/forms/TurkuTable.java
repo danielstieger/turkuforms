@@ -19,7 +19,7 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.modellwerkstatt.addons.desktopgridpro.DesktopGridPro;
 import org.modellwerkstatt.addons.desktopgridpro.DesktopGridProDataView;
-import org.modellwerkstatt.dataux.runtime.delegates.Delegate;
+import org.modellwerkstatt.dataux.runtime.delegates.BaseDelegate;
 import org.modellwerkstatt.dataux.runtime.delegates.TableCellBigDecimalConverter;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
@@ -307,7 +307,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
 
 
-        IOFXMetaRangeScale<BigDecimal> meta = MoJSON.get(item, Delegate.getMetaDataAccessorToPath(property));
+        IOFXMetaRangeScale<BigDecimal> meta = MoJSON.get(item, BaseDelegate.getMetaDataAccessorToPath(property));
         String errText = null;
 
         if (meta.getMin() != null && meta.getMax() != null) {

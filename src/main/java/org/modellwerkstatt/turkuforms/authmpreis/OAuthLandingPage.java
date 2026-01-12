@@ -7,7 +7,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.WrappedSession;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.modellwerkstatt.dataux.runtime.auth.CredentialReporter;

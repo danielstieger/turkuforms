@@ -3,7 +3,7 @@ package org.modellwerkstatt.turkuforms.forms;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
+import org.modellwerkstatt.dataux.runtime.extensions.IDlgt;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
@@ -22,7 +22,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     private FormHeading heading;
     private FormLayout formLayout;
     private List<Integer> colWeights;
-    private List<IDataUxDelegate<?>> delegates;
+    private List<IDlgt<?>> delegates;
 
     public TurkuDelegatesForm(ITurkuAppFactory fact) {
         factory = fact;
@@ -55,7 +55,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     }
 
     @Override
-    public void addDelegate(IDataUxDelegate iDataUxDelegate) {
+    public void addDelegate(IDlgt iDataUxDelegate) {
 
         FormChild<?> child = (FormChild<?>) iDataUxDelegate.getDelegateUiImpl();
         Component rightPart = (Component) child.getRightPartComponent();
@@ -104,7 +104,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         FormChild<?> turkuEditor = null;
         boolean focussed = false;
 
-        for (IDataUxDelegate<?> dlgt: delegates) {
+        for (IDlgt<?> dlgt: delegates) {
             if (dlgt.isRequestFocus()) {
                 focussed = true;
                 turkuEditor = (FormChild<?>) dlgt.getDelegateUiImpl();
@@ -114,7 +114,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         }
 
         if (!focussed) {
-            for (IDataUxDelegate<?> dlgt: delegates) {
+            for (IDlgt<?> dlgt: delegates) {
                 if (dlgt.isEnabled()) {
                     focussed = true;
                     turkuEditor = (FormChild<?>) dlgt.getDelegateUiImpl();
@@ -185,7 +185,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         addComponentAtIndex(0, heading);
     }
 
-    public void focusOnNextDlgt(IDataUxDelegate<?> current, boolean next) {
+    public void focusOnNextDlgt(IDlgt<?> current, boolean next) {
         int index = delegates.indexOf(current);
 
         if (next) { index ++; }

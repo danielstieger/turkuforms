@@ -2,7 +2,7 @@ package org.modellwerkstatt.turkuforms.editors;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
-import org.modellwerkstatt.dataux.runtime.extensions.IDataUxDelegate;
+import org.modellwerkstatt.dataux.runtime.extensions.IDlgt;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TextEditor;
 import org.modellwerkstatt.turkuforms.forms.TurkuDelegatesForm;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
@@ -12,7 +12,7 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
     protected T inputField;
     protected Component rightPart;
 
-    protected IDataUxDelegate<?> delegate;
+    protected IDlgt<?> delegate;
     protected TurkuDelegatesForm<?> turkuDelegatesForm;
     protected boolean wideOption;
     protected boolean provideHintOption;
@@ -31,7 +31,7 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
         throw new IllegalStateException("Not implemented. Probably resort to js?");
     }
 
-    public void setDelegate(IDataUxDelegate iDataUxDelegate) { delegate = iDataUxDelegate; }
+    public void setDelegate(IDlgt iDataUxDelegate) { delegate = iDataUxDelegate; }
 
     public void attachedToForm(TurkuDelegatesForm<?> dlgtFrm) { turkuDelegatesForm = dlgtFrm; }
 
@@ -52,11 +52,11 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
     public Object getRightPartComponent() { return rightPart; }
 
     @Override
-    public void setOption(Option... options) {
-        if (IToolkit_TextEditor.has(Option.WIDE, options)) {
+    public void setOption(IDlgt.Opt... options) {
+        if (IToolkit_TextEditor.has(IDlgt.Opt.WIDE, options)) {
             wideOption = true;
         }
-        if (IToolkit_TextEditor.has(Option.PROVIDE_HINT, options)) {
+        if (IToolkit_TextEditor.has(IDlgt.Opt.REFERENCE_PROVIDE_HINT, options)) {
             provideHintOption = true;
         }
     }
