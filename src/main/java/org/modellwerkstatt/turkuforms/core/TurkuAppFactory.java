@@ -202,6 +202,15 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         return new UploadEditor(uploadFsLocationStore, this);
     }
 
+    @Override
+    public IToolkit_Form createCustomForm(CustomForm customForm) {
+        if (customForm == CustomForm.PASSIVE_HTML_FULLSCREEN) {
+            return new PassiveHtmlForm(this);
+        }
+
+        throw new RuntimeException("Unknown custom form: " + customForm);
+    }
+
     public IMoLdapService getLdapServiceIfPresent() {
         IMoLdapService instance = this.context.getAutowireCapableBeanFactory().getBean(IMoLdapService.class);
         return instance;

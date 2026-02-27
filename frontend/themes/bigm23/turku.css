@@ -525,6 +525,11 @@ vaadin-radio-button[disabled]:not([checked]) {
     border: 2px solid var(--lumo-error-color);
 }
 
+iframe {
+  width: 100vw;
+  height: 100vh;
+  border: 0;
+}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - SDI STUFF - - - - - - - - - - - - - -*/
 
@@ -533,5 +538,3 @@ vaadin-radio-button[disabled]:not([checked]) {
     padding-top: 1em;
     font-weight: var(--turku-bold);
 }
-
-
