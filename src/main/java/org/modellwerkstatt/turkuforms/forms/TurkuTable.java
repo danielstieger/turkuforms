@@ -22,8 +22,8 @@ import org.modellwerkstatt.addons.desktopgridpro.DesktopGridProDataView;
 import org.modellwerkstatt.dataux.runtime.delegates.BaseDelegate;
 import org.modellwerkstatt.dataux.runtime.delegates.TableCellBigDecimalConverter;
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
-import org.modellwerkstatt.dataux.runtime.genspecifications.IGenSelControlled;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecification.IGenSelControlled;
+import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -606,7 +606,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     }
 
     @Override
-    public void addMenuAndSetButtons(Menu menuSub) {
+    public void addMenuAndSetButtons(MenuAction menuSub) {
         overflowMenu = new TurkuMenu();
         overflowMenu.initialize(factory, menuSub);
         topPane.add(overflowMenu);

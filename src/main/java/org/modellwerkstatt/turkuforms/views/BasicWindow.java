@@ -23,9 +23,9 @@ import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.Version;
-import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecification.AbstractAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.CmdAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
@@ -177,7 +177,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
         setNavbarTitleDiv(navbarTitle);
     }
 
-    protected SubMenu addToMainMenu(Menu menu, String menuName){
+    protected SubMenu addToMainMenu(MenuAction menu, String menuName){
 
         MenuItem root = mainmenuBar.addItem(Workarounds.createIconWithCollection(turkuFactory.translateIconName("mainmenu_down"), true));
         root.add(new Text(menuName));
@@ -227,7 +227,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
                 section.addClassName("DrawerMenuHeading");
                 drawerCommandsLayout.addComponentAtIndex(componentIndex++, section);
 
-                for (AbstractAction inFolder : ((Menu) currentItem).getAllItems()) {
+                for (AbstractAction inFolder : ((MenuAction) currentItem).getAllItems()) {
                     if (inFolder instanceof CmdAction) {
                         Button btn = createDrawerButton((CmdAction) inFolder);
                         drawerCommandsLayout.addComponentAtIndex(componentIndex++, btn);

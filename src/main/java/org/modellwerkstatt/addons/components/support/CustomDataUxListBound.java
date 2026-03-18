@@ -5,7 +5,7 @@ import org.modellwerkstatt.dataux.runtime.core.IDelegateChange;
 import org.modellwerkstatt.dataux.runtime.core.IPagePaneSelCrtl;
 import org.modellwerkstatt.dataux.runtime.core.ISelectionController;
 import org.modellwerkstatt.dataux.runtime.extensions.ICustomDataUxElement;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
@@ -97,7 +97,7 @@ public abstract class CustomDataUxListBound<T> implements ICustomDataUxElement<T
     }
 
     @Override
-    public void initializeGen(IToolkit_UiFactory iToolkit_uiFactory, IPagePaneSelCrtl iPagePaneSelCrtl, ISelectionController.Binding binding, Menu menu) {
+    public void initializeGen(IToolkit_UiFactory iToolkit_uiFactory, IPagePaneSelCrtl iPagePaneSelCrtl, ISelectionController.Binding binding, MenuAction menu) {
     }
 
     @Override

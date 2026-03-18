@@ -9,9 +9,9 @@ import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.grid.contextmenu.GridMenuItem;
 import com.vaadin.flow.component.grid.contextmenu.GridSubMenu;
 import com.vaadin.flow.component.html.Hr;
-import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecification.AbstractAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.CmdAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
@@ -26,7 +26,7 @@ public class MenuContext<T> {
 
     protected CmdAction doubleClickAction;
 
-    public MenuContext(ITurkuAppFactory factory, Grid<T> grid, Menu menu) {
+    public MenuContext(ITurkuAppFactory factory, Grid<T> grid, MenuAction menu) {
 
         GridContextMenu<T> rootGCM = new GridContextMenu<>(grid);
 
@@ -38,7 +38,7 @@ public class MenuContext<T> {
                 // null is separator, ignore that here ...
 
             } else {
-                createMainMenuStructure(factory, grid, rootGCM, null, ((Menu) currentItem).getAllItems());
+                createMainMenuStructure(factory, grid, rootGCM, null, ((MenuAction) currentItem).getAllItems());
             }
         }
     }
@@ -80,7 +80,7 @@ public class MenuContext<T> {
                     createdItem = subGCM.addItem(currentItem.labelText);
                 }
 
-                createMainMenuStructure(turkuFactory, grid, null, createdItem.getSubMenu(), ((Menu) currentItem).getAllItems());
+                createMainMenuStructure(turkuFactory, grid, null, createdItem.getSubMenu(), ((MenuAction) currentItem).getAllItems());
             }
         }
     }

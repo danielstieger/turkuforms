@@ -11,7 +11,6 @@ import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.core2.TurkuMainWin2;
-import org.modellwerkstatt.turkuforms.sdi.BrowserTab;
 import org.modellwerkstatt.turkuforms.views.CmdUi;
 
 import java.util.Optional;
@@ -104,8 +103,6 @@ public class Workarounds {
         } else if (mainComponent instanceof TurkuMainWin2) {
             return ((TurkuMainWin2) mainComponent).getApplicationController();
 
-        } else if (mainComponent instanceof BrowserTab) {
-            return ((BrowserTab) mainComponent).getApplicationController();
         }
 
         return null;

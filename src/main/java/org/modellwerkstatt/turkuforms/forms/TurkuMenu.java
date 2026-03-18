@@ -10,9 +10,9 @@ import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
-import org.modellwerkstatt.dataux.runtime.genspecifications.AbstractAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecification.AbstractAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.CmdAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
@@ -30,7 +30,7 @@ public class TurkuMenu extends MenuBar {
     }
 
 
-    public <T> void initialize(ITurkuAppFactory factory, Menu menu) {
+    public <T> void initialize(ITurkuAppFactory factory, MenuAction menu) {
 
         for (AbstractAction currentItem : menu.getAllItems()) {
             if (currentItem instanceof CmdAction) {
@@ -49,7 +49,7 @@ public class TurkuMenu extends MenuBar {
                 created.addThemeNames("tertiary", "small");
                 if (Defs.hasLabel(currentItem.labelText)) { created.add(new Text(currentItem.labelText)); }
                 SubMenu createdSub = created.getSubMenu();
-                addMainMenuStructure(factory, createdSub, ((Menu) currentItem).getAllItems());
+                addMainMenuStructure(factory, createdSub, ((MenuAction) currentItem).getAllItems());
 
             }
         }
@@ -76,7 +76,7 @@ public class TurkuMenu extends MenuBar {
             } else {
                 MenuItem created = parent.addItem(currentItem.labelText);
                 SubMenu createdSub = created.getSubMenu();
-                addMainMenuStructure(turkuFactory, createdSub, ((Menu) currentItem).getAllItems());
+                addMainMenuStructure(turkuFactory, createdSub, ((MenuAction) currentItem).getAllItems());
 
             }
         }

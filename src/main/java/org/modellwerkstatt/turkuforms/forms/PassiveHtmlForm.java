@@ -1,14 +1,11 @@
 package org.modellwerkstatt.turkuforms.forms;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.modellwerkstatt.dataux.runtime.extensions.IDlgt;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
-import org.modellwerkstatt.turkuforms.editors.FormChild;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
 
 import java.util.List;

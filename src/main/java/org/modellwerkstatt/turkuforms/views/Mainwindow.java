@@ -5,8 +5,8 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import org.modellwerkstatt.dataux.runtime.genspecifications.CmdAction;
-import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.CmdAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.TileAction;
 
 import java.util.List;
 

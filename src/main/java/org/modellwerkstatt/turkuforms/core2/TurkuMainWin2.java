@@ -17,9 +17,9 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.*;
-import org.modellwerkstatt.dataux.runtime.genspecifications.IGenAppUiModule;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
-import org.modellwerkstatt.dataux.runtime.genspecifications.TileAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
+import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.TileAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -267,7 +267,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
     }
 
     @Override
-    public void setMenuAndInit(int langIndex, Menu start, Menu extra, Menu help) {
+    public void setMenuAndInit(int langIndex, MenuAction start, MenuAction extra, MenuAction help) {
         String advancedInfo = applicationController.appUserSystemVersionInfo() + "\n\n" + getTurkuVersionInfo();
 
         if (appInCompactMode) {

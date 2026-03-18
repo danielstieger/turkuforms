@@ -6,7 +6,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.core.FocusController;
-import org.modellwerkstatt.dataux.runtime.genspecifications.Menu;
+import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_FormContainer;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
@@ -131,7 +131,7 @@ public class TurkuGridLayout<DTO> extends VerticalLayout implements IToolkit_For
     }
 
     @Override
-    public void addMenuAndSetButtons(Menu menuSub) {
+    public void addMenuAndSetButtons(MenuAction menuSub) {
         if (topContainer == null) { installTopContainer(); }
         menu = new TurkuMenu();
         topContainer.add(menu);

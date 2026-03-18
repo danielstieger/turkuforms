@@ -56,7 +56,7 @@ abstract public class FormChild<T extends Component> implements IToolkit_TextEdi
         if (IToolkit_TextEditor.has(IDlgt.Opt.WIDE, options)) {
             wideOption = true;
         }
-        if (IToolkit_TextEditor.has(IDlgt.Opt.REFERENCE_PROVIDE_HINT, options)) {
+        if (IToolkit_TextEditor.has(IDlgt.Opt.REFERENCEDLGT_PROVIDE_HINT, options)) {
             provideHintOption = true;
         }
     }

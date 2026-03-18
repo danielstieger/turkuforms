@@ -242,6 +242,20 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
+    public String getSettingsDescription() {
+        String settings = super.getSettingsDescription();
+
+        if (usingUrlHandling) {
+            settings += "UsingUrlHandling ";
+        }
+        if (singleAppInstanceMode)  {
+            settings += "SingleAppInstanceMode ";
+        }
+
+        return settings;
+    }
+
+    @Override
     public boolean cmdAccessible(String fqName) {
         return true;
         // this is for the sdi, which is replaced with the MI, winter 25
