@@ -71,7 +71,6 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
         Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout() + " paramInfo=" + paramInfo.getParamsToForwardIfAny());
 
-
         if (loginRequested && factory.isSingleAppInstanceMode() && otherCrtlPresent) {
             Turku.l("IPAuthLandingPage.beforeEnter() in singleapp instance mode and other controllers present? "+ otherCrtlPresent);
 

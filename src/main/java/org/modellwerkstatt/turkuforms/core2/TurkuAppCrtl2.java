@@ -155,5 +155,10 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
             this.internal_immediatelyShutdown();
         }
     }
+
+    @Override
+    public ApplicationMDI getAppMDI() {
+        return this;
+    }
 }
 

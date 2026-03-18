@@ -126,4 +126,10 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
             this.internal_immediatelyShutdown();
         }
     }
+
+
+    @Override
+    public ApplicationMDI getAppMDI() {
+        return this;
+    }
 }
