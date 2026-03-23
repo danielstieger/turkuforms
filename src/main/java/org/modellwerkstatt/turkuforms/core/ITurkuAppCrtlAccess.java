@@ -3,7 +3,6 @@ package org.modellwerkstatt.turkuforms.core;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
-import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 
 import java.util.Map;
 

@@ -2,19 +2,10 @@ package org.modellwerkstatt.turkuforms.util;
 
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServlet;
-import com.vaadin.flow.server.WrappedSession;
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.modellwerkstatt.objectflow.runtime.MoWareFormattersFactory;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.Map;
 
 public class Turku {
     public static final String INTERNAL_VERSION = "turkuforms (moware17) autumn 25";
