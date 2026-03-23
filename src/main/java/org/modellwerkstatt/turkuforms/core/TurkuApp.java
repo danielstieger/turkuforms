@@ -20,7 +20,7 @@ import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.*;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
-import org.modellwerkstatt.dataux.runtime.genspecification.TileAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.Tile;
 import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
@@ -275,7 +275,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     }
 
     @Override
-    public void showTiles(List<TileAction> tilesList, boolean resetUrl) {
+    public void showTiles(List<Tile> tilesList, boolean resetUrl) {
         Dux.hl("Showing tiles.");
         if (mainTabImpl.hasOpenTabs()) {
             throw new RuntimeException("We do have open tabs but requested to show tiles?");

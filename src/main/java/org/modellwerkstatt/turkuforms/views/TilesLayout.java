@@ -7,7 +7,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import org.modellwerkstatt.dataux.runtime.genspecification.CmdAction;
-import org.modellwerkstatt.dataux.runtime.genspecification.TileAction;
+import org.modellwerkstatt.dataux.runtime.genspecification.Tile;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.util.TurkuHasEnabled;
@@ -30,9 +30,9 @@ public class TilesLayout extends FlexLayout {
     }
 
 
-    public void addTile(ITurkuAppFactory factory, TileAction tile, ComponentEventListener<ClickEvent<Button>> execItem) {
+    public void addTile(ITurkuAppFactory factory, Tile tile, ComponentEventListener<ClickEvent<Button>> execItem) {
 
-        CmdAction action = tile.getAction();
+        CmdAction action = tile.getCmdAction();
         Button btn = addButtonOnly(factory, action.image, action.labelText, action.getToolTip(), tile.getColor(), action.hotKey, execItem);
 
         action.attachButton1(new TurkuHasEnabled(action.hideWhenDisabled, btn, "Tile " + action.labelText));
