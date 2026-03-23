@@ -6,8 +6,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.time.LocalDate;
 
@@ -40,16 +40,16 @@ public class TestView<DTO> extends HorizontalLayout {
 
 
         /* gp.getElement().addEventListener("active-item-changed", e -> {
-            Turku.l("Turkutable.grid.addEventListener() ACTIVE-ITEM-CHANGED " + e.getType() + " / " + e.getEventData());
+            Dux.hl("Turkutable.grid.addEventListener() ACTIVE-ITEM-CHANGED " + e.getType() + " / " + e.getEventData());
         });
 
         gp.getElement().addEventListener("cell-activate", e -> {
-            Turku.l("Turkutable.grid.addEventListener() CELL-ACTIVATED " + e.getType() + " / " + e.getEventData() + " / " + e.getSource());
+            Dux.hl("Turkutable.grid.addEventListener() CELL-ACTIVATED " + e.getType() + " / " + e.getEventData() + " / " + e.getSource());
         });
 
 */
         gp.getElement().addEventListener("cell-edit-started", e -> {
-            Turku.l("Turkutable.grid.addEventListener() CELL-EDIT-STARTED " + e.getType() + " / " + e.getEventData() + " / " + e.getSource());
+            Dux.hl("Cell edit started: " + e.getType() + " / " + e.getEventData() + " / " + e.getSource());
         });
 
         add(gp);

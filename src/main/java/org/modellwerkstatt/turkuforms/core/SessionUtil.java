@@ -5,9 +5,9 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.WrappedSession;
 import org.joda.time.DateTime;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
 import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 public class SessionUtil {
     public final static String APPCRTL_SESSIONATTRIB_PREFIX = "appCrtl_";
@@ -39,21 +39,21 @@ public class SessionUtil {
         WrappedSession session = vaadinSession.getSession();
 
         long crtlSPresent = session.getAttributeNames().stream().filter(SessionUtil::isTurkuControllerAttribute).count();
-        Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() found " + crtlSPresent + " controllers in session.");
+        Dux.hl("Found " + crtlSPresent + " controllers in session.");
 
         for (String name: session.getAttributeNames()){
-            Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() checking " + name);
+            Dux.hl("Checking session attribute " + name);
 
             if (isTurkuControllerAttribute(name)) {
                 ITurkuAppCrtlAccess crtl = (ITurkuAppCrtlAccess) session.getAttribute(name);
                 ApplicationMDI app = crtl.getAppMDI();
                 Component mainWin = (Component) app.getMainWindowImpl();
-                Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() shutting down " + name);
+                Dux.hl("Shutting down controller " + name);
 
                 try {
                     if (mainWin.getUI().isPresent() && mainWin.getUI().get().isAttached()) {
                         mainWin.getUI().get().access(() -> {
-                            Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() UI FOR " + name + " - doing a shutdown with ui.access({}).");
+                            Dux.hl("UI found for " + name + ", shutting down via ui.access().");
 
                             app.logMowareTracing("", "", ITurkuAppFactory.TURKU_PORTJ, "shutdown other controllers, shutting down this one.", "" + vaadinSession.hashCode());
                             app.onExitRequested(true);
@@ -61,7 +61,7 @@ public class SessionUtil {
 
                     } else {
                         // This leads to mem leaks in V23
-                        Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() NO UI FOR " + name + " - doing a shutdown without ui.access({}).");
+                        Dux.hl("No UI found for " + name + ", shutting down directly.");
 
                         app.logMowareTracing("", "", ITurkuAppFactory.TURKU_PORTJ, "shutdown other controllers, shutting down this one WITHOUT UI ACCESS.", "" + vaadinSession.hashCode());
                         app.onExitRequested(true);
@@ -78,7 +78,7 @@ public class SessionUtil {
                     }
 
                 }
-                Turku.l("TurkuApplicationController.shutdownOtherControllersInSession() closed down " + name);
+                Dux.hl("Controller " + name + " shut down.");
             }
         }
     }

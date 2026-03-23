@@ -21,6 +21,7 @@ import org.modellwerkstatt.dataux.runtime.core.*;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.dataux.runtime.genspecification.TileAction;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -49,7 +50,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
 
     public TurkuApp() {
-        // Turku.l("TurkuApp.constructor() - start");
+        // Dux.hl("TurkuApp.constructor() - start");
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         VaadinSession vaadinSession = VaadinSession.getCurrent();
 
@@ -58,7 +59,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         String remoteAddr = factory.getRemoteAddr();
 
         userEnvironment = NavigationUtil.getAndClearUserEnvFromUi();
-        Turku.l("TurkuApp.constructor() - userEnvironment is " + userEnvironment);
+        Dux.hl("Creating app for user environment " + userEnvironment);
 
         if (userEnvironment == null) {
             String msg = "UserEnvironment to pick up was null, redirecting to /login, " + vaadinSession.hashCode() + " /  " + System.currentTimeMillis() + " / " + applicationController + " / " + this.hashCode();
@@ -88,7 +89,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         }
 
-        Turku.l("TurkuApp.constructor() - done, heartbeat @ " + VaadinService.getCurrent().getDeploymentConfiguration().getHeartbeatInterval());
+        Dux.hl("App initialized, heartbeat interval " + VaadinService.getCurrent().getDeploymentConfiguration().getHeartbeatInterval());
     }
 
 
@@ -97,7 +98,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
         // start a command?
         if (initialStartupParams == null) {
-            // Turku.l("TurkuApp.beforeEnter() path=" + beforeEnterEvent.getLocation().getPath() + " and queryString " + beforeEnterEvent.getLocation().getQueryParameters().getQueryString());
+            // Dux.hl("TurkuApp.beforeEnter() path=" + beforeEnterEvent.getLocation().getPath() + " and queryString " + beforeEnterEvent.getLocation().getQueryParameters().getQueryString());
             QueryParameters query = beforeEnterEvent.getLocation().getQueryParameters();
             if (query.getParameters().size() == 0) {
                 // check :path variable
@@ -124,7 +125,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
             quickUserInfo("Reloading this web page does not work. The application was destroyed.");
         }
 
-        Turku.l("TurkuApp.beforeEnter() done for " + applicationController);
+        Dux.hl("Before enter finished for " + applicationController);
     }
 
     @Override
@@ -147,7 +148,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     @Override
     public void closeApplicationAndExit() {
         // This is basically the logout? Unclear if we want to set the principal null
-        Turku.l("TurkuApp.closeApplicationAndExit() " + applicationController + " attached=" + isAttached());
+        Dux.hl("Closing application " + applicationController + ", attached=" + isAttached());
 
         applicationController.logMowareTracing("","", TURKU_PORTJ, "User initiated a closeAppAndExit()","");
         applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), false);
@@ -164,7 +165,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
         boolean invalidated = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
         // leads to valueUnbound() in turn closing app crtl
 
-        Turku.l("parDeploymentForwardNow() invalidated is " + invalidated);
+        Dux.hl("Parallel deployment forward, invalidated=" + invalidated);
 
         if (! invalidated) {
             NavigationUtil.absolutNavi(NavigationUtil.OTHER_TABS_OPEN);
@@ -180,7 +181,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     
     @Override
     public void showDialog(DlgType dlgType, String text, IApplication.DlgRunnable dlgRunnable) {
-        // Turku.l("TurkuApp.showDialog() " + OFXConsoleHelper._____organizeCurrentStacktrace_____());
+        // Dux.hl("TurkuApp.showDialog() " + OFXConsoleHelper._____organizeCurrentStacktrace_____());
 
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
         window.simplePrompt(dlgType, text, dlgRunnable);
@@ -275,7 +276,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
     @Override
     public void showTiles(List<TileAction> tilesList, boolean resetUrl) {
-        Turku.l("TurkuApp.showTiles()");
+        Dux.hl("Showing tiles.");
         if (mainTabImpl.hasOpenTabs()) {
             throw new RuntimeException("We do have open tabs but requested to show tiles?");
         }
@@ -285,7 +286,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
     @Override
     public void addTab(IToolkit_CommandContainerUi cmdUiTab) {
-        Turku.l("TurkuApp.addTab()");
+        Dux.hl("Adding tab.");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         if (this.getContent() != mainTabImpl.getAsComponent()) {
             this.setContent(mainTabImpl.getAsComponent());
@@ -298,7 +299,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
     @Override
     public void focusTab(IToolkit_CommandContainerUi cmdUiTab) {
-        Turku.l("TurkuApp.focusTab()");
+        Dux.hl("Focusing tab.");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.focusTab(tab);
         setOptionalTabTitleInNavbar(mainTabImpl.getTitleForNavbar());
@@ -306,7 +307,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
 
     @Override
     public void ensureTabClosed(IToolkit_CommandContainerUi cmdUiTab) {
-        Turku.l("TurkuApp.ensureTabClosed()");
+        Dux.hl("Ensuring tab is closed.");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.closeTab(tab);
         setOptionalTabTitleInNavbar("");
@@ -315,7 +316,7 @@ public class TurkuApp extends Mainwindow implements IToolkit_MainWindow, Shortcu
     @Override
     public void onShortcut(ShortcutEvent event) {
         String keyName;
-        Turku.l("TurkuApp.onShortcut() " + event.getKeyModifiers()+ " " + event.getKey().getKeys());
+        Dux.hl("Shortcut received: " + event.getKeyModifiers() + " " + event.getKey().getKeys());
         if (event.matches(Key.F6, KeyModifier.SHIFT)) { keyName = "DBG_SESSION"; }
         else if (event.matches(Key.F5, KeyModifier.SHIFT)) { keyName = "DBG_GRAPH"; }
         else { keyName = HkTranslate.trans(event.getKey()); }

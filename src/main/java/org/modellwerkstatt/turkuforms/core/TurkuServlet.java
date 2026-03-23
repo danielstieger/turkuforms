@@ -7,6 +7,7 @@ import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinServletService;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.manmap.runtime.IM3DatabaseDescription;
@@ -67,17 +68,11 @@ public class TurkuServlet extends VaadinServlet {
 
 
     @Override
-    public void init(ServletConfig servletConfig) throws ServletException {
-        Turku.clearAndDelete();
-
-        super.init(servletConfig);
-    }
-
-    @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
 
         try {
+            Dux.init("/home/rocketdan/turkulog.log");
 
             String servletPath = this.getServletContext().getContextPath();
             actualServletUrl = servletPath;
@@ -146,7 +141,7 @@ public class TurkuServlet extends VaadinServlet {
             RouteConfiguration.forApplicationScope().setRoute(LOGIN_ROUTE, authenticatorClass);
             RouteConfiguration.forApplicationScope().setRoute(LOGOUT_ROUTE, authenticatorClass);
 
-            Turku.l("TurkuServlet.servletInitialized() done successfully for '" + servletPath + "' with " + authenticatorClass.getName());
+            Dux.hl("Servlet initialized successfully for '" + servletPath + "' with authenticator " + authenticatorClass.getName());
 
 
 
@@ -206,6 +201,6 @@ public class TurkuServlet extends VaadinServlet {
         MMStaticAccessHelper.shutdownAndGcClean();
         OFXStringFormatter2.GLOBAL_INSTANCE_DEFAULT_LANG = null;
 
-        Turku.l("TurkuServlet.destroy(): servlet cleaned up and destroyed.");
+        Dux.hl("Servlet cleaned up and destroyed.");
     }
 }

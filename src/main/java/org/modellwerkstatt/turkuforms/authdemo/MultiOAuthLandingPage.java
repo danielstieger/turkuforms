@@ -5,6 +5,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.auth.IExtAuthProvider;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.auth.NavigationUtil;
 import org.modellwerkstatt.turkuforms.auth.ParamInfo;
@@ -12,7 +13,6 @@ import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.authmpreis.SimpleMessageCmpt;
 import org.modellwerkstatt.turkuforms.core.SessionUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class MultiOAuthLandingPage extends SimpleMessageCmpt implements BeforeEn
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
 
 
-        Turku.l("AuthDemo.beforeEnter()  on session " + VaadinSession.getCurrent().hashCode());
+        Dux.hl("Auth demo before enter on session " + VaadinSession.getCurrent().hashCode());
         VaadinSession session = VaadinSession.getCurrent();
         TurkuServlet servlet = Workarounds.getCurrentTurkuServlet();
         providers = servlet.getUiFactory().getAllExtAuthProviders();

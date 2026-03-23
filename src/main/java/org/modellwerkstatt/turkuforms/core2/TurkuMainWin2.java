@@ -20,6 +20,7 @@ import org.modellwerkstatt.dataux.runtime.core.*;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
 import org.modellwerkstatt.dataux.runtime.genspecification.TileAction;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_CommandContainerUi;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -54,7 +55,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
 
     public TurkuMainWin2() {
-        Turku.l("T2App.constructor() - done, heartbeat @ " + VaadinService.getCurrent().getDeploymentConfiguration().getHeartbeatInterval());
+        Dux.hl("Main window initialized, heartbeat interval " + VaadinService.getCurrent().getDeploymentConfiguration().getHeartbeatInterval());
 
     }
 
@@ -69,7 +70,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
         String remoteAddr = factory.getRemoteAddr();
 
         userEnvironment = NavigationUtil.getAndClearUserEnvFromUi();
-        Turku.l("T2App.startupAppCrtl() - starting application " + userEnvironment);
+        Dux.hl("Starting application controller for " + userEnvironment);
 
         if (userEnvironment == null) {
             UserPrincipal userPrincipal = SessionUtil.getUserPrincipal(vaadinSession);
@@ -140,14 +141,14 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
             });
         }
 
-        Turku.l("The params are  "+ params.getCmdName() + " / " + params.numParams() + " cmd running " + applicationController.isCommandRunning());
+        Dux.hl("Navigation params: " + params.getCmdName() + " / " + params.numParams() + ", command running=" + applicationController.isCommandRunning());
 
-        Turku.l("T2App.beforeEnter() done with " + applicationController);
+        Dux.hl("Before enter finished for " + applicationController);
     }
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
-        Turku.l("T2App.onAttach() starting ... ");
+        Dux.hl("Attach started.");
 
         super.onAttach(attachEvent);
 
@@ -167,7 +168,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
     @Override
     public void closeApplicationAndExit() {
         // This is basically the logout? Unclear if we want to set the principal null
-        Turku.l("T2App.closeApplicationAndExit() " + applicationController + " attached=" + isAttached());
+        Dux.hl("Closing application " + applicationController + ", attached=" + isAttached());
 
         applicationController.logMowareTracing("","", TURKU_PORTJ, "User initiated a closeAppAndExit()","");
         applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), false);
@@ -184,7 +185,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
         boolean wasLastCrtl = applicationController.unregisterFromSessionTryInvalidate(VaadinSession.getCurrent(), true);
         // leads to valueUnbound() in turn closing app crtl
 
-        Turku.l("parDeploymentForwardNow() invalidated is " + wasLastCrtl);
+        Dux.hl("Parallel deployment forward, invalidated=" + wasLastCrtl);
 
         if (! wasLastCrtl) {
             NavigationUtil.absolutNavi(NavigationUtil.OTHER_TABS_OPEN);
@@ -200,7 +201,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     @Override
     public void showDialog(DlgType dlgType, String text, IApplication.DlgRunnable dlgRunnable) {
-        // Turku.l("T2App.showDialog() " + OFXConsoleHelper._____organizeCurrentStacktrace_____());
+        // Dux.hl("T2App.showDialog() " + OFXConsoleHelper._____organizeCurrentStacktrace_____());
 
         PromptWindow window = new PromptWindow(turkuFactory, userEnvironment.getLangIndex());
         window.simplePrompt(dlgType, text, dlgRunnable);
@@ -295,7 +296,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     @Override
     public void showTiles(List<TileAction> tilesList, boolean resetUrl) {
-        Turku.l("T2App.showTiles() resetURL=" + resetUrl + " x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ");
+        Dux.hl("Showing tiles, resetUrl=" + resetUrl);
 
         if (mainTabImpl.hasOpenTabs()) {
             throw new RuntimeException("We do have open tabs but requested to show tiles?");
@@ -310,7 +311,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     @Override
     public void addTab(IToolkit_CommandContainerUi cmdUiTab) {
-        Turku.l("T2App.addTab()");
+        Dux.hl("Adding tab.");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         if (this.getContent() != mainTabImpl.getAsComponent()) {
             this.setContent(mainTabImpl.getAsComponent());
@@ -323,7 +324,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     @Override
     public void focusTab(IToolkit_CommandContainerUi cmdUiTab) {
-        Turku.l("T2App.focusTab()");
+        Dux.hl("Focusing tab.");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.focusTab(tab);
         setOptionalTabTitleInNavbar(mainTabImpl.getTitleForNavbar());
@@ -331,7 +332,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
 
     @Override
     public void ensureTabClosed(IToolkit_CommandContainerUi cmdUiTab) {
-        Turku.l("T2App.ensureTabClosed()");
+        Dux.hl("Ensuring tab is closed.");
         CmdUiTab tab = (CmdUiTab) cmdUiTab;
         mainTabImpl.closeTab(tab);
         setOptionalTabTitleInNavbar("");
@@ -340,7 +341,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
     @Override
     public void onShortcut(ShortcutEvent event) {
         String keyName;
-        Turku.l("T2App.onShortcut() " + event.getKeyModifiers()+ " " + event.getKey().getKeys());
+        Dux.hl("Shortcut received: " + event.getKeyModifiers() + " " + event.getKey().getKeys());
         if (event.matches(Key.F6, KeyModifier.SHIFT)) { keyName = "DBG_SESSION"; }
         else if (event.matches(Key.F5, KeyModifier.SHIFT)) { keyName = "DBG_GRAPH"; }
         else { keyName = HkTranslate.trans(event.getKey()); }

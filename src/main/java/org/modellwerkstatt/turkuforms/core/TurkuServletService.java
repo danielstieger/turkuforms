@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.function.DeploymentConfiguration;
 import com.vaadin.flow.server.*;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
@@ -63,7 +64,7 @@ public class TurkuServletService extends VaadinServletService {
 
         UI currentUI = isVaadinHeartBeat || isBeacon ? null : UI.getCurrent();
 
-//        Turku.l("TurkuServletService.requestEnd() " + isVaadinHeartBeat + " / " + currentUI);
+//        Dux.hl("TurkuServletService.requestEnd() " + isVaadinHeartBeat + " / " + currentUI);
 
         super.requestEnd(request, response, session);
         String onWebSocket = "";
@@ -110,7 +111,7 @@ public class TurkuServletService extends VaadinServletService {
                 UI uiToClose = session.getUIById(uiId);
 
                 if (uiToClose != null) {
-                    Turku.l("TurkuServletService.requestEnd() BEACON calling close on " + uiToClose + " now.");
+                    Dux.hl("Beacon request closing UI " + uiToClose + ".");
 
                     uiToClose.access(() -> {
                         ITurkuAppCrtlAccess crtl = Workarounds.getControllerFormUi(uiToClose);

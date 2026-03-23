@@ -8,13 +8,13 @@ import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
 import org.modellwerkstatt.dataux.runtime.core.GlobalCmdTermEvent;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.MPreisAppConfig;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -31,7 +31,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
     public TurkuAppCrtl2(IToolkit_UiFactory factory, IToolkit_MainWindow appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
 
-        Turku.l("TurkuAppCrtl2() initialization of " + this.hashCode());
+        Dux.hl("Initializing application controller " + this.hashCode());
         // upon init, take this as req.
         startRequest(4711);
     }
@@ -79,7 +79,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
     }
 
     public void beaconClose(VaadinSession session, UI closingUi) {
-        Turku.l("TACrtl2.beaconClose() shutdown in progress: " + inShutdownMode() + " . . . ");
+        Dux.hl("Beacon close requested. Shutdown in progress: " + inShutdownMode());
 
         logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
         unregisterFromSessionTryInvalidate(session, false);
@@ -103,7 +103,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
         List<TurkuAppCrtl2> others = allAppCrtlsInSession(vaadinSession, false);
 
         if (others.size() == 0) {
-            Turku.l("TACrtl2.unregisterFromSessionTryInvalidate() setting invalidate timeout (or invalidate immediatelly = "+ immediatelyParDeploy+ ")");
+            Dux.hl("Setting session invalidation timeout. Immediate parallel deploy: " + immediatelyParDeploy);
             session.setAttribute(USERNAME_SESSIONATTRIB, session.getAttribute(USERNAME_SESSIONATTRIB) + " unregistered");
             // TODO: why not generally invalidate immediatelly?
             session.setMaxInactiveInterval(MPreisAppConfig.NEW_SESSION_TIMEOUT_INVALIDATE_SEC_SHORT);
@@ -145,7 +145,7 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
 
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
-        Turku.l("TACrtl2.valueUnbound(): shutdown in progress (" + this.inShutdownMode() + ") or shutdown now.");
+        Dux.hl("Session unbound. Shutdown in progress: " + this.inShutdownMode());
 
         // Just this controller, not others of the httpSession
         logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "Unregistring from session, shutdown in progress ","" + this.inShutdownMode());
@@ -161,4 +161,3 @@ public class TurkuAppCrtl2 extends ApplicationMDI implements HttpSessionBindingL
         return this;
     }
 }
-

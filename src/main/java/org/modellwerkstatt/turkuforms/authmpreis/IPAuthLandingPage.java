@@ -7,6 +7,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.server.VaadinSession;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
@@ -16,7 +17,6 @@ import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.SessionUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import static org.modellwerkstatt.turkuforms.core.MPreisAppConfig.OK_HOKTEY;
@@ -69,10 +69,10 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
         boolean loginRequested = TurkuServlet.LOGIN_ROUTE.equals(naviPath);
         boolean otherCrtlPresent = SessionUtil.hasOtherControllersInSession(vaadinSession);
 
-        Turku.l("IPAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout() + " paramInfo=" + paramInfo.getParamsToForwardIfAny());
+        Dux.hl("Before enter: naviPath=" + naviPath + ", otherControllers=" + otherCrtlPresent + ", activeLogout=" + paramInfo.wasActiveLogout() + ", forwardedParams=" + paramInfo.getParamsToForwardIfAny());
 
         if (loginRequested && factory.isSingleAppInstanceMode() && otherCrtlPresent) {
-            Turku.l("IPAuthLandingPage.beforeEnter() in singleapp instance mode and other controllers present? "+ otherCrtlPresent);
+            Dux.hl("Single-app instance mode with other controllers present: " + otherCrtlPresent);
 
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {
@@ -149,10 +149,10 @@ public class IPAuthLandingPage extends HorizontalLayout implements BeforeEnterOb
 
                         boolean multiCrtlsAfterLogin = SessionUtil.hasOtherControllersInSession(vaadinSession);
 
-                        Turku.l("IPAuthLandingPage.login with ldap multiCrtlsAfterLogin=" + multiCrtlsAfterLogin);
+                        Dux.hl("LDAP login finished. Multiple controllers after login: " + multiCrtlsAfterLogin);
 
                         if (factory.isSingleAppInstanceMode() && multiCrtlsAfterLogin) {
-                            Turku.l("IPAuthLandingPage.login with ldap() in singleapp instance mode! and other controllers present? "+ otherCrtlPresent);
+                            Dux.hl("LDAP login in single-app instance mode with other controllers present: " + otherCrtlPresent);
 
                             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
                                     factory.getSystemLabel(-1, MoWareTranslations.Key.APPLICATION_RUNNING_IN_BROWSER), () -> {

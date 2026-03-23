@@ -11,7 +11,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 
 @Route("dialog-with-keyboard-shortcuts")
 public class DialogWithKeyboardShortcuts extends VerticalLayout {
@@ -33,7 +33,7 @@ public class DialogWithKeyboardShortcuts extends VerticalLayout {
         okButton.addClickListener(
                 event -> {
                     Notification.show("Accepted");
-                    Turku.l("This is the close clickListener()");
+                    Dux.hl("Close button clicked.");
                     dialog.close();
                 }
         );
@@ -43,7 +43,7 @@ public class DialogWithKeyboardShortcuts extends VerticalLayout {
         // another button is focused
         ShortcutRegistration shortcutRegistration = Shortcuts
                 .addShortcutListener(buttons, () -> {
-                    Turku.l("This is the ShortcutRegistration ..... APPLAUSE ! ");
+                    Dux.hl("Shortcut triggered.");
                     dialog.close();
 
                     }, Key.KEY_L, KeyModifier.CONTROL);

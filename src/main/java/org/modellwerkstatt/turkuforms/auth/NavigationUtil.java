@@ -6,11 +6,11 @@ import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
 import org.modellwerkstatt.dataux.runtime.core.LoginController;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
 import org.modellwerkstatt.objectflow.runtime.UserEnvironmentInformation;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 @SuppressWarnings("unchecked")
@@ -24,7 +24,7 @@ public class NavigationUtil {
 
 
     public static void ensureAppRoutPresentAndForward(BeforeEnterEvent evOrNull, ParamInfo paramInfo, boolean forceAbsolutNavi) {
-        Turku.l("NavigationUtil.ensureAppRoutPresentAndForward() forwarding .... ");
+        Dux.hl("Forwarding to app route.");
         TurkuServlet theServlet = Workarounds.getCurrentTurkuServlet();
 
         if (! RouteConfiguration.forSessionScope().isRouteRegistered(theServlet.getTurkuAppImplClass())) {

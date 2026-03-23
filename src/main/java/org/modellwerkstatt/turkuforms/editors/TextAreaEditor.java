@@ -33,7 +33,7 @@ public class TextAreaEditor extends EditorBasisFocusable<TextArea> implements IT
 
 
     public void setText(String s) {
-        // Turku.l("TextEditor.getText() " + s);
+        // Dux.hl("TextEditor.getText() " + s);
 
         if (!SaveObjectComperator.equals(cachedValue, s)) {
             cachedValue = s;

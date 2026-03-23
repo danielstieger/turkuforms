@@ -42,7 +42,7 @@ public class TextEditor extends EditorBasisFocusable<TextField> implements ITool
 
 
     public void setText(String s) {
-        // Turku.l("TextEditor.getText() " + s);
+        // Dux.hl("TextEditor.getText() " + s);
 
         if (!SaveObjectComperator.equals(cachedValue, s)) {
             cachedValue = s;

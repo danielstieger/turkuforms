@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.IDlgt;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_DelegateForm;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
@@ -12,7 +13,6 @@ import org.modellwerkstatt.turkuforms.editors.DummyEditor;
 import org.modellwerkstatt.turkuforms.editors.FormChild;
 import org.modellwerkstatt.turkuforms.editors.ImageViewer;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
                 new FormLayout.ResponsiveStep("1px", 1),
                 new FormLayout.ResponsiveStep("420px", totalWidth));
 
-        // Turku.l("TurkuDelegatesForm.setColLayoutConstraints() with weights: " + colWeights + " total " + totalWidth);
+        // Dux.hl("TurkuDelegatesForm.setColLayoutConstraints() with weights: " + colWeights + " total " + totalWidth);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         }
 
 
-        // Turku.l("TurkuDelegatesForm.addDelegate() added "+ iDataUxDelegate.getPropertyName() + " as "  + numDelegate + " with span  " + colWeights.get(numDelegate % colWeights.size()));
+        // Dux.hl("TurkuDelegatesForm.addDelegate() added "+ iDataUxDelegate.getPropertyName() + " as "  + numDelegate + " with span  " + colWeights.get(numDelegate % colWeights.size()));
 
         delegates.add(iDataUxDelegate);
         child.attachedToForm(this);
@@ -124,7 +124,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
             }
         }
 
-        Turku.l("TurkuDelegatesForm.myRequestFocus() on " + turkuEditor);
+        Dux.hl("Requesting focus for " + turkuEditor);
 
         if (!focussed) { return null; }
         else { return turkuEditor.getEditor(); }
@@ -147,11 +147,11 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         if (firstFocus >= 0) {
             FormChild<?> fc = (FormChild<?>) this.delegates.get(firstFocus).getDelegateUiImpl();
             fc.turkuFocus();
-            // Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() focussed " + fc);
+            // Dux.hl("TurkuDelegatesForm.checkDelegatesValidAndFocus() focussed " + fc);
 
         }
 
-        // Turku.l("TurkuDelegatesForm.checkDelegatesValidAndFocus() " + firstErr);
+        // Dux.hl("TurkuDelegatesForm.checkDelegatesValidAndFocus() " + firstErr);
         return firstErr;
     }
 
@@ -170,7 +170,7 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     @Override
     public void setProblems(List<IOFXProblem> list) {
         if (heading == null) { installHeading(); }
-        Turku.l("TurkuDelegatesForms.setProblems() " + list);
+        Dux.hl("Updating form problems: " + list);
         heading.flag(list);
     }
 

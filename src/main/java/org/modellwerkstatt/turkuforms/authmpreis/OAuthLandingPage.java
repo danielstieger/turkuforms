@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.modellwerkstatt.dataux.runtime.auth.CredentialReporter;
 import org.modellwerkstatt.dataux.runtime.auth.IExtAuthProvider;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.objectflow.runtime.DeprecatedServerDateProvider;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
@@ -21,7 +22,6 @@ import org.modellwerkstatt.turkuforms.auth.UserPrincipal;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.core.SessionUtil;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.util.List;
@@ -74,10 +74,10 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
 
         boolean loginRequested = TurkuServlet.LOGIN_ROUTE.equals(naviPath);
         boolean otherCrtlPresent = SessionUtil.hasOtherControllersInSession(vaadinSession);
-        Turku.l("OAuthLandingPage.beforeEnter() naviPath " + naviPath + " oc=" + otherCrtlPresent + " al="+paramInfo.wasActiveLogout());
+        Dux.hl("Before enter: naviPath=" + naviPath + ", otherControllers=" + otherCrtlPresent + ", activeLogout=" + paramInfo.wasActiveLogout());
 
         if (loginRequested && factory.isSingleAppInstanceMode() && otherCrtlPresent) {
-            Turku.l("IPAuthLandingPage.beforeEnter() in singleapp instance mode and other controllers present? "+ otherCrtlPresent);
+            Dux.hl("Single-app instance mode with other controllers present: " + otherCrtlPresent);
 
             ParamInfo finalParamInfo1 = paramInfo;
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), "Start",
@@ -188,7 +188,7 @@ public class OAuthLandingPage extends HorizontalLayout implements BeforeEnterObs
                 }
             }
 
-            Turku.l("OAuthLandingPage - " + errorMsg);
+            Dux.hl("OAuth login error: " + errorMsg);
             servlet.logOnPortJ(OAuthLandingPage.class.getName(), factory.getRemoteAddr(),IOFXCoreReporter.Type.APP_TRACE, IOFXCoreReporter.LogPriority.ERROR, errorMsg, exToReportOnPortJ);
             setAsRoot(new SimpleMessageCmpt(servlet.getAppNameVersion(), HOME_REDIRECT_PREFIX_LABEL, errorMsg, () -> {
                 UI.getCurrent().navigate(TurkuServlet.LOGIN_ROUTE);

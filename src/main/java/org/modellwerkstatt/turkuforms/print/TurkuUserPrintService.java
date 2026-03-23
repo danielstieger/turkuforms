@@ -1,9 +1,9 @@
 package org.modellwerkstatt.turkuforms.print;
 
 import com.vaadin.flow.component.UI;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.objectflow.runtime.IOFXUserEnvironment;
 import org.modellwerkstatt.objectflow.runtime.OFXFatClientFopUserPrintService;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import java.io.File;
 
@@ -32,10 +32,10 @@ public class TurkuUserPrintService extends OFXFatClientFopUserPrintService {
         }
 
         UI ui = UI.getCurrent();
-        Turku.l("TurkuUserPrintService.view() instructing ui " + ui + " to open " + this.httpServedPath + "/" + remainder);
+        Dux.hl("Opening " + this.httpServedPath + "/" + remainder + " in UI " + ui);
 
         ui.getPage().open(this.httpServedPath + "/" + remainder, "_blank");
-        Turku.l("TurkuUserPrintService.view() opening done.");
+        Dux.hl("Open request sent.");
     }
 
     @Override
@@ -50,4 +50,3 @@ public class TurkuUserPrintService extends OFXFatClientFopUserPrintService {
         ui.getPage().open(url, "_blank");
     }
 }
-

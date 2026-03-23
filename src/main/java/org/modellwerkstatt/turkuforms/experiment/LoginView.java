@@ -5,7 +5,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.router.*;
-import org.modellwerkstatt.turkuforms.util.Turku;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 
 @PreserveOnRefresh
 public class LoginView extends Div implements BeforeEnterObserver, BeforeLeaveObserver {
@@ -20,21 +20,21 @@ public class LoginView extends Div implements BeforeEnterObserver, BeforeLeaveOb
         this.add(mainP);
         mainP.setText("LoginView.constructor()");
 
-        Turku.l("LoginView.constructor() ");
+        Dux.hl("Login view created.");
         for (UI ui : UI.getCurrent().getSession().getUIs()) {
-            Turku.l("> " + ui);
+            Dux.hl("Open UI: " + ui);
         }
     }
 
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
-        Turku.l("LoginView.beforeLeave(): "+ event);
+        Dux.hl("Before leave: " + event);
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        Turku.l("LoginView.beforeEnter(): "+ event);
+        Dux.hl("Before enter: " + event);
     }
 
 

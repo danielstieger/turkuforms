@@ -6,11 +6,11 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UploadEditor;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Defs;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import java.io.File;
@@ -129,7 +129,7 @@ public class UploadEditor extends FormChild<Upload> implements IToolkit_UploadEd
 
     public static String removePath(String filePath) {
         int li = filePath.lastIndexOf(File.separator);
-        Turku.l("UploadEditor() searching for " + File.separator + " in " + filePath + " ==> " + li);
+        Dux.hl("Searching for '" + File.separator + "' in " + filePath + " -> " + li);
         if (li < 0) { return filePath; }
         return filePath.substring(li + 1);
     }

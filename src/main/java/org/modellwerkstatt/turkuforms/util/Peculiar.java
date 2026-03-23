@@ -51,7 +51,7 @@ public class Peculiar {
     }
 
     public static void useGridShortcutHk(Component grid, String hk, ShortcutEventListener listener) {
-        // Turku.l("Peculiar.useGridShortcutHk() registering HK for " + hk);
+        // Dux.hl("Peculiar.useGridShortcutHk() registering HK for " + hk);
 
         ShortcutRegistration reg;
         if (Defs.hkNeedsCrtl(hk)) { reg = Shortcuts.addShortcutListener(grid, listener, HkTranslate.trans(hk), KeyModifier.CONTROL); }
@@ -72,7 +72,7 @@ public class Peculiar {
     }
 
     public static ShortcutRegistration useGlobalShortcutHk(Component layout, String hk, ShortcutEventListener listener) {
-        // Turku.l("Peculiar.useGlobalShortcutHk() registering HK for " + hk);
+        // Dux.hl("Peculiar.useGlobalShortcutHk() registering HK for " + hk);
         ShortcutRegistration reg;
 
         if (Defs.hkNeedsCrtl(hk)) {

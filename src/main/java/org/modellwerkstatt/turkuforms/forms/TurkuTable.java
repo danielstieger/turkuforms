@@ -24,6 +24,7 @@ import org.modellwerkstatt.dataux.runtime.delegates.TableCellBigDecimalConverter
 import org.modellwerkstatt.dataux.runtime.extensions.ITableCellStringConverter;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenSelControlled;
 import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_TableForm;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
 import org.modellwerkstatt.dataux.runtime.utils.MoWareTranslations;
@@ -34,7 +35,6 @@ import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import org.modellwerkstatt.objectflow.runtime.Selection;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.util.Peculiar;
-import org.modellwerkstatt.turkuforms.util.Turku;
 import org.modellwerkstatt.turkuforms.util.Workarounds;
 
 import javax.validation.ValidationException;
@@ -126,7 +126,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 selectionHandlerEnabled = false;
 
                 Set<DTO> allSelected = event.getAllSelectedItems();
-                Turku.l("TukruTable.selectionModel.addMultiSelectionListener() Pushing " + allSelected.size() + " selected to SelCrtl.");
+                Dux.hl("Selection changed, pushing " + allSelected.size() + " selected items to the selection controller.");
 
                 Selection sel;
                 // sel.setIssuer(TurkuTable.this.hashCode());
@@ -154,7 +154,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         dataView = new DesktopGridProDataView<>();
         searchField.addValueChangeListener(e -> {
-                    Turku.l("SearchField.valueChange(LAZY) for '"+ e.getValue() + "'");
+                    Dux.hl("Search text changed to '" + e.getValue() + "'.");
                     dataView.setSearchText(e.getValue());
 
                     Set<DTO> curSel = selectionModel.getSelectedItems();
@@ -245,7 +245,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                     eventData = e.getEventData().toString();
                     idx = grid.getRowToSelectWhileEdit(e.getEventData());
 
-                    Turku.l("TurkuTable.eventListener(cell-edit-started) idx " +  idx + " from " + eventData);
+                    Dux.hl("Cell edit started at index " + idx + " from " + eventData);
 
                     if (idx > 0) {
                         selectionHandlerEnabled = false;
@@ -461,7 +461,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         try {
             boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
 
-            // Turku.l("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
+            // Dux.hl("TurkuTable.selectionChanged() " + iofxSelection + "/ " + iofxSelection.getObjectOrNull() + " ignore: " + issuedFromSelectionHandler);
             // No longer? if (issuedFromSelectionHandler) { return true; }
 
             selectionHandlerEnabled = false;
@@ -492,8 +492,8 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         boolean allSelFound = dataView.setNewList(grid, list, iofxSelection.getObjects());
         selectionHandlerEnabled = true;
 
-        // Turku.l("TurkuTable.loadList() "  + list.size() + ", all sel found " + allSelFound + ", " + iofxSelection + " / " + iofxSelection.getObjectOrNull());
-        // Turku.l("                      " + iofxSelection.getIssuer() + " == " + this.hashCode());
+        // Dux.hl("TurkuTable.loadList() "  + list.size() + ", all sel found " + allSelFound + ", " + iofxSelection + " / " + iofxSelection.getObjectOrNull());
+        // Dux.hl("                      " + iofxSelection.getIssuer() + " == " + this.hashCode());
 
         // Und was ist mit sort order?
         if (allSelFound) {
@@ -551,7 +551,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public Object myRequestFocus() {
 
         Optional<DTO> firstSelected = selectionModel.getFirstSelectedItem();
-        // Turku.l("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
+        // Dux.hl("TurkuTable.myRequestFocus(): firstSelected is " + firstSelected);
 
         // scrolling needed?
         if ((factory.isScrollAdjust() || firstEditableCol >= 0 || editPreview) && firstSelected.isPresent()) {
@@ -579,7 +579,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void afterFullUiInitialized() {
-        Turku.l("TurkuTable.afterFullUiInitialized() called");
+        Dux.hl("Table fully initialized.");
     }
 
     @Override

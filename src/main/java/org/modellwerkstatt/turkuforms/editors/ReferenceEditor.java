@@ -43,7 +43,7 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     public void setIssuesUpdateConclusion() {
         super.setIssuesUpdateConclusion();
         inputField.addValueChangeListener(event -> {
-            // Turku.l("ReferenceEditor.valueChangeListener called with " + event.getValue() + " / fromClient " + event.isFromClient());
+            // Dux.hl("ReferenceEditor.valueChangeListener called with " + event.getValue() + " / fromClient " + event.isFromClient());
             if (event.isFromClient() || !provideHintOption) {
                 execUpdateConclusion(event.getValue());
             }
@@ -52,7 +52,7 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
         if (provideHintOption) {
             inputField.setAllowCustomValue(true);
             inputField.addCustomValueSetListener(event -> {
-                // Turku.l("ReferenceEditor.addCustomValueSetListener with " + event.getDetail());
+                // Dux.hl("ReferenceEditor.addCustomValueSetListener with " + event.getDetail());
 
                 if (delegate != null) {
                     String text = event.getDetail();
@@ -73,7 +73,7 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     public void setText(String s) {
         boolean valueNull = (s == null);
 
-        // Turku.l("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
+        // Dux.hl("ReferenceEditor.setText() " + this + ": " + cachedValue + " given(" + s + ") with enabled " + cachedEnabledState);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
 
             if (!valueNull && items == null) {
@@ -101,11 +101,11 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
     public String getText() {
         // vaadin getValue() returns null for "nothing selected"
         cachedValue = inputField.getValue();
-        // Turku.l("ReferenceEditor.getText() cachedValue " + cachedValue);
+        // Dux.hl("ReferenceEditor.getText() cachedValue " + cachedValue);
 
         if (provideHintOption && cachedValue != null && !items.stream().anyMatch(s -> cachedValue.equals(s))) {
             // some entry or within scope
-            // Turku.l("ReferenceEditor.getText() not in scope - set to null");
+            // Dux.hl("ReferenceEditor.getText() not in scope - set to null");
             cachedValue = null;
         }
 
@@ -114,7 +114,7 @@ public class ReferenceEditor extends EditorBasisFocusable<AutoSelectComboBox<Str
 
     @Override
     public void setItems(List<String> given) {
-        // Turku.l("ReferenceEditor.setItems() "+ this + " => " + given);
+        // Dux.hl("ReferenceEditor.setItems() "+ this + " => " + given);
         items = given;
         inputField.setItems(items);
         // calling vaadin.setItems() will set value to null

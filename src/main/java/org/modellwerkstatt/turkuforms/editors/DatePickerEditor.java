@@ -77,7 +77,7 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
     public void setText(String s) {
         boolean valueNull = (s == null || s.equals(""));
 
-        // Turku.l("" + this  + " setText(): '" + s + "' " + valueNull);
+        // Dux.hl("" + this  + " setText(): '" + s + "' " + valueNull);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
             if (valueNull) {
                 cachedValue = null;
@@ -104,7 +104,7 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
     public String getText() {
         LocalDate ld = inputField.getValue();
 
-        // Turku.l("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
+        // Dux.hl("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
 
         if (ld != null) {
             cachedValue = ldToString(ld) ;
@@ -116,7 +116,7 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
             cachedValue = "";
         }
 
-        // Turku.l("" + this  + " getText(): " + cachedValue);
+        // Dux.hl("" + this  + " getText(): " + cachedValue);
         return cachedValue;
     }
 

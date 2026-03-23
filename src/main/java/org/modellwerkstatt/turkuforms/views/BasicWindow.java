@@ -26,6 +26,7 @@ import com.vaadin.flow.server.Version;
 import org.modellwerkstatt.dataux.runtime.genspecification.AbstractAction;
 import org.modellwerkstatt.dataux.runtime.genspecification.CmdAction;
 import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.objectflow.runtime.MoVersion;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 import org.modellwerkstatt.turkuforms.forms.LeftRight;
@@ -161,7 +162,7 @@ abstract public class BasicWindow extends AppLayout implements HasDynamicTitle {
     }
 
     protected void adjustBranding(int id) {
-        Turku.l("Adjusting Branding to " + id);
+        Dux.hl("Adjusting branding to " + id);
         logo.setClassName("NavBarSmallLogo" + id);
     }
     protected void setUserInfo(String info) {

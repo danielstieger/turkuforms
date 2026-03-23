@@ -7,10 +7,10 @@ import com.vaadin.flow.server.WrappedSession;
 import org.modellwerkstatt.dataux.runtime.core.ApplicationMDI;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_MainWindow;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IOFXCoreReporter;
-import org.modellwerkstatt.turkuforms.util.Turku;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -26,7 +26,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
     public TurkuApplicationController(IToolkit_UiFactory factory, IToolkit_MainWindow appWin, IGenAppUiModule appBehavior, AppJmxRegistration registration, IOFXCoreReporter.MoWarePlatform pltfrm) {
         super(factory, appWin, appBehavior, registration, pltfrm);
 
-        Turku.l("TurkuApplicationController() initialization of " + this.hashCode());
+        Dux.hl("Initializing application controller " + this.hashCode());
         // upon init, take this as req.
         startRequest(4711);
     }
@@ -57,7 +57,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
 
 
     public void beaconClose(VaadinSession session, UI closingUi) {
-        Turku.l("TurkuApp.beaconClose() shutdown in progress: " + inShutdownMode() + " . . . or shutdown now.");
+        Dux.hl("Beacon close requested. Shutdown in progress: " + inShutdownMode());
         // this will result in a valueUnbound()
         logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "closing app due to a beacon close tab call.","" + VaadinSession.getCurrent().hashCode());
 
@@ -94,7 +94,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
         }
 
         if (!others) {
-            Turku.l("TurkuApplicationController.unregisterFromSessionTryInvalidate() setting invalidate timeout (or invalidate immediatelly = "+ immediate+ ")");
+            Dux.hl("Setting session invalidation timeout. Immediate: " + immediate);
             setUserPrincipal(vaadinSession, null);
             session.setAttribute(USERNAME_SESSIONATTRIB, session.getAttribute(USERNAME_SESSIONATTRIB) + " unregistered");
             session.setMaxInactiveInterval(MPreisAppConfig.SESSION_TIMEOUT_INVALIDATE_SEC);
@@ -116,7 +116,7 @@ public class TurkuApplicationController extends ApplicationMDI implements HttpSe
 
     @Override
     public void valueUnbound(HttpSessionBindingEvent event) {
-        Turku.l("TurkuApplicationController.valueUnbound(): shutdown in progress (" + this.inShutdownMode() + ") or shutdown now.");
+        Dux.hl("Session unbound. Shutdown in progress: " + this.inShutdownMode());
 
         // Just this controller, not others of the httpSession
         logMowareTracing("","", ITurkuAppFactory.TURKU_PORTJ, "Unregistring from session, shutdown in progress ","" + this.inShutdownMode());

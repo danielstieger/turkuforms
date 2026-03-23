@@ -69,14 +69,14 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
         // check DatePickerEditor ...
         inputField.addValidationStatusChangeListener(event -> {
             isInvalid = !event.getNewStatus();
-            // Turku.l("DatePickerEditor.addValidationStatusChangeListener() isInvalid: " + isInvalid);
+            // Dux.hl("DatePickerEditor.addValidationStatusChangeListener() isInvalid: " + isInvalid);
         });
     }
 
     public void setText(String s) {
         boolean valueNull = (s == null || s.equals(""));
 
-        // Turku.l("" + this  + " setText(): '" + s + "' " + valueNull);
+        // Dux.hl("" + this  + " setText(): '" + s + "' " + valueNull);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
             if (valueNull) {
                 cachedValue = null;
@@ -99,7 +99,7 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
     public String getText() {
         LocalDateTime ld = inputField.getValue();
 
-        // Turku.l("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
+        // Dux.hl("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
 
         if (ld != null) {
             LocalDateTime adjusted = ld.withYear(MoWareFormattersFactory.twoToFourDigitYear(ld.getYear()));
@@ -112,7 +112,7 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
             cachedValue = "";
         }
 
-        // Turku.l("" + this  + " getText(): " + cachedValue);
+        // Dux.hl("" + this  + " getText(): " + cachedValue);
         return cachedValue;
     }
 

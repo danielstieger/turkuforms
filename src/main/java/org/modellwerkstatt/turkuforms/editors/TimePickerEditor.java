@@ -36,14 +36,14 @@ public class TimePickerEditor extends EditorBasisFocusable<TimePicker> implement
         // check DatePickerEditor ...
         inputField.addValidationStatusChangeListener(event -> {
             isInvalid = !event.getNewStatus();
-            // Turku.l("DatePickerEditor.addValidationStatusChangeListener() isInvalid: " + isInvalid);
+            // Dux.hl("DatePickerEditor.addValidationStatusChangeListener() isInvalid: " + isInvalid);
         });
     }
 
     public void setText(String s) {
         boolean valueNull = (s == null || s.equals(""));
 
-        // Turku.l("" + this  + " setText(): '" + s + "' " + valueNull);
+        // Dux.hl("" + this  + " setText(): '" + s + "' " + valueNull);
         if (!SaveObjectComperator.equals(cachedValue, s)) {
             if (valueNull) {
                 cachedValue = null;
@@ -66,7 +66,7 @@ public class TimePickerEditor extends EditorBasisFocusable<TimePicker> implement
     public String getText() {
         LocalTime ld = inputField.getValue();
 
-        // Turku.l("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
+        // Dux.hl("" + this  + " getvalue(): " + ld + " / " +  isInvalid);
 
         if (ld != null) {
             LocalDateTime notAdjusted = LocalDateTime.now();
@@ -80,7 +80,7 @@ public class TimePickerEditor extends EditorBasisFocusable<TimePicker> implement
             cachedValue = "";
         }
 
-        // Turku.l("" + this  + " getText(): " + cachedValue);
+        // Dux.hl("" + this  + " getText(): " + cachedValue);
         return cachedValue;
     }
 
