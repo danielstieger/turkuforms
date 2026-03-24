@@ -24,7 +24,7 @@ repositories {
 
 
 vaadin {
-    pnpmEnable = false
+    pnpmEnable = true
     optimizeBundle = true
     productionMode = true
 }
