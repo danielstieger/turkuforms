@@ -35,4 +35,5 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     boolean cmdAccessible(String fqName);
 
+    boolean isUseMinimalDelegateFormLabelWidth();
 }

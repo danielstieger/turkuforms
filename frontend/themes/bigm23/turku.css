@@ -434,7 +434,6 @@ vaadin-vertical-layout {
 }*/
 
 vaadin-form-item::part(label) {
-    width: 10.5em;
     text-align: right;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -465,7 +464,7 @@ vaadin-form-layout[children$="1"] .FormItemWideOption vaadin-text-area[disabled]
 }
 
 vaadin-time-picker {
-  width: 20%;
+  width: 100%;
 }
 
 vaadin-text-field[disabled],

@@ -250,7 +250,7 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
     @Override
     public void setAppInfo(String appName, String version, String dynTitle, int brandingId) {
         super.setSysInfo(appName+ " " + version);
-        super.setNavbarTitleDiv("MI - " + appName + " " + dynTitle);
+        super.setNavbarTitleDiv(appName + " " + dynTitle);
         super.setUserInfo(userEnvironment.getUserName());
         super.adjustBranding(brandingId);
     }

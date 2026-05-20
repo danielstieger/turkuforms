@@ -36,6 +36,8 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private Map<String,IOFXCmdModule.CmdUrlDefaults> defaultUrlForFqCmd;
     private boolean usingUrlHandling;
 
+    private boolean useMinimalDelegateFormLabelWidth;
+
     // Empty, app has to handle stuff, i.e. empty = return full path
     // for uploadLocations
 
@@ -49,6 +51,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         // should be initialized in servlet
         onLogoutMainLandingPath = null;
 
+        useMinimalDelegateFormLabelWidth = false;
     }
 
 
@@ -274,5 +277,13 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         dpI18n.setWeekdays(List.of("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"));
         dpI18n.setWeekdaysShort(List.of("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"));
         return dpI18n;
+    }
+
+    public boolean isUseMinimalDelegateFormLabelWidth() {
+        return useMinimalDelegateFormLabelWidth;
+    }
+
+    public void setUseMinimalDelegateFormLabelWidth(boolean val) {
+        this.useMinimalDelegateFormLabelWidth = val;
     }
 }

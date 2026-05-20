@@ -1,6 +1,8 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.HasSize;
+import com.vaadin.flow.component.Unit;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;
 
@@ -44,6 +46,22 @@ public class CmdUiPrompt extends CmdUi {
         super.setContent(formAsComponent);
         if (fullSize) {
             ((HasSize) formAsComponent).setHeightFull();
+        }
+    }
+
+    @Override
+    public void delayedAfterFullUiInitialized() {
+        super.delayedAfterFullUiInitialized();
+        Dux.hl("okay, check for re-layout");
+
+        if (factory.isUseMinimalDelegateFormLabelWidth()) {
+            if (fullSize) {
+                promptWindow.setSizeFull();
+                this.setSizeFull();
+
+            } else {
+                promptWindow.setWidthFull();
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package org.modellwerkstatt.turkuforms.forms;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.modellwerkstatt.dataux.runtime.extensions.IDlgt;
 import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
@@ -23,6 +24,8 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     private FormLayout formLayout;
     private List<Integer> colWeights;
     private List<IDlgt<?>> delegates;
+    private boolean minLabels;
+
 
     public TurkuDelegatesForm(ITurkuAppFactory fact) {
         factory = fact;
@@ -33,6 +36,8 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         this.add(formLayout);
 
         delegates = new ArrayList<>();
+
+        minLabels = fact.isUseMinimalDelegateFormLabelWidth();
     }
 
 
@@ -48,10 +53,14 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         }
 
         formLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("1px", 1),
-                new FormLayout.ResponsiveStep("420px", totalWidth));
+                new FormLayout.ResponsiveStep("0", 1),
+                new FormLayout.ResponsiveStep("760px", totalWidth));
 
-        // Dux.hl("TurkuDelegatesForm.setColLayoutConstraints() with weights: " + colWeights + " total " + totalWidth);
+        if (!minLabels) {
+            setFormLabelWith("10.5em");
+        }
+
+        Dux.hl("TurkuDelegatesForm.setColLayoutConstraints() with weights: " + colWeights + " total " + totalWidth);
     }
 
     @Override
@@ -96,6 +105,21 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
     @Override
     public void afterFullUiInitialized() {
         formLayout.getElement().setAttribute("children", "" + delegates.size());
+
+        if (minLabels) {
+            Dux.hl("Okay, let s adjust the minLabels.");
+
+            int max = delegates.stream()
+                    .mapToInt(iDlgt -> {
+                        Label l = (Label) iDlgt.getDelegateUiImpl().getLabel();
+                        int len = l.getText().length();
+                        return len;
+                    }).max().orElse(20);
+
+            String labelWidth = (max + 2) + "ch";
+            setFormLabelWith(labelWidth);
+
+        }
     }
 
     @Override
@@ -205,9 +229,13 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
             focusOnNextDlgt(delegates.get(index), next);
 
         }
-
-
     }
 
+    private void setFormLabelWith(String width) {
+        formLayout.getElement().getStyle()
+                .set("--vaadin-form-item-label-width", width);
+        formLayout.getElement().getStyle()
+                .set("--vaadin-form-layout-label-width", width);
+    }
 
 }
