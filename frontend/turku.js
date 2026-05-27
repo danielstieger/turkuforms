@@ -121,62 +121,14 @@ window.turku = {
         forComponent.style.setProperty('--turku-cmd-color-shade', colorString + "10");
     },
 
+    checkForDefaultScaling(scalingFactor) {
+        const numericFactor = parseFloat(scalingFactor);
+        const targetFontSize = (numericFactor * 100) + "%";
+        const htmlElement = document.documentElement;
 
-    childWindows: { },
-
-    openerCanAccessWindow: function(crtlHash) {
-        let noOpener = window.opener == null || window.opener == window;
-
-        if (! noOpener) {
-            let childWindows = window.opener.turku.childWindows;
-
-            console.log('openerCanAccessWindow() childWindows list ' + childWindows);
-            if (childWindows['turkuwin_' + crtlHash]) {
-                return true;
-            }
-
+        if (htmlElement.style.fontSize !== targetFontSize) {
+            htmlElement.style.fontSize = targetFontSize;
         }
-
-        return false;
-    },
-
-    closeWindow: function(crtlHash) {
-        console.log('Turku.closeWindow() closing win for ' + crtlHash);
-        let theWin = turku.childWindows['turkuwin_' + crtlHash];
-        console.log('                    it is ' + theWin);
-
-        if (theWin) {
-            theWin.close();
-
-        }
-    },
-
-    openNewWindow: function(crtlHash, urlToOpen) {
-        let newWindow = window.open(urlToOpen, '_blank');
-        newWindow.focus();
-
-        turku.childWindows['turkuwin_' + crtlHash] = newWindow;
-        console.log("Turku.openNewWindow() stored the new window " + turku.childWindows['turkuwin_' + crtlHash] + " as " + crtlHash);
-    },
-
-    setNotLandingPage: function() {
-        var link = document.querySelector("link[rel~='icon']");
-        var current = link.href.substring(0, link.href.lastIndexOf('/'));
-        var newUrl = current + '/faviconpassive.png';
-
-        var links=document.getElementsByTagName('link');
-        var head=document.getElementsByTagName('head')[0];
-        for(var i=0; i<links.length; i++) {
-            if(links[i].getAttribute('rel')==='icon') {
-                head.removeChild(links[i])
-            }
-        }
-
-        var link=document.createElement('link');
-        link.type='image/x-icon';
-        link.rel='icon';
-        link.href=newUrl;
-        document.getElementsByTagName('head')[0].appendChild(link);
     },
 
     setTurkuCookie: function(value,days) {

@@ -15,6 +15,7 @@ import org.modellwerkstatt.turkuforms.util.Defs;
 import org.modellwerkstatt.turkuforms.views.CmdUiPrompt;
 import org.modellwerkstatt.turkuforms.views.CmdUiTab;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private boolean usingUrlHandling;
 
     private boolean useMinimalDelegateFormLabelWidth;
+    private BigDecimal defaultScaling;
 
     // Empty, app has to handle stuff, i.e. empty = return full path
     // for uploadLocations
@@ -52,6 +54,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         onLogoutMainLandingPath = null;
 
         useMinimalDelegateFormLabelWidth = false;
+        defaultScaling = null;
     }
 
 
@@ -285,5 +288,14 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     public void setUseMinimalDelegateFormLabelWidth(boolean val) {
         this.useMinimalDelegateFormLabelWidth = val;
+    }
+
+
+    public BigDecimal getDefaultScaling() {
+        return defaultScaling;
+    }
+
+    public void setDefaultScaling(BigDecimal defaultScaling) {
+        this.defaultScaling = defaultScaling;
     }
 }

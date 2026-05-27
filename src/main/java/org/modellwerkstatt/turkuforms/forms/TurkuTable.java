@@ -1,5 +1,6 @@
 package org.modellwerkstatt.turkuforms.forms;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -8,6 +9,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.gridpro.EditColumnConfigurator;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -70,7 +72,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     private boolean hasSummaryLine = false;
     private boolean selectionHandlerEnabled = true;
     private String cssRulesToAdd = "";
-
+    private Div overflowspaceHolder = null;
 
 
     public TurkuTable(ITurkuAppFactory fact) {
@@ -103,6 +105,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         topPane.spacer();
         topPane.add(searchField);
         topPane.add(infoCsvButton);
+
+        overflowspaceHolder = new Div(Workarounds.createIconWithCollection(factory.translateIconName("table_menu"), true));
+        overflowspaceHolder.addClassName("TurkuFormMenuSpaceHolder");
+        topPane.add(overflowspaceHolder);
 
         grid = new DesktopGridPro<>();
         grid.setEditOnClick(true);
@@ -609,7 +615,9 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     public void addMenuAndSetButtons(MenuAction menuSub) {
         overflowMenu = new TurkuMenu();
         overflowMenu.initialize(factory, menuSub);
-        topPane.add(overflowMenu);
+        // topPane.add(overflowMenu);
+        topPane.replace(overflowspaceHolder, overflowMenu);
+
 
         contextMenu = new MenuContext<DTO>(factory, grid, menuSub);
         grid.addItemDoubleClickListener(e -> {

@@ -5,6 +5,7 @@ import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.objectflow.runtime.IMoLdapService;
 import org.modellwerkstatt.objectflow.runtime.IOFXCmdModule;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ITurkuAppFactory extends IToolkit_UiFactory {
@@ -36,4 +37,5 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     boolean cmdAccessible(String fqName);
 
     boolean isUseMinimalDelegateFormLabelWidth();
+    BigDecimal getDefaultScaling();
 }
