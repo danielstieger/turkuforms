@@ -496,6 +496,16 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         selectionHandlerEnabled = false;
 
         boolean allSelFound = dataView.setNewList(grid, list, iofxSelection.getObjects());
+
+        if (factory.getHideTableSearchWhenBelow() != null) {
+            Integer limit = factory.getHideTableSearchWhenBelow();
+            if (list.size() >= limit) {
+                searchField.setVisible(true);
+            } else {
+                searchField.setVisible(false);
+            }
+        }
+
         selectionHandlerEnabled = true;
 
         // Dux.hl("TurkuTable.loadList() "  + list.size() + ", all sel found " + allSelFound + ", " + iofxSelection + " / " + iofxSelection.getObjectOrNull());

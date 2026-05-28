@@ -38,4 +38,6 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
 
     boolean isUseMinimalDelegateFormLabelWidth();
     BigDecimal getDefaultScaling();
+    Integer getHideTableSearchWhenBelow();
+
 }
