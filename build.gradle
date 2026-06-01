@@ -60,18 +60,6 @@ dependencies {
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.manmap.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.objectflow.runtime.jar")
     implementation files("${mowarePluginHome}/languages/MoWareLangAndSolutions/org.modellwerkstatt.dataux.runtime.jar")
-
-
-    // implementation files("${mowarePluginHome}/jars/security/spring-security-core-5.3.13.RELEASE.jar")
-    // implementation files("${mowarePluginHome}/jars/security/spring-security-config-5.3.13.RELEASE.jar")
-    // implementation files("${mowarePluginHome}/jars/security/spring-security-oauth2-client-5.3.13.RELEASE.jar")
-    // implementation files("${mowarePluginHome}/jars/security/spring-security-web-5.3.13.RELEASE.jar")
-
-    // implementation files("${mowarePluginHome}/jars/security/google-api-client-2.0.0.jar")
-    // implementation files("${mowarePluginHome}/jars/security/google-oauth-client-1.34.1.jar")
-    // implementation files("${mowarePluginHome}/jars/security/google-http-client-1.42.1.jar")
-    // implementation files("${mowarePluginHome}/jars/security/google-http-client-gson-1.42.1.jar")
-
 }
 
 // ant.importBuild "${mowareHome}/objectflow/assembly/bmoware.xml"
@@ -122,13 +110,6 @@ task ZZ_mowareIntegrate(type: Copy) {
     dependsOn(war)
     from war.archivePath
     into "${mowareHome}/turkuforms/jars"
-}
-
-task zz_buildSimpleOne() {
-    dependsOn(ZZ_mowareIntegrate)
-    dependsOn("bmoware.mowareUpdatePluginForTukru")
-    dependsOn(mowareBuildSimpleOne)
-    dependsOn(redeployOnly)
 }
 
 task zz_buildSimpleOne_MI() {

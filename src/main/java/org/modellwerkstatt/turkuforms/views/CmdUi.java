@@ -180,8 +180,8 @@ abstract public class CmdUi extends VerticalLayout implements IToolkit_CommandCo
                 boolean enabled = concInfos.get(i).enabled;
 
                 conclusionButtons.get(i).setEnabled(enabled);
-                if (concInfos.get(i).hideWhenDisabled && !enabled) {
-                    conclusionButtons.get(i).setVisible(false);
+                if (concInfos.get(i).hideWhenDisabled) {
+                    conclusionButtons.get(i).setVisible(enabled);
                 }
 
             }

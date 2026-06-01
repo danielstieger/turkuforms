@@ -217,19 +217,25 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         dtoClass = theDto;
 
         int remainingWidth = 99;
+        boolean growTo100 = factory.isTableColumnGrowTo100();
+
         for (int i = 0; i < colInfo.size(); i++) {
             boolean lastCol = (i == colInfo.size() - 1);
             TableColumn col = colInfo.get(i);
 
             int width = col.widthInPercent;
 
-            if (lastCol) {
+            if (lastCol && growTo100) {
                 width = remainingWidth;
             } else {
                 remainingWidth -= width;
             }
 
             grid.getColumns().get(col.position).setWidth(width + "%");
+            if (!growTo100) {
+                grid.getColumns().get(col.position).setFlexGrow(0);
+            }
+
             if (lastCol && width > 40) {
                 grid.getColumns().get(col.position).setTextAlign(ColumnTextAlign.START);
             }

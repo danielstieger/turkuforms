@@ -40,6 +40,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private boolean useMinimalDelegateFormLabelWidth;
     private BigDecimal defaultScaling;
     private Integer hideTableSearchWhenBelow;
+    private boolean tableColumnGrowTo100;
 
     // Empty, app has to handle stuff, i.e. empty = return full path
     // for uploadLocations
@@ -57,6 +58,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         useMinimalDelegateFormLabelWidth = false;
         defaultScaling = null;
         hideTableSearchWhenBelow = null;
+        tableColumnGrowTo100 = true;
     }
 
 
@@ -308,5 +310,13 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     public void setHideTableSearchWhenBelow(Integer hideTableSearchWhenBelow) {
         this.hideTableSearchWhenBelow = hideTableSearchWhenBelow;
+    }
+
+    public boolean isTableColumnGrowTo100() {
+        return tableColumnGrowTo100;
+    }
+
+    public void setTableColumnGrowTo100(boolean tableColumnGrowTo100) {
+        this.tableColumnGrowTo100 = tableColumnGrowTo100;
     }
 }
