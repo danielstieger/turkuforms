@@ -1,6 +1,5 @@
 package org.modellwerkstatt.turkuforms.forms;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -505,11 +504,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         if (factory.getHideTableSearchWhenBelow() != null) {
             Integer limit = factory.getHideTableSearchWhenBelow();
-            if (list.size() >= limit) {
-                searchField.setVisible(true);
-            } else {
-                searchField.setVisible(false);
-            }
+            searchField.setVisible(list.size() >= limit);
         }
 
         selectionHandlerEnabled = true;

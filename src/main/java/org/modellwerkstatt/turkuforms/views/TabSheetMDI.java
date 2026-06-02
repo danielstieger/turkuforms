@@ -7,7 +7,6 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.dom.Element;
 import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
-import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core2.TurkuMainWin2;
 
 import java.util.ArrayList;
@@ -44,12 +43,11 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
                 int index = this.getIndexOf(current);
 
                 // on detach, the listener might get fired
-                if (!isOldTurkuApp(this.getParent().get()) && UI.getCurrent() != null) {
+                if (UI.getCurrent() != null) {
                     String url = tabsInSheet.get(index).getAdjustedUrl();
                     if (url == null) {
                         url = "/";
                     }
-
                     UI.getCurrent().getPage().getHistory().replaceState(null, url);
                 }
 
@@ -110,11 +108,7 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
     public void adjustTopBarColorOrNull(String col) {
         Object mainWindow = this.getParent().get();
 
-        if (isOldTurkuApp(mainWindow)) {
-            ((TurkuApp) mainWindow).adjustTopBarColorOrNull(col);
-        } else {
-            ((TurkuMainWin2) mainWindow).adjustTopBarColorOrNull(col);
-        }
+        ((TurkuMainWin2) mainWindow).adjustTopBarColorOrNull(col);
     }
 
     @Override
@@ -130,9 +124,4 @@ public class TabSheetMDI extends TabSheet implements ITurkuMainTab {
 
         tab.executeJs("turku.setTurkuCommandColor($0, $1)", tab, col);
     }
-
-    static protected boolean isOldTurkuApp(Object e) {
-        return e instanceof TurkuApp;
-    }
-
 }

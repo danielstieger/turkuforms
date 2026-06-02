@@ -109,7 +109,7 @@ public class TurkuServlet extends VaadinServlet {
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
             turkuAppImplClass = classLoader.loadClass(appImplClassFq);
 
-            appFactory.initCmdUrlDefaults(!appImplClassFq.equals(TurkuApp.class.getName()));
+            appFactory.initCmdUrlDefaults(true);
 
             appFactory.initExtAuthProviders();
 

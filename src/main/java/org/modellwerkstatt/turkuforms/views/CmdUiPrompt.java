@@ -1,7 +1,6 @@
 package org.modellwerkstatt.turkuforms.views;
 
 import com.vaadin.flow.component.HasSize;
-import com.vaadin.flow.component.Unit;
 import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppFactory;

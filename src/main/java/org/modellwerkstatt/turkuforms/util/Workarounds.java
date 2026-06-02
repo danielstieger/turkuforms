@@ -8,7 +8,6 @@ import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServlet;
 import org.modellwerkstatt.turkuforms.core.ITurkuAppCrtlAccess;
-import org.modellwerkstatt.turkuforms.core.TurkuApp;
 import org.modellwerkstatt.turkuforms.core.TurkuServlet;
 import org.modellwerkstatt.turkuforms.core2.TurkuMainWin2;
 import org.modellwerkstatt.turkuforms.views.CmdUi;
@@ -97,10 +96,7 @@ public class Workarounds {
     public static ITurkuAppCrtlAccess getControllerFormUi(UI ui) {
         Component mainComponent = ui.getChildren().findFirst().orElse(null);
 
-        if (mainComponent instanceof TurkuApp) {
-            return ((TurkuApp) mainComponent).getApplicationController();
-
-        } else if (mainComponent instanceof TurkuMainWin2) {
+         if (mainComponent instanceof TurkuMainWin2) {
             return ((TurkuMainWin2) mainComponent).getApplicationController();
 
         }

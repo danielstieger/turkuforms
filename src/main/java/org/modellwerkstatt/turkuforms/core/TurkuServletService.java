@@ -79,7 +79,7 @@ public class TurkuServletService extends VaadinServletService {
             String webSocket = request.getHeader("sec-fetch-mode");
             String atmosphereSocket = request.getHeader("X-Atmosphere-Transport");
 
-            onWebSocket = "" + webSocket + " / " + atmosphereSocket;
+            onWebSocket = webSocket + " / " + atmosphereSocket;
 
             onWebSocket += " / " + Turku.cookiesToString(request);
 
