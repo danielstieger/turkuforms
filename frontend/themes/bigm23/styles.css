@@ -16,7 +16,6 @@ html {
 
       adjust vaadin-button::part(prefix)
  */
-
     --lumo-font-family: Helvetica, Arial, sans-serif;
     --turku-bold: 600;
 

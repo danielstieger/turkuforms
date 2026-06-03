@@ -397,6 +397,10 @@ vaadin-selection-grid {
     display: none;
 }
 
+vaadin-text-field vaadin-icon[icon="vaadin:search"][disabled] {
+  display: none;
+}
+
 /* cell styling * * * */
 .TrkCelImp {
     font-weight:var(--turku-bold);

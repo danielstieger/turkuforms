@@ -300,6 +300,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     public void setDefaultScaling(BigDecimal defaultScaling) {
+
         this.defaultScaling = defaultScaling;
     }
 

@@ -51,7 +51,6 @@ public class CmdUiPrompt extends CmdUi {
     @Override
     public void delayedAfterFullUiInitialized() {
         super.delayedAfterFullUiInitialized();
-        Dux.hl("okay, check for re-layout");
 
         if (factory.isUseMinimalDelegateFormLabelWidth()) {
             if (fullSize) {
@@ -59,7 +58,8 @@ public class CmdUiPrompt extends CmdUi {
                 this.setSizeFull();
 
             } else {
-                promptWindow.setWidthFull();
+                // Summer 26, no idea why relayouting is needed after all
+                // promptWindow.setWidthFull();
             }
         }
     }
