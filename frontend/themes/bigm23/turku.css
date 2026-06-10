@@ -324,6 +324,12 @@ vaadin-button::part(prefix) {
   padding-right: 0em;
 }
 
+/* check Workarounds.createIconWithCollection() */
+.TurkuFormMenuSpaceHolder span{
+    line-height: 18px; /* chromium problem? */
+}
+
+
 .TabLockingMessage {
     background-color: var(--lumo-error-color) !important;
     color: white;

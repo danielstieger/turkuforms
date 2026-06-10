@@ -40,4 +40,6 @@ public interface ITurkuAppFactory extends IToolkit_UiFactory {
     BigDecimal getDefaultScaling();
     Integer getHideTableSearchWhenBelow();
     boolean isTableColumnGrowTo100();
+    boolean isSizeSmall();
+
 }

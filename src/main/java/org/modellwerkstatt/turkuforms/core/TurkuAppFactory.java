@@ -41,6 +41,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private BigDecimal defaultScaling;
     private Integer hideTableSearchWhenBelow;
     private boolean tableColumnGrowTo100;
+    private boolean sizeSmall;
 
     // Empty, app has to handle stuff, i.e. empty = return full path
     // for uploadLocations
@@ -59,6 +60,7 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         defaultScaling = null;
         hideTableSearchWhenBelow = null;
         tableColumnGrowTo100 = true;
+        sizeSmall = false;
     }
 
 
@@ -319,5 +321,14 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
 
     public void setTableColumnGrowTo100(boolean tableColumnGrowTo100) {
         this.tableColumnGrowTo100 = tableColumnGrowTo100;
+    }
+
+    @Override
+    public boolean isSizeSmall() {
+        return sizeSmall;
+    }
+
+    public void setSizeSmall(boolean sizeSmall) {
+        this.sizeSmall = sizeSmall;
     }
 }

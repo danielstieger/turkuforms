@@ -4,7 +4,6 @@
  *
  */
 
-@import url('./fonts/ibmplexsans.css');
 @import url('./fonts/materialicons.css');
 
 @import url('./mpreis.css');
@@ -12,21 +11,32 @@
 
 
 html {
-/*    --lumo-font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
-
-      adjust vaadin-button::part(prefix)
- */
     --lumo-font-family: Helvetica, Arial, sans-serif;
     --turku-bold: 600;
 
-    --lumo-font-size-xxs: 0.75rem;
-    --lumo-font-size-xs: 0.75rem;
-    --lumo-font-size-s: 0.875rem;
-    --lumo-font-size-m: 1rem;
-    --lumo-font-size-l: 1.1rem;
-    --lumo-font-size-xl: 1.125rem;
-    --lumo-font-size-xxl: 1.5rem;
+    /* basically, this are the compact mode settings. */
+    --lumo-size-xl: 3rem;
+    --lumo-size-l: 2.5rem;
+    --lumo-size-m: 2rem;
+    --lumo-size-s: 1.75rem;
+    --lumo-size-xs: 1.5rem;
+    --lumo-font-size: 1rem;
     --lumo-font-size-xxxl: 1.75rem;
+    --lumo-font-size-xxl: 1.375rem;
+    --lumo-font-size-xl: 1.125rem;
+    --lumo-font-size-l: 1rem;
+    --lumo-font-size-m: 0.875rem;
+    --lumo-font-size-s: 0.8125rem;
+    --lumo-font-size-xs: 0.75rem;
+    --lumo-font-size-xxs: 0.6875rem;
+    --lumo-line-height-m: 1.4;
+    --lumo-line-height-s: 1.2;
+    --lumo-line-height-xs: 1.1;
+    --lumo-space-xl: 1.875rem;
+    --lumo-space-l: 1.25rem;
+    --lumo-space-m: 0.625rem;
+    --lumo-space-s: 0.3125rem;
+    --lumo-space-xs: 0.1875rem;
 
     --turku-cmd-color: rgba(23, 132, 200, 1.0);
     --turku-cmd-color-shade: rgba(23, 132, 200, 0.1);
@@ -55,4 +65,66 @@ html {
     --turku-border-size: 2px;
 
     --vaadin-field-default-width: 4em;
+}
+
+html[subtheme~="smallSize"] {
+
+    --lumo-font-size-xxxl: 1.375rem;  /* 22px */
+    --lumo-font-size-xxl:  1.1875rem; /* 19px */
+    --lumo-font-size-xl:   1rem;      /* 16px */
+    --lumo-font-size-l:    0.9375rem; /* 15px */
+    --lumo-font-size-m:    0.8125rem; /* 13px */
+    --lumo-font-size-s:    0.75rem;   /* 12px */
+    --lumo-font-size-xs:   0.6875rem; /* 11px */
+    --lumo-font-size-xxs:  0.625rem;  /* 10px */
+
+    /* Component/control sizes */
+    --lumo-size-xl: 2.25rem; /* 36px */
+    --lumo-size-l:  2rem;    /* 32px */
+    --lumo-size-m:  1.75rem; /* 28px */
+    --lumo-size-s:  1.5rem;  /* 24px - component size */
+    --lumo-size-xs: 1.25rem; /* 20px  - table height of row*/
+
+    /* Spacing */
+    --lumo-space-xl: 1.5rem;    /* 24px */
+    --lumo-space-l:  1rem;      /* 16px */
+    --lumo-space-m:  0.5rem;    /* 8px */
+    --lumo-space-s:  0.25rem;   /* 4px */
+    --lumo-space-xs: 0.125rem;  /* 2px */
+
+    /* Line heights */
+    --lumo-line-height-m: 1.35;
+    --lumo-line-height-s: 1.2;
+    --lumo-line-height-xs: 1.1;
+}
+
+html[subtheme~="midSize"] {
+
+    --lumo-font-size-xxxl: 1.375rem;  /* 22px */
+    --lumo-font-size-xxl:  1.1875rem; /* 19px */
+    --lumo-font-size-xl:   1rem;      /* 16px */
+    --lumo-font-size-l:    0.9375rem; /* 15px */
+    --lumo-font-size-m: 0.875rem;  /* 14px */
+    --lumo-font-size-s: 0.8125rem; /* 13px */
+    --lumo-font-size-xs:   0.6875rem; /* 11px */
+    --lumo-font-size-xxs:  0.625rem;  /* 10px */
+
+    /* Component/control sizes */
+    --lumo-size-xl: 2.25rem; /* 36px */
+    --lumo-size-l:  2rem;    /* 32px */
+    --lumo-size-m:  1.75rem; /* 28px */
+    --lumo-size-s:  1.5rem;  /* 24px */
+    --lumo-size-xs: 1.25rem; /* 20px */
+
+    /* Spacing */
+    --lumo-space-xl: 1.5rem;    /* 24px */
+    --lumo-space-l:  1rem;      /* 16px */
+    --lumo-space-m:  0.5rem;    /* 8px */
+    --lumo-space-s:  0.25rem;   /* 4px */
+    --lumo-space-xs: 0.125rem;  /* 2px */
+
+    /* Line heights */
+    --lumo-line-height-m: 1.35;
+    --lumo-line-height-s: 1.2;
+    --lumo-line-height-xs: 1.1;
 }

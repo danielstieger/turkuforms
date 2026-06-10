@@ -9,7 +9,6 @@ import com.vaadin.flow.theme.Theme;
 import org.joda.time.LocalTime;
 
 
-@JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 @Theme("bigm23")
 @Push(transport = Transport.WEBSOCKET)
 // When using WEBSOCKET, the service() of TurkuServlet get s no longer called
