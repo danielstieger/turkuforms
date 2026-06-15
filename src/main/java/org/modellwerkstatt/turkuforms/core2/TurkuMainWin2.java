@@ -159,11 +159,8 @@ public class TurkuMainWin2 extends Mainwindow implements IToolkit_MainWindow, Sh
         String servletUrl = Workarounds.getCurrentTurkuServlet().getActualServletUrl();
         this.getElement().executeJs("turku.installBeacon($0, $1)", servletUrl, UI.getCurrent().getUIId());
 
-        if (turkuFactory.isSizeSmall()) {
-            attachEvent.getUI().getPage().executeJs("document.documentElement.setAttribute('subtheme', 'smallSize');");
-
-        }else if (turkuFactory.getDefaultScaling() != null) {
-            this.getElement().executeJs("turku.checkForDefaultScaling($0)", turkuFactory.getDefaultScaling().toPlainString());
+        if (turkuFactory.getTurkuSubTheme() != null) {
+            attachEvent.getUI().getPage().executeJs("document.documentElement.setAttribute('subtheme', $0);", turkuFactory.getTurkuSubTheme());
 
         }
     }

@@ -121,16 +121,6 @@ window.turku = {
         forComponent.style.setProperty('--turku-cmd-color-shade', colorString + "10");
     },
 
-    checkForDefaultScaling(scalingFactor) {
-        const numericFactor = parseFloat(scalingFactor);
-        const targetFontSize = (numericFactor * 100) + "%";
-        const htmlElement = document.documentElement;
-
-        if (htmlElement.style.fontSize !== targetFontSize) {
-            htmlElement.style.fontSize = targetFontSize;
-        }
-    },
-
     setTurkuCookie: function(value,days) {
         let expires = '';
         if (days) {

@@ -38,10 +38,9 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     private boolean usingUrlHandling;
 
     private boolean useMinimalDelegateFormLabelWidth;
-    private BigDecimal defaultScaling;
     private Integer hideTableSearchWhenBelow;
     private boolean tableColumnGrowTo100;
-    private boolean sizeSmall;
+    private String turkuSubTheme;
 
     // Empty, app has to handle stuff, i.e. empty = return full path
     // for uploadLocations
@@ -57,10 +56,9 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         onLogoutMainLandingPath = null;
 
         useMinimalDelegateFormLabelWidth = false;
-        defaultScaling = null;
         hideTableSearchWhenBelow = null;
         tableColumnGrowTo100 = true;
-        sizeSmall = false;
+        turkuSubTheme = null;
     }
 
 
@@ -296,16 +294,6 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
         this.useMinimalDelegateFormLabelWidth = val;
     }
 
-
-    public BigDecimal getDefaultScaling() {
-        return defaultScaling;
-    }
-
-    public void setDefaultScaling(BigDecimal defaultScaling) {
-
-        this.defaultScaling = defaultScaling;
-    }
-
     @Override
     public Integer getHideTableSearchWhenBelow() {
         return hideTableSearchWhenBelow;
@@ -324,11 +312,11 @@ public class TurkuAppFactory extends BaseUiFactory implements ITurkuAppFactory {
     }
 
     @Override
-    public boolean isSizeSmall() {
-        return sizeSmall;
+    public String getTurkuSubTheme() {
+        return turkuSubTheme;
     }
 
-    public void setSizeSmall(boolean sizeSmall) {
-        this.sizeSmall = sizeSmall;
+    public void setTurkuSubTheme(String theme) {
+        this.turkuSubTheme = theme;
     }
 }
