@@ -5,6 +5,7 @@ import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.ServiceException;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinServletService;
+import org.modellwerkstatt.dataux.runtime.core.Shutdown;
 import org.modellwerkstatt.dataux.runtime.genspecification.IGenAppUiModule;
 import org.modellwerkstatt.dataux.runtime.telemetrics.AppJmxRegistration;
 import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
@@ -40,7 +41,6 @@ public class TurkuServlet extends VaadinServlet {
     private String appNameVersion;
     private String actualServletUrl;
     private boolean disableBrowserContextMenu;
-    private AbstractApplicationContext appContext;
 
     public TurkuServletService turkuServletService;
     public ITurkuAppFactory getUiFactory() {
@@ -91,12 +91,15 @@ public class TurkuServlet extends VaadinServlet {
             }
 
             jmxRegistration = new AppJmxRegistration(appBehaviorFqName, deployedAsVersion, realPath, servletPath);
+            getServletContext().setAttribute(Shutdown.CTX_JMXREG, jmxRegistration);
+
             turkuServletService.setJmxRegistration(jmxRegistration);
 
             deployedAsVersion = deployedAsVersion.replace("_", ".");
 
             //  - okay, wire up everything
-            appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
+            AbstractApplicationContext appContext = new ClassPathXmlApplicationContext(xmlConfigFile);
+            getServletContext().setAttribute(Shutdown.CTX_SPRING, appContext);
 
             ClassLoader classLoader = this.getClass().getClassLoader();
             Class<?> appBehaviorClass = classLoader.loadClass(appBehaviorFqName);
@@ -105,6 +108,7 @@ public class TurkuServlet extends VaadinServlet {
 
             appContext.getBean(IM3DatabaseDescription.class).setSessionInfo(appNameVersion + " " + guessedServerName);
             appFactory = ((ITurkuAppFactory) appContext.getBean(IToolkit_UiFactory.class));
+            getServletContext().setAttribute(Shutdown.CTX_UIFACTORY, appFactory);
 
             authenticatorClass = classLoader.loadClass(appFactory.getAuthenticatorClassFqName());
             turkuAppImplClass = classLoader.loadClass(appImplClassFq);
@@ -178,28 +182,6 @@ public class TurkuServlet extends VaadinServlet {
     @Override
     public void destroy() {
         super.destroy();
-
-        // in case of startup exceptions ..
-        if (appFactory != null) {
-            appFactory.getEventBus().close();
-        }
-        if (jmxRegistration != null) {
-            jmxRegistration.gcClean();
-        }
-        if (appContext != null) {
-            String msg = OFXConsoleHelper.closeConnectionPoolExplicitly(appContext);
-            if (msg != null) {
-                super.log(msg);
-            }
-            appContext.close();
-            appContext = null;
-        }
-
-
-        DeprecatedServerDateProvider.shutdownAndGcClean();
-        MMStaticAccessHelper.shutdownAndGcClean();
-        OFXStringFormatter2.GLOBAL_INSTANCE_DEFAULT_LANG = null;
-
-        Dux.hl("Servlet cleaned up and destroyed.");
+        Dux.hl("Servlet destroyed.");
     }
 }
