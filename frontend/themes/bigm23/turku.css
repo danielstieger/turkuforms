@@ -384,7 +384,7 @@ vaadin-button::part(prefix) {
 }
 
 vaadin-selection-grid {
-    height: 100px !important;
+    height: 30px !important;
 }
 
 .TurkuTableSummaryLine {
