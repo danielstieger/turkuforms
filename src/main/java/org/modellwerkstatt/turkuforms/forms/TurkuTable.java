@@ -136,8 +136,11 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                 Selection sel;
                 // sel.setIssuer(TurkuTable.this.hashCode());
 
+
+
                 if (allSelected.size() > 0) {
-                    sel = new Selection(dtoClass, new ArrayList(allSelected));
+                    List<DTO> inSyncList = dataView.getSelectionInSync(allSelected);
+                    sel = new Selection(dtoClass, inSyncList);
 
                 } else {
                     sel = new Selection(dtoClass);
@@ -468,7 +471,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
     @Override
     public boolean selectionChanged(IOFXSelection<DTO> iofxSelection) {
 
-        // TODO: WME initialization BUG in spot ..
         try {
             boolean issuedFromSelectionHandler = iofxSelection.getIssuer() == this.hashCode();
 
