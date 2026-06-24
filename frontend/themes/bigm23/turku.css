@@ -384,7 +384,7 @@ vaadin-button::part(prefix) {
 }
 
 vaadin-selection-grid {
-    height: 30px !important;
+    height: 40px !important;
 }
 
 .TurkuTableSummaryLine {
@@ -485,17 +485,16 @@ vaadin-time-picker {
   width: 100%;
 }
 
-vaadin-text-field[disabled],
-vaadin-text-area[disabled],
-vaadin-select[disabled],
-vaadin-date-time-picker-date-picker[disabled],
-vaadin-date-time-picker-time-picker[disabled],
-vaadin-date-picker[disabled],
-vaadin-radio-group[disabled],
-vaadin-combo-box[disabled],
-vcf-auto-select-combo-box[disabled],
-vaadin-time-picker[disabled]
-{
+html:not([subtheme~="smallSize"]) vaadin-text-field[disabled],
+html:not([subtheme~="smallSize"]) vaadin-text-area[disabled],
+html:not([subtheme~="smallSize"]) vaadin-select[disabled],
+html:not([subtheme~="smallSize"]) vaadin-date-time-picker-date-picker[disabled],
+html:not([subtheme~="smallSize"]) vaadin-date-time-picker-time-picker[disabled],
+html:not([subtheme~="smallSize"]) vaadin-date-picker[disabled],
+html:not([subtheme~="smallSize"]) vaadin-radio-group[disabled],
+html:not([subtheme~="smallSize"]) vaadin-combo-box[disabled],
+html:not([subtheme~="smallSize"]) vcf-auto-select-combo-box[disabled],
+html:not([subtheme~="smallSize"]) vaadin-time-picker[disabled] {
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
@@ -548,10 +547,8 @@ iframe {
     border: 0;
 }
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - SDI STUFF - - - - - - - - - - - - - -*/
+/* - - - - - - - - - - - - - - - - - - - - - - - - SMALL SIZE ADJUSTMENTS - - - - - - - - - - - - - -*/
 
-.LandingPageTopTitle {
-    padding-left: 3em;
-    padding-top: 1em;
-    font-weight: var(--turku-bold);
+html[subtheme~="smallSize"] vaadin-split-layout::part(handle)::after {
+    opacity: 1 !important;
 }

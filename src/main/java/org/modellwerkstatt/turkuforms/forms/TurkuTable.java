@@ -530,17 +530,26 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         Set<DTO> selection = selectionModel.getSelectedItems();
         int total = dataView.getFilteredTotalCount();
         int numSelection = selection.size();
+        boolean traditional = !factory.isTableColumnGrowTo100();
 
         if (!selOfSelCrtlSameAsLocal) { debugSt += " ? "; }
 
 
-        if (numSelection == 0) {
 
-        } else if (numSelection == 1) {
-            // debugSt += " " + (dataView.getIndex(selection.iterator().next()) + 1);
+        if (numSelection == 1) {
+            if (traditional) {
+                debugSt += (dataView.getIndex(selection.iterator().next()) + 1) + " / ";
+            }
 
         } else {
-            debugSt += numSelection + " / ";
+            if (traditional) {
+                debugSt += "M / ";
+
+            } else {
+                debugSt += numSelection + " / ";
+
+            }
+
         }
 
         infoCsvButton.setText(debugSt + total);

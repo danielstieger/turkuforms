@@ -68,6 +68,8 @@ html {
 }
 
 html[subtheme~="smallSize"] {
+    --turku-shade-disabled: #FAFAFA;
+
 
     --lumo-font-size-xxxl: 1.375rem;  /* 22px */
     --lumo-font-size-xxl:  1.1875rem; /* 19px */
