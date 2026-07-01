@@ -34,7 +34,9 @@ public class DateTimePickerEditor extends EditorBasisFocusable<DateTimePicker> i
         inputField.setMin(LocalDateTime.of(1951, 1, 1, 1, 0));
         // prevents dropdown combo for time
         inputField.setStep(Duration.ofMinutes(1));
-        inputField.setDatePickerI18n(extI18n);
+
+        inputField.setDatePickerI18n(extI18n.setFirstDayOfWeek(1));
+        inputField.setWeekNumbersVisible(true);
 
         inputField.addAttachListener(e -> {
             inputField.getElement().executeJs("turku.adjustDateTimeTimePicker($0)", inputField.getElement());

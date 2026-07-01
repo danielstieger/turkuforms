@@ -32,7 +32,9 @@ public class DatePickerEditor extends EditorBasisFocusable<DatePicker> implement
         inputField.setMax(LocalDate.of(2049, 1, 1));
         inputField.setMin(LocalDate.of(1951, 1, 1));
 
-        inputField.setI18n(extI18n);
+        inputField.setI18n(extI18n.setFirstDayOfWeek(1));
+        inputField.setWeekNumbersVisible(true);
+
 
         // esc closes cmdtab
         ShortcutRegistration reg = Shortcuts.addShortcutListener(inputField, shortcutEvent -> {
