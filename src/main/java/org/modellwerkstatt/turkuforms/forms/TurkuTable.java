@@ -192,6 +192,10 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
             return false;
         });
 
+        boolean traditional = !factory.isTableColumnGrowTo100();
+        if (traditional) {
+            grid.addSortListener(event -> { adjustTableInformation("", true);});
+        }
 
         topPane.addClickListener(event -> {
             if (event.getClickCount() == 2) {
@@ -265,7 +269,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
                         selectionHandlerEnabled = false;
                         grid.deselectAll();
                         selectionHandlerEnabled = true;
-                        grid.select(dataView.getItem(idx - 1));
+                        grid.select(dataView.getItemFromFilteredList(idx - 1));
                     }
 
                 } catch (IndexOutOfBoundsException ex) {
@@ -570,7 +574,6 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
         infoCsvButton.setEnabled(false);
         searchField.setVisible(false);
         grid.getColumns().forEach(it -> { it.setSortable(false); });
-
         grid.setEditPreviewMode();
     }
 

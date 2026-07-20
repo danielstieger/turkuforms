@@ -3,10 +3,8 @@ package org.modellwerkstatt.addons.desktopgridpro;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class DesktopGridProDataView<DTO> {
     private List<DTO> originalList;
@@ -110,12 +108,15 @@ public class DesktopGridProDataView<DTO> {
         return "".equals(filterForWhat);
     }
 
-    public DTO getItem(int index) {
+    public DTO getItemFromFilteredList(int index) {
         return filteredList.get(index);
     }
 
     public int getIndex(DTO item) {
-        return filteredList.indexOf(item);
+
+        // return filteredList.indexOf(item);
+        // To Replace with Vaadin 24+
+        return findIndexByIdentity(currentDataView.getItems(), item);
     }
 
     public List<DTO> getFilteredList() {
@@ -138,6 +139,18 @@ public class DesktopGridProDataView<DTO> {
         currentDataView.getItems().forEach(it -> {if (selection.contains(it)) { inSync.add(it); } });
 
         return inSync;
+    }
+
+    int findIndexByIdentity(Stream<DTO> items, DTO searchedItem) {
+        Iterator<DTO> iterator = items.iterator();
+
+        for (int index = 0; iterator.hasNext(); index++) {
+            if (iterator.next() == searchedItem) {
+                return index;
+            }
+        }
+
+        return -1;
     }
 
     public void gcClear() {
