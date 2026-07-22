@@ -508,7 +508,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
         boolean allSelFound = dataView.setNewList(grid, list, iofxSelection.getObjects());
 
-        if (factory.getHideTableSearchWhenBelow() != null) {
+        if (factory.getHideTableSearchWhenBelow() != null && searchField.isEmpty()) {
             Integer limit = factory.getHideTableSearchWhenBelow();
             searchField.setVisible(list.size() >= limit);
         }
