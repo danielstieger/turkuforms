@@ -27,19 +27,21 @@ public abstract class CustomDataUxListBound<T> implements ICustomDataUxElement<T
     public void setToolkitFormImpl(IToolkit_Form<T> impl) {
         formImpl = impl;
     }
+    @Override
+    public IToolkit_Form getToolkitImplementation() {
+        return formImpl;
+    }
+
 
     @Override
     public void loadList(List<T> list, IOFXSelection iofxSelection) {
         formImpl.loadList(list, iofxSelection);
     }
 
-    @Override
-    public IToolkit_Form getToolkitImplementation() {
-        return formImpl;
-    }
+
 
     @Override
-    public void addDelegateInfo(String delegateName, String path, String label) {
+    public void addDelegateInfo(String delegateName, String path, String label, String format) {
         labelToPathMap.put(label, path);
     }
 
