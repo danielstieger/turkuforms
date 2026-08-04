@@ -2,18 +2,14 @@ package org.modellwerkstatt.addons.components;
 
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
-import com.vaadin.flow.component.charts.model.style.SolidColor;
 import org.modellwerkstatt.addons.components.support.MultiSeriesUxListBound;
 import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
 import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
     protected MultiSeriesUxListBound<T> provider;
@@ -33,10 +29,12 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         Configuration conf = chart.getConfiguration();
         PlotOptionsLine opt = new PlotOptionsLine();
         opt.setAnimation(false);
-
         conf.setPlotOptions(opt);
 
         conf.getTitle().getStyle().setFontSize("14px");
+        if (provider.getTitle() != null) conf.setTitle(provider.getTitle());
+        if (provider.getyTitle() != null) conf.getyAxis().setTitle(provider.getyTitle());
+
         chart.drawChart();
 
     }
@@ -46,35 +44,42 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         Dux.hl("LineChartToolkitImpl with " + list.size() + " items");
 
         Configuration conf = chart.getConfiguration();
-        conf.setSeries(Collections.emptyList());
 
 
-        XAxis xAxis = conf.getxAxis();
-        xAxis.setType(AxisType.CATEGORY);
+        List<Series> allSeries = new ArrayList<Series>();
+        List<String> categoriesUsed = new ArrayList<>();
 
-        List<DataSeries> allSeries = new ArrayList<DataSeries>();
         provider.getSeries().forEach(series ->
             allSeries.add(new DataSeries(series.getName())));
 
         for (int dataIndex = 0; dataIndex < list.size(); dataIndex++) {
             T obj = list.get(dataIndex);
 
+            categoriesUsed.add(provider.getXValueAsString(obj));
+
             allSeries.forEach(series -> {
                     DataSeriesItem item = new DataSeriesItem();
-                    item.setName(provider.getXValueAsString(obj));
                     item.setY(provider.getYValueAsBigDecimal(obj, series.getName()));
-                    series.add(item);
-                    });
+                    ((DataSeries) series).add(item);
+            });
         }
 
-        allSeries.forEach(conf::addSeries);
+        XAxis xAxis = conf.getxAxis();
+        xAxis.setType(AxisType.CATEGORY);
+        conf.getxAxis().setCategories(categoriesUsed.toArray(new String[categoriesUsed.size()]));
+        conf.setSeries(allSeries);
+
+        Labels labels = new Labels();
+        labels.setEnabled(true);
+        labels.setUseHTML(false);
+        labels.setRotation(-55);
+        labels.setAutoRotation(new Number[]{-55});
+        labels.setAlign(HorizontalAlign.RIGHT);
+        xAxis.setLabels(labels);
+
         Dux.hl("LineChartToolkitImpl with " + allSeries.size() + " series.");
 
-        Labels labels = xAxis.getLabels();
-        labels.setEnabled(true);
-        labels.setRotation(55);
-        labels.setAlign(HorizontalAlign.RIGHT);
-        // labels.setStep(5);
+        chart.drawChart(true);
     }
 
     @Override

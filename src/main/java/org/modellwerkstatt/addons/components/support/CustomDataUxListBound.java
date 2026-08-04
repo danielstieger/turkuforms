@@ -39,6 +39,10 @@ public abstract class CustomDataUxListBound<T> implements ICustomDataUxElement<T
     }
 
 
+    @Override
+    public void setOption(String s, String s1) {
+        throw new RuntimeException("Not implemented");
+    }
 
     @Override
     public void addDelegateInfo(String delegateName, String path, String label, String format) {

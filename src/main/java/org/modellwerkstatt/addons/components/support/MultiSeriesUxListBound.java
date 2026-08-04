@@ -2,8 +2,6 @@ package org.modellwerkstatt.addons.components.support;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.ReadablePartial;
 import org.joda.time.format.DateTimeFormat;
 import org.modellwerkstatt.dataux.runtime.core.IDelegateChange;
 import org.modellwerkstatt.dataux.runtime.core.IPagePaneSelCrtl;
@@ -11,7 +9,6 @@ import org.modellwerkstatt.dataux.runtime.core.ISelectionController;
 import org.modellwerkstatt.dataux.runtime.customcomponents.ExtCmpt;
 import org.modellwerkstatt.dataux.runtime.extensions.ICustomDataUxElement;
 import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
-import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
@@ -25,17 +22,22 @@ import java.util.List;
 public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     protected IToolkit_Form<T> formImpl;
     protected String xValuePath;
+    protected boolean xValuePathFirstSet;
     protected String xValueFormat;
     protected List<Series> allSeries;
+    protected String title;
+    protected String yTitle;
 
     public MultiSeriesUxListBound() {
         allSeries = new ArrayList<Series>();
-
+        xValuePathFirstSet = false;
     }
 
     public List<Series> getSeries() {
         return allSeries;
     }
+    public String getTitle() { return title; }
+    public String getyTitle() { return yTitle; }
 
     public String getXValueAsString(T root) {
         Object obj = MoJSON.get(root, xValuePath);
@@ -67,10 +69,10 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
 
     @Override
     public void addDelegateInfo(String delegateName, String path, String label, String format) {
-        Dux.hl("Adding delegate " + delegateName + " to " + path);
-        if (label.equals(ExtCmpt.LINECHART_XPOS)) {
+        if (!xValuePathFirstSet) {
             xValuePath = path;
             xValueFormat = format;
+            xValuePathFirstSet = true;
 
         } else {
             allSeries.add(new Series(delegateName, path, label, format));
@@ -79,8 +81,15 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     }
 
     @Override
+    public void setOption(String key, String val) {
+        if (ExtCmpt.LINECHART_TITLE.equals(key)) title = val;
+        else if (ExtCmpt.LINECHART_YTITLE.equals(key)) yTitle = val;
+        else throw new RuntimeException("Invalid option: " + key);
+    }
+
+    @Override
     public boolean selectionChanged(IOFXSelection iofxSelection, boolean b) {
-        return false;
+        return true;
     }
 
     @Override
