@@ -31,8 +31,13 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         opt.setAnimation(false);
         conf.setPlotOptions(opt);
 
-        conf.getTitle().getStyle().setFontSize("14px");
-        if (provider.getTitle() != null) conf.setTitle(provider.getTitle());
+        conf.getChart().setStyledMode(true);
+
+        if (provider.getTitle() != null) {
+            conf.setTitle("<span class=\"FormHeading\">" + provider.getyTitle() + "</span>");
+            conf.getTitle().setAlign(HorizontalAlign.LEFT);
+            conf.getTitle().setUseHTML(true);
+        }
         if (provider.getyTitle() != null) conf.getyAxis().setTitle(provider.getyTitle());
 
         chart.drawChart();
@@ -75,6 +80,8 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         labels.setRotation(-55);
         labels.setAutoRotation(new Number[]{-55});
         labels.setAlign(HorizontalAlign.RIGHT);
+
+        if (provider.getxLabelStep() > 0) labels.setStep(provider.getxLabelStep());
         xAxis.setLabels(labels);
 
         Dux.hl("LineChartToolkitImpl with " + allSeries.size() + " series.");

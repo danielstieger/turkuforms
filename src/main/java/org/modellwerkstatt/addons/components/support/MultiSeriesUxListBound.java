@@ -22,15 +22,15 @@ import java.util.List;
 public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     protected IToolkit_Form<T> formImpl;
     protected String xValuePath;
-    protected boolean xValuePathFirstSet;
+    protected boolean xValuePathFirstSet = false;
     protected String xValueFormat;
-    protected List<Series> allSeries;
+    protected List<Series> allSeries =  new ArrayList<Series>();
     protected String title;
     protected String yTitle;
+    protected int xLabelStep = 0;
 
     public MultiSeriesUxListBound() {
-        allSeries = new ArrayList<Series>();
-        xValuePathFirstSet = false;
+
     }
 
     public List<Series> getSeries() {
@@ -38,6 +38,7 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     }
     public String getTitle() { return title; }
     public String getyTitle() { return yTitle; }
+    public int getxLabelStep() { return xLabelStep; }
 
     public String getXValueAsString(T root) {
         Object obj = MoJSON.get(root, xValuePath);
@@ -84,6 +85,8 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     public void setOption(String key, String val) {
         if (ExtCmpt.LINECHART_TITLE.equals(key)) title = val;
         else if (ExtCmpt.LINECHART_YTITLE.equals(key)) yTitle = val;
+        else if (ExtCmpt.LINECHART_XLABELSTEP.equals(key)) xLabelStep = Integer.parseInt(val);
+
         else throw new RuntimeException("Invalid option: " + key);
     }
 

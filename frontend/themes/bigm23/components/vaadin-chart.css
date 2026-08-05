@@ -1,7 +1,37 @@
+/*
+ * Da der Chart in einem Shadow DOM gerendert wird, muss die CSS-Regel gegebenenfalls in
+ * einer komponentenspezifischen Datei stehen:
+ */
 :host() {
-    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    --vaadin-charts-background: var(--turku-primary-background);
+    --vaadin-charts-title-label: var(--lumo-body-text-color);
+    --vaadin-charts-axis-title: var(--lumo-body-text-color);
+    --vaadin-charts-axis-label: var(--lumo-body-text-color);
+    --vaadin-charts-data-label: var(--lumo-body-text-color);
+    --vaadin-charts-secondary-label: var(--lumo-body-text-color);
+    --vaadin-charts-disabled-label: var(--lumo-body-text-color);
 
-    /* only applicable if setStyleMode is css */
-    --vaadin-charts-background: #fafafa !important;
-    --vaadin-charts-title-label: rgba(23, 132, 200, 1.0);
+
+    --vaadin-charts-color-0: rgb(23, 132, 200);
+    --vaadin-charts-color-1: rgb(200, 91, 23);
+    --vaadin-charts-color-2: rgb(230, 161, 30);
+    --vaadin-charts-color-3: rgb(44, 160, 44);
+    --vaadin-charts-color-4: rgb(214, 39, 40);
+    --vaadin-charts-color-5: rgb(148, 103, 189);
+    --vaadin-charts-color-6: rgb(227, 119, 194);
+    --vaadin-charts-color-7: rgb(23, 190, 207);
+    --vaadin-charts-color-8: rgb(140, 140, 23);
+}
+
+.highcharts-title {
+   left: 0 !important;
+   margin-left: .2em !important;
+}
+
+.FormHeading {
+    font-weight: var(--turku-bold);
+    color: var(--turku-cmd-color);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-m);
+    font-family: var(--lumo-font-family);
 }
