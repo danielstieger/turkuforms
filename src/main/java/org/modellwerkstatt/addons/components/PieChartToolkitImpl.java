@@ -55,7 +55,6 @@ public class PieChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         boolean titleOnFirstItemExpected = dataProvider.hasLabel(ExtCmpt.PIECHART_TITEL_ON_FIRST_ITEM);
 
 
-
         for (int i = 0; i < list.size(); i++) {
             T obj = list.get(i);
             boolean last = i == list.size() - 1;

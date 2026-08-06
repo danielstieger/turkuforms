@@ -42,6 +42,7 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
 
         chart.drawChart();
 
+
     }
 
     @Override
