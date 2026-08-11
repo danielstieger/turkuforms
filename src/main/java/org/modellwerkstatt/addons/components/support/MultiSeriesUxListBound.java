@@ -9,6 +9,7 @@ import org.modellwerkstatt.dataux.runtime.core.ISelectionController;
 import org.modellwerkstatt.dataux.runtime.customcomponents.ExtCmpt;
 import org.modellwerkstatt.dataux.runtime.extensions.ICustomDataUxElement;
 import org.modellwerkstatt.dataux.runtime.genspecification.MenuAction;
+import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_UiFactory;
 import org.modellwerkstatt.dataux.runtime.utils.MoJSON;
@@ -17,6 +18,7 @@ import org.modellwerkstatt.objectflow.runtime.IOFXSelection;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
@@ -25,9 +27,7 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     protected boolean xValuePathFirstSet = false;
     protected String xValueFormat;
     protected List<Series> allSeries =  new ArrayList<Series>();
-    protected String title;
-    protected String yTitle;
-    protected int xLabelStep = 0;
+    protected HashMap<String, String> options = new HashMap<>();
 
     public MultiSeriesUxListBound() {
 
@@ -36,9 +36,13 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     public List<Series> getSeries() {
         return allSeries;
     }
-    public String getTitle() { return title; }
-    public String getyTitle() { return yTitle; }
-    public int getxLabelStep() { return xLabelStep; }
+    public String getOption(String key) {
+        if (options.containsKey(key)) {
+            Dux.hl("Option for "+ key + " is  "+ options.get(key));
+            return options.get(key);
+        }
+        return null;
+    }
 
     public String getXValueAsString(T root) {
         Object obj = MoJSON.get(root, xValuePath);
@@ -83,11 +87,7 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
 
     @Override
     public void setOption(String key, String val) {
-        if (ExtCmpt.LINECHART_TITLE.equals(key)) title = val;
-        else if (ExtCmpt.LINECHART_YTITLE.equals(key)) yTitle = val;
-        else if (ExtCmpt.LINECHART_XLABELSTEP.equals(key)) xLabelStep = Integer.parseInt(val);
-
-        else throw new RuntimeException("Invalid option: " + key);
+        options.put(key, val);
     }
 
     @Override

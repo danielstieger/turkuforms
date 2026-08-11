@@ -3,6 +3,7 @@ package org.modellwerkstatt.addons.components;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
 import org.modellwerkstatt.addons.components.support.MultiSeriesUxListBound;
+import org.modellwerkstatt.dataux.runtime.customcomponents.ExtCmpt;
 import org.modellwerkstatt.dataux.runtime.telemetrics.Dux;
 import org.modellwerkstatt.dataux.runtime.toolkit.IToolkit_Form;
 import org.modellwerkstatt.objectflow.runtime.IOFXProblem;
@@ -33,12 +34,31 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
 
         conf.getChart().setStyledMode(true);
 
-        if (provider.getTitle() != null) {
-            conf.setTitle("<span class=\"FormHeading\">" + provider.getyTitle() + "</span>");
+        if (provider.getOption(ExtCmpt.LINECHART_LINE1COLOR) != null)
+            chart.getStyle().set("--vaadin-charts-color-0", provider.getOption(ExtCmpt.LINECHART_LINE1COLOR));
+
+        if (provider.getOption(ExtCmpt.LINECHART_LINE2COLOR) != null)
+            chart.getStyle().set("--vaadin-charts-color-1", provider.getOption(ExtCmpt.LINECHART_LINE2COLOR));
+
+        if (provider.getOption(ExtCmpt.LINECHART_LINE3COLOR) != null)
+            chart.getStyle().set("--vaadin-charts-color-2", provider.getOption(ExtCmpt.LINECHART_LINE3COLOR));
+
+        if (provider.getOption(ExtCmpt.LINECHART_LINE4COLOR) != null)
+            chart.getStyle().set("--vaadin-charts-color-3", provider.getOption(ExtCmpt.LINECHART_LINE4COLOR));
+
+        if (provider.getOption(ExtCmpt.LINECHART_LINE5COLOR) != null)
+            chart.getStyle().set("--vaadin-charts-color-4", provider.getOption(ExtCmpt.LINECHART_LINE5COLOR));
+
+        if (provider.getOption(ExtCmpt.LINECHART_LINE6COLOR) != null)
+            chart.getStyle().set("--vaadin-charts-color-5", provider.getOption(ExtCmpt.LINECHART_LINE6COLOR));
+
+        if (provider.getOption(ExtCmpt.LINECHART_TITLE) != null) {
+            conf.setTitle("<span class=\"FormHeading\">" + provider.getOption(ExtCmpt.LINECHART_TITLE) + "</span>");
             conf.getTitle().setAlign(HorizontalAlign.LEFT);
             conf.getTitle().setUseHTML(true);
         }
-        if (provider.getyTitle() != null) conf.getyAxis().setTitle(provider.getyTitle());
+
+        if (provider.getOption(ExtCmpt.LINECHART_YTITLE) != null) conf.getyAxis().setTitle(provider.getOption(ExtCmpt.LINECHART_YTITLE) );
 
         chart.drawChart();
 
@@ -82,7 +102,10 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         labels.setAutoRotation(new Number[]{-55});
         labels.setAlign(HorizontalAlign.RIGHT);
 
-        if (provider.getxLabelStep() > 0) labels.setStep(provider.getxLabelStep());
+        if (provider.getOption(ExtCmpt.LINECHART_XLABELSTEP) != null) {
+            int step = Integer.parseInt(provider.getOption(ExtCmpt.LINECHART_XLABELSTEP));
+            labels.setStep(step);
+        }
         xAxis.setLabels(labels);
 
         Dux.hl("LineChartToolkitImpl with " + allSeries.size() + " series.");
