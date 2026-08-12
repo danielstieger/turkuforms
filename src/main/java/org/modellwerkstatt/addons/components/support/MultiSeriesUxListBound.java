@@ -38,7 +38,6 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
     }
     public String getOption(String key) {
         if (options.containsKey(key)) {
-            Dux.hl("Option for "+ key + " is  "+ options.get(key));
             return options.get(key);
         }
         return null;

@@ -67,8 +67,6 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
 
     @Override
     public void loadList(List<T> list, IOFXSelection<T> iofxSelection) {
-        Dux.hl("LineChartToolkitImpl with " + list.size() + " items");
-
         Configuration conf = chart.getConfiguration();
 
 
@@ -107,8 +105,6 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
             labels.setStep(step);
         }
         xAxis.setLabels(labels);
-
-        Dux.hl("LineChartToolkitImpl with " + allSeries.size() + " series.");
 
         chart.drawChart(true);
     }
