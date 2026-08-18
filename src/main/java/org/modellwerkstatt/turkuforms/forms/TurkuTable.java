@@ -610,7 +610,7 @@ public class TurkuTable<DTO> extends VerticalLayout implements IToolkit_TableFor
 
     @Override
     public void afterFullUiInitialized() {
-        Dux.hl("Table fully initialized.");
+
     }
 
     @Override

@@ -27,6 +27,10 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
 
     @Override
     public void afterFullUiInitialized() {
+
+    }
+
+    public void chartConfig() {
         Configuration conf = chart.getConfiguration();
         PlotOptionsLine opt = new PlotOptionsLine();
         opt.setAnimation(false);
@@ -59,10 +63,6 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         }
 
         if (provider.getOption(ExtCmpt.LINECHART_YTITLE) != null) conf.getyAxis().setTitle(provider.getOption(ExtCmpt.LINECHART_YTITLE) );
-
-        chart.drawChart();
-
-
     }
 
     @Override
@@ -106,7 +106,10 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
         }
         xAxis.setLabels(labels);
 
+        chartConfig();
+
         chart.drawChart(true);
+        Dux.hl("" + list.size() + " elements loaded. And chart config done. ");
     }
 
     @Override

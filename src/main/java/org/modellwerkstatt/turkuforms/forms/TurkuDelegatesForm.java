@@ -107,7 +107,6 @@ public class TurkuDelegatesForm<DTO> extends VerticalLayout implements IToolkit_
         formLayout.getElement().setAttribute("children", "" + delegates.size());
 
         if (minLabels) {
-            Dux.hl("Okay, let s adjust the minLabels.");
 
             int max = delegates.stream()
                     .mapToInt(iDlgt -> {
