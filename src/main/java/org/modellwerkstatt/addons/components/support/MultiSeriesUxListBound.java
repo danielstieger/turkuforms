@@ -42,6 +42,9 @@ public class MultiSeriesUxListBound<T> implements ICustomDataUxElement<T> {
         }
         return null;
     }
+    public boolean hasOption(String key) {
+        return options.containsKey(key);
+    }
 
     public String getXValueAsString(T root) {
         Object obj = MoJSON.get(root, xValuePath);

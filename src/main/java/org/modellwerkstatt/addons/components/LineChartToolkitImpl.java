@@ -32,9 +32,26 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
 
     public void chartConfig() {
         Configuration conf = chart.getConfiguration();
-        PlotOptionsLine opt = new PlotOptionsLine();
-        opt.setAnimation(false);
-        conf.setPlotOptions(opt);
+
+        if (provider.hasOption(ExtCmpt.LINECHART_SPLINE)) {
+            chart.getConfiguration().getChart().setType(ChartType.SPLINE);
+            PlotOptionsSpline opt = new PlotOptionsSpline();
+            opt.setAnimation(false);
+            conf.setPlotOptions(opt);
+
+        } else {
+            PlotOptionsLine opt = new PlotOptionsLine();
+            opt.setAnimation(false);
+            conf.setPlotOptions(opt);
+
+            if (provider.hasOption(ExtCmpt.LINECHART_STEP_RIGHT)) {
+                opt.setStep(StepType.RIGHT);
+            } else if (provider.hasOption(ExtCmpt.LINECHART_STEP_LEFT)) {
+                opt.setStep(StepType.LEFT);
+            } else if (provider.hasOption(ExtCmpt.LINECHART_STEP_CENTER)) {
+                opt.setStep(StepType.CENTER);
+            }
+        }
 
         conf.getChart().setStyledMode(true);
 
@@ -68,7 +85,6 @@ public class LineChartToolkitImpl<T> extends Chart implements IToolkit_Form<T> {
     @Override
     public void loadList(List<T> list, IOFXSelection<T> iofxSelection) {
         Configuration conf = chart.getConfiguration();
-
 
         List<Series> allSeries = new ArrayList<Series>();
         List<String> categoriesUsed = new ArrayList<>();
